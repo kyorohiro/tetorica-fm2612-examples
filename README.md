@@ -34,6 +34,11 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 | PSG | [02-noise](examples/genesis/psg/02-noise/README.md) | 周期 / ホワイトノイズ |
 | PCM | [01-wav-export](examples/genesis/pcm/01-wav-export/README.md) | Float32 PCM と WAV 出力 |
 | AudioWorklet | [01-note](examples/audio-worklet/01-note/README.md) | 音声スレッドで FM 発音、初期化・停止・解放 |
+| PC-98 | [01-note](examples/pc98/fm/01-note/README.md) | PC-98 YM2608 の FM 発音 |
+| PC-98 | [01-tone](examples/pc98/ssg/01-tone/README.md) | PC-98 YM2608 の SSG トーン |
+| Game Boy | [01-duty](examples/gameboy/pulse/01-duty/README.md) | Game Boy pulse のデューティ比 |
+| Game Boy | [01-waveform](examples/gameboy/wave/01-waveform/README.md) | Game Boy wave の波形メモリー |
+| Game Boy | [01-width](examples/gameboy/noise/01-width/README.md) | Game Boy noise の幅 |
 
 ## 各フォルダーの構成
 

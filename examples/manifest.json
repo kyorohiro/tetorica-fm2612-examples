@@ -53,5 +53,30 @@
     "id": "audio-worklet/01-note",
     "title": "AudioWorklet で FM 発音",
     "description": "processor の読み込み・WASM 転送・ready 待機から、音声スレッドでの発音と停止まで。"
+  },
+  {
+    "id": "pc98/fm/01-note",
+    "title": "PC-98 YM2608 の FM 発音",
+    "description": "YM2608Synth と DirectTransport で FM のサイン波を鳴らす。外部 ROM は不要。"
+  },
+  {
+    "id": "pc98/ssg/01-tone",
+    "title": "PC-98 YM2608 の SSG トーン",
+    "description": "YM2608 内蔵 SSG の矩形波を 440 Hz で鳴らす。音量を指定して停止する。"
+  },
+  {
+    "id": "gameboy/pulse/01-duty",
+    "title": "Game Boy pulse のデューティ比",
+    "description": "pulse チャンネルで 12.5%・25%・50%・75% の矩形波を比較する。"
+  },
+  {
+    "id": "gameboy/wave/01-waveform",
+    "title": "Game Boy wave の波形メモリー",
+    "description": "32点・各 0〜15 の三角波とノコギリ波を wave チャンネルで比較する。"
+  },
+  {
+    "id": "gameboy/noise/01-width",
+    "title": "Game Boy noise の幅",
+    "description": "noise チャンネルで 15-bit と 7-bit の違いを聴き比べる。"
   }
 ]
