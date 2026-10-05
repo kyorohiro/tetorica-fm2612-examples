@@ -3,6 +3,10 @@
 公開済み `tetorica-fm2612@0.2.0` を import して使う、機能別の小さなサンプル集。
 各サンプルに Web と Node.js の入口を置いています。本体リポジトリには依存しません。
 
+パッケージ本体の説明・API の使い方・配布設定は
+[hello_ymfm_wasm/packages/fm2612](https://github.com/kyorohiro/hello_ymfm_wasm/tree/main/packages/fm2612)
+を参照してください。
+
 ## 起動
 
 Node.js 22 以降で repository ルートから実行します。
