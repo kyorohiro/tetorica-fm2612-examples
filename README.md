@@ -23,21 +23,22 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 
 | 分類 | サンプル | 学ぶこと |
 | --- | --- | --- |
-| FM | [01-single-note](examples/fm/01-single-note/README.md) | preset / noteOn / noteOff |
-| FM | [02-melody](examples/fm/02-melody/README.md) | 音程と音符の長さ |
-| FM | [03-presets](examples/fm/03-presets/README.md) | sine / bell / organ の比較 |
-| FM | [04-operators](examples/fm/04-operators/README.md) | algorithm / operator |
-| FM | [05-stereo-pan](examples/fm/05-stereo-pan/README.md) | 左・右・両側の出力 |
-| FM | [06-chord](examples/fm/06-chord/README.md) | 複数チャンネルで和音 |
+| FM | [01-single-note](examples/genesis/fm/01-single-note/README.md) | preset / noteOn / noteOff |
+| FM | [02-melody](examples/genesis/fm/02-melody/README.md) | 音程と音符の長さ |
+| FM | [03-presets](examples/genesis/fm/03-presets/README.md) | sine / bell / organ の比較 |
+| FM | [04-operators](examples/genesis/fm/04-operators/README.md) | algorithm / operator |
+| FM | [05-stereo-pan](examples/genesis/fm/05-stereo-pan/README.md) | 左・右・両側の出力 |
+| FM | [06-chord](examples/genesis/fm/06-chord/README.md) | 複数チャンネルで和音 |
 | Chip raw | [01-register-note](examples/chip-raw/01-register-note/README.md) | YM2612 レジスタ直接操作 |
-| PSG | [01-tone](examples/psg/01-tone/README.md) | Sega PSG のトーン |
-| PSG | [02-noise](examples/psg/02-noise/README.md) | 周期 / ホワイトノイズ |
-| PCM | [01-wav-export](examples/pcm/01-wav-export/README.md) | Float32 PCM と WAV 出力 |
+| PSG | [01-tone](examples/genesis/psg/01-tone/README.md) | Sega PSG のトーン |
+| PSG | [02-noise](examples/genesis/psg/02-noise/README.md) | 周期 / ホワイトノイズ |
+| PCM | [01-wav-export](examples/genesis/pcm/01-wav-export/README.md) | Float32 PCM と WAV 出力 |
+| AudioWorklet | [01-note](examples/audio-worklet/01-note/README.md) | 音声スレッドで FM 発音、初期化・停止・解放 |
 
 ## 各フォルダーの構成
 
 ```text
-examples/fm/01-single-note/
+examples/genesis/fm/01-single-note/
 ├── README.md
 ├── web/
 │   ├── index.html
@@ -51,14 +52,17 @@ examples/fm/01-single-note/
 パッケージと実行環境の標準 API だけを使用します。
 
 `generateStereo(frames)` で PCM を生成してチップの時間を進めます。
-Web 版は生成済み PCM を Web Audio で再生します。
-各ファイル内に PCM の連結、WAV ヘッダーとデータの書き込み、リソース解放も載せています。
+FM / PSG / PCM の Web 版は生成済み PCM を Web Audio で再生します。
+AudioWorklet の例は processor が音声スレッドで PCM を生成します。
+Node 版は DirectTransport による同じ音源設定のオフライン生成です。
+オフライン生成の例には PCM の連結と WAV エンコードも載せています。
+AudioWorklet の Web 版には ready 待機と transport・node・AudioContext の解放を載せています。
 
 ## Node 版
 
 ```sh
-node examples/fm/01-single-note/node/main.mjs
-node examples/fm/02-melody/node/main.mjs ./melody.wav
+node examples/genesis/fm/01-single-note/node/main.mjs
+node examples/genesis/fm/02-melody/node/main.mjs ./melody.wav
 ```
 
 既定では `output/<サンプル名>.wav` に保存します。

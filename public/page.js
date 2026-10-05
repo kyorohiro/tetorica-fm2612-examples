@@ -1,4 +1,4 @@
-const labels = {fm: 'FM — 発音・音色・チャンネル', 'chip-raw': 'Chip raw — レジスタ操作', psg: 'PSG — トーン・ノイズ', pcm: 'PCM — ファイル出力'};
+const labels = {'genesis/fm': 'Genesis FM — 発音・音色・チャンネル', 'chip-raw': 'Chip raw — レジスタ操作', 'genesis/psg': 'Genesis PSG — トーン・ノイズ', 'genesis/pcm': 'Genesis PCM — ファイル出力', 'audio-worklet': 'AudioWorklet — 音声スレッドで再生'};
 const catalog = document.getElementById('catalog');
 try {
   const response = await fetch('./examples/manifest.json');
