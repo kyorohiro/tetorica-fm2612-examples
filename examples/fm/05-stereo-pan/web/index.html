@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>左右のパン — tetorica-fm2612 examples</title>
+  <link rel="stylesheet" href="../../../../style.css">
+  <script type="importmap">{"imports":{
+    "tetorica-fm2612":"../../../../vendor/tetorica-fm2612/soundchip.js",
+    "tetorica-fm2612/":"../../../../vendor/tetorica-fm2612/"
+  }}</script>
+</head>
+<body><main>
+  <nav><a href="../../../../index.html">← Examples</a><a href="./main.js">Source ↗</a></nav>
+  <header><p class="eyebrow">fm/05-stereo-pan · WEB / NODE</p>
+    <h1>左右のパン</h1><p>左だけ・右だけ・両側の順に出力を切り替える。ヘッドフォンで比較。</p>
+  </header>
+  <section class="sample-panel">
+    <div class="actions"><button id="play">Play</button><button id="stop" disabled>Stop</button>
+    <a id="download" download="fm-05-stereo-pan.wav" hidden>Download WAV</a></div>
+    <p id="status" role="status" aria-live="polite">Ready.</p>
+    <p class="muted">音源で PCM を事前生成してから Web Audio で再生します。Web / Node の全コードを、それぞれ省略せずに載せています。</p>
+    <h2>Web — 読み込み・音源操作・再生・WAV 保存</h2>
+    <pre class="source"><code data-source="./main.js">Loading…</code></pre>
+    <h2>Node — 読み込み・音源操作・WAV 保存</h2>
+    <pre><code>node examples/fm/05-stereo-pan/node/main.mjs</code></pre>
+    <pre class="source"><code data-source="../node/main.mjs">Loading…</code></pre>
+    <p><a href="../README.md">この例の README</a></p>
+  </section>
+</main><script type="module" src="./main.js"></script><script type="module">
+// Display the actual source files; this code only controls the source viewer.
+for (const code of document.querySelectorAll('[data-source]')) {
+  try {
+    const response = await fetch(code.dataset.source);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    code.textContent = await response.text();
+  } catch (error) {
+    code.textContent = error.message;
+  }
+}
+</script></body>
+</html>

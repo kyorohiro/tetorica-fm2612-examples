@@ -1,0 +1,52 @@
+[
+  {
+    "id": "fm/01-single-note",
+    "title": "最初の FM 発音",
+    "description": "sine プリセット、noteOn / noteOff、PCM を生成して時間を進める最小例。"
+  },
+  {
+    "id": "fm/02-melody",
+    "title": "音階とメロディ",
+    "description": "1つのチャンネルで C–D–E–G–C を順に鳴らす。"
+  },
+  {
+    "id": "fm/03-presets",
+    "title": "プリセットを切り替える",
+    "description": "同じ音程で sine・bell・organ の音色を比較する。"
+  },
+  {
+    "id": "fm/04-operators",
+    "title": "オペレーターを設定",
+    "description": "プリセットを使わず、algorithm 7 と OP4 で音を作る。"
+  },
+  {
+    "id": "fm/05-stereo-pan",
+    "title": "左右のパン",
+    "description": "左だけ・右だけ・両側の順に出力を切り替える。ヘッドフォンで比較。"
+  },
+  {
+    "id": "fm/06-chord",
+    "title": "複数チャンネルで和音",
+    "description": "チャンネル 0・1・2 に C・E・G を割り当てて同時に鳴らす。"
+  },
+  {
+    "id": "chip-raw/01-register-note",
+    "title": "レジスタを直接書く",
+    "description": "YM2612 の OP4・algorithm・pan・周波数・key on/off をレジスタで設定。"
+  },
+  {
+    "id": "psg/01-tone",
+    "title": "Sega PSG のトーン",
+    "description": "10-bit divider と attenuation を書いて矩形波を鳴らす。"
+  },
+  {
+    "id": "psg/02-noise",
+    "title": "Sega PSG のノイズ",
+    "description": "周期ノイズとホワイトノイズを切り替える。"
+  },
+  {
+    "id": "pcm/01-wav-export",
+    "title": "PCM と WAV 出力",
+    "description": "generateStereo の Float32 PCM を取得し、Web / Node のアダプターで WAV に保存。"
+  }
+]

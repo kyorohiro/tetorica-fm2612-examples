@@ -1,0 +1,14 @@
+{
+  "name": "tetorica-fm2612-examples",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Runnable examples consuming the published tetorica-fm2612 npm package",
+  "license": "BSD-3-Clause",
+  "engines": {"node": ">=22"},
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "node scripts/build.mjs"
+  },
+  "dependencies": {"tetorica-fm2612": "0.2.0"}
+}
