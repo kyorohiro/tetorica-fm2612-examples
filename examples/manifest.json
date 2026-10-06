@@ -98,5 +98,10 @@
     "id": "pc98/adpcm-b/01-sample",
     "title": "YM2608 ADPCM-B：サンプルメモリ再生",
     "description": "エンコード済み ADPCM-B を loadMemory で転送し、再生範囲・速度・音量・ループを設定する。"
+  },
+  {
+    "id": "pc98/adpcm-b/02-load-sample",
+    "title": "YM2608 ADPCM-B：PCM / WAV の loadSample",
+    "description": "PCM を loadSample で変換・転送して再生し、WAV の読み込みと1.5倍速の再生も試す。"
   }
 ]

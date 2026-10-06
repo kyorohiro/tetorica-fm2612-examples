@@ -1,6 +1,6 @@
 # tetorica-fm2612 examples
 
-公開済み `tetorica-fm2612@0.2.0` を import して使う、機能別の小さなサンプル集。
+公開済み `tetorica-fm2612@0.2.2` を import して使う、機能別の小さなサンプル集。
 各サンプルに Web と Node.js の入口を置いています。本体リポジトリには依存しません。
 
 パッケージ本体の説明・API の使い方・配布設定は
@@ -43,6 +43,7 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 | X68000 | [01-byte-stream](examples/x68000/adpcm/01-byte-stream/README.md) | X68000 OKIM6258 の ADPCM 再生 |
 | PC-98 | [01-rhythm](examples/pc98/adpcm-a/01-rhythm/README.md) | YM2608 ADPCM-A：固定リズム音源 |
 | PC-98 | [01-sample](examples/pc98/adpcm-b/01-sample/README.md) | YM2608 ADPCM-B：サンプルメモリ再生 |
+| PC-98 | [02-load-sample](examples/pc98/adpcm-b/02-load-sample/README.md) | YM2608 ADPCM-B：PCM / WAV の loadSample |
 
 ## 各フォルダーの構成
 
