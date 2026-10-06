@@ -1,7 +1,10 @@
 # tetorica-fm2612 examples
 
 公開済み `tetorica-fm2612@0.2.3` を import して使う、機能別の小さなサンプル集。
-各サンプルに Web と Node.js の入口を置いています。本体リポジトリには依存しません。
+PCM 生成の例には Web と Node.js の入口を置き、Web Audio を使う埋め込み例は Web 専用として掲載しています。本体リポジトリには依存しません。
+
+[公開 examples](https://kyorohiro.github.io/tetorica-fm2612-examples/) と
+[Runtime の構成と選び方](public/runtime.html) から読み始められます。
 
 パッケージ本体の説明・API の使い方・配布設定は
 [hello_ymfm_wasm/packages/fm2612](https://github.com/kyorohiro/hello_ymfm_wasm/tree/main/packages/fm2612)
@@ -44,6 +47,13 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 | PC-98 | [01-rhythm](examples/pc98/adpcm-a/01-rhythm/README.md) | YM2608 ADPCM-A：固定リズム音源 |
 | PC-98 | [01-sample](examples/pc98/adpcm-b/01-sample/README.md) | YM2608 ADPCM-B：サンプルメモリ再生 |
 | PC-98 | [02-load-sample](examples/pc98/adpcm-b/02-load-sample/README.md) | YM2608 ADPCM-B：PCM / WAV の loadSample |
+| Embedding（Web） | [01-megadrive-fx](examples/embedding/01-megadrive-fx/README.md) | MegaDriveSynth の発音、delay / reverb、終了 |
+| Embedding（Web） | [02-event-recording](examples/embedding/02-event-recording/README.md) | 音源操作をイベント JSON に録音、import / 再生 |
+| Embedding（Web） | [03-looper](examples/embedding/03-looper/README.md) | 音符の録音、ループ、undo / 停止 |
+| Embedding（Web） | [04-playground-worker](examples/embedding/04-playground-worker/README.md) | Playground のコードを Worker で実行 |
+| Embedding（Web / Node） | [05-vgm-player](examples/embedding/05-vgm-player/README.md) | 自作 PSG VGM / 手元の VGM の再生、Node WAV 出力 |
+| Patches（Web / Node） | [01-tfi-roundtrip](examples/patches/01-tfi-roundtrip/README.md) | TFI の import / export、音色の発音 |
+| Patches（Web / Node） | [02-vgi-roundtrip](examples/patches/02-vgi-roundtrip/README.md) | VGI の import / export、音色の発音 |
 
 ## 各フォルダーの構成
 
@@ -60,6 +70,7 @@ examples/genesis/fm/01-single-note/
 各ファイルに必要なコードをすべて記述します。サンプル間や Web / Node 間の
 重複はそのまま残し、共通の音源処理・再生ヘルパーは使いません。
 パッケージと実行環境の標準 API だけを使用します。
+ブラウザ専用の例は `node/` を置かず、一覧と README に実行環境を明記します。
 
 `generateStereo(frames)` で PCM を生成してチップの時間を進めます。
 FM / PSG / PCM の Web 版は生成済み PCM を Web Audio で再生します。
@@ -106,6 +117,8 @@ WAV 出力には package の `encodeWav(pcm, {gain: 0.25})` を使います。
 機能の分類内にフォルダーを作り、`web/`、`node/`、README を置きます。
 一覧の原本は `examples/manifest.json` です。そこにタイトルと説明を追加すると
 Web の一覧にも表示されます。ビルドで examples フォルダー全体を配布します。
+ブラウザ専用の場合は `environments: ["web"]`、Web / Node の両方を持つ場合は
+`environments: ["web", "node"]` を指定できます。省略時は従来の Web / Node 例として扱います。
 
 ## License
 

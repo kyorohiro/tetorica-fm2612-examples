@@ -1,4 +1,4 @@
-const labels = {'genesis/fm': 'Genesis FM — 発音・音色・チャンネル', 'chip-raw': 'Chip raw — レジスタ操作', 'genesis/psg': 'Genesis PSG — トーン・ノイズ', 'genesis/pcm': 'Genesis PCM — ファイル出力', 'audio-worklet': 'AudioWorklet — 音声スレッドで再生', pc98: 'PC-98 — YM2608 FM / SSG / ADPCM', gameboy: 'Game Boy — pulse / wave / noise', x68000: 'X68000 — YM2151 FM / OKIM6258 ADPCM'};
+const labels = {'genesis/fm': 'Genesis FM — 発音・音色・チャンネル', 'chip-raw': 'Chip raw — レジスタ操作', embedding: 'Embedding — アプリ・ゲームへの組み込み', patches: 'Patches — TFI / VGI の音色ファイル', 'genesis/psg': 'Genesis PSG — トーン・ノイズ', 'genesis/pcm': 'Genesis PCM — ファイル出力', 'audio-worklet': 'AudioWorklet — 音声スレッドで再生', pc98: 'PC-98 — YM2608 FM / SSG / ADPCM', gameboy: 'Game Boy — pulse / wave / noise', x68000: 'X68000 — YM2151 FM / OKIM6258 ADPCM'};
 const catalog = document.getElementById('catalog');
 try {
   const response = await fetch('./examples/manifest.json');
@@ -16,11 +16,13 @@ try {
       const title = document.createElement('h3'); title.textContent = example.title;
       const description = document.createElement('p'); description.textContent = example.description;
       const links = document.createElement('div'); links.className = 'actions';
-      for (const [text, file] of [['Web →', 'web/index.html'], ['Node source', 'node/main.mjs'], ['README', 'README.md']]) {
+      const hasNode = !example.environments || example.environments.includes('node');
+      const entries = [['Web →', 'web/index.html'], ...(hasNode ? [['Node source', 'node/main.mjs']] : []), ['README', 'README.md']];
+      for (const [text, file] of entries) {
         const link = document.createElement('a'); link.textContent = text; link.href = `./examples/${example.id}/${file}`; links.append(link);
       }
       const command = document.createElement('pre');
-      const code = document.createElement('code'); code.textContent = `node examples/${example.id}/node/main.mjs`; command.append(code);
+      const code = document.createElement('code'); code.textContent = hasNode ? `node examples/${example.id}/node/main.mjs` : 'Web Audio / ブラウザ専用'; command.append(code);
       card.append(id, title, description, links, command); grid.append(card);
     }
     section.append(heading, grid); catalog.append(section);

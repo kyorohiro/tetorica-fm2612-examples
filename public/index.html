@@ -11,10 +11,11 @@
   <header>
     <p class="eyebrow">TETORICA-FM2612 · WEB / NODE · v0.2.3</p>
     <h1>Small examples.<br>One topic at a time.</h1>
-    <p>機能ごとに小さく分けた音源サンプル集。各フォルダーに説明、Web の実行ページ、Node.js の WAV 出力例があります。読み込みから音源操作、出力まで、それぞれのコードに省略せず記述しています。</p>
+    <p>機能ごとに小さく分けた音源サンプル集。音源操作、音色ファイル、アプリ・ゲームへの組み込みを試せます。PCM 生成の例は Web / Node、Web Audio の埋め込み例はブラウザ向けです。各例に読み込みから出力まで省略せず記述しています。</p>
+    <p><a href="./runtime.html">Runtime の構成と選び方 →</a></p>
     <pre><code>npm install
 npm run dev</code></pre>
-    <p class="muted">公開済み npm パッケージを import して使います。Web は PCM を生成して再生、Node は WAV を保存します。各例のコードは共通ヘルパーを使わず、重複も含めて全部載せています。</p>
+    <p class="muted">公開済み npm パッケージを import して使います。Web は PCM 再生や AudioWorklet で発音し、Node は WAV を保存します。各例のコードは共通ヘルパーを使わず、重複も含めて全部載せています。</p>
   </header>
   <div id="catalog"><p role="status">Loading examples…</p></div>
   <section class="setup">

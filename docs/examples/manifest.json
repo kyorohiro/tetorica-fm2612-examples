@@ -103,5 +103,64 @@
     "id": "pc98/adpcm-b/02-load-sample",
     "title": "YM2608 ADPCM-B：PCM / WAV の loadSample",
     "description": "PCM を loadSample で変換・転送して再生し、WAV の読み込みと1.5倍速の再生も試す。"
+  },
+  {
+    "id": "embedding/01-megadrive-fx",
+    "title": "MegaDriveSynth：発音と FX",
+    "description": "MegaDriveSynth の start() → FM 発音 → delay / reverb → close() をアプリに組み込む。",
+    "environments": [
+      "web"
+    ]
+  },
+  {
+    "id": "embedding/02-event-recording",
+    "title": "MegaDriveSynth：イベント録音と再生",
+    "description": "noteOn / noteOff を JSON に記録し、export → import → playRecording で再演奏する。",
+    "environments": [
+      "web"
+    ]
+  },
+  {
+    "id": "embedding/03-looper",
+    "title": "MegaSynthLooper：音符をループ",
+    "description": "演奏した noteOn / noteOff を1周分記録し、繰り返し再生・undo・停止する。",
+    "environments": [
+      "web"
+    ]
+  },
+  {
+    "id": "embedding/04-playground-worker",
+    "title": "Playground Runtime：Worker で実行",
+    "description": "Playground のコードを load() し、Worker で実行してアプリに組み込む。",
+    "environments": [
+      "web"
+    ]
+  },
+  {
+    "id": "embedding/05-vgm-player",
+    "title": "VGM Runtime：ファイルを再生",
+    "description": "自作の PSG VGM または手元の VGM を読み込み、再生・停止・解放する。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
+    "id": "patches/01-tfi-roundtrip",
+    "title": "TFI：音色の import / export",
+    "description": "TFI バイナリを preset に変換して発音し、音色ファイルと WAV を保存する。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
+    "id": "patches/02-vgi-roundtrip",
+    "title": "VGI：音色の import / export",
+    "description": "VGI バイナリを preset に変換して発音し、音色ファイルと WAV を保存する。",
+    "environments": [
+      "web",
+      "node"
+    ]
   }
 ]
