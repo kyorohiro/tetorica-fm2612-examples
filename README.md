@@ -1,7 +1,8 @@
 # tetorica-fm2612 examples
 
-公開済み `tetorica-fm2612@0.2.5` を import して使う、機能別の小さなサンプル集。
-PCM 生成の例には Web と Node.js の入口を置き、Web Audio を使う埋め込み例と、Node の nativeFX / 音声デバイス出力の例も掲載しています。本体リポジトリには依存しません。
+`tetorica-fm2612` を import して使う、機能別の小さなサンプル集。
+チップ別の基本例は npm 0.2.6 の WorkletTransport / AudifyTransport を使います。導入手順は末尾の「Transport の例」を参照してください。
+チップ別の基本例は WorkletTransport / AudifyTransport を使います。PCM 生成・WAV 保存は専用例に置き、Web Audio を使う埋め込み例と、Node の nativeFX / 音声デバイス出力の例も掲載しています。本体リポジトリには依存しません。
 
 [公開 examples](https://kyorohiro.github.io/tetorica-fm2612-examples/) と
 [Runtime の構成と選び方](public/runtime.html) から読み始められます。
@@ -61,6 +62,8 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 | Embedding（Node・実験用） | [09-megasynth-node-pcm-looper](examples/embedding/09-megasynth-node-pcm-looper/README.md) | PCM 録音・native mixer・dry / FX WAV |
 | Embedding（Node・実験用） | [10-megasynth-node-audio](examples/embedding/10-megasynth-node-audio/README.md) | Worker 内のリアルタイム出力・録音・停止・再開 |
 
+| DirectTransport | [01-single-note](examples/transport/direct/01-single-note/README.md) | PCM 生成・Web 再生・Node WAV 保存 |
+
 ## 各フォルダーの構成
 
 ```text
@@ -68,9 +71,9 @@ examples/genesis/fm/01-single-note/
 ├── README.md
 ├── web/
 │   ├── index.html
-│   └── main.js       npm import → WASM → 音源操作 → PCM → 再生・停止・WAV 保存
+│   └── main.js       npm import → WorkletTransport → 音源操作 → 発音・終了
 └── node/
-    └── main.mjs      npm import → WASM → 音源操作 → PCM → WAV 保存
+    └── main.mjs      npm import → AudifyTransport → 音源操作 → 発音・終了
 ```
 
 各ファイルに必要なコードをすべて記述します。サンプル間や Web / Node 間の
@@ -79,9 +82,11 @@ examples/genesis/fm/01-single-note/
 ブラウザ専用の例は `node/` を置かず、一覧と README に実行環境を明記します。
 
 `generateStereo(frames)` で PCM を生成してチップの時間を進めます。
-FM / PSG / PCM の Web 版は生成済み PCM を Web Audio で再生します。
+チップ別の基本例は WorkletTransport でリアルタイムに発音します。
+DirectTransport / PCM の専用例では生成済み PCM を再生します。
 AudioWorklet の例は processor が音声スレッドで PCM を生成します。
-Node 版は DirectTransport による同じ音源設定のオフライン生成です。
+基本例の Node 版は AudifyTransport による同じ音源操作のリアルタイム再生です。
+オフライン生成は DirectTransport / PCM の専用例で説明します。
 オフライン生成の例には PCM の連結と、npm package の `encodeWav()` による WAV 出力も載せています。
 AudioWorklet の Web 版には ready 待機と transport・node・AudioContext の解放を載せています。
 
@@ -89,10 +94,10 @@ AudioWorklet の Web 版には ready 待機と transport・node・AudioContext �
 
 ```sh
 node examples/genesis/fm/01-single-note/node/main.mjs
-node examples/genesis/fm/02-melody/node/main.mjs ./melody.wav
+node examples/transport/direct/01-single-note/node/main.mjs ./note.wav
 ```
 
-既定では `output/<サンプル名>.wav` に保存します。
+DirectTransport / PCM の Node 例は `output/<サンプル名>.wav` に保存します。チップ別の基本例は audify の音声デバイスへ出力します。
 オフラインの Node 版に AudioContext や音声ドライバーは不要です。リアルタイム出力例だけは audify と音声デバイスを使います。
 WAV をスピーカーで聴く場合は音声プレイヤーで開いてください。
 Web と Node の音源操作は同等ですが、各ファイルにそれぞれ記述しています。
@@ -133,7 +138,7 @@ Node 専用の場合は `environments: ["node"]`、ブラウザ専用の場合�
 
 ## MegaSynth Node examples
 
-`embedding/06`〜`10` は `tetorica-fm2612@0.2.5` の実験用 MegaSynth API を使います。
+`embedding/06`〜`10` は `tetorica-fm2612@0.2.6` の実験用 MegaSynth API を使います。
 通常の `npm ci` で公開 package を導入できます。
 
 ```sh
@@ -149,6 +154,24 @@ node examples/embedding/10-megasynth-node-audio/node/main.mjs
 06〜09 は音声デバイス不要、10 は audify による Worker 内リアルタイム出力です。
 各例は独立したファイルに処理をすべて記述し、package の export だけを import します。
 一覧では Node source / README のみを表示し、Web へのリンクは付けません。
-Node オフライン全28例は `npm run check:node` で検証できます。
+Node オフライン全12例は `npm run check:node` で検証できます。
 WAV の RIFF ヘッダー・非ゼロ PCM とイベント JSON を確認します。
-音声デバイスを使う embedding/01 と10の Node 例は、このコマンドには含めません。
+音声デバイスを使うチップ別の基本例と embedding/01・10の Node 例は、このコマンドには含めません。
+
+## Transport の例
+
+Genesis / PC-98 / Game Boy / X68000 FM の基本例は、WorkletTransport / AudifyTransport を使用します。
+公開済み npm 0.2.6 を使用します。Node のリアルタイム再生には audify を追加してください。
+
+```sh
+npm install
+npm install --no-save audify
+npm run dev
+node examples/genesis/fm/01-single-note/node/main.mjs
+```
+
+基本例の Web は Worklet 内でチップを動かし、Main で Synth / Transport を使います。
+Node は呼び出し元でチップ / Synth を動かし、AudifyTransport がデバイス出力を担当します。
+MegaSynth のゲーム埋め込み例は別枠で維持します。
+[DirectTransport の専用例](examples/transport/direct/01-single-note/README.md) に PCM 生成と WAV 保存を分けています。
+基本例の Node 版は音声デバイスを使うため `check:node` の WAV 出力検証には含めません。

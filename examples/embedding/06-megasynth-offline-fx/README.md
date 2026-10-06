@@ -2,7 +2,7 @@
 
 AudioContext なしで FM → native delay / reverb → WAV を生成する。
 
-公開済み `tetorica-fm2612@0.2.5` の実験 API を import します。
+公開済み `tetorica-fm2612@0.2.6` の実験 API を import します。
 導入手順は [repository README](../../../README.md#megasynth-node-examples) を参照してください。
 
 ```sh

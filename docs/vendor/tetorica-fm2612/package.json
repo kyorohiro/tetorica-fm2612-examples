@@ -1,6 +1,6 @@
 {
   "name": "tetorica-fm2612",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Tetorica sound chip WASM cores, Synth helpers and browser audio runtime",
   "type": "module",
   "license": "BSD-3-Clause",
@@ -14,6 +14,7 @@
     ".": "./soundchip.js",
     "./assets": "./package_assets.js",
     "./node": "./node/megasynth.mjs",
+    "./node/transports": "./node/chip_transports.mjs",
     "./generated/*": "./generated/*",
     "./*.js": "./*.js",
     "./*": "./*.js"

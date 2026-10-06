@@ -9,7 +9,17 @@
     <p>公開済み npm package のどの API を使うか、アプリ・ゲームへの組み込み方に合わせて選びます。</p>
     <pre><code>npm install tetorica-fm2612</code></pre>
   </header>
-  <section class="sample-panel"><h2>音源を直接操作する</h2>
+  <section><h2>チップ別の基本例（npm 0.2.6）</h2>
+<pre><code>Web: createSoundChip(name, {execution: 'worklet'})
+     → WorkletTransport → Synth（Main）→ WASM（Worklet）
+Node: createSoundChip(name)
+      → AudifyTransport → Synth / WASM（呼び出し元）→ 音声出力
+</code></pre>
+<p>演奏するコードは同じ Synth の API。DirectTransport の PCM / WAV 手順は専用例へ分けています。
+MegaSynth はゲームへの埋め込み用の統合 API として別枠に残しています。</p>
+<p><a href="./examples/genesis/fm/01-single-note/web/index.html">FM 発音</a> ·
+<a href="./examples/transport/direct/01-single-note/web/index.html">DirectTransport の PCM / WAV</a></p></section>
+<section class="sample-panel"><h2>音源を直接操作する</h2>
     <pre><code>generated/*.js + *.wasm  チップのエミュレーター
           ↓
 createSoundChip()        レジスタ・PCM 生成の入口
@@ -23,7 +33,7 @@ generateStereo(frames)   時間を進めて Float32 PCM を生成
 Web Audio / encodeWav()  ブラウザ再生 / Web・Node の WAV 保存</code></pre>
     <p><code>generateStereo()</code> を呼ぶとチップの時間が進みます。Node では AudioContext や音声ドライバーは不要です。
       <code>createSoundChip('ym2612')</code> は Web / Node に応じて WASM を自動読み込みします。</p>
-    <p><a href="./examples/genesis/fm/01-single-note/web/index.html">最小の FM 発音</a> ·
+    <p><a href="./examples/transport/direct/01-single-note/web/index.html">DirectTransport の PCM 生成</a> ·
       <a href="./examples/chip-raw/01-register-note/web/index.html">レジスタ直接操作</a> ·
       <a href="./examples/genesis/pcm/01-wav-export/web/index.html">PCM / WAV 出力</a></p>
   </section>

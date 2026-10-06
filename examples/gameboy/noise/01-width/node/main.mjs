@@ -1,48 +1,29 @@
-import {encodeWav} from 'tetorica-fm2612';
-// Run this file from the repository root with Node.js 22+.
-import {GameboyApu} from 'tetorica-fm2612/gameboyapu.js';
-import moduleFactory from 'tetorica-fm2612/generated/gameboy_apu_wasm.js';
-import {GameboySynth, GameboyDirectTransport} from 'tetorica-fm2612/gameboysynth.js';
-import {runtimeAssetUrl} from 'tetorica-fm2612/package_assets.js';
-import {readFile, mkdir, writeFile} from 'node:fs/promises';
-import {dirname, resolve} from 'node:path';
-import {fileURLToPath} from 'node:url';
+import {createSoundChip} from 'tetorica-fm2612';
+import {GameboySynth} from 'tetorica-fm2612/gameboysynth.js';
+import {GameboyAudifyTransport} from 'tetorica-fm2612/node/transports';
 
-// Read the WASM shipped in the installed npm package.
-const wasmBinary = await readFile(runtimeAssetUrl('generated/gameboy_apu_wasm.wasm'));
-const chip = await GameboyApu.create({moduleFactory, moduleOptions: {wasmBinary}});
-try {
-  const sampleRate = chip.sampleRate();
-  const gb = new GameboySynth({transport: new GameboyDirectTransport(chip)});
+async function play(gb) {
   gb.initialize();
-  const segments = [];
   for (const width of [15, 7]) {
     gb.noise.setVoice({volume: 10, envelope: {direction: 'down', period: 1},
       divisor: 3, shift: 4, width});
     gb.noise.keyOn();
-    segments.push(chip.generateStereo(Math.round(sampleRate * 0.4)));
+    await wait(400);
     gb.noise.keyOff();
-    segments.push(chip.generateStereo(Math.round(sampleRate * 0.15)));
+    await wait(150);
   }
-  gb.dispose();
-  // Concatenate the generated segments in their original order.
-  const frames = segments.reduce((sum, segment) => sum + segment.left.length, 0);
-  const left = new Float32Array(frames);
-  const right = new Float32Array(frames);
-  let offset = 0;
-  for (const segment of segments) {
-    left.set(segment.left, offset);
-    right.set(segment.right, offset);
-    offset += segment.left.length;
-  }
-
-  // Encode and save stereo PCM16. No audio driver is required.
-  const wav = encodeWav({left, right, sampleRate}, {gain: 0.25});
-  const defaultPath = fileURLToPath(new URL('../../../../../output/gameboy-noise-01-width.wav', import.meta.url));
-  const output = process.argv[2] ? resolve(process.argv[2]) : defaultPath;
-  await mkdir(dirname(output), {recursive: true});
-  await writeFile(output, wav);
-  console.log(`${output}\n${left.length} frames · ${sampleRate} Hz · stereo PCM16`);
-} finally {
-  chip.dispose();
 }
+
+const chip = await createSoundChip('gameboy');
+const transport = new GameboyAudifyTransport(chip);
+const gb = new GameboySynth({transport});
+try {
+  await transport.start();
+  console.log('Playing…');
+  await play(gb);
+  await transport.stop();
+} finally {
+  await transport.close(); chip.dispose();
+}
+console.log('Finished: audio output closed.');
+function wait(milliseconds) {return new Promise(resolve => setTimeout(resolve, milliseconds));}

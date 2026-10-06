@@ -208,36 +208,26 @@ Worklet uploads complete before the returned promise resolves.
 `loadMemory()` remains the API for already-encoded ADPCM-B bytes.
 This does not add arbitrary sample loading to YM2608's fixed ADPCM-A rhythm.
 
-## Experimental MegaSynth for Node
+## Chip output transports (0.2.6)
 
-Version 0.2.5 adds standalone YM2612 FM / DAC rendering through the shared
-nativeFX DSP, sample-clock event recording and event / PCM loopers.
+Basic chip examples use a shared factory followed by a transport and Synth.
+Browser `createSoundChip(name, {execution: 'worklet'})` creates the WASM chip
+inside AudioWorklet. `YM2612WorkletTransport` / `YM2608WorkletTransport` send
+register commands from Main, and accept an existing AudioWorkletNode or MessagePort
+for applications that manage the connection themselves.
+Gameboy, SegaPSG and YM2151 transports are exported by `chip_worklet_transport.js`.
+The worklet factory supports `ym2612`, `ym2608`, `gameboy`, `segapsg`, `ym2151`.
+Default factory execution stays local; Game Boy and Sega PSG now also support
+`createSoundChip('gameboy')` and `createSoundChip('segapsg')`.
 
-```js
-import {createMegaSynthSession} from 'tetorica-fm2612/megasynth_session.js';
-import {FM_PRESETS} from 'tetorica-fm2612/megasynth-fm-presets.js';
-import {encodeWav} from 'tetorica-fm2612';
-
-const synth = await createMegaSynthSession({sampleRate: 48000});
-try {
-  synth.fm.setPreset(0, FM_PRESETS.sine);
-  synth.fx.setChain([synth.fx.delay({time: 0.12, mix: 0.25})]);
-  synth.schedule(0, {target: 'fm', method: 'noteOn', args: [0, 4, 553]});
-  synth.schedule(12000, {target: 'fm', method: 'noteOff', args: [0]});
-  const wav = encodeWav(await synth.render(48000));
-  // Save wav using node:fs/promises or another destination.
-} finally {await synth.close();}
-```
-
-For realtime device output, `import {MegaSynthNode} from 'tetorica-fm2612/node'`.
-Install the optional `audify` peer dependency in your application. The owned
-Worker renders FM, nativeFX and output without transferring normal playback
-PCM to Main. Controls are asynchronous; await FM / recording / looper commands.
-Use `engineOptions: {looperMode: 'pcm'}` for dry FM capture and native PCM playback.
-See [Node API and lifecycle](./node/README.md) for recording, export, audio budget,
-stop / resume / close and output adapters. macOS / Node 22 / CoreAudio is tested;
-other platforms are not yet verified. PSG, Mega CD PCM and microphone input are
-not included in this experimental Node MegaSynth runtime.
+Node `YM2612AudifyTransport(chip)` and the corresponding YM2608 / Gameboy /
+SegaPSG / YM2151 classes are exported by `tetorica-fm2612/node/transports`.
+They borrow the caller's chip, render PCM on the calling thread, and own a
+device-only Worker. Use `await start()`, `await stop()`, `await close()`, then
+`chip.dispose()`. Audify remains optional, but is required by this chosen output.
+MegaSynth stays available as the integrated game-embedding API.
+DirectTransport is the separate offline PCM / WAV interface.
+These transport/factory APIs are available starting in 0.2.6.
 
 ## Local packaging
 
@@ -263,10 +253,10 @@ FM/PSG/PCM mixing, stop/reset and close/restart. Playwright is a development
 dependency; it is not required by users of the sound-chip runtime.
 
 The build is staged in `dist/fm2612/`; packing produces
-`tetorica-fm2612-0.2.5.tgz`. To install a local build in another project:
+`tetorica-fm2612-0.2.6.tgz`. To install a local build in another project:
 
 ```sh
-npm install /absolute/path/to/tetorica-fm2612-0.2.5.tgz
+npm install /absolute/path/to/tetorica-fm2612-0.2.6.tgz
 ```
 
 The existing `tetorica-vgm` CLI package is built separately. This first package
@@ -282,12 +272,17 @@ and generator. External instrument/sample ROMs are not included.
 
 ## Release notes
 
-`0.2.5` adds experimental Node MegaSynth offline / realtime Worker runtimes,
-shared nativeFX DSP, sample-clock event recording and event / PCM loopers.
-The optional audify adapter supports Worker-owned output; explicit PCM export
-supports WAV saving. Browser nativeFX uses the same DSP and retains its existing
-AudioWorklet API. PCM capture excludes previous loop playback and FX tails.
+`0.2.6` adds browser Worklet chip creation and chip-specific Audify transports
+for YM2612, YM2608, Game Boy, Sega PSG and YM2151. Basic examples use
+WorkletTransport on Web and AudifyTransport on Node; DirectTransport remains
+available for explicit PCM generation and WAV export. Applications can move
+Synth/Transport into their own Worker using a dedicated MessagePort.
+MegaSynthNode can also start without an audio driver, render PCM offline,
+and attach, detach or replace an output adapter later.
 
+`0.2.5` adds experimental MegaSynth Node APIs for offline nativeFX rendering,
+event recording, PCM looping and Worker-based realtime device output.
+Audify is an optional peer dependency.
 
 `0.2.4` removes the ymfm YM2612 DAC ladder's idle offset from AudioWorklet
 output and keeps output silent until FM/PSG initialization completes. This

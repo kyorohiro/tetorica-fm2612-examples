@@ -2,32 +2,38 @@
   {
     "id": "genesis/fm/01-single-note",
     "title": "最初の FM 発音",
-    "description": "sine プリセット、noteOn / noteOff、PCM を生成して時間を進める最小例。"
+    "description": "sine プリセット、noteOn / noteOff を Transport 経由でリアルタイム再生する最小例。",
+    "nodeAudioOutput": true
   },
   {
     "id": "genesis/fm/02-melody",
     "title": "音階とメロディ",
-    "description": "1つのチャンネルで C–D–E–G–C を順に鳴らす。"
+    "description": "1つのチャンネルで C–D–E–G–C を順に鳴らす。",
+    "nodeAudioOutput": true
   },
   {
     "id": "genesis/fm/03-presets",
     "title": "プリセットを切り替える",
-    "description": "同じ音程で sine・bell・organ の音色を比較する。"
+    "description": "同じ音程で sine・bell・organ の音色を比較する。",
+    "nodeAudioOutput": true
   },
   {
     "id": "genesis/fm/04-operators",
     "title": "オペレーターを設定",
-    "description": "プリセットを使わず、algorithm 7 と OP4 で音を作る。"
+    "description": "プリセットを使わず、algorithm 7 と OP4 で音を作る。",
+    "nodeAudioOutput": true
   },
   {
     "id": "genesis/fm/05-stereo-pan",
     "title": "左右のパン",
-    "description": "左だけ・右だけ・両側の順に出力を切り替える。ヘッドフォンで比較。"
+    "description": "左だけ・右だけ・両側の順に出力を切り替える。ヘッドフォンで比較。",
+    "nodeAudioOutput": true
   },
   {
     "id": "genesis/fm/06-chord",
     "title": "複数チャンネルで和音",
-    "description": "チャンネル 0・1・2 に C・E・G を割り当てて同時に鳴らす。"
+    "description": "チャンネル 0・1・2 に C・E・G を割り当てて同時に鳴らす。",
+    "nodeAudioOutput": true
   },
   {
     "id": "chip-raw/01-register-note",
@@ -37,12 +43,14 @@
   {
     "id": "genesis/psg/01-tone",
     "title": "Sega PSG のトーン",
-    "description": "10-bit divider と attenuation を書いて矩形波を鳴らす。"
+    "description": "10-bit divider と attenuation を書いて矩形波を鳴らす。",
+    "nodeAudioOutput": true
   },
   {
     "id": "genesis/psg/02-noise",
     "title": "Sega PSG のノイズ",
-    "description": "周期ノイズとホワイトノイズを切り替える。"
+    "description": "周期ノイズとホワイトノイズを切り替える。",
+    "nodeAudioOutput": true
   },
   {
     "id": "genesis/pcm/01-wav-export",
@@ -57,32 +65,38 @@
   {
     "id": "pc98/fm/01-note",
     "title": "PC-98 YM2608 の FM 発音",
-    "description": "YM2608Synth と DirectTransport で FM のサイン波を鳴らす。外部 ROM は不要。"
+    "description": "YM2608Synth と DirectTransport で FM のサイン波を鳴らす。外部 ROM は不要。",
+    "nodeAudioOutput": true
   },
   {
     "id": "pc98/ssg/01-tone",
     "title": "PC-98 YM2608 の SSG トーン",
-    "description": "YM2608 内蔵 SSG の矩形波を 440 Hz で鳴らす。音量を指定して停止する。"
+    "description": "YM2608 内蔵 SSG の矩形波を 440 Hz で鳴らす。音量を指定して停止する。",
+    "nodeAudioOutput": true
   },
   {
     "id": "gameboy/pulse/01-duty",
     "title": "Game Boy pulse のデューティ比",
-    "description": "pulse チャンネルで 12.5%・25%・50%・75% の矩形波を比較する。"
+    "description": "pulse チャンネルで 12.5%・25%・50%・75% の矩形波を比較する。",
+    "nodeAudioOutput": true
   },
   {
     "id": "gameboy/wave/01-waveform",
     "title": "Game Boy wave の波形メモリー",
-    "description": "32点・各 0〜15 の三角波とノコギリ波を wave チャンネルで比較する。"
+    "description": "32点・各 0〜15 の三角波とノコギリ波を wave チャンネルで比較する。",
+    "nodeAudioOutput": true
   },
   {
     "id": "gameboy/noise/01-width",
     "title": "Game Boy noise の幅",
-    "description": "noise チャンネルで 15-bit と 7-bit の違いを聴き比べる。"
+    "description": "noise チャンネルで 15-bit と 7-bit の違いを聴き比べる。",
+    "nodeAudioOutput": true
   },
   {
     "id": "x68000/fm/01-note",
     "title": "X68000 YM2151 の FM 発音",
-    "description": "4 MHz の YM2151 にレジスタを書き、1つのオペレーターで発音する。"
+    "description": "4 MHz の YM2151 にレジスタを書き、1つのオペレーターで発音する。",
+    "nodeAudioOutput": true
   },
   {
     "id": "x68000/adpcm/01-byte-stream",
@@ -92,17 +106,20 @@
   {
     "id": "pc98/adpcm-a/01-rhythm",
     "title": "YM2608 ADPCM-A：固定リズム音源",
-    "description": "package 同梱の Tetorica 自作リズム ROM を読み込み、bass drum・snare・hi-hat を鳴らす。"
+    "description": "package 同梱の Tetorica 自作リズム ROM を読み込み、bass drum・snare・hi-hat を鳴らす。",
+    "nodeAudioOutput": true
   },
   {
     "id": "pc98/adpcm-b/01-sample",
     "title": "YM2608 ADPCM-B：サンプルメモリ再生",
-    "description": "エンコード済み ADPCM-B を loadMemory で転送し、再生範囲・速度・音量・ループを設定する。"
+    "description": "エンコード済み ADPCM-B を loadMemory で転送し、再生範囲・速度・音量・ループを設定する。",
+    "nodeAudioOutput": true
   },
   {
     "id": "pc98/adpcm-b/02-load-sample",
     "title": "YM2608 ADPCM-B：PCM / WAV の loadSample",
-    "description": "PCM を loadSample で変換・転送して再生し、WAV の読み込みと1.5倍速の再生も試す。"
+    "description": "PCM を loadSample で変換・転送して再生し、WAV の読み込みと1.5倍速の再生も試す。",
+    "nodeAudioOutput": true
   },
   {
     "id": "embedding/01-megasynth-fx",
@@ -205,5 +222,14 @@
       "node"
     ],
     "nodeAudioOutput": true
+  },
+  {
+    "id": "transport/direct/01-single-note",
+    "title": "DirectTransport：PCM 生成と WAV 保存",
+    "description": "レジスタ操作・PCM 生成・生成済み PCM の Web 再生・Node WAV 保存を順に説明する。",
+    "environments": [
+      "web",
+      "node"
+    ]
   }
 ]
