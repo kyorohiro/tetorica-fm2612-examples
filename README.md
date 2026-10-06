@@ -41,6 +41,8 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 | Game Boy | [01-width](examples/gameboy/noise/01-width/README.md) | Game Boy noise の幅 |
 | X68000 | [01-note](examples/x68000/fm/01-note/README.md) | X68000 YM2151 の FM 発音 |
 | X68000 | [01-byte-stream](examples/x68000/adpcm/01-byte-stream/README.md) | X68000 OKIM6258 の ADPCM 再生 |
+| PC-98 | [01-rhythm](examples/pc98/adpcm-a/01-rhythm/README.md) | YM2608 ADPCM-A：固定リズム音源 |
+| PC-98 | [01-sample](examples/pc98/adpcm-b/01-sample/README.md) | YM2608 ADPCM-B：サンプルメモリ再生 |
 
 ## 各フォルダーの構成
 

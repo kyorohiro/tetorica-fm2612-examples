@@ -88,5 +88,15 @@
     "id": "x68000/adpcm/01-byte-stream",
     "title": "X68000 OKIM6258 の ADPCM 再生",
     "description": "自作の 4-bit ADPCM バイト列を時間に合わせて送り、波形を再生する。"
+  },
+  {
+    "id": "pc98/adpcm-a/01-rhythm",
+    "title": "YM2608 ADPCM-A：固定リズム音源",
+    "description": "package 同梱の Tetorica 自作リズム ROM を読み込み、bass drum・snare・hi-hat を鳴らす。"
+  },
+  {
+    "id": "pc98/adpcm-b/01-sample",
+    "title": "YM2608 ADPCM-B：サンプルメモリ再生",
+    "description": "エンコード済み ADPCM-B を loadMemory で転送し、再生範囲・速度・音量・ループを設定する。"
   }
 ]
