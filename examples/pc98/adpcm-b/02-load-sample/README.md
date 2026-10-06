@@ -1,6 +1,6 @@
 # YM2608 ADPCM-B：PCM / WAV の loadSample
 
-`tetorica-fm2612@0.2.2` の `YM2608Synth.adpcm.loadSample()` を使う例です。
+`tetorica-fm2612@0.2.3` の `YM2608Synth.adpcm.loadSample()` を使う例です。
 自作の PCM と、そこから作る WAV を入力にするため、外部ファイルは不要です。
 
 ## Web
@@ -26,7 +26,7 @@ node examples/pc98/adpcm-b/02-load-sample/node/main.mjs
 1. 440 Hz の Float32 PCM をコード内で生成。
 2. `loadSample({channels: [wave], sampleRate: 8000}, {address: 0})` で mono 化・ADPCM-B 変換・転送・再生範囲と速度の設定。
 3. 音量・左右出力を指定し、`keyOn()` で通常速度の再生。
-4. 同じファイル内の WAV エンコーダーで入力 WAV を生成し、`loadSample(sourceWav, {address: 4096})` で別領域へ読み込み。
+4. npm package の `encodeWav()` で入力 WAV を生成し、`loadSample(sourceWav, {address: 4096})` で別領域へ読み込み。
 5. `setPlaybackRate()` で1.5倍速にして再生。
 
 `loadSample()` は読み込み時に ADPCM-B を停止しますが、再生は開始しません。

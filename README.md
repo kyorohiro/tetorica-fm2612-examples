@@ -1,6 +1,6 @@
 # tetorica-fm2612 examples
 
-公開済み `tetorica-fm2612@0.2.2` を import して使う、機能別の小さなサンプル集。
+公開済み `tetorica-fm2612@0.2.3` を import して使う、機能別の小さなサンプル集。
 各サンプルに Web と Node.js の入口を置いています。本体リポジトリには依存しません。
 
 パッケージ本体の説明・API の使い方・配布設定は
@@ -65,7 +65,7 @@ examples/genesis/fm/01-single-note/
 FM / PSG / PCM の Web 版は生成済み PCM を Web Audio で再生します。
 AudioWorklet の例は processor が音声スレッドで PCM を生成します。
 Node 版は DirectTransport による同じ音源設定のオフライン生成です。
-オフライン生成の例には PCM の連結と WAV エンコードも載せています。
+オフライン生成の例には PCM の連結と、npm package の `encodeWav()` による WAV 出力も載せています。
 AudioWorklet の Web 版には ready 待機と transport・node・AudioContext の解放を載せています。
 
 ## Node 版
@@ -96,9 +96,10 @@ import map で bare import を解決し、JS / WASM / Worker / Worklet の配置
 ライセンス・同梱ソースを保ちます。バンドラーや CDN は使用しません。
 `public/vendor/`、`dist/`、`output/` は生成物で、git 管理しません。
 
-`0.2.0` のブラウザ用 factory の既定 `locateFile` と生成済みローダーには
-互換性の問題があるため、各例のコードで公開 API の
-`moduleOptions.wasmBinary` に WASM を渡しています。
+`createSoundChip('ym2612')` などの factory は、Web / Node ともに WASM を自動で読み込みます。
+Sega PSG・Game Boy・OKIM6258 の個別ラッパーと AudioWorklet の例では、
+ローダーや WASM の転送手順を明示しています。
+WAV 出力には package の `encodeWav(pcm, {gain: 0.25})` を使います。
 
 ## サンプルを追加する
 

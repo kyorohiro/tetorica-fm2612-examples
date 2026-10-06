@@ -1,13 +1,10 @@
 // Run this file from the repository root with Node.js 22+.
-import {createSoundChip} from 'tetorica-fm2612';
-import {runtimeAssetUrl} from 'tetorica-fm2612/package_assets.js';
-import {readFile, mkdir, writeFile} from 'node:fs/promises';
+import {createSoundChip, encodeWav} from 'tetorica-fm2612';
+import {mkdir, writeFile} from 'node:fs/promises';
 import {dirname, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
-// Read the WASM shipped in the installed npm package.
-const wasmBinary = await readFile(runtimeAssetUrl('generated/ym2151_wasm.wasm'));
-const chip = await createSoundChip('ym2151', {moduleOptions: {wasmBinary}});
+const chip = await createSoundChip('ym2151');
 try {
   // X68000 uses a 4 MHz YM2151. Register writes below select channel 0.
   const sampleRate = chip.sampleRate(4000000);
@@ -52,7 +49,7 @@ try {
   }
 
   // Encode and save stereo PCM16. No audio driver is required.
-  const wav = encodeWav({left, right, sampleRate});
+  const wav = encodeWav({left, right, sampleRate}, {gain: 0.25});
   const defaultPath = fileURLToPath(new URL('../../../../../output/x68000-fm-01-note.wav', import.meta.url));
   const output = process.argv[2] ? resolve(process.argv[2]) : defaultPath;
   await mkdir(dirname(output), {recursive: true});
@@ -60,27 +57,4 @@ try {
   console.log(`${output}\n${left.length} frames · ${sampleRate} Hz · stereo PCM16`);
 } finally {
   chip.dispose();
-}
-
-// Stereo PCM16 WAV, usable in browsers and Node. Reduce volume for playback.
-function encodeWav({left, right, sampleRate}, gain = 0.25) {
-  const dataSize = left.length * 4;
-  const buffer = new ArrayBuffer(44 + dataSize);
-  const view = new DataView(buffer);
-  const text = (offset, value) => {
-    for (let i = 0; i < value.length; i++) view.setUint8(offset + i, value.charCodeAt(i));
-  };
-  text(0, 'RIFF'); view.setUint32(4, 36 + dataSize, true);
-  text(8, 'WAVE'); text(12, 'fmt '); view.setUint32(16, 16, true);
-  view.setUint16(20, 1, true); view.setUint16(22, 2, true);
-  view.setUint32(24, sampleRate, true); view.setUint32(28, sampleRate * 4, true);
-  view.setUint16(32, 4, true); view.setUint16(34, 16, true);
-  text(36, 'data'); view.setUint32(40, dataSize, true);
-  for (let i = 0; i < left.length; i++) {
-    for (const [channel, samples] of [left, right].entries()) {
-      const value = Math.max(-1, Math.min(1, samples[i] * gain));
-      view.setInt16(44 + i * 4 + channel * 2, Math.round(value * (value < 0 ? 32768 : 32767)), true);
-    }
-  }
-  return new Uint8Array(buffer);
 }

@@ -1,3 +1,4 @@
+import {encodeWav} from 'tetorica-fm2612';
 import {GameboyApu} from 'tetorica-fm2612/gameboyapu.js';
 import moduleFactory from 'tetorica-fm2612/generated/gameboy_apu_wasm.js';
 import {GameboySynth, GameboyDirectTransport} from 'tetorica-fm2612/gameboysynth.js';
@@ -28,8 +29,7 @@ playButton.addEventListener('click', async () => {
     context = new AudioContext();
     await context.resume();
 
-    // Load the package's WASM explicitly: 0.2.0's generated browser loader
-    // does not accept the factory's default locateFile option.
+    // This individual wrapper receives its generated loader and WASM bytes.
     const response = await fetch(runtimeAssetUrl('generated/gameboy_apu_wasm.wasm'), {signal});
     if (!response.ok) throw new Error(`WASM: HTTP ${response.status}`);
     const wasmBinary = new Uint8Array(await response.arrayBuffer());
@@ -67,7 +67,7 @@ playButton.addEventListener('click', async () => {
     chip.dispose();
     chip = null;
 
-    const wav = encodeWav({left, right, sampleRate});
+    const wav = encodeWav({left, right, sampleRate}, {gain: 0.25});
     downloadUrl = URL.createObjectURL(new Blob([wav], {type: 'audio/wav'}));
     download.href = downloadUrl;
     download.hidden = false;
@@ -115,26 +115,3 @@ window.addEventListener('pagehide', () => {
   controller?.abort();
   if (downloadUrl) URL.revokeObjectURL(downloadUrl);
 });
-
-// Stereo PCM16 WAV, usable in browsers and Node. Reduce volume for playback.
-function encodeWav({left, right, sampleRate}, gain = 0.25) {
-  const dataSize = left.length * 4;
-  const buffer = new ArrayBuffer(44 + dataSize);
-  const view = new DataView(buffer);
-  const text = (offset, value) => {
-    for (let i = 0; i < value.length; i++) view.setUint8(offset + i, value.charCodeAt(i));
-  };
-  text(0, 'RIFF'); view.setUint32(4, 36 + dataSize, true);
-  text(8, 'WAVE'); text(12, 'fmt '); view.setUint32(16, 16, true);
-  view.setUint16(20, 1, true); view.setUint16(22, 2, true);
-  view.setUint32(24, sampleRate, true); view.setUint32(28, sampleRate * 4, true);
-  view.setUint16(32, 4, true); view.setUint16(34, 16, true);
-  text(36, 'data'); view.setUint32(40, dataSize, true);
-  for (let i = 0; i < left.length; i++) {
-    for (const [channel, samples] of [left, right].entries()) {
-      const value = Math.max(-1, Math.min(1, samples[i] * gain));
-      view.setInt16(44 + i * 4 + channel * 2, Math.round(value * (value < 0 ? 32768 : 32767)), true);
-    }
-  }
-  return new Uint8Array(buffer);
-}

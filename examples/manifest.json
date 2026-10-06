@@ -47,7 +47,7 @@
   {
     "id": "genesis/pcm/01-wav-export",
     "title": "PCM と WAV 出力",
-    "description": "generateStereo の Float32 PCM を取得し、Web / Node のアダプターで WAV に保存。"
+    "description": "generateStereo の Float32 PCM を取得し、npm package の encodeWav() で WAV に保存。"
   },
   {
     "id": "audio-worklet/01-note",
