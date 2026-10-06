@@ -162,5 +162,45 @@
       "web",
       "node"
     ]
+  },
+  {
+    "id": "embedding/06-megasynth-offline-fx",
+    "title": "MegaSynth：Node オフライン nativeFX",
+    "description": "AudioContext なしで FM → native delay / reverb → WAV を生成する。",
+    "environments": [
+      "node"
+    ]
+  },
+  {
+    "id": "embedding/07-megasynth-node-recording",
+    "title": "MegaSynth：Node イベント録音",
+    "description": "サンプル時計で音符を JSON に録音し、import / 再演して WAV を保存する。",
+    "environments": [
+      "node"
+    ]
+  },
+  {
+    "id": "embedding/08-megasynth-node-looper",
+    "title": "MegaSynth：Node イベント looper",
+    "description": "1周分の音符を録音し、繰り返し再演・undo・停止する。",
+    "environments": [
+      "node"
+    ]
+  },
+  {
+    "id": "embedding/09-megasynth-node-pcm-looper",
+    "title": "MegaSynth：Node PCM looper",
+    "description": "dry FM を PCM に録音し、native mixer / FX でループ再生して WAV を保存する。",
+    "environments": [
+      "node"
+    ]
+  },
+  {
+    "id": "embedding/10-megasynth-node-audio",
+    "title": "MegaSynth：Node Worker リアルタイム",
+    "description": "Worker 内で FM / nativeFX / 音声出力、recording、PCM looper、停止・再開を動かす。",
+    "environments": [
+      "node"
+    ]
   }
 ]

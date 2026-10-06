@@ -5,10 +5,15 @@
   "type": "module",
   "description": "Runnable examples consuming the published tetorica-fm2612 npm package",
   "license": "BSD-3-Clause",
-  "engines": {"node": ">=22"},
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "node scripts/dev.mjs",
-    "build": "node scripts/build.mjs"
+    "build": "node scripts/build.mjs",
+    "check:node": "node scripts/check-node.mjs"
   },
-  "dependencies": {"tetorica-fm2612": "0.2.3"}
+  "dependencies": {
+    "tetorica-fm2612": "0.2.5"
+  }
 }

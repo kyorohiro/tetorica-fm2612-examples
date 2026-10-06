@@ -208,6 +208,37 @@ Worklet uploads complete before the returned promise resolves.
 `loadMemory()` remains the API for already-encoded ADPCM-B bytes.
 This does not add arbitrary sample loading to YM2608's fixed ADPCM-A rhythm.
 
+## Experimental MegaSynth for Node
+
+Version 0.2.5 adds standalone YM2612 FM / DAC rendering through the shared
+nativeFX DSP, sample-clock event recording and event / PCM loopers.
+
+```js
+import {createMegaSynthSession} from 'tetorica-fm2612/megasynth_session.js';
+import {FM_PRESETS} from 'tetorica-fm2612/megasynth-fm-presets.js';
+import {encodeWav} from 'tetorica-fm2612';
+
+const synth = await createMegaSynthSession({sampleRate: 48000});
+try {
+  synth.fm.setPreset(0, FM_PRESETS.sine);
+  synth.fx.setChain([synth.fx.delay({time: 0.12, mix: 0.25})]);
+  synth.schedule(0, {target: 'fm', method: 'noteOn', args: [0, 4, 553]});
+  synth.schedule(12000, {target: 'fm', method: 'noteOff', args: [0]});
+  const wav = encodeWav(await synth.render(48000));
+  // Save wav using node:fs/promises or another destination.
+} finally {await synth.close();}
+```
+
+For realtime device output, `import {MegaSynthNode} from 'tetorica-fm2612/node'`.
+Install the optional `audify` peer dependency in your application. The owned
+Worker renders FM, nativeFX and output without transferring normal playback
+PCM to Main. Controls are asynchronous; await FM / recording / looper commands.
+Use `engineOptions: {looperMode: 'pcm'}` for dry FM capture and native PCM playback.
+See [Node API and lifecycle](./node/README.md) for recording, export, audio budget,
+stop / resume / close and output adapters. macOS / Node 22 / CoreAudio is tested;
+other platforms are not yet verified. PSG, Mega CD PCM and microphone input are
+not included in this experimental Node MegaSynth runtime.
+
 ## Local packaging
 
 From the repository root:
@@ -232,10 +263,10 @@ FM/PSG/PCM mixing, stop/reset and close/restart. Playwright is a development
 dependency; it is not required by users of the sound-chip runtime.
 
 The build is staged in `dist/fm2612/`; packing produces
-`tetorica-fm2612-0.2.3.tgz`. To install a local build in another project:
+`tetorica-fm2612-0.2.5.tgz`. To install a local build in another project:
 
 ```sh
-npm install /absolute/path/to/tetorica-fm2612-0.2.3.tgz
+npm install /absolute/path/to/tetorica-fm2612-0.2.5.tgz
 ```
 
 The existing `tetorica-vgm` CLI package is built separately. This first package
@@ -250,6 +281,18 @@ included; Nuked-OPN2 is LGPL-2.1-or-later, with its source and build script in
 and generator. External instrument/sample ROMs are not included.
 
 ## Release notes
+
+`0.2.5` adds experimental Node MegaSynth offline / realtime Worker runtimes,
+shared nativeFX DSP, sample-clock event recording and event / PCM loopers.
+The optional audify adapter supports Worker-owned output; explicit PCM export
+supports WAV saving. Browser nativeFX uses the same DSP and retains its existing
+AudioWorklet API. PCM capture excludes previous loop playback and FX tails.
+
+
+`0.2.4` removes the ymfm YM2612 DAC ladder's idle offset from AudioWorklet
+output and keeps output silent until FM/PSG initialization completes. This
+reduces clicks when browser audio starts or disconnects. Raw chip PCM remains
+unchanged.
 
 `0.2.3` adds common `encodeWav()` for mono/stereo PCM16 WAV bytes and fixes
 default browser/Worker `createSoundChip()` loading by reading WASM internally.

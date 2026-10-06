@@ -1,6 +1,6 @@
 # YM2608 ADPCM-B：PCM / WAV の loadSample
 
-`tetorica-fm2612@0.2.3` の `YM2608Synth.adpcm.loadSample()` を使う例です。
+`tetorica-fm2612@0.2.5` の `YM2608Synth.adpcm.loadSample()` を使う例です。
 自作の PCM と、そこから作る WAV を入力にするため、外部ファイルは不要です。
 
 ## Web

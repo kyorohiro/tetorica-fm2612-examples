@@ -17,7 +17,8 @@ try {
       const description = document.createElement('p'); description.textContent = example.description;
       const links = document.createElement('div'); links.className = 'actions';
       const hasNode = !example.environments || example.environments.includes('node');
-      const entries = [['Web →', 'web/index.html'], ...(hasNode ? [['Node source', 'node/main.mjs']] : []), ['README', 'README.md']];
+      const hasWeb = !example.environments || example.environments.includes('web');
+      const entries = [...(hasWeb ? [['Web →', 'web/index.html']] : []), ...(hasNode ? [['Node source', 'node/main.mjs']] : []), ['README', 'README.md']];
       for (const [text, file] of entries) {
         const link = document.createElement('a'); link.textContent = text; link.href = `./examples/${example.id}/${file}`; links.append(link);
       }

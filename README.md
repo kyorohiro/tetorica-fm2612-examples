@@ -1,6 +1,6 @@
 # tetorica-fm2612 examples
 
-公開済み `tetorica-fm2612@0.2.3` を import して使う、機能別の小さなサンプル集。
+公開済み `tetorica-fm2612@0.2.5` を import して使う、機能別の小さなサンプル集。
 PCM 生成の例には Web と Node.js の入口を置き、Web Audio を使う埋め込み例は Web 専用として掲載しています。本体リポジトリには依存しません。
 
 [公開 examples](https://kyorohiro.github.io/tetorica-fm2612-examples/) と
@@ -55,6 +55,12 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 | Patches（Web / Node） | [01-tfi-roundtrip](examples/patches/01-tfi-roundtrip/README.md) | TFI の import / export、音色の発音 |
 | Patches（Web / Node） | [02-vgi-roundtrip](examples/patches/02-vgi-roundtrip/README.md) | VGI の import / export、音色の発音 |
 
+| Embedding（Node・実験用） | [06-megasynth-offline-fx](examples/embedding/06-megasynth-offline-fx/README.md) | FM / nativeFX / WAV |
+| Embedding（Node・実験用） | [07-megasynth-node-recording](examples/embedding/07-megasynth-node-recording/README.md) | サンプル時計・イベント JSON・再演 |
+| Embedding（Node・実験用） | [08-megasynth-node-looper](examples/embedding/08-megasynth-node-looper/README.md) | イベント looper・undo・停止 |
+| Embedding（Node・実験用） | [09-megasynth-node-pcm-looper](examples/embedding/09-megasynth-node-pcm-looper/README.md) | PCM 録音・native mixer・dry / FX WAV |
+| Embedding（Node・実験用） | [10-megasynth-node-audio](examples/embedding/10-megasynth-node-audio/README.md) | Worker 内のリアルタイム出力・録音・停止・再開 |
+
 ## 各フォルダーの構成
 
 ```text
@@ -87,7 +93,7 @@ node examples/genesis/fm/02-melody/node/main.mjs ./melody.wav
 ```
 
 既定では `output/<サンプル名>.wav` に保存します。
-Node 版に AudioContext や音声ドライバーは不要です。
+オフラインの Node 版に AudioContext や音声ドライバーは不要です。リアルタイム出力例だけは audify と音声デバイスを使います。
 WAV をスピーカーで聴く場合は音声プレイヤーで開いてください。
 Web と Node の音源操作は同等ですが、各ファイルにそれぞれ記述しています。
 
@@ -117,10 +123,32 @@ WAV 出力には package の `encodeWav(pcm, {gain: 0.25})` を使います。
 機能の分類内にフォルダーを作り、`web/`、`node/`、README を置きます。
 一覧の原本は `examples/manifest.json` です。そこにタイトルと説明を追加すると
 Web の一覧にも表示されます。ビルドで examples フォルダー全体を配布します。
-ブラウザ専用の場合は `environments: ["web"]`、Web / Node の両方を持つ場合は
+Node 専用の場合は `environments: ["node"]`、ブラウザ専用の場合は `environments: ["web"]`、Web / Node の両方を持つ場合は
 `environments: ["web", "node"]` を指定できます。省略時は従来の Web / Node 例として扱います。
 
 ## License
 
 サンプルコードは BSD-3-Clause。ランタイムの第三者ライセンスは
 配布パッケージ内の `THIRD_PARTY_LICENSES.txt`、`licenses/`、`sources/` を参照してください。
+
+## MegaSynth Node examples
+
+`embedding/06`〜`10` は `tetorica-fm2612@0.2.5` の実験用 MegaSynth API を使います。
+通常の `npm ci` で公開 package を導入できます。
+
+```sh
+npm ci
+node examples/embedding/06-megasynth-offline-fx/node/main.mjs
+node examples/embedding/07-megasynth-node-recording/node/main.mjs
+node examples/embedding/08-megasynth-node-looper/node/main.mjs
+node examples/embedding/09-megasynth-node-pcm-looper/node/main.mjs
+npm install --no-save --package-lock=false audify
+node examples/embedding/10-megasynth-node-audio/node/main.mjs
+```
+
+06〜09 は音声デバイス不要、10 は audify による Worker 内リアルタイム出力です。
+各例は独立したファイルに処理をすべて記述し、package の export だけを import します。
+一覧では Node source / README のみを表示し、Web へのリンクは付けません。
+Node オフライン全28例は `npm run check:node` で検証できます。
+WAV の RIFF ヘッダー・非ゼロ PCM とイベント JSON を確認します。
+リアルタイムの10番は音声デバイスを使うため、このコマンドには含めません。
