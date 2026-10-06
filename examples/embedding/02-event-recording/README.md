@@ -1,4 +1,4 @@
-# MegaDriveSynth：イベント録音と再生
+# MegaSynth：イベント録音と再生
 
 noteOn / noteOff を JSON に記録し、export → import → playRecording で再演奏する。
 

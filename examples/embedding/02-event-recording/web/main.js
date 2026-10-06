@@ -1,4 +1,4 @@
-import {MegaDriveSynth} from 'tetorica-fm2612/megasynth.js';
+import {MegaSynth} from 'tetorica-fm2612/megasynth.js';
 import {FM_PRESETS} from 'tetorica-fm2612/megasynth-fm-presets.js';
 import {runtimeAssetUrl} from 'tetorica-fm2612/package_assets.js';
 
@@ -29,7 +29,7 @@ playButton.addEventListener('click', async () => {
   stopButton.disabled = false;
   status.textContent = 'Loading…';
   try {
-    mega = new MegaDriveSynth({
+    mega = new MegaSynth({
       workletUrl: runtimeAssetUrl('ym2612-worklet.js').href,
       ym2612WasmUrl: runtimeAssetUrl('generated/ym2612_wasm.wasm').href,
       masterVolume: 0.25,

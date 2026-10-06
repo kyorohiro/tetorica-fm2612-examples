@@ -47,7 +47,7 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 | PC-98 | [01-rhythm](examples/pc98/adpcm-a/01-rhythm/README.md) | YM2608 ADPCM-A：固定リズム音源 |
 | PC-98 | [01-sample](examples/pc98/adpcm-b/01-sample/README.md) | YM2608 ADPCM-B：サンプルメモリ再生 |
 | PC-98 | [02-load-sample](examples/pc98/adpcm-b/02-load-sample/README.md) | YM2608 ADPCM-B：PCM / WAV の loadSample |
-| Embedding（Web） | [01-megadrive-fx](examples/embedding/01-megadrive-fx/README.md) | MegaDriveSynth の発音、delay / reverb、終了 |
+| Embedding（Web） | [01-megasynth-fx](examples/embedding/01-megasynth-fx/README.md) | MegaSynth の発音、delay / reverb、終了 |
 | Embedding（Web） | [02-event-recording](examples/embedding/02-event-recording/README.md) | 音源操作をイベント JSON に録音、import / 再生 |
 | Embedding（Web） | [03-looper](examples/embedding/03-looper/README.md) | 音符の録音、ループ、undo / 停止 |
 | Embedding（Web） | [04-playground-worker](examples/embedding/04-playground-worker/README.md) | Playground のコードを Worker で実行 |

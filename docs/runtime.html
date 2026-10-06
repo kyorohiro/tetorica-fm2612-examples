@@ -30,9 +30,9 @@ Web Audio / encodeWav()  ブラウザ再生 / Web・Node の WAV 保存</code></
   <section class="sample-panel"><h2>リアルタイムで組み込む</h2>
     <p><code>YM2612WorkletTransport</code> は synth の命令を AudioWorklet へ送り、音声スレッドで PCM を生成します。
       processor の読み込み、WASM の転送、ready 待機を自分で扱う例が <a href="./examples/audio-worklet/01-note/web/index.html">AudioWorklet の最小例</a>です。</p>
-    <p><code>MegaDriveSynth</code>（<code>MegaSynth</code> の別名）は、その初期化と終了、FM、Web Audio の FX、イベント録音をまとめます。
+    <p><code>MegaSynth</code>は、その初期化と終了、FM、Web Audio の FX、イベント録音をまとめます。
       <code>start()</code> 後に <code>fm</code> を操作し、終了時は <code>close()</code> を呼びます。</p>
-    <p><a href="./examples/embedding/01-megadrive-fx/web/index.html">発音 + delay / reverb</a> ·
+    <p><a href="./examples/embedding/01-megasynth-fx/web/index.html">発音 + delay / reverb</a> ·
       <a href="./examples/embedding/02-event-recording/web/index.html">イベント JSON の録音・再生</a> ·
       <a href="./examples/embedding/03-looper/web/index.html">音符の looper</a></p>
     <p><code>Playground</code> は <code>liveLoop</code>・<code>play</code>・<code>beat</code> を含むコードを実行します。
@@ -55,7 +55,7 @@ Web Audio / encodeWav()  ブラウザ再生 / Web・Node の WAV 保存</code></
       <code>npm run dev</code> と <code>npm run build</code> が package の JS・WASM・Worker・Worklet・ライセンスを vendor に配置します。
       自分のアプリでも package 内の相対配置を保ち、<code>runtimeAssetUrl()</code> で必要なアセットの URL を取得します。</p>
     <p>個別の Sega PSG・Game Boy・OKIM6258 ラッパーや VgmRuntime は、生成済みローダーと WASM バイト列を渡す API を使います。
-      MegaDriveSynth / Playground は Worklet と WASM の URL を指定します。具体的な手順は各例のソースに省略せず記載しています。</p>
+      MegaSynth / Playground は Worklet と WASM の URL を指定します。具体的な手順は各例のソースに省略せず記載しています。</p>
     <p>ブラウザでは HTTP サーバーで配信し、AudioWorklet は HTTPS または localhost で実行します。
       音声は Play などのユーザー操作から開始します。Node は22以降に対応します。
       Web Audio を使う埋め込み例は Web 専用、PCM 生成・WAV 出力・音色変換は Node でも実行できます。</p>

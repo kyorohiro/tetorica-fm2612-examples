@@ -105,16 +105,16 @@
     "description": "PCM を loadSample で変換・転送して再生し、WAV の読み込みと1.5倍速の再生も試す。"
   },
   {
-    "id": "embedding/01-megadrive-fx",
-    "title": "MegaDriveSynth：発音と FX",
-    "description": "MegaDriveSynth の start() → FM 発音 → delay / reverb → close() をアプリに組み込む。",
+    "id": "embedding/01-megasynth-fx",
+    "title": "MegaSynth：発音と FX",
+    "description": "MegaSynth の start() → FM 発音 → delay / reverb → close() をアプリに組み込む。",
     "environments": [
       "web"
     ]
   },
   {
     "id": "embedding/02-event-recording",
-    "title": "MegaDriveSynth：イベント録音と再生",
+    "title": "MegaSynth：イベント録音と再生",
     "description": "noteOn / noteOff を JSON に記録し、export → import → playRecording で再演奏する。",
     "environments": [
       "web"
