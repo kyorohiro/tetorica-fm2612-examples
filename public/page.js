@@ -1,4 +1,4 @@
-const labels = {'genesis/fm': 'Genesis FM — 発音・音色・チャンネル', 'chip-raw': 'Chip raw — レジスタ操作', 'genesis/psg': 'Genesis PSG — トーン・ノイズ', 'genesis/pcm': 'Genesis PCM — ファイル出力', 'audio-worklet': 'AudioWorklet — 音声スレッドで再生', pc98: 'PC-98 — YM2608 FM / SSG', gameboy: 'Game Boy — pulse / wave / noise'};
+const labels = {'genesis/fm': 'Genesis FM — 発音・音色・チャンネル', 'chip-raw': 'Chip raw — レジスタ操作', 'genesis/psg': 'Genesis PSG — トーン・ノイズ', 'genesis/pcm': 'Genesis PCM — ファイル出力', 'audio-worklet': 'AudioWorklet — 音声スレッドで再生', pc98: 'PC-98 — YM2608 FM / SSG', gameboy: 'Game Boy — pulse / wave / noise', x68000: 'X68000 — YM2151 FM / OKIM6258 ADPCM'};
 const catalog = document.getElementById('catalog');
 try {
   const response = await fetch('./examples/manifest.json');

@@ -39,6 +39,8 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 | Game Boy | [01-duty](examples/gameboy/pulse/01-duty/README.md) | Game Boy pulse のデューティ比 |
 | Game Boy | [01-waveform](examples/gameboy/wave/01-waveform/README.md) | Game Boy wave の波形メモリー |
 | Game Boy | [01-width](examples/gameboy/noise/01-width/README.md) | Game Boy noise の幅 |
+| X68000 | [01-note](examples/x68000/fm/01-note/README.md) | X68000 YM2151 の FM 発音 |
+| X68000 | [01-byte-stream](examples/x68000/adpcm/01-byte-stream/README.md) | X68000 OKIM6258 の ADPCM 再生 |
 
 ## 各フォルダーの構成
 

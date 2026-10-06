@@ -78,5 +78,15 @@
     "id": "gameboy/noise/01-width",
     "title": "Game Boy noise の幅",
     "description": "noise チャンネルで 15-bit と 7-bit の違いを聴き比べる。"
+  },
+  {
+    "id": "x68000/fm/01-note",
+    "title": "X68000 YM2151 の FM 発音",
+    "description": "4 MHz の YM2151 にレジスタを書き、1つのオペレーターで発音する。"
+  },
+  {
+    "id": "x68000/adpcm/01-byte-stream",
+    "title": "X68000 OKIM6258 の ADPCM 再生",
+    "description": "自作の 4-bit ADPCM バイト列を時間に合わせて送り、波形を再生する。"
   }
 ]
