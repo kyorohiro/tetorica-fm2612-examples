@@ -1,7 +1,7 @@
 # tetorica-fm2612 examples
 
 公開済み `tetorica-fm2612@0.2.5` を import して使う、機能別の小さなサンプル集。
-PCM 生成の例には Web と Node.js の入口を置き、Web Audio を使う埋め込み例は Web 専用として掲載しています。本体リポジトリには依存しません。
+PCM 生成の例には Web と Node.js の入口を置き、Web Audio を使う埋め込み例と、Node の nativeFX / 音声デバイス出力の例も掲載しています。本体リポジトリには依存しません。
 
 [公開 examples](https://kyorohiro.github.io/tetorica-fm2612-examples/) と
 [Runtime の構成と選び方](public/runtime.html) から読み始められます。
@@ -47,7 +47,7 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 | PC-98 | [01-rhythm](examples/pc98/adpcm-a/01-rhythm/README.md) | YM2608 ADPCM-A：固定リズム音源 |
 | PC-98 | [01-sample](examples/pc98/adpcm-b/01-sample/README.md) | YM2608 ADPCM-B：サンプルメモリ再生 |
 | PC-98 | [02-load-sample](examples/pc98/adpcm-b/02-load-sample/README.md) | YM2608 ADPCM-B：PCM / WAV の loadSample |
-| Embedding（Web） | [01-megasynth-fx](examples/embedding/01-megasynth-fx/README.md) | MegaSynth の発音、delay / reverb、終了 |
+| Embedding（Web / Node） | [01-megasynth-fx](examples/embedding/01-megasynth-fx/README.md) | MegaSynth の発音、delay / reverb、終了 |
 | Embedding（Web） | [02-event-recording](examples/embedding/02-event-recording/README.md) | 音源操作をイベント JSON に録音、import / 再生 |
 | Embedding（Web） | [03-looper](examples/embedding/03-looper/README.md) | 音符の録音、ループ、undo / 停止 |
 | Embedding（Web） | [04-playground-worker](examples/embedding/04-playground-worker/README.md) | Playground のコードを Worker で実行 |
@@ -151,4 +151,4 @@ node examples/embedding/10-megasynth-node-audio/node/main.mjs
 一覧では Node source / README のみを表示し、Web へのリンクは付けません。
 Node オフライン全28例は `npm run check:node` で検証できます。
 WAV の RIFF ヘッダー・非ゼロ PCM とイベント JSON を確認します。
-リアルタイムの10番は音声デバイスを使うため、このコマンドには含めません。
+音声デバイスを使う embedding/01 と10の Node 例は、このコマンドには含めません。

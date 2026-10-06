@@ -107,10 +107,12 @@
   {
     "id": "embedding/01-megasynth-fx",
     "title": "MegaSynth：発音と FX",
-    "description": "MegaSynth の start() → FM 発音 → delay / reverb → close() をアプリに組み込む。",
+    "description": "Web / Node で FM を発音し、delay / reverb を繋いで終了する。Node は nativeFX と audify を使う。",
     "environments": [
-      "web"
-    ]
+      "web",
+      "node"
+    ],
+    "nodeAudioOutput": true
   },
   {
     "id": "embedding/02-event-recording",
@@ -201,6 +203,7 @@
     "description": "Worker 内で FM / nativeFX / 音声出力、recording、PCM looper、停止・再開を動かす。",
     "environments": [
       "node"
-    ]
+    ],
+    "nodeAudioOutput": true
   }
 ]

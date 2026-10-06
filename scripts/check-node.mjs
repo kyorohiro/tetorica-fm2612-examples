@@ -9,7 +9,7 @@ const directory=await mkdtemp(join(tmpdir(), 'tetorica-examples-'));
 try {
   const manifest=JSON.parse(await readFile(root+'/examples/manifest.json','utf8'));
   let count=0;
-  for(const item of manifest.filter(item=>(!item.environments||item.environments.includes('node'))&&!item.id.endsWith('10-megasynth-node-audio'))){
+  for(const item of manifest.filter(item=>(!item.environments||item.environments.includes('node'))&&!item.nodeAudioOutput)){
    const out=join(directory, `${item.id.replaceAll('/', '-')}.wav`);
    execFileSync(process.execPath,[`examples/${item.id}/node/main.mjs`,...((item.id==='embedding/05-vgm-player'||item.id.startsWith('patches/')) ? ['',out] : [out])],{cwd:root,timeout:30000,stdio:'pipe'});
    const wav=await readFile(out); assert.equal(wav.toString('ascii',0,4),'RIFF');assert.equal(wav.toString('ascii',8,12),'WAVE');
