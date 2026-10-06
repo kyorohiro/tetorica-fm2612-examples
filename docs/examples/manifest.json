@@ -1,0 +1,107 @@
+[
+  {
+    "id": "genesis/fm/01-single-note",
+    "title": "最初の FM 発音",
+    "description": "sine プリセット、noteOn / noteOff、PCM を生成して時間を進める最小例。"
+  },
+  {
+    "id": "genesis/fm/02-melody",
+    "title": "音階とメロディ",
+    "description": "1つのチャンネルで C–D–E–G–C を順に鳴らす。"
+  },
+  {
+    "id": "genesis/fm/03-presets",
+    "title": "プリセットを切り替える",
+    "description": "同じ音程で sine・bell・organ の音色を比較する。"
+  },
+  {
+    "id": "genesis/fm/04-operators",
+    "title": "オペレーターを設定",
+    "description": "プリセットを使わず、algorithm 7 と OP4 で音を作る。"
+  },
+  {
+    "id": "genesis/fm/05-stereo-pan",
+    "title": "左右のパン",
+    "description": "左だけ・右だけ・両側の順に出力を切り替える。ヘッドフォンで比較。"
+  },
+  {
+    "id": "genesis/fm/06-chord",
+    "title": "複数チャンネルで和音",
+    "description": "チャンネル 0・1・2 に C・E・G を割り当てて同時に鳴らす。"
+  },
+  {
+    "id": "chip-raw/01-register-note",
+    "title": "レジスタを直接書く",
+    "description": "YM2612 の OP4・algorithm・pan・周波数・key on/off をレジスタで設定。"
+  },
+  {
+    "id": "genesis/psg/01-tone",
+    "title": "Sega PSG のトーン",
+    "description": "10-bit divider と attenuation を書いて矩形波を鳴らす。"
+  },
+  {
+    "id": "genesis/psg/02-noise",
+    "title": "Sega PSG のノイズ",
+    "description": "周期ノイズとホワイトノイズを切り替える。"
+  },
+  {
+    "id": "genesis/pcm/01-wav-export",
+    "title": "PCM と WAV 出力",
+    "description": "generateStereo の Float32 PCM を取得し、npm package の encodeWav() で WAV に保存。"
+  },
+  {
+    "id": "audio-worklet/01-note",
+    "title": "AudioWorklet で FM 発音",
+    "description": "processor の読み込み・WASM 転送・ready 待機から、音声スレッドでの発音と停止まで。"
+  },
+  {
+    "id": "pc98/fm/01-note",
+    "title": "PC-98 YM2608 の FM 発音",
+    "description": "YM2608Synth と DirectTransport で FM のサイン波を鳴らす。外部 ROM は不要。"
+  },
+  {
+    "id": "pc98/ssg/01-tone",
+    "title": "PC-98 YM2608 の SSG トーン",
+    "description": "YM2608 内蔵 SSG の矩形波を 440 Hz で鳴らす。音量を指定して停止する。"
+  },
+  {
+    "id": "gameboy/pulse/01-duty",
+    "title": "Game Boy pulse のデューティ比",
+    "description": "pulse チャンネルで 12.5%・25%・50%・75% の矩形波を比較する。"
+  },
+  {
+    "id": "gameboy/wave/01-waveform",
+    "title": "Game Boy wave の波形メモリー",
+    "description": "32点・各 0〜15 の三角波とノコギリ波を wave チャンネルで比較する。"
+  },
+  {
+    "id": "gameboy/noise/01-width",
+    "title": "Game Boy noise の幅",
+    "description": "noise チャンネルで 15-bit と 7-bit の違いを聴き比べる。"
+  },
+  {
+    "id": "x68000/fm/01-note",
+    "title": "X68000 YM2151 の FM 発音",
+    "description": "4 MHz の YM2151 にレジスタを書き、1つのオペレーターで発音する。"
+  },
+  {
+    "id": "x68000/adpcm/01-byte-stream",
+    "title": "X68000 OKIM6258 の ADPCM 再生",
+    "description": "自作の 4-bit ADPCM バイト列を時間に合わせて送り、波形を再生する。"
+  },
+  {
+    "id": "pc98/adpcm-a/01-rhythm",
+    "title": "YM2608 ADPCM-A：固定リズム音源",
+    "description": "package 同梱の Tetorica 自作リズム ROM を読み込み、bass drum・snare・hi-hat を鳴らす。"
+  },
+  {
+    "id": "pc98/adpcm-b/01-sample",
+    "title": "YM2608 ADPCM-B：サンプルメモリ再生",
+    "description": "エンコード済み ADPCM-B を loadMemory で転送し、再生範囲・速度・音量・ループを設定する。"
+  },
+  {
+    "id": "pc98/adpcm-b/02-load-sample",
+    "title": "YM2608 ADPCM-B：PCM / WAV の loadSample",
+    "description": "PCM を loadSample で変換・転送して再生し、WAV の読み込みと1.5倍速の再生も試す。"
+  }
+]

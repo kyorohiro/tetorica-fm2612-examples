@@ -1,0 +1,62 @@
+// Run this file from the repository root with Node.js 22+.
+import {createSoundChip, encodeWav} from 'tetorica-fm2612';
+import {YM2608Synth, YM2608DirectTransport} from 'tetorica-fm2612/ym2608synth.js';
+import {mkdir, writeFile} from 'node:fs/promises';
+import {dirname, resolve} from 'node:path';
+import {fileURLToPath} from 'node:url';
+
+const chip = await createSoundChip('ym2608');
+try {
+  const chipSampleRate = chip.sampleRate();
+  const transport = new YM2608DirectTransport(chip);
+  const fm = new YM2608Synth({transport});
+  const segments = [];
+  // Original synthetic ADPCM-B: bytes are already encoded, not Float32 PCM.
+  // ADPCM-B is a different codec from ADPCM-A and OKIM6258.
+  const bytes = Uint8Array.from({length: 1024}, (_, i) => i % 8 < 4 ? 0x55 : 0xdd);
+  fm.adpcm.loadMemory(bytes, 0);
+  // Start and exclusive end must both be aligned to 32 bytes.
+  fm.adpcm.setSample({start: 0, end: bytes.length});
+  fm.adpcm.setPlaybackRate(8000); // Decoded PCM samples/second, not bytes/second.
+  fm.adpcm.setVolume(180);
+  fm.adpcm.setPan(true, true);
+  fm.adpcm.keyOn({repeat: true}); // Repeat the entire selected sample range.
+  segments.push(chip.generateStereo(Math.round(chipSampleRate * 0.6)));
+  fm.adpcm.keyOff();
+  segments.push(chip.generateStereo(Math.round(chipSampleRate * 0.2)));
+  // Concatenate the generated segments in their original order.
+  const frames = segments.reduce((sum, segment) => sum + segment.left.length, 0);
+  const nativeLeft = new Float32Array(frames);
+  const nativeRight = new Float32Array(frames);
+  let offset = 0;
+  for (const segment of segments) {
+    nativeLeft.set(segment.left, offset);
+    nativeRight.set(segment.right, offset);
+    offset += segment.left.length;
+  }
+
+  // YM2608's native rate is too high for a browser AudioBuffer.
+  // Convert the PCM to 44.1 kHz with linear interpolation in this example.
+  const sampleRate = 44100;
+  const outputFrames = Math.round(frames * sampleRate / chipSampleRate);
+  const left = new Float32Array(outputFrames);
+  const right = new Float32Array(outputFrames);
+  for (let i = 0; i < outputFrames; i++) {
+    const position = i * chipSampleRate / sampleRate;
+    const first = Math.min(Math.floor(position), frames - 1);
+    const second = Math.min(first + 1, frames - 1);
+    const fraction = position - first;
+    left[i] = nativeLeft[first] * (1 - fraction) + nativeLeft[second] * fraction;
+    right[i] = nativeRight[first] * (1 - fraction) + nativeRight[second] * fraction;
+  }
+
+  // Encode and save stereo PCM16. No audio driver is required.
+  const wav = encodeWav({left, right, sampleRate}, {gain: 0.25});
+  const defaultPath = fileURLToPath(new URL('../../../../../output/pc98-adpcm-b-01-sample.wav', import.meta.url));
+  const output = process.argv[2] ? resolve(process.argv[2]) : defaultPath;
+  await mkdir(dirname(output), {recursive: true});
+  await writeFile(output, wav);
+  console.log(`${output}\n${left.length} frames · ${sampleRate} Hz · stereo PCM16`);
+} finally {
+  chip.dispose();
+}
