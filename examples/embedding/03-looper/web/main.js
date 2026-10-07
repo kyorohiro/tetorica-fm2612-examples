@@ -10,7 +10,7 @@ const detail = document.getElementById('detail');
 let controller;
 
 // Local, abortable timer: Stop also cancels waits between notes.
-function wait(milliseconds, signal) {
+function wait(milliseconds, {signal}) {
   signal.throwIfAborted();
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => { signal.removeEventListener('abort', abort); resolve(); }, milliseconds);
@@ -42,17 +42,17 @@ playButton.addEventListener('click', async () => {
     await looper.startRecording();
     status.textContent = 'Recording…';
     looper.noteOn(0, 4, 553);
-    await wait(200, signal);
+    await wait(200, {signal});
     looper.noteOff(0);
-    await wait(100, signal);
+    await wait(100, {signal});
     looper.noteOn(0, 4, 829);
-    await wait(200, signal);
+    await wait(200, {signal});
     looper.noteOff(0);
-    await wait(100, signal);
+    await wait(100, {signal});
     const unit = await looper.finishRecording();
     detail.textContent = JSON.stringify({state: looper.getState(), unit}, null, 2);
     status.textContent = 'Looping…';
-    await wait(1400, signal);
+    await wait(1400, {signal});
     await looper.undo();
     await looper.stop();
 

@@ -9,7 +9,7 @@ const detail = document.getElementById('detail');
 let controller;
 
 // Local, abortable timer: Stop also cancels waits between notes.
-function wait(milliseconds, signal) {
+function wait(milliseconds, {signal}) {
   signal.throwIfAborted();
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => { signal.removeEventListener('abort', abort); resolve(); }, milliseconds);
@@ -45,9 +45,9 @@ playButton.addEventListener('click', async () => {
     status.textContent = 'Recording…';
     for (const fnum of [553, 696, 829]) {
       mega.fm.noteOn(0, 4, fnum);
-      await wait(180, signal);
+      await wait(180, {signal});
       mega.fm.noteOff(0);
-      await wait(100, signal);
+      await wait(100, {signal});
     }
     mega.stopRecord();
     const recording = mega.exportRecording();
@@ -62,7 +62,7 @@ playButton.addEventListener('click', async () => {
     mega.importRecording(JSON.parse(json));
     status.textContent = 'Replaying…';
     mega.playRecording(null, {loop: false});
-    await wait(recording.durationSeconds * 1000 + 250, signal);
+    await wait(recording.durationSeconds * 1000 + 250, {signal});
     mega.stopRecordingPlayback();
 
     status.textContent = 'Finished.';

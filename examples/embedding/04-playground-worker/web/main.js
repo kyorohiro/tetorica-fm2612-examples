@@ -8,7 +8,7 @@ const detail = document.getElementById('detail');
 let controller;
 
 // Local, abortable timer: Stop also cancels waits between notes.
-function wait(milliseconds, signal) {
+function wait(milliseconds, {signal}) {
   signal.throwIfAborted();
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => { signal.removeEventListener('abort', abort); resolve(); }, milliseconds);
@@ -50,7 +50,7 @@ playButton.addEventListener('click', async () => {
     pg.load('stage1', editor.value);
     await pg.play('stage1', {execution: 'worker'});
     status.textContent = 'Playing…';
-    await wait(2300, signal);
+    await wait(2300, {signal});
     detail.textContent = JSON.stringify(pg.getState(), null, 2);
     pg.stop();
     status.textContent = 'Finished.';

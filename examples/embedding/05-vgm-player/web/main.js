@@ -8,7 +8,7 @@ const detail = document.getElementById('detail');
 let controller;
 
 // Local, abortable timer: Stop also cancels waits between notes.
-function wait(milliseconds, signal) {
+function wait(milliseconds, {signal}) {
   signal.throwIfAborted();
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => { signal.removeEventListener('abort', abort); resolve(); }, milliseconds);
@@ -78,7 +78,7 @@ playButton.addEventListener('click', async () => {
     // The parser can finish ahead of the speakers; also wait for output drain.
     while (vgm.getState().outputMode !== 'none') {
       detail.textContent = JSON.stringify(vgm.getState(), null, 2);
-      await wait(50, signal);
+      await wait(50, {signal});
     }
     status.textContent = 'Finished.';
   } catch (error) {

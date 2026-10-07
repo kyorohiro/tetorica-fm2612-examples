@@ -2,15 +2,15 @@ import {createSoundChip} from 'tetorica-fm2612';
 import {GameboySynth} from 'tetorica-fm2612/gameboysynth.js';
 import {GameboyWorkletTransport} from 'tetorica-fm2612/chip_worklet_transport.js';
 
-async function play(gb, signal) {
+async function play(gb, {signal}) {
   gb.initialize();
   for (const width of [15, 7]) {
     gb.noise.setVoice({volume: 10, envelope: {direction: 'down', period: 1},
       divisor: 3, shift: 4, width});
     gb.noise.keyOn();
-    await wait(400, signal);
+    await wait(400, {signal});
     gb.noise.keyOff();
-    await wait(150, signal);
+    await wait(150, {signal});
   }
 }
 
@@ -33,7 +33,7 @@ playButton.addEventListener('click', async () => {
     const gb = new GameboySynth({transport});
     await transport.start();
     status.textContent = 'Playing…';
-    await play(gb, signal);
+    await play(gb, {signal});
     await transport.flush();
     status.textContent = 'Finished.';
   } catch (error) {
@@ -48,7 +48,7 @@ stopButton.addEventListener('click', () => {controller?.abort(); void transport?
 window.addEventListener('pagehide', () => {controller?.abort(); void transport?.close();});
 
 // Audio rendering is driven by AudioWorklet; this timer sets the note durations.
-function wait(milliseconds, signal) {
+function wait(milliseconds, {signal}) {
   signal.throwIfAborted();
   return new Promise((resolve, reject) => {
     const done = () => {signal.removeEventListener('abort', abort); resolve();};

@@ -10,7 +10,7 @@ const detail = document.getElementById('detail');
 let controller;
 
 // Local, abortable timer: Stop also cancels waits between notes.
-function wait(milliseconds, signal) {
+function wait(milliseconds, {signal}) {
   signal.throwIfAborted();
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => { signal.removeEventListener('abort', abort); resolve(); }, milliseconds);
@@ -44,11 +44,11 @@ playButton.addEventListener('click', async () => {
     status.textContent = 'Playing…';
     for (const fnum of [553, 696, 829]) {
       mega.fm.noteOn(0, 4, fnum);
-      await wait(240, signal);
+      await wait(240, {signal});
       mega.fm.noteOff(0);
-      await wait(100, signal);
+      await wait(100, {signal});
     }
-    await wait(600, signal);
+    await wait(600, {signal});
 
     status.textContent = 'Finished.';
   } catch (error) {
