@@ -1,7 +1,7 @@
 # tetorica-fm2612 examples
 
 `tetorica-fm2612` を import して使う、機能別の小さなサンプル集。
-チップ別の基本例は npm 0.2.11 の WorkletTransport / AudifyTransport を使います。導入手順は末尾の「Transport の例」を参照してください。
+チップ別の基本例は npm 0.2.12 の WorkletTransport / AudifyTransport を使います。導入手順は末尾の「Transport の例」を参照してください。
 チップ別の基本例は WorkletTransport / AudifyTransport を使います。PCM 生成・WAV 保存は専用例に置き、Web Audio を使う埋め込み例と、Node の nativeFX / 音声デバイス出力の例も掲載しています。本体リポジトリには依存しません。
 
 [公開 examples](https://kyorohiro.github.io/tetorica-fm2612-examples/) と
@@ -43,6 +43,9 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 | Game Boy | [01-duty](examples/gameboy/pulse/01-duty/README.md) | Game Boy pulse のデューティ比 |
 | Game Boy | [01-waveform](examples/gameboy/wave/01-waveform/README.md) | Game Boy wave の波形メモリー |
 | Game Boy | [01-width](examples/gameboy/noise/01-width/README.md) | Game Boy noise の幅 |
+| NES | [01-tones](examples/nes/apu/01-tones/README.md) | 2つの pulse・triangle のベース・noise の打音を重ねる。 |
+| NES | [01-wave-modulation](examples/nes/fds/01-wave-modulation/README.md) | 64点の波形を作り、変調なし／ありの音色を比較する。 |
+| NES | [01-sample](examples/nes/dmc/01-sample/README.md) | 自作の1-bit DPCM データをメモリーへ送り、再生速度を比較する。 |
 | X68000 | [01-note](examples/x68000/fm/01-note/README.md) | X68000 YM2151 の FM 発音 |
 | X68000 | [01-byte-stream](examples/x68000/adpcm/01-byte-stream/README.md) | X68000 OKIM6258 の ADPCM 再生 |
 | PC-98 | [01-rhythm](examples/pc98/adpcm-a/01-rhythm/README.md) | YM2608 ADPCM-A：固定リズム音源 |
@@ -163,7 +166,7 @@ WAV の RIFF ヘッダー・非ゼロ PCM とイベント JSON を確認しま�
 ## Transport の例
 
 Genesis / PC-98 / Game Boy / X68000 FM の基本例は、WorkletTransport / AudifyTransport を使用します。
-公開済み npm 0.2.11 を使用します。Node のリアルタイム再生には audify を追加してください。
+公開済み npm 0.2.12 を使用します。Node のリアルタイム再生には audify を追加してください。
 
 ```sh
 npm install

@@ -93,6 +93,36 @@
     "nodeAudioOutput": true
   },
   {
+    "id": "nes/apu/01-tones",
+    "title": "NES APU の音色",
+    "description": "2つの pulse・triangle のベース・noise の打音を重ねる。",
+    "environments": [
+      "web",
+      "node"
+    ],
+    "nodeAudioOutput": true
+  },
+  {
+    "id": "nes/fds/01-wave-modulation",
+    "title": "FDS の波形と変調",
+    "description": "64点の波形を作り、変調なし／ありの音色を比較する。",
+    "environments": [
+      "web",
+      "node"
+    ],
+    "nodeAudioOutput": true
+  },
+  {
+    "id": "nes/dmc/01-sample",
+    "title": "NES DMC サンプル",
+    "description": "自作の1-bit DPCM データをメモリーへ送り、再生速度を比較する。",
+    "environments": [
+      "web",
+      "node"
+    ],
+    "nodeAudioOutput": true
+  },
+  {
     "id": "x68000/fm/01-note",
     "title": "X68000 YM2151 の FM 発音",
     "description": "YM2151Synth と FM_PRESETS を使い、音名で発音する。Web / Node 共通の Synth 操作。",

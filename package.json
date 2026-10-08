@@ -14,6 +14,6 @@
     "check:node": "node scripts/check-node.mjs"
   },
   "dependencies": {
-    "tetorica-fm2612": "0.2.11"
+    "tetorica-fm2612": "0.2.12"
   }
 }
