@@ -2,7 +2,7 @@
 
 1周分の音符を録音し、繰り返し再演・undo・停止する。
 
-公開済み `tetorica-fm2612@0.2.10` の実験 API を import します。
+公開済み `tetorica-fm2612@0.2.11` の実験 API を import します。
 導入手順は [repository README](../../../README.md#megasynth-node-examples) を参照してください。
 
 ```sh

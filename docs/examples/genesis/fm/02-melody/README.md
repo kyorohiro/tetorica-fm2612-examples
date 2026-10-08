@@ -2,7 +2,7 @@
 
 1つのチャンネルで C–D–E–G–C を順に鳴らす。
 
-チップ生成 → Transport → Synth の基本例です。npm 0.2.10 の API を使います。
+チップ生成 → Transport → Synth の基本例です。npm 0.2.11 の API を使います。
 導入は [repository README](../../../../README.md#transport-の例) を参照してください。
 
 ## Web

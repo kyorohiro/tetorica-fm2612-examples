@@ -1,8 +1,8 @@
 # YM2608 ADPCM-B：PCM / WAV の loadSample
 
-`tetorica-fm2612@0.2.10` の `YM2608Synth.adpcm.loadSample()` を使う例です。
+`tetorica-fm2612@0.2.11` の `YM2608Synth.adpcm.loadSample()` を使う例です。
 
-チップ生成 → Transport → Synth の基本例です。npm 0.2.10 の API を使います。
+チップ生成 → Transport → Synth の基本例です。npm 0.2.11 の API を使います。
 導入は [repository README](../../../../README.md#transport-の例) を参照してください。
 
 ## Web

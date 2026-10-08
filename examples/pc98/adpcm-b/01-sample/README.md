@@ -2,7 +2,7 @@
 
 エンコード済み ADPCM-B を loadMemory で転送し、再生範囲・速度・音量・ループを設定する。
 
-チップ生成 → Transport → Synth の基本例です。npm 0.2.10 の API を使います。
+チップ生成 → Transport → Synth の基本例です。npm 0.2.11 の API を使います。
 導入は [repository README](../../../../README.md#transport-の例) を参照してください。
 
 ## Web

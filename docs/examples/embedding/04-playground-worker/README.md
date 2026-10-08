@@ -2,7 +2,7 @@
 
 Playground のコードを load() し、Worker で実行してアプリに組み込む。
 
-公開済み `tetorica-fm2612@0.2.10` を import します。
+公開済み `tetorica-fm2612@0.2.11` を import します。
 [Web ページ](web/index.html) と [全コード](web/main.js) を参照してください。
 repository ルートで `npm install` → `npm run dev` を実行し、一覧から開きます。
 Play はユーザー操作から開始します。Stop・完了・エラー時にリソースを解放します。

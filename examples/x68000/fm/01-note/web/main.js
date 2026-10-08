@@ -1,34 +1,13 @@
 import {createSoundChip} from 'tetorica-fm2612';
-import {YM2151WorkletTransport} from 'tetorica-fm2612/chip_worklet_transport.js';
+import {FM_PRESETS} from 'tetorica-fm2612/megasynth-fm-presets.js';
+import {YM2151Synth, YM2151WorkletTransport} from 'tetorica-fm2612/ym2151synth.js';
 
-async function play(transport, {signal}) {
-  transport.reset();
-  transport.write(0, 0x20);
-  transport.write(1, 0xc7); // Both outputs, algorithm 7, feedback 0.
-  for (let operator = 0; operator < 4; operator++) {
-    const offset = operator * 8;
-    transport.write(0, 0x40 + offset);
-    transport.write(1, 1); // Multiplier 1, detune 0.
-    transport.write(0, 0x60 + offset);
-    transport.write(1, operator === 3 ? 24 : 127);
-    transport.write(0, 0x80 + offset);
-    transport.write(1, 31); // Attack.
-    transport.write(0, 0xa0 + offset);
-    transport.write(1, 0);  // First decay.
-    transport.write(0, 0xc0 + offset);
-    transport.write(1, 0);  // Second decay / detune 2.
-    transport.write(0, 0xe0 + offset);
-    transport.write(1, 15); // Sustain level 0, release 15.
-  }
-  transport.write(0, 0x28);
-  transport.write(1, 0x4a); // Key code: octave and semitone bits.
-  transport.write(0, 0x30);
-  transport.write(1, 0);    // Key fraction 0.
-  transport.write(0, 0x08);
-  transport.write(1, 0x40); // Key on C2 (operator 3), channel 0.
+async function play(fm, {signal}) {
+  fm.setPreset(0, FM_PRESETS.sine);
+  fm.setOperator(0, 3, {tl: 24});
+  fm.noteOn(0, 'A4');
   await wait(600, {signal});
-  transport.write(0, 0x08);
-  transport.write(1, 0);    // Key off channel 0.
+  fm.noteOff(0);
   await wait(200, {signal});
 }
 
@@ -48,9 +27,10 @@ playButton.addEventListener('click', async () => {
     chip = await createSoundChip('ym2151', {execution: 'worklet', signal});
     signal.throwIfAborted();
     transport = new YM2151WorkletTransport(chip);
+    const fm = new YM2151Synth({transport});
     await transport.start();
     status.textContent = 'Playing…';
-    await play(transport, {signal});
+    await play(fm, {signal});
     await transport.flush();
     status.textContent = 'Finished.';
   } catch (error) {

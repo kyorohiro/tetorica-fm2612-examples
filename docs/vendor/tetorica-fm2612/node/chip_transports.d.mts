@@ -3,19 +3,12 @@ import { YM2612DirectTransport } from '../ym2612synth.js';
 import { YM2608DirectTransport } from '../ym2608synth.js';
 import { GameboyDirectTransport } from '../gameboysynth.js';
 import { SegaPSGDirectTransport } from '../segapsgsynth.js';
+import { YM2151DirectTransport } from '../ym2151synth.js';
 export type AudifyTransportOptions = import('./megasynth.mjs').OutputConnectionOptions & {
     sampleRate?: number;
     gain?: number;
     queueBlocks?: number;
 };
-declare class RegisterDirectTransport {
-    chip: Pick<import("../ym2151.js").Ym2151, "reset" | "write">;
-    /** @param {Pick<import("../ym2151.js").Ym2151, "write"|"reset">} chip */
-    constructor(chip: Pick<import("../ym2151.js").Ym2151, "write" | "reset">);
-    reset(): void;
-    write(...args: any[]): void;
-    writeRegister(register: any, value: any): void;
-}
 export declare const YM2612AudifyTransport: new (chip: {
     writeRegister(register: number, value: number, port?: number): void;
     sampleRate?: () => number;
@@ -71,7 +64,7 @@ export declare const SegaPSGAudifyTransport: new (chip: import("../segapsg.js").
         output: Record<string, unknown> | null;
     };
 };
-export declare const YM2151AudifyTransport: new (chip: Pick<import("../ym2151.js").Ym2151, "reset" | "write">, options?: AudifyTransportOptions) => Omit<RegisterDirectTransport, "getState"> & {
+export declare const YM2151AudifyTransport: new (chip: import("../ym2151.js").Ym2151, options?: AudifyTransportOptions) => Omit<YM2151DirectTransport, "getState"> & {
     start(): Promise<void>;
     stop(): Promise<void>;
     close(): Promise<void>;
@@ -91,4 +84,3 @@ export declare const PWM32XAudifyTransport: new (chip: import("../pwm32x.js").PW
         output: Record<string, unknown> | null;
     };
 };
-export {};

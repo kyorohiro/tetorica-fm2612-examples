@@ -95,7 +95,7 @@
   {
     "id": "x68000/fm/01-note",
     "title": "X68000 YM2151 の FM 発音",
-    "description": "4 MHz の YM2151 にレジスタを書き、1つのオペレーターで発音する。",
+    "description": "YM2151Synth と FM_PRESETS を使い、音名で発音する。Web / Node 共通の Synth 操作。",
     "nodeAudioOutput": true
   },
   {

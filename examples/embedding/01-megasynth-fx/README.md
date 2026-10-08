@@ -2,7 +2,7 @@
 
 MegaSynth の start() → FM 発音 → delay / reverb → close() をアプリに組み込む。
 Web / Node とも同じ sine preset と3音を使い、音源の後ろに FX を繋ぎます。
-公開済み `tetorica-fm2612@0.2.10` を import します。
+公開済み `tetorica-fm2612@0.2.11` を import します。
 
 ## Web
 
