@@ -1,7 +1,7 @@
 # tetorica-fm2612 examples
 
 `tetorica-fm2612` を import して使う、機能別の小さなサンプル集。
-チップ別の基本例は npm 0.2.6 の WorkletTransport / AudifyTransport を使います。導入手順は末尾の「Transport の例」を参照してください。
+チップ別の基本例は npm 0.2.10 の WorkletTransport / AudifyTransport を使います。導入手順は末尾の「Transport の例」を参照してください。
 チップ別の基本例は WorkletTransport / AudifyTransport を使います。PCM 生成・WAV 保存は専用例に置き、Web Audio を使う埋め込み例と、Node の nativeFX / 音声デバイス出力の例も掲載しています。本体リポジトリには依存しません。
 
 [公開 examples](https://kyorohiro.github.io/tetorica-fm2612-examples/) と
@@ -63,6 +63,8 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 | Embedding（Node・実験用） | [10-megasynth-node-audio](examples/embedding/10-megasynth-node-audio/README.md) | Worker 内のリアルタイム出力・録音・停止・再開 |
 
 | DirectTransport | [01-single-note](examples/transport/direct/01-single-note/README.md) | PCM 生成・Web 再生・Node WAV 保存 |
+
+| Chip Mixer（Web） | [11-chip-mixer](examples/embedding/11-chip-mixer/README.md) | 自動 ID・チップ別 Volume / Pan / Mute / Reset |
 
 ## 各フォルダーの構成
 
@@ -138,7 +140,7 @@ Node 専用の場合は `environments: ["node"]`、ブラウザ専用の場合�
 
 ## MegaSynth Node examples
 
-`embedding/06`〜`10` は `tetorica-fm2612@0.2.6` の実験用 MegaSynth API を使います。
+`embedding/06`〜`10` は `tetorica-fm2612@0.2.10` の実験用 MegaSynth API を使います。
 通常の `npm ci` で公開 package を導入できます。
 
 ```sh
@@ -161,7 +163,7 @@ WAV の RIFF ヘッダー・非ゼロ PCM とイベント JSON を確認しま�
 ## Transport の例
 
 Genesis / PC-98 / Game Boy / X68000 FM の基本例は、WorkletTransport / AudifyTransport を使用します。
-公開済み npm 0.2.6 を使用します。Node のリアルタイム再生には audify を追加してください。
+公開済み npm 0.2.10 を使用します。Node のリアルタイム再生には audify を追加してください。
 
 ```sh
 npm install
@@ -175,3 +177,8 @@ Node は呼び出し元でチップ / Synth を動かし、AudifyTransport が�
 MegaSynth のゲーム埋め込み例は別枠で維持します。
 [DirectTransport の専用例](examples/transport/direct/01-single-note/README.md) に PCM 生成と WAV 保存を分けています。
 基本例の Node 版は音声デバイスを使うため `check:node` の WAV 出力検証には含めません。
+
+## Chip Mixer
+
+Web の `SoundChipMixer` でチップ別の音量・Pan・Mute を設定できます。`createSoundChip()` の `id` は省略でき、生成後の `chip.id` から取得できます。Game Boy は初期音量28%です。
+[複数チップの実行例](examples/embedding/11-chip-mixer/README.md) と MegaSynth / Playground Worker の例を参照してください。

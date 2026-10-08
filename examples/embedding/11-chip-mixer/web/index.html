@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chip Mixer：自動 ID と個別調整 — tetorica-fm2612 examples</title>
+  <link rel="stylesheet" href="../../../../style.css">
+  <script type="importmap">{"imports":{
+    "tetorica-fm2612":"../../../../vendor/tetorica-fm2612/soundchip.js",
+    "tetorica-fm2612/":"../../../../vendor/tetorica-fm2612/"
+  }}</script>
+</head>
+<body><main>
+  <nav><a href="../../../../index.html">← Examples</a><a href="./main.js">Source ↗</a></nav>
+  <header><p class="eyebrow">embedding/11-chip-mixer · WEB</p>
+    <h1>Chip Mixer：自動 ID と個別調整</h1>
+    <p>2つの Game Boy を混ぜ、chip.id で Volume・Pan・Mute を調整します。</p>
+  </header>
+  <section class="sample-panel">
+    <div class="actions"><button id="play">Play</button><button id="stop" disabled>Stop</button><button id="reset" disabled>Reset mixer</button></div>
+    <p id="status" role="status" aria-live="polite">Ready.</p>
+    <p>Play で約3秒再生します。Game Boy の初期音量は各28%。Reset は音量28%・Pan中央・Mute解除に戻します。</p>
+    <div id="strips"></div>
+    <pre id="detail" aria-live="polite"></pre>
+    <h2>コード</h2><pre class="source"><code id="source">Loading…</code></pre>
+    <p><a href="../README.md">この例の README</a></p>
+  </section>
+</main><script type="module" src="./main.js"></script><script type="module">
+const response = await fetch('./main.js');
+document.getElementById('source').textContent = await response.text();
+</script></body>
+</html>

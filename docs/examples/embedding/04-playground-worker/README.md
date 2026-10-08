@@ -2,10 +2,12 @@
 
 Playground のコードを load() し、Worker で実行してアプリに組み込む。
 
-公開済み `tetorica-fm2612@0.2.6` を import します。
+公開済み `tetorica-fm2612@0.2.10` を import します。
 [Web ページ](web/index.html) と [全コード](web/main.js) を参照してください。
 repository ルートで `npm install` → `npm run dev` を実行し、一覧から開きます。
 Play はユーザー操作から開始します。Stop・完了・エラー時にリソースを解放します。
+
+Worker のコードでは `await mixer.set(fm.id, {volume: 0.8})` で FM の出力音量を設定します。新しく作るチップも `const chip = await createSoundChip(name)` の `chip.id` で個別調整できます。
 
 `liveLoop` は停止まで繰り返します。この例は約2.3秒後に停止します。`stop()` は演奏を止め、`finalize()` は Worker と音声リソースを解放します。エディターのコードは実行されるので、自分で信頼するコードを入力してください。
 

@@ -231,5 +231,13 @@
       "web",
       "node"
     ]
+  },
+  {
+    "id": "embedding/11-chip-mixer",
+    "title": "Chip Mixer：自動 ID と個別調整",
+    "description": "2つの Game Boy を混ぜ、chip.id で Volume・Pan・Mute・Reset を操作する。",
+    "environments": [
+      "web"
+    ]
   }
 ]

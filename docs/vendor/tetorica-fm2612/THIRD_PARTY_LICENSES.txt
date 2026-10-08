@@ -8,5 +8,6 @@ mame-okim6258: see licenses/mame-okim6258/LICENSE and README.md.
 mame-okim6295: see licenses/mame-okim6295/LICENSE and README.md.
 mame-rf5c164: see licenses/mame-rf5c164/LICENSE and README.md.
 mame-segapcm: see licenses/mame-segapcm/LICENSE and README.md.
+mame-32x-pwm: see licenses/mame-32x-pwm/LICENSE and README.md.
 Nuked-OPN2 is LGPL-2.1-or-later; the MAME adaptations listed above are BSD-3-Clause.
 No external instrument/sample ROMs are included.

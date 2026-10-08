@@ -35,6 +35,8 @@ playButton.addEventListener('click', async () => {
     });
     await mega.start();
     signal.throwIfAborted();
+    // Built-in chips also expose IDs for per-chip output mixing.
+    mega.mixer.set(mega.fm.id, {volume: 0.8, pan: 0, muted: false});
     mega.fm.setPreset(0, FM_PRESETS.sine);
     // These effects run in Web Audio, after the chip output.
     const delay = createDelayFX(mega.audioContext, {time: 0.12, feedback: 0.3, mix: 0.25});

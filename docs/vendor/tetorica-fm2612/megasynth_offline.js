@@ -1,3 +1,4 @@
+import {PWM32XPlayback} from './pwm32x_playback.js';
 /** Experimental offline MegaSynth engine. Browser / Node; no audio device. */
 import {createSoundChip} from './soundchip.js';
 import {YM2612Synth, YM2612DirectTransport} from './ym2612synth.js';
@@ -29,8 +30,12 @@ async function loadFX(options) {
  * Create an experimental YM2612 + nativeFX offline renderer.
  * This is a separate entry point; the existing browser MegaSynth is unchanged.
  * Options: sampleRate (default 48000), masterVolume (default 1), chipOptions,
- * fxModule / fxWasmBinary / fxWasmUrl, signal.
+ * fxModule / fxWasmBinary / fxWasmUrl, signal, mega32X, pwmOptions.
  */
+/** @typedef {{sampleRate?: number, masterVolume?: number, chipOptions?: import('./soundchip.js').SoundChipOptions,
+ * fxModule?: WebAssembly.Module, fxWasmBinary?: Uint8Array | ArrayBuffer, fxWasmUrl?: string | URL,
+ * signal?: AbortSignal, mega32X?: boolean, pwmOptions?: import('./pwm32x.js').PWM32XOptions}} MegaSynthOfflineOptions */
+/** @param {MegaSynthOfflineOptions} [options] */
 export async function createMegaSynthOffline(options = {}) {
   const sampleRate = options.sampleRate ?? 48000;
   const masterVolume = options.masterVolume ?? 1;
@@ -47,7 +52,7 @@ export async function createMegaSynthOffline(options = {}) {
   const chip = await createSoundChip('ym2612', {...options.chipOptions, signal: options.signal});
   try {
     options.signal?.throwIfAborted();
-    return new MegaSynthOffline(chip, dsp, sampleRate, masterVolume);
+    return new MegaSynthOffline(chip, dsp, sampleRate, masterVolume, options);
   } catch (error) { chip.dispose(); throw error; }
 }
 
@@ -57,7 +62,9 @@ class MegaSynthOffline {
   #idleLeft; #idleRight; #chipRate;
   #sampleRate; #masterVolume;
 
-  constructor(chip, dsp, sampleRate, masterVolume) {
+  /** @param {import("./ym2612.js").Ym2612} chip @param {NativeFXEngine} dsp @param {number} sampleRate @param {number} masterVolume @param {MegaSynthOfflineOptions} options */
+  constructor(chip, dsp, sampleRate, masterVolume, options) {
+    this.pwm = options.mega32X === true ? new PWM32XPlayback({...options.pwmOptions, sampleRate}) : null;
     this.#chip = chip; this.#dsp = dsp; this.#sampleRate = sampleRate;
     this.#masterVolume = masterVolume; this.#chipRate = chip.sampleRate();
     const idle = chip.generateStereoView(1);
@@ -95,6 +102,7 @@ class MegaSynthOffline {
     for (let channel = 0; channel < 6; channel++) this.fm.noteOff(channel);
     this.#transport.dacPlayer?.reset();
     this.#transport.write(0, 0x2b, 0);
+    this.pwm?.reset();
     this.#dsp.samples.clear(); this.#dsp.resetNoise(); this.#dsp.command({op: 'clear'});
   }
 
@@ -119,6 +127,7 @@ class MegaSynthOffline {
   }
 
   /** Advance the sample clock, render the chip, then apply native FX. */
+/** @param {number} frames @param {{onSource?: (input: Float32Array[]) => void}} [options] */
   render(frames, {onSource} = {}) {
     this.#assertOpen();
     if (!Number.isSafeInteger(frames) || frames < 0 || frames > 10000000 || !Number.isSafeInteger(this.#frame + frames)) {
@@ -152,7 +161,11 @@ class MegaSynthOffline {
         }
         input[0][i] = this.#lastLeft; input[1][i] = this.#lastRight;
       }
-      // Capture FM before sample playback, FX and master volume, avoiding overdub feedback.
+      if (this.pwm) {
+        const pwm = this.pwm.generateStereo(count);
+        for (let i = 0; i < count; i++) {input[0][i] += pwm.left[i]; input[1][i] += pwm.right[i];}
+      }
+      // Capture FM/PWM before sample playback, FX and master volume, avoiding overdub feedback.
       onSource?.(input);
       const output = [left.subarray(offset, offset + count), right.subarray(offset, offset + count)];
       this.#dsp.process(input, output);
@@ -165,6 +178,7 @@ class MegaSynthOffline {
   close() {
     if (this.#closed) return;
     this.#closed = true; this.#events.length = 0;
+    this.pwm?.dispose();
     this.#chip.dispose(); this.#chip = null; this.#dsp = null;
   }
 }

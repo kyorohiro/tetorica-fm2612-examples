@@ -1,6 +1,6 @@
 # Full web runtime
 
-Includes all 142 top-level web runtime modules and 23 generated chip/engine pairs.
+Includes all 148 top-level web runtime modules and 23 generated chip/engine pairs.
 
 ay8910, gameboy_apu, huc6280, k051649, nuked_opn2, okim6258, rf5c164, segapcm, segapsg, y8950, ym2151, ym2203, ym2413, ym2608, ym2610b, ym2612, ym3438, ym3526, ym3812, ymf262, ymf276, ymf278b, ymf288
 

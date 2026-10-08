@@ -19,6 +19,7 @@ function wait(milliseconds, {signal}) {
 let pg;
 const editor = document.getElementById('code');
 editor.value = `setBpm(120);
+await mixer.set(fm.id, {volume: 0.8, pan: 0, muted: false});
 fm.setPreset(CH1, FM_PRESETS.sine);
 liveLoop("lead", async () => {
   await play("C4", {channel: CH1, duration: 0.18});

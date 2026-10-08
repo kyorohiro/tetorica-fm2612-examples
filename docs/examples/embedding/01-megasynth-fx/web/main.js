@@ -10,7 +10,7 @@ const detail = document.getElementById('detail');
 let controller;
 
 // Local, abortable timer: Stop also cancels waits between notes.
-function wait(milliseconds, signal) {
+function wait(milliseconds, {signal}) {
   signal.throwIfAborted();
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => { signal.removeEventListener('abort', abort); resolve(); }, milliseconds);
@@ -35,6 +35,8 @@ playButton.addEventListener('click', async () => {
     });
     await mega.start();
     signal.throwIfAborted();
+    // Built-in chips also expose IDs for per-chip output mixing.
+    mega.mixer.set(mega.fm.id, {volume: 0.8, pan: 0, muted: false});
     mega.fm.setPreset(0, FM_PRESETS.sine);
     // These effects run in Web Audio, after the chip output.
     const delay = createDelayFX(mega.audioContext, {time: 0.12, feedback: 0.3, mix: 0.25});
@@ -44,11 +46,11 @@ playButton.addEventListener('click', async () => {
     status.textContent = 'Playing…';
     for (const fnum of [553, 696, 829]) {
       mega.fm.noteOn(0, 4, fnum);
-      await wait(240, signal);
+      await wait(240, {signal});
       mega.fm.noteOff(0);
-      await wait(100, signal);
+      await wait(100, {signal});
     }
-    await wait(600, signal);
+    await wait(600, {signal});
 
     status.textContent = 'Finished.';
   } catch (error) {

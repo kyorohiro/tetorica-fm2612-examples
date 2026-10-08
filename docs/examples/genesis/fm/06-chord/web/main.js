@@ -2,15 +2,15 @@ import {createSoundChip} from 'tetorica-fm2612';
 import {FM_PRESETS} from 'tetorica-fm2612/megasynth-fm-presets.js';
 import {YM2612Synth, YM2612WorkletTransport} from 'tetorica-fm2612/ym2612synth.js';
 
-async function play(fm, signal) {
+async function play(fm, {signal}) {
   const notes = [617, 778, 925];
   for (let channel = 0; channel < notes.length; channel++) {
     fm.setPreset(channel, FM_PRESETS['two-op-organ']);
     fm.noteOn(channel, 4, notes[channel]);
   }
-  await wait(800, signal);
+  await wait(800, {signal});
   for (let channel = 0; channel < notes.length; channel++) fm.noteOff(channel);
-  await wait(300, signal);
+  await wait(300, {signal});
 }
 
 const playButton = document.getElementById('play');
@@ -32,7 +32,7 @@ playButton.addEventListener('click', async () => {
     const fm = new YM2612Synth({transport});
     await transport.start();
     status.textContent = 'Playing…';
-    await play(fm, signal);
+    await play(fm, {signal});
     await transport.flush();
     status.textContent = 'Finished.';
   } catch (error) {
@@ -47,7 +47,7 @@ stopButton.addEventListener('click', () => {controller?.abort(); void transport?
 window.addEventListener('pagehide', () => {controller?.abort(); void transport?.close();});
 
 // Audio rendering is driven by AudioWorklet; this timer sets the note durations.
-function wait(milliseconds, signal) {
+function wait(milliseconds, {signal}) {
   signal.throwIfAborted();
   return new Promise((resolve, reject) => {
     const done = () => {signal.removeEventListener('abort', abort); resolve();};

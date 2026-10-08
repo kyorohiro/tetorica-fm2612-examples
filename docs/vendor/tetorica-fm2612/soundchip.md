@@ -113,3 +113,70 @@ chip の `dispose()` は利用者の責任で、Transport を閉じてから行�
 DirectTransport は、手元で `generateStereo()` により PCM を生成し、WAV 保存や利用者の出力へ渡す用途に使う。
 examples の `transport/direct/01-single-note` に PCM 生成・連結・Web 再生・WAV 保存をすべて記述する。
 これらの追加入口は npm 0.2.6 以降で利用できる。
+
+## 32X PWM 共通コア（0.2.7）
+
+`createSoundChip('pwm', {clock: 23011361, sampleRate: 48000})` は MAME 由来の
+FIFO・タイマー処理を持つ JavaScript コアを生成する。WASM・音声デバイスは不要。
+レジスタ0〜4を `writeRegister(register, value)` で設定し、`generateStereo(frames)` で進める。
+`reset` / `read` / `saveState` / `loadState` / `dispose` に対応。
+
+npm 0.2.7 以降で利用できる。共通Worklet / Audify Transport、
+MegaSynth / Playground / Node の入口を追加済み。利用方法は以下を参照。
+VGM比較には `pwmModel: 'mame'` を使う。VGM側はcycle基準の振幅に揃える。
+元の固定DAC換算を使う場合は `pwmOutputMode: 'dac'`。コア単体の既定はDAC換算、Analyzer／CLIのVGM再生の既定はMAME由来方式とcycle基準の振幅。
+従来方式は `pwmModel: legacy` で選べる。
+詳しくは `docs/issues/pwm32x_01.md` と `docs/demos/32x-pwm-compare.html` を参照。
+
+### 32X PWM runtime (0.2.7)
+
+The MAME-derived core is now available in MegaSynth (`new MegaSynth({mega32X: true})` / `synth.pwm` after `start()`), MegaSynthNode (`mega32X: true`) and Playground (`await useSoundChip('pwm')`).
+Browser synthesis runs in AudioWorklet; MegaSynthNode generates it in its audio Worker. `scheduleWrites([{frame, register, value}, ...])` uses output-frame offsets relative to receipt of the batch. `getState().sampleRate` gives the units; these are not VGM 44,100 Hz offsets.
+
+Standalone browser output:
+
+```js
+import {createSoundChip} from 'tetorica-fm2612';
+import {PWM32XWorkletTransport} from 'tetorica-fm2612/pwm32x_transport.js';
+const chip = await createSoundChip('pwm', {execution: 'worklet'});
+const transport = new PWM32XWorkletTransport(chip);
+await transport.write(0, 5);
+await transport.write(1, 1047);
+await transport.write(4, 700);
+await transport.start();
+// await transport.close() when finished.
+```
+
+The runtime wrappers use `duty` output with core gain 1; low-level direct `createSoundChip('pwm')` keeps raw `dac` gain .4. The Worklet endpoint's `gain` controls output volume (default .25).
+For standalone Node playback, use `PWM32XAudifyTransport` from `tetorica-fm2612/node/transports`; it accepts the direct factory chip, wraps the same frame scheduler and borrows rather than disposes that chip. `PWM32XDirectTransport` generates PCM for a consumer-owned output or WAV export.
+These APIs are available from npm 0.2.7. A PCM `loadSample`/`play` facade is not included; register writes and scheduling are available.
+
+## 共通出力ミキサー
+
+`execution: 'worklet'` では `SoundChipMixer` を指定でき、返されたendpointの
+`chip.mixer` / `chip.id` からも設定できます。省略時はendpoint専用のミキサーです。
+
+```js
+import {createSoundChip, SoundChipMixer} from './soundchip.js';
+const mixer = new SoundChipMixer();
+const chip = await createSoundChip('gameboy', {
+  execution: 'worklet', mixer,
+});
+mixer.set(chip.id, {volume: 0.28, pan: 0, muted: false});
+// レジスタ設定後に await chip.start()。使用後に await chip.dispose()。
+```
+
+`volume` は0〜2の倍率、`pan` は-1〜1のステレオバランスです。
+Game Boyは28%、他は100%が初期値。`reset(id)`もその値に戻ります。
+既存のendpointの`gain`（既定0.25）とは別の倍率です。複数endpointを同じ
+ミキサーに登録する場合は、異なるIDと共通のAudioContext／出力先を指定します。
+`dispose()`で当該登録を解除し、ほかのチップは維持します。
+直生成モードは生のPCMを保ち、出力ミキサー指定はWorklet専用です。
+MegaSynthの`synth.mixer`、playgroundの`mixer`／`pg.mixer`も同じ設定項目を使います。
+playgroundのWorkerでは各操作を`await`してください。
+
+IDの指定は省略できます。`createSoundChip`で生成したDirect／Workletのどちらも
+`chip.id`から取得できます。自動IDは生成要求時に連番で確保し、同時初期化でも
+重複しません。IDは生成後に変更できません。手動の`{id: 'gb1'}`も利用できます。
+playgroundの`createSoundChip`／`useSoundChip`でも返されたオブジェクトの`.id`を
+`await mixer.set(chip.id, {volume: 0.3})`へ渡せます。

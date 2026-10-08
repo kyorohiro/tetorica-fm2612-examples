@@ -1,3 +1,4 @@
+import {PWM32XDirectTransport} from '../pwm32x_transport.js';
 import {YM2612DirectTransport} from '../ym2612synth.js';
 import {YM2608DirectTransport} from '../ym2608synth.js';
 import {GameboyDirectTransport} from '../gameboysynth.js';
@@ -70,6 +71,14 @@ class Playback {
     return this.closing;
   }
 }
+/** @typedef {import('./megasynth.mjs').OutputConnectionOptions & {sampleRate?: number, gain?: number, queueBlocks?: number}} AudifyTransportOptions */
+/** @template {new (...args: any[]) => any} T
+ * @param {T} Direct @param {string} name
+ * @returns {{new(chip: ConstructorParameters<T>[0], options?: AudifyTransportOptions): Omit<InstanceType<T>, 'getState'> & {
+ * start(): Promise<void>, stop(): Promise<void>, close(): Promise<void>,
+ * getState(): {running: boolean, error: string|null, output: Record<string, unknown>|null}
+ * }}}
+ */
 function audifyTransport(Direct, name) {
   return class extends Direct {
     constructor(chip, options = {}) {super(chip); this.playback = new Playback(this, options, name);}
@@ -81,6 +90,7 @@ function audifyTransport(Direct, name) {
   };
 }
 class RegisterDirectTransport {
+  /** @param {Pick<import("../ym2151.js").Ym2151, "write"|"reset">} chip */
   constructor(chip) {this.chip = chip;}
   reset() {this.chip.reset();}
   write(...args) {this.chip.write(...args);}
@@ -91,3 +101,5 @@ export const YM2608AudifyTransport = audifyTransport(YM2608DirectTransport, 'ym2
 export const GameboyAudifyTransport = audifyTransport(GameboyDirectTransport, 'gameboy');
 export const SegaPSGAudifyTransport = audifyTransport(SegaPSGDirectTransport, 'segapsg');
 export const YM2151AudifyTransport = audifyTransport(RegisterDirectTransport, 'ym2151');
+
+export const PWM32XAudifyTransport = audifyTransport(PWM32XDirectTransport, 'pwm');

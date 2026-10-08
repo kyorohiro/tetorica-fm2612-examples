@@ -2,7 +2,7 @@
 
 サンプル時計で音符を JSON に録音し、import / 再演して WAV を保存する。
 
-公開済み `tetorica-fm2612@0.2.6` の実験 API を import します。
+公開済み `tetorica-fm2612@0.2.10` の実験 API を import します。
 導入手順は [repository README](../../../README.md#megasynth-node-examples) を参照してください。
 
 ```sh

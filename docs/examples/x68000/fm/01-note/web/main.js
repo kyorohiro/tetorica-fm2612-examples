@@ -1,7 +1,7 @@
 import {createSoundChip} from 'tetorica-fm2612';
 import {YM2151WorkletTransport} from 'tetorica-fm2612/chip_worklet_transport.js';
 
-async function play(transport, signal) {
+async function play(transport, {signal}) {
   transport.reset();
   transport.write(0, 0x20);
   transport.write(1, 0xc7); // Both outputs, algorithm 7, feedback 0.
@@ -26,10 +26,10 @@ async function play(transport, signal) {
   transport.write(1, 0);    // Key fraction 0.
   transport.write(0, 0x08);
   transport.write(1, 0x40); // Key on C2 (operator 3), channel 0.
-  await wait(600, signal);
+  await wait(600, {signal});
   transport.write(0, 0x08);
   transport.write(1, 0);    // Key off channel 0.
-  await wait(200, signal);
+  await wait(200, {signal});
 }
 
 const playButton = document.getElementById('play');
@@ -50,7 +50,7 @@ playButton.addEventListener('click', async () => {
     transport = new YM2151WorkletTransport(chip);
     await transport.start();
     status.textContent = 'Playing…';
-    await play(transport, signal);
+    await play(transport, {signal});
     await transport.flush();
     status.textContent = 'Finished.';
   } catch (error) {
@@ -65,7 +65,7 @@ stopButton.addEventListener('click', () => {controller?.abort(); void transport?
 window.addEventListener('pagehide', () => {controller?.abort(); void transport?.close();});
 
 // Audio rendering is driven by AudioWorklet; this timer sets the note durations.
-function wait(milliseconds, signal) {
+function wait(milliseconds, {signal}) {
   signal.throwIfAborted();
   return new Promise((resolve, reject) => {
     const done = () => {signal.removeEventListener('abort', abort); resolve();};

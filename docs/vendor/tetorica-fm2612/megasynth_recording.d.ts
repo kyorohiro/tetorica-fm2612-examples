@@ -1,0 +1,41 @@
+export declare class MegaSynthRecordingManager {
+    synth: any;
+    now: any;
+    setTimer: any;
+    clearTimer: any;
+    cyclePaddingSeconds: any;
+    recording: boolean;
+    playing: boolean;
+    loopPlayback: boolean;
+    currentRecording: {
+        format: string;
+        version: number;
+        startedAt: any;
+        durationSeconds: number;
+        initialState: any;
+        commands: never[];
+    } | null;
+    lastRecording: any;
+    importedRecording: any;
+    activePlaybackRecording: any;
+    playbackTimers: Set<any>;
+    constructor(options?: {});
+    attachSynth(synth: any): void;
+    start(): any;
+    stop(): any;
+    isRecording(): boolean;
+    isPlaying(): boolean;
+    recordCommand(command: any): void;
+    exportCurrentRecording(): any;
+    exportRecording(): any;
+    importRecording(recording: any): any;
+    play(recording?: null, options?: {}): any;
+    _playCycle(recording: any, options?: {}): void;
+    _schedulePlayback(callback: any, delayMs: any): void;
+    stopPlayback(): void;
+    _applyInitialState(initialState: any, options?: {}): void;
+    _applyCommand(command: any, options?: {}): void;
+    _captureSynthState(): any;
+    _normalizeRecording(recording: any): any;
+    _cloneRecording(recording: any): any;
+}

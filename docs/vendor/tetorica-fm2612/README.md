@@ -10,6 +10,56 @@ its default entry point provides chip creation without starting browser audio.
 npm install tetorica-fm2612
 ```
 
+## Chip mixer
+
+Browser outputs share `SoundChipMixer`: `volume` is a linear multiplier (0–2),
+`pan` is stereo balance (-1 left, 0 center, 1 right), and `muted` silences the
+output while the chip keeps running. Game Boy starts at 28%; other chips start
+at 100%. `reset(id)` restores that chip's balance; `reset()` restores all strips.
+
+```js
+import {createSoundChip, SoundChipMixer} from 'tetorica-fm2612';
+const mixer = new SoundChipMixer();
+const audioContext = new AudioContext();
+const chip = await createSoundChip('gameboy', {
+  execution: 'worklet', audioContext, mixer,
+});
+mixer.set(chip.id, {volume: 0.28, pan: 0, muted: false});
+// Configure registers or use a Synth, then await chip.start().
+// await chip.dispose() removes its strip; caller owns audioContext.close().
+```
+
+All chips created by `createSoundChip` expose a stable, readonly `chip.id`.
+Omitting `{id}` assigns an automatic ID such as `gameboy:1`; simultaneous
+creation also gets distinct IDs. Worklet endpoints expose `chip.mixer` even
+without an explicit mixer. Each endpoint retains its existing `gain` trim (default 0.25); the mixer
+balance multiplies that trim. Direct chips continue to generate raw PCM and
+accept no output mixer. `PCMChipMixer` is available from `soundchip_mixer.js`
+for synchronous rendering, as used by the Analyzer.
+
+For browser MegaSynth, use `synth.mixer.set('ym2612', {volume: 0.5})`.
+Built-in strip IDs are `ym2612`, `segapsg` when enabled, `rf5c164` in Mega CD
+mode and `pwm` in Mega 32X mode. Settings can be specified before `start()`.
+Mixer output feeds the existing FX chain, then the master volume. Closing the
+synth removes its connected strips. A shared mixer can be passed as `{mixer}`.
+
+Inside Playground Main or Worker code:
+
+```js
+const gb = await createSoundChip('gameboy');
+await mixer.set(gb.id, {volume: 0.28, pan: -0.5});
+const settings = await pg.mixer.get(gb.id);
+await mixer.reset(gb.id);
+gb.dispose();
+```
+
+Worker controls return promises; `await` works in both execution modes.
+`createSoundChip` assigns an ID when omitted and preserves independent
+instances. Explicit IDs must be unique within a shared mixer, including while initialization is pending.
+For a stable application name, `{id: 'gb1'}` remains available. `useSoundChip` retains its existing
+per-name cache and returns the same object/ID until disposed or stopped; its `{id}` option is not supported. Disposing a client or
+stopping the runtime removes its output route.
+
 ## Included sound chips
 
 | Family | Chips |
@@ -253,10 +303,10 @@ FM/PSG/PCM mixing, stop/reset and close/restart. Playwright is a development
 dependency; it is not required by users of the sound-chip runtime.
 
 The build is staged in `dist/fm2612/`; packing produces
-`tetorica-fm2612-0.2.6.tgz`. To install a local build in another project:
+`tetorica-fm2612-0.2.8.tgz`. To install a local build in another project:
 
 ```sh
-npm install /absolute/path/to/tetorica-fm2612-0.2.6.tgz
+npm install /absolute/path/to/tetorica-fm2612-0.2.8.tgz
 ```
 
 The existing `tetorica-vgm` CLI package is built separately. This first package
@@ -271,6 +321,19 @@ included; Nuked-OPN2 is LGPL-2.1-or-later, with its source and build script in
 and generator. External instrument/sample ROMs are not included.
 
 ## Release notes
+
+`0.2.8` includes JSDoc-generated TypeScript declarations for browser and Node
+entry points, typed Direct/Worklet chip creation and async Worker APIs.
+The build validates every declaration and strict installed-package examples
+under NodeNext/Bundler resolution, including a browser without Node types.
+This release also adds npm discovery keywords.
+
+
+`0.2.7` adds the MAME-derived 32X PWM core, output-frame scheduling,
+MegaSynth/MegaSynthNode integration, Playground support and PWM Worklet/Audify/Direct
+transports. Integrated output uses cycle-normalized amplitude; the low-level
+core also offers raw DAC scaling. The BSD license and source provenance are included.
+
 
 `0.2.6` adds browser Worklet chip creation and chip-specific Audify transports
 for YM2612, YM2608, Game Boy, Sega PSG and YM2151. Basic examples use
@@ -302,3 +365,46 @@ runtimes release routing nodes when closed so they can restart safely.
 `0.2.1` updates the npm Homepage link to
 [tetorica-fm2612-examples](https://github.com/kyorohiro/tetorica-fm2612-examples).
 Sound-chip runtime behavior is unchanged from `0.2.0`.
+
+### 32X PWM (0.2.7)
+
+Version 0.2.7 adds MAME-derived PWM to `MegaSynth({mega32X: true})`,
+`MegaSynthNode({mega32X: true})` and Playground's `useSoundChip('pwm')`.
+After `start()`, use `synth.pwm.write(register, value)`
+or `synth.pwm.scheduleWrites([{frame, register, value}, ...])`. Frames are offsets
+from receipt of the batch at the output sample rate returned by `pwm.getState()`.
+The integrated default is `duty` output, gain 1; `pwmOptions` can select `clock`,
+`outputMode` and core `gain`. PWM is mixed before the common FX/master output.
+Standalone `PWM32XWorkletTransport`, `PWM32XAudifyTransport` and PCM-only
+`PWM32XDirectTransport` use the same MAME-derived core.
+See [implementation and validation](https://github.com/kyorohiro/hello_ymfm_wasm/blob/main/docs/issues/pwm32x_01.md).
+
+## TypeScript (0.2.8)
+
+Version 0.2.8 generates `.d.ts` and Node `.d.mts` declarations from
+JSDoc and includes them in the npm tarball. `types` export conditions cover the
+root, assets, Node APIs, transports and both extensionless and `.js` subpaths.
+These declarations are available from 0.2.8; 0.2.7 predates this change.
+
+```ts
+import {createSoundChip} from 'tetorica-fm2612';
+import {YM2612Synth, YM2612WorkletTransport} from 'tetorica-fm2612/ym2612synth.js';
+
+const chip = await createSoundChip('ym2612', {execution: 'worklet'});
+const transport = new YM2612WorkletTransport(chip);
+const fm = new YM2612Synth({transport});
+await transport.start();
+fm.noteOn(0, 4, 553);
+// await transport.close() when finished.
+```
+
+`createSoundChip('ym2612')` infers the direct `Ym2612` core;
+`execution: 'worklet'` infers the remote endpoint. Browser APIs require DOM
+library types. Node APIs use Node's `EventEmitter` types; Node TypeScript
+projects should include `@types/node`. The emitted declarations use generic
+TypedArray types, supported by TypeScript 5.7 and later.
+
+Development validation: `npm run build:fm2612` generates and checks every
+declaration; `npm run test:fm2612:types` verifies strict consumer examples under
+NodeNext and Bundler resolution, including expected errors. The tarball
+installation check also runs the consumer type tests against the installed package.
