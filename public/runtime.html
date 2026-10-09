@@ -60,6 +60,12 @@ Web Audio / encodeWav()  ブラウザ再生 / Web・Node の WAV 保存</code></
     <p><a href="./examples/patches/01-tfi-roundtrip/web/index.html">TFI import / export</a> ·
       <a href="./examples/patches/02-vgi-roundtrip/web/index.html">VGI import / export</a></p>
   </section>
+  <section class="sample-panel"><h2>API を探す</h2>
+    <p><a href="https://github.com/kyorohiro/hello_ymfm_wasm/tree/main/packages/fm2612#api-entry-points">機能 → import パス → 主な API の一覧</a>から入口を選べます。
+      例えば音程変換は <code>import {hzToBlockFnum} from 'tetorica-fm2612/pitch.js'</code> です。</p>
+    <p>引数・options・戻り値は、インストール済み package の <code>.d.ts</code> / <code>.d.mts</code> とエディターの補完・定義へ移動で確認できます。
+      例えば <code>node_modules/tetorica-fm2612/pitch.d.ts</code> を参照してください。</p>
+  </section>
   <section class="sample-panel"><h2>ブラウザでの配置と実行環境</h2>
     <p>この examples は import map で <code>tetorica-fm2612</code> の bare import を、コピーした npm package へ解決します。
       <code>npm run dev</code> と <code>npm run build</code> が package の JS・WASM・Worker・Worklet・ライセンスを vendor に配置します。

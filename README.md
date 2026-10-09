@@ -11,6 +11,22 @@
 [hello_ymfm_wasm/packages/fm2612](https://github.com/kyorohiro/hello_ymfm_wasm/tree/main/packages/fm2612)
 を参照してください。
 
+## API を探す
+
+機能から import 先を探すには、パッケージ README の
+[API entry points](https://github.com/kyorohiro/hello_ymfm_wasm/tree/main/packages/fm2612#api-entry-points)
+を参照してください。チップ生成・Synth・Transport・音程変換・WAV・音色ファイルなどの入口を一覧にしています。
+
+例えば Hz を YM2612 の BLOCK/FNUM に変換する helper は、ルートではなく `pitch.js` から import します。
+
+```js
+import {hzToBlockFnum} from 'tetorica-fm2612/pitch.js';
+const {block, fnum} = hzToBlockFnum(440);
+```
+
+引数・options・戻り値はインストール済みの `.d.ts` / `.d.mts` と、エディターの補完・定義へ移動で確認できます。
+例えば `node_modules/tetorica-fm2612/pitch.d.ts` です。各例の README と実際のコードも併せて参照できます。
+
 ## 起動
 
 Node.js 22 以降で repository ルートから実行します。
