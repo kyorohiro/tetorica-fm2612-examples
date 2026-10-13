@@ -5,9 +5,15 @@
  * チップ操作・PCM 生成に DOM・AudioContext は不要。ローダーは実行環境に合わせて渡す。
  */
 export declare const GAMEBOY_APU_CLOCK = 4194304;
+/**
+ * Validate Game Boy APU generation settings.
+ * @param {{clock?: number, sampleRate?: number}} [options={}] Chip clock in Hz and PCM samples per second.
+ * @returns {void}
+ * @throws {RangeError} For an invalid clock or sample rate.
+ */
 export declare function validateGameboyApu({ clock, sampleRate }?: {
-    clock?: number | undefined;
-    sampleRate?: number | undefined;
+    clock?: number;
+    sampleRate?: number;
 }): void;
 /**
  * GameboyApu chip instance backed by WASM. No AudioContext or playback device is created.
@@ -15,6 +21,7 @@ export declare function validateGameboyApu({ clock, sampleRate }?: {
  * Register writes program the chip; generateStereo() advances it to produce PCM.
  */
 export declare class GameboyApu {
+    #private;
     module: Object;
     handle: number;
     api: Object;
@@ -24,8 +31,8 @@ export declare class GameboyApu {
      * Initialize GameboyApu and its native WASM module.
      * The generated module factory is injected so browser and Node callers can choose asset loading.
      * @param {import("./soundchip.js").SoundChipOptions} [options={}] Chip and Emscripten initialization settings.
-     * @param {function(Object): (Object|Promise<Object>)} options.moduleFactory Generated WASM module factory.
-     * @param {Object} [options.moduleOptions] Forwarded loader options, e.g. wasmBinary or locateFile.
+     * @param {import('./soundchip.js').WasmModuleFactory} options.moduleFactory Generated WASM module factory.
+     * @param {import('./soundchip.js').WasmModuleOptions} [options.moduleOptions] Forwarded loader options, e.g. wasmBinary or locateFile.
      * @param {number} [options.clock] Input chip clock in Hz.
      * @param {number} [options.sampleRate=44100] Generated PCM frames per second.
      * @returns {Promise<GameboyApu>} Ready-to-use chip; the caller must dispose it.
@@ -44,6 +51,12 @@ export declare class GameboyApu {
      * @throws {Error} When the chip has been disposed.
      */
     assertAlive(): void;
+    supportsState(): boolean;
+    saveState(): Readonly<{
+        byteLength: any;
+    }>;
+    validateState(state: any): void;
+    loadState(state: any): void;
     /**
      * Reset synthesis state for a new playback pass. Reapply voice and key registers afterward.
      * @returns {void}

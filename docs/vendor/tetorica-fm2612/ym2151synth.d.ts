@@ -55,14 +55,16 @@ export declare class YM2151DirectTransport {
 }
 /** Eight-channel OPM Synth, shared by Direct, Worklet and Node transports.
  * Operators and key masks use logical M1, M2, C1, C2 order (0..3).
- * Notes use the default YM2151_CLOCK; setPitch() exposes raw KC/KF values.
+ * Notes use the configured master clock; setPitch() exposes raw KC/KF values.
  */
 export declare class YM2151Synth {
     #private;
     transport: YM2151Transport;
-    /** @param {{transport: YM2151Transport}} options */
-    constructor({ transport }?: {
+    clock: number;
+    /** @param {{transport: YM2151Transport, clock?:number}} options */
+    constructor({ transport, clock }?: {
         transport: YM2151Transport;
+        clock?: number;
     });
     reset(): void;
     /** @param {number} register @param {number} value */
@@ -78,10 +80,10 @@ export declare class YM2151Synth {
     setAlgo(ch: number, algorithm: number, feedback?: number): void;
     /** @param {number} ch @param {boolean} left @param {boolean} right @param {number} [ams] @param {number} [pms] */
     setPan(ch: number, left: boolean, right: boolean, ams?: number, pms?: number): void;
-    /** @param {number} ch @param {string | number} note Note name or MIDI integer 13..108.
+    /** @param {number} ch @param {string | number} note Note name or MIDI integer 0..127, within the clock-dependent hardware range.
      * @returns {number} Written raw key code. */
     setNote(ch: number, note: string | number): number;
-    /** Frequency in Hz at the default 3579545 Hz clock; quantized to 1/64 semitone.
+    /** Frequency in Hz at the configured master clock; quantized to 1/64 semitone.
      * @param {number} ch @param {number} frequency */
     setFrequency(ch: number, frequency: number): {
         keyCode: number;

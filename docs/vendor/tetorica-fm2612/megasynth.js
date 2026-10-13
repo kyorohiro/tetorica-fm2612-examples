@@ -19,7 +19,7 @@ import { createSegaPsgApi } from "./segapsg_api.js";
 import { createRf5c164Audio } from "./playground_rf5c164_audio.js";
 import { createRf5c164Client } from "./playground_rf5c164.js";
 import { samplePCM } from "./native_sample.js";
-import { TetoricaAudioRuntime } from "./tetorica_audio_runtime.js?v=native-fx-1";
+import { TetoricaAudioRuntime } from "./tetorica_audio_runtime.js?v=prepared-fx-rerun-2";
 export {
   createFXBranch,
   createBitcrusherFX,
@@ -838,6 +838,7 @@ export class MegaSynth {
     if (psgWasmBinary) {
       const node = this.node;
       this.psg = createSegaPsgApi({
+        /** @param {number} value */
         write(value) {
           node.port.postMessage({
             type: "psg-write",

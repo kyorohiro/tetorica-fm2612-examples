@@ -104,6 +104,7 @@ export declare class VgmPlayer {
     maxFillStepsPerProcess: number;
     /** @type {number} */
     waitAccumulator: number;
+    pendingWaitSamples: number;
     /** @type {VgmAudioChunk[]} */
     chunkQueue: VgmAudioChunk[];
     /** @type {number} */
@@ -252,31 +253,43 @@ export declare class VgmPlayer {
      * @param {Float32Array} left
      * @param {Float32Array} right
      * @param {number} frames
+     * @param {{budgetMs?: number}} [options] Optional cooperative budget; a short
+     * return contains only generated audio and must be retried, not padded for playback.
      * @returns {number} Audio frames copied, excluding end-of-track zero padding.
      */
-    process(left: Float32Array, right: Float32Array, frames: number): number;
+    process(left: Float32Array, right: Float32Array, frames: number, { budgetMs }?: {
+        budgetMs?: number;
+    }): number;
 }
-export declare function createVgmTargets(engine: any): {
+/**
+ * Adapt an engine's available register/memory methods to VGM runtime targets.
+ * @param {VgmPlaybackEngine} engine Playback engine; optional chip methods enable their targets.
+ * @returns Chip-specific targets; unavailable chip targets are undefined.
+ */
+export declare function createVgmTargets(engine: VgmPlaybackEngine): {
     resolveChip: any;
+    msm5205: {
+        writeRegister: (register: any, value: any) => any;
+    } | undefined;
     pwm: {
         writeRegister: (register: any, value: any) => any;
     };
     rf5c164: {
-        writeRegister: (register: any, value: any) => any;
-        writeMemory: (offset: any, value: any) => any;
-        loadBankedMemory: (data: any, offset: any) => any;
+        writeRegister: (register: any, value: any) => void;
+        writeMemory: (offset: any, value: any) => void;
+        loadBankedMemory: (data: any, offset: any) => void;
     } | undefined;
     ym2612: {
-        writeRegister: (register: any, value: any, port?: number) => any;
+        writeRegister: (register: any, value: any, port?: number) => void;
     } | undefined;
     ym2203: {
-        writeRegister: (register: any, value: any) => any;
+        writeRegister: (register: any, value: any) => void;
     } | undefined;
     ym2413: {
-        writeRegister: (register: any, value: any) => any;
+        writeRegister: (register: any, value: any) => void;
     } | undefined;
     ym2151: {
-        writeRegister: (register: any, value: any) => any;
+        writeRegister: (register: any, value: any) => void;
     } | undefined;
     huc6280: {
         writeRegister: (r: any, v: any) => any;
@@ -290,48 +303,48 @@ export declare function createVgmTargets(engine: any): {
         writeRegister: (r: any, v: any) => any;
     } | undefined;
     ym3526: {
-        writeRegister: (register: any, value: any) => any;
+        writeRegister: (register: any, value: any) => void;
     } | undefined;
     ym3812: {
-        writeRegister: (register: any, value: any) => any;
+        writeRegister: (register: any, value: any) => void;
     } | undefined;
     ymf262: {
-        writeRegister: (register: any, value: any, port: any) => any;
+        writeRegister: (register: any, value: any, port: any) => void;
     } | undefined;
     y8950: {
-        writeRegister: (register: any, value: any) => any;
-        loadSampleMemory: (...args: any[]) => any;
+        writeRegister: (register: any, value: any) => void;
+        loadSampleMemory: (...args: any[]) => void;
     } | undefined;
     ymf278b: {
-        writeRegister: (register: any, value: any, port: any) => any;
-        loadSampleMemory: (...args: any[]) => any;
+        writeRegister: (register: any, value: any, port: any) => void;
+        loadSampleMemory: (...args: any[]) => void;
     } | undefined;
     ay8910: {
-        writeRegister: (register: any, value: any) => any;
+        writeRegister: (register: any, value: any) => void;
     } | undefined;
     k051649: {
-        writeRegister: (port: any, register: any, value: any) => any;
+        writeRegister: (port: any, register: any, value: any) => void;
     } | undefined;
     segapcm: {
-        writeRegister: (offset: any, value: any) => any;
-        loadSampleMemory: (...args: any[]) => any;
+        writeRegister: (offset: any, value: any) => void;
+        loadSampleMemory: (...args: any[]) => void;
     } | undefined;
     nesApu: {
         writeRegister: (r: any, v: any) => any;
         loadSampleMemory: (data: any, offset: any) => any;
     } | undefined;
     gameboyDmg: {
-        writeRegister: (register: any, value: any) => any;
+        writeRegister: (register: any, value: any) => void;
     } | undefined;
     ym2608: {
-        writeRegister: (register: any, value: any, port?: number) => any;
-        loadAdpcmBMemory: ((data: any, offset: any, memorySize: any) => any) | undefined;
+        writeRegister: (register: any, value: any, port?: number) => void;
+        loadAdpcmBMemory: ((data: any, offset: any, memorySize: any) => void) | undefined;
     } | undefined;
     ym2610: {
         writeRegister: (register: any, value: any, port?: number) => any;
         loadAdpcmRom: (...args: any[]) => any;
     } | undefined;
     psg: {
-        write: (value: any) => any;
+        write: (value: any) => void;
     };
 };

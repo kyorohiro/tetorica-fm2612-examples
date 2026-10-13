@@ -1,10 +1,10 @@
 /** Optional Node Worker output adapter. Requires audify 1.10.x, loaded only here. */
-export async function createOutput({sampleRate, bufferFrames, onDrain, onError, moduleUrl, deviceId}) {
+export async function createOutput({sampleRate, bufferFrames, onDrain, onError, moduleUrl, deviceId, api}) {
   let loaded;
   try { loaded = await import(moduleUrl ?? 'audify'); }
   catch (cause) {throw new Error(`Could not load audify: ${cause.message}. Install with npm install audify`, {cause});}
   const {RtAudio, RtAudioFormat} = loaded.default ?? loaded;
-  const audio = new RtAudio();
+  const audio = api == null ? new RtAudio() : new RtAudio(api);
   let queuedFrames = 0, consumedFrames = 0, closed = false, running = false;
   let frames;
   try {
@@ -14,7 +14,11 @@ export async function createOutput({sampleRate, bufferFrames, onDrain, onError, 
         if (closed || !running) return;
         queuedFrames = Math.max(0, queuedFrames - frames); consumedFrames += frames;
         onDrain();
-      }, 0, (_type, message) => {if (!closed) onError(new Error(message));});
+      }, 0, (type, message) => {
+        // RtAudio uses a process-wide callback. Destruction of another, unopened
+        // instance can report a benign closeStream warning to the active stream.
+        if (!closed && type > 1) onError(new Error(message));
+      });
     if (audio.getStreamSampleRate() !== sampleRate) throw new Error('Audio device sample rate differs from renderer');
   } catch (error) {if (audio.isStreamOpen()) audio.closeStream(); throw error;}
   return {

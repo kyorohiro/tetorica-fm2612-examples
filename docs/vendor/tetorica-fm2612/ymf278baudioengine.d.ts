@@ -1,14 +1,22 @@
 /**
+ * @file ymf278baudioengine.js
+ * 実行環境: Browser / Node.js
+ * 依存: 音源チップ／WASM バックエンド（ファクトリーまたはエンジンを注入）。
+ * 同期 PCM 生成・ミックス用。DOM・AudioContext・スピーカー出力は不要。
+ */
+import { Ymf278b } from './ymf278b.js';
+import { SegaPSG } from './segapsg.js';
+/**
  * Ymf278bAudioEngine adapter for synchronous stereo rendering and VGM register dispatch.
  * Output timing uses sampleRate() frames per second. No browser audio device is opened.
  * Dispose the engine when done to release its underlying chips.
  */
 export declare class Ymf278bAudioEngine {
-    ymf278b: any;
-    psg: any;
+    ymf278b: Ymf278b;
+    psg: SegaPSG | undefined;
     waveRom: Uint8Array<ArrayBuffer> | null;
-    chipRate: any;
-    outputRate: any;
+    chipRate: number;
+    outputRate: number;
     psgMuted: boolean;
     remainder: number;
     lastLeft: number;
@@ -16,22 +24,26 @@ export declare class Ymf278bAudioEngine {
     volume: number | undefined;
     /**
      * Create the chip instances required by this engine.
-     * @param {Object} [options={}] Chip factories, clocks in Hz and loader settings.
+     * @param {{ymf278bModuleFactory: import('./soundchip.js').WasmModuleFactory, ymf278bModuleOptions?: import('./soundchip.js').WasmModuleOptions, ymf278bClock?: number, segaPsgModuleFactory?: import('./soundchip.js').WasmModuleFactory, psgClock?: number, outputSampleRate?: number, masterVolume?: number}} [options={}] Chip factories, clocks in Hz and loader settings.
      * @param {number} [options.outputSampleRate=44100] Output stereo frames per second.
      * @param {number} [options.masterVolume=1] Linear output gain, not dB.
      * @returns {Promise<Ymf278bAudioEngine>} Initialized engine owned by the caller.
      */
-    /** @param {{ymf278bModuleFactory: Function, ymf278bModuleOptions?: Record<string, unknown>, ymf278bClock?: number, segaPsgModuleFactory?: Function, psgClock?: number, outputSampleRate?: number, masterVolume?: number}} [options] */
     static create({ ymf278bModuleFactory, ymf278bModuleOptions, ymf278bClock, segaPsgModuleFactory, psgClock, outputSampleRate, masterVolume }?: {
-        ymf278bModuleFactory: Function;
-        ymf278bModuleOptions?: Record<string, unknown>;
+        ymf278bModuleFactory: import('./soundchip.js').WasmModuleFactory;
+        ymf278bModuleOptions?: import('./soundchip.js').WasmModuleOptions;
         ymf278bClock?: number;
-        segaPsgModuleFactory?: Function;
+        segaPsgModuleFactory?: import('./soundchip.js').WasmModuleFactory;
         psgClock?: number;
         outputSampleRate?: number;
         masterVolume?: number;
     }): Promise<Ymf278bAudioEngine>;
-    constructor(chip: any, psg: any, chipRate: any, outputRate: any, volume: any);
+    /** @param {Ymf278b} chip
+     * @param {SegaPSG | undefined} psg
+     * @param {number} chipRate
+     * @param {number} outputRate
+     * @param {number} volume */
+    constructor(chip: Ymf278b, psg: SegaPSG | undefined, chipRate: number, outputRate: number, volume: number);
     /**
      * Return the rate used by process() and processFrames().
      * @returns {number} Output stereo frames per second (Hz).
@@ -47,6 +59,8 @@ export declare class Ymf278bAudioEngine {
      * @returns {number} Gain multiplier, not a dB value.
      */
     getMasterVolume(): number;
+    /** @param {boolean} value */
+    setPsgChannelMuted(channel: any, muted: any): void;
     setPsgMuted(value: any): void;
     /**
      * Change one physical channel mute flag.
@@ -55,7 +69,9 @@ export declare class Ymf278bAudioEngine {
      * @returns {void}
      */
     setChannelMuted(channel: number, muted: boolean): void;
-    setPcmChannelMuted(channel: any, muted: any): void;
+    /** @param {number} channel
+     * @param {boolean} muted */
+    setPcmChannelMuted(channel: number, muted: boolean): void;
     /**
      * Dispatch a VGM register/command write to the corresponding sound chip.
      * @param {number} value Register/command data value.
@@ -68,8 +84,12 @@ export declare class Ymf278bAudioEngine {
      * @param {number} value Register/command data value.
      */
     writeYmf278b(port: number, register: number, value: number): void;
-    loadSampleMemory(data: any, offset: any, memorySize: any): void;
-    loadWaveRom(data: any): void;
+    /** @param {Uint8Array} data
+     * @param {number} memorySize
+     * @param {number} offset */
+    loadSampleMemory(data: Uint8Array, offset: number, memorySize: number): void;
+    /** @param {Uint8Array} data */
+    loadWaveRom(data: Uint8Array): void;
     clearSampleMemory(): void;
     /**
      * Reset chip/playback state for a new pass. This is not pause/resume; replay setup writes afterward.
@@ -98,4 +118,5 @@ export declare class Ymf278bAudioEngine {
         right: Float32Array;
     };
 }
-export declare const createYmf278bAudioEngine: (options: any) => Promise<Ymf278bAudioEngine>;
+/** @param {Parameters<typeof Ymf278bAudioEngine.create>[0]} [options] */
+export declare const createYmf278bAudioEngine: (options?: Parameters<typeof Ymf278bAudioEngine.create>[0]) => Promise<Ymf278bAudioEngine>;

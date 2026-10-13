@@ -1,5 +1,6 @@
 /** Three tone/noise channels sharing one noise generator and one envelope. */
 export declare class SSGSynth {
+    #private;
     transport: {
         write: (register: number, value: number) => void;
     };
@@ -16,9 +17,11 @@ export declare class SSGSynth {
     });
     /** Reset tracked registers after the parent chip was reset. Does not write hardware. */
     resetState(): void;
-    /** Track parent Synth raw writes so mixer changes preserve other channels and I/O bits. */
-    observeWrite(register: any, value: any): void;
-    write(register: any, value: any): void;
+    /** Track parent Synth raw writes so mixer changes preserve other channels and I/O bits. @param {number} register  @param {number} value */
+    observeWrite(register: number, value: number): void;
+    /** @param {number} register
+     * @param {number} value */
+    write(register: number, value: number): void;
     /** Silence/reset SSG audio registers only; FM and I/O registers are preserved. */
     reset(): void;
     /** @param {number} channel 0..2.
@@ -31,22 +34,34 @@ export declare class SSGSynth {
         volume?: number;
         envelope?: boolean;
     }): number;
-    /** Enable shared noise on one channel. Changing period affects all noise-enabled channels. */
-    noise(channel: any, { period, volume, envelope }?: {
+    /** Configure Hz without changing mixer or volume. @param {number} channel @param {number} hz */
+    setFrequency(channel: number, hz: number): number;
+    /** @param {number} channel @param {string|number} note */
+    setNote(channel: number, note: string | number): number;
+    /** Enable tone and restore configured volume/envelope selection; retain noise gates. @param {number} channel */
+    keyOn(channel: number): void;
+    /** Silence this channel while remembering volume/envelope and pitch. Shared noise and other channels keep their settings.
+     * @param {number} channel */
+    keyOff(channel: number): void;
+    /** @param {number} channel @param {string|number} note */
+    noteOn(channel: number, note: string | number): void;
+    /** Enable shared noise on one channel. Changing period affects all noise-enabled channels. @param {number} channel */
+    noise(channel: number, { period, volume, envelope }?: {
         envelope?: boolean | undefined;
         period?: number | undefined;
         volume?: number | undefined;
     }): void;
-    /** Change only tone pitch, preserving mixer/volume. Raw 12-bit hardware period. */
-    setTonePeriod(channel: any, period: any): void;
-    /** Mixer gates may combine tone and noise on the same channel. */
-    setMixer(channel: any, { tone, noise }: {
+    /** Change only tone pitch, preserving mixer/volume. Raw 12-bit hardware period. @param {number} channel @param {number} period */
+    setTonePeriod(channel: number, period: number): void;
+    /** Mixer gates may combine tone and noise on the same channel. @param {number} channel */
+    setMixer(channel: number, { tone, noise }: {
         noise: any;
         tone: any;
     }): void;
-    /** Envelope selection replaces fixed volume with the shared hardware envelope. */
-    setVolume(channel: any, volume: any, envelope?: boolean): void;
-    off(channel: any): void;
+    /** Envelope selection replaces fixed volume with the shared hardware envelope. @param {number} channel @param {number} volume */
+    setVolume(channel: number, volume: number, envelope?: boolean): void;
+    /** @param {number} channel */
+    off(channel: number): void;
     /** Set the shared envelope period/shape; writing shape retriggers the envelope. */
     setEnvelope({ period, shape }: {
         period: any;

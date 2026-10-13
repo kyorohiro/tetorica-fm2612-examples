@@ -1,7 +1,7 @@
 # NES DMC サンプル
 
 自作の1-bit DPCM データをメモリーへ送り、再生速度を比較する。
-`tetorica-fm2612` 0.2.12 の `NesApuSynth` を使います。標準クロックは NTSC 1789773 Hz。ROM は不要です。
+`tetorica-fm2612` 0.2.13 の `NesApuSynth` を使います。標準クロックは NTSC 1789773 Hz。ROM は不要です。
 
 ## Web
 

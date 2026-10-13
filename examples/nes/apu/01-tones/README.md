@@ -1,7 +1,7 @@
 # NES APU の音色
 
 2つの pulse・triangle のベース・noise の打音を重ねる。
-`tetorica-fm2612` 0.2.12 の `NesApuSynth` を使います。標準クロックは NTSC 1789773 Hz。ROM は不要です。
+`tetorica-fm2612` 0.2.13 の `NesApuSynth` を使います。標準クロックは NTSC 1789773 Hz。ROM は不要です。
 
 ## Web
 

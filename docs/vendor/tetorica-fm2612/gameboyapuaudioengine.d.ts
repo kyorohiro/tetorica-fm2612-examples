@@ -1,33 +1,49 @@
 /**
+ * @file gameboyapuaudioengine.js
+ * 実行環境: Browser / Node.js
+ * 依存: 音源チップ／WASM バックエンド（ファクトリーまたはエンジンを注入）。
+ * 同期 PCM 生成・ミックス用。DOM・AudioContext・スピーカー出力は不要。
+ */
+import { GameboyApu } from './gameboyapu.js';
+/**
  * GameboyApuAudioEngine adapter for synchronous stereo rendering and VGM register dispatch.
  * Output timing uses sampleRate() frames per second. No browser audio device is opened.
  * Dispose the engine when done to release its underlying chips.
  */
 export declare class GameboyApuAudioEngine {
-    gameboy: any;
+    #private;
+    gameboy: GameboyApu;
     channelMask: number;
     volume: number | undefined;
     /**
      * Create the chip instances required by this engine.
-     * @param {Object} [options={}] Chip factories, clocks in Hz and loader settings.
+     * @param {{moduleFactory: import('./soundchip.js').WasmModuleFactory, moduleOptions?: import('./soundchip.js').WasmModuleOptions, clock?: number, outputSampleRate?: number, masterVolume?: number}} [options={}] Chip factories, clocks in Hz and loader settings.
      * @param {number} [options.outputSampleRate=44100] Output stereo frames per second.
      * @param {number} [options.masterVolume=1] Linear output gain, not dB.
      * @returns {Promise<GameboyApuAudioEngine>} Initialized engine owned by the caller.
      */
-    /** @param {{moduleFactory: Function, moduleOptions?: Record<string, unknown>, clock: number, outputSampleRate?: number, masterVolume?: number}} options */
     static create({ moduleFactory, moduleOptions, clock, outputSampleRate, masterVolume }?: {
-        moduleFactory: Function;
-        moduleOptions?: Record<string, unknown>;
-        clock: number;
+        moduleFactory: import('./soundchip.js').WasmModuleFactory;
+        moduleOptions?: import('./soundchip.js').WasmModuleOptions;
+        clock?: number;
         outputSampleRate?: number;
         masterVolume?: number;
     }): Promise<GameboyApuAudioEngine>;
-    constructor(chip: any, volume?: number);
+    /** @param {GameboyApu} chip
+     * @param {number} [volume] */
+    constructor(chip: GameboyApu, volume?: number);
     /**
      * Return the rate used by process() and processFrames().
      * @returns {number} Output stereo frames per second (Hz).
      */
     sampleRate(): number;
+    supportsState(): boolean;
+    stateSettingsKey(): string;
+    saveState(): Readonly<{
+        byteLength: any;
+    }>;
+    validateState(state: any): void;
+    loadState(state: any): void;
     /**
      * Reset chip/playback state for a new pass. This is not pause/resume; replay setup writes afterward.
      * @returns {void}
@@ -78,4 +94,5 @@ export declare class GameboyApuAudioEngine {
      */
     process(left: Float32Array, right: Float32Array, frames: number): void;
 }
-export declare const createGameboyApuAudioEngine: (options: any) => Promise<GameboyApuAudioEngine>;
+/** @param {Parameters<typeof GameboyApuAudioEngine.create>[0]} [options] */
+export declare const createGameboyApuAudioEngine: (options?: Parameters<typeof GameboyApuAudioEngine.create>[0]) => Promise<GameboyApuAudioEngine>;

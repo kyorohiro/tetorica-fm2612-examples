@@ -1,46 +1,21 @@
-export declare function createNativeFXRack(context: any): Promise<{
+/** @param {AudioContext} context Owner of the native FX AudioWorklet.
+ * @returns Native rack node, FX/sample/noise controllers and Main/Worker ownership/lifecycle methods. */
+export declare function createNativeFXRack(context: AudioContext): Promise<{
     node: AudioWorkletNode;
-    controller: {
-        liveFx(name: string, { process, context, resetState }?: {
-            process: (input: Float32Array[], output: Float32Array[], state: Record<string, unknown>, context: Record<string, unknown>) => void;
-            context?: Record<string, unknown>;
-            resetState?: boolean;
-        }): void;
-        updateContext(name: any, context: any): void;
-        removeLiveFx(name: any): void;
-        branch: (...children: any[]) => {
-            type: string;
-            children: any[];
-            owner: /*elided*/ any;
-            dispose(): void;
-        };
-        parallel: (...children: any[]) => {
-            type: string;
-            children: any[];
-            owner: /*elided*/ any;
-            dispose(): void;
-        };
-        setChain(effects?: any[]): any[];
-        clear({ dispose }?: {
-            dispose?: boolean | undefined;
-        }): any[];
-        dispose(): void;
-        getChain(): any[];
-        syncTempo(): void;
-    };
+    controller: any;
     mainActive: boolean;
     sample: {
         accept(d: any): void;
-        load(name: any, pcm: any): Promise<{
-            name: any;
-            length: any;
-            sampleRate: any;
-            numberOfChannels: any;
+        load(name: string, pcm: import('./wav.js').ChannelPCM): Promise<{
+            name: string;
+            length: number;
+            sampleRate: number;
+            numberOfChannels: number;
             duration: number;
         }>;
-        play(name: any, options?: {}): Promise<{
-            name: any;
-            stop: () => any;
+        play(name: string, options?: import('./megasynth.js').MegaSynthSamplePlayOptions): Promise<{
+            name: string;
+            stop: () => void;
         }>;
         stop(name: any): void;
         stopAll(): void;

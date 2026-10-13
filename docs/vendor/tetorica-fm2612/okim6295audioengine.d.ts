@@ -9,7 +9,7 @@ export declare class Oki6295AudioEngine {
     clockBuffer: any;
     pin7: boolean | undefined;
     bank: number | undefined;
-    nmkMode: any;
+    nmkMode: number | undefined;
     nmkBanks: Uint8Array<ArrayBuffer> | undefined;
     pending: number | undefined;
     phase: number | undefined;
@@ -25,22 +25,46 @@ export declare class Oki6295AudioEngine {
         outputSampleRate?: number | undefined;
     });
     sampleRate(): number;
-    setMasterVolume(v: any): void;
+    /** @param {number} v */
+    setMasterVolume(v: number): void;
     getMasterVolume(): number | undefined;
-    setOki6295Muted(v: any): void;
+    /** @param {boolean} v */
+    setOki6295Muted(v: boolean): void;
     supportsState(): boolean;
     reset(): void;
     dispose(): void;
-    loadOki6295Rom(data: any, offset?: number, size?: any): void;
+    /** @param {Uint8Array} data
+     * @param {number} size
+     * @param {number} [offset] */
+    loadOki6295Rom(data: Uint8Array, offset?: number, size?: number): void;
     clearOki6295Rom(): void;
-    readRom(address: any): number;
+    /** @param {number} address */
+    readRom(address: number): number;
     readStatus(): number;
-    writeOki6295(register: any, value: any): void;
+    /** @param {number} register  @param {number} value */
+    writeOki6295(register: number, value: number): void;
     command(value: any): void;
     tick(): void;
-    processFrames(frames: any): {
-        left: Float32Array<any>;
-        right: Float32Array<any>;
+    /** @param {number} frames */
+    processFrames(frames: number): {
+        left: Float32Array<ArrayBuffer>;
+        right: Float32Array<ArrayBuffer>;
     };
 }
-export declare function attachOki6295(engine: any, oki: any): any;
+/**
+ * Add OKIM6295 rendering, ROM uploads and mute controls to an engine in place.
+ * Combined state snapshots are disabled; reset/dispose cover both engines.
+ * @template {{processFrames: (frames: number) => {left: Float32Array, right: Float32Array}, reset: () => void, dispose: () => void, getMasterVolume: () => number}} Engine
+ * @param {Engine} engine Primary engine whose master volume also scales ADPCM.
+ * @param {Oki6295AudioEngine} oki ADPCM engine to attach.
+ * @returns The mutated primary engine with OKIM6295 controls.
+ */
+export declare function attachOki6295<Engine extends {
+    processFrames: (frames: number) => {
+        left: Float32Array;
+        right: Float32Array;
+    };
+    reset: () => void;
+    dispose: () => void;
+    getMasterVolume: () => number;
+}>(engine: Engine, oki: Oki6295AudioEngine): Engine;

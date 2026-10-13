@@ -1,4 +1,7 @@
-export declare function createOpnAudio(context: any, destination: any, name: any): Promise<{
+/** @param {AudioContext} context
+ * @param {AudioNode} destination
+ * @param {'ym2612'|'ym2203'|'ym2610'} name */
+export declare function createOpnAudio(context: AudioContext, destination: AudioNode, name: 'ym2612' | 'ym2203' | 'ym2610'): Promise<{
     node: AudioWorkletNode;
     port: MessagePort;
     dispose(): void;

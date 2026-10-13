@@ -2,7 +2,9 @@
 
 Playground のコードを load() し、Worker で実行してアプリに組み込む。
 
-公開済み `tetorica-fm2612@0.2.11` を import します。
+公開済み `tetorica-fm2612@0.2.13` を import します。
+0.2.13 では `play()` の音程が A4＝440 Hz に修正されています。旧版と比べて
+この例の音高が変わります。秒指定の旧 `{duration}` は引き続き利用できます。
 [Web ページ](web/index.html) と [全コード](web/main.js) を参照してください。
 repository ルートで `npm install` → `npm run dev` を実行し、一覧から開きます。
 Play はユーザー操作から開始します。Stop・完了・エラー時にリソースを解放します。

@@ -4,12 +4,12 @@ export type PWMWrite = {
     register: 0 | 1 | 2 | 3 | 4;
     value: number;
 };
-export type PWMAPI = Pick<PWM32XPlayback, 'write' | 'writeRegister' | 'read' | 'reset' | 'scheduleWrites' | 'clearSchedule' | 'getState'>;
+export type PWMAPI = Pick<PWM32XPlayback, 'write' | 'writeRegister' | 'read' | 'reset' | 'scheduleWrites' | 'clearSchedule' | 'getState' | 'setClock'>;
 export type AsyncPWMAPI = {
     [K in keyof PWMAPI]: (...args: Parameters<PWMAPI[K]>) => Promise<ReturnType<PWMAPI[K]>>;
 };
 /** @typedef {{frame: number, register: 0|1|2|3|4, value: number}} PWMWrite */
-/** @typedef {Pick<PWM32XPlayback, 'write'|'writeRegister'|'read'|'reset'|'scheduleWrites'|'clearSchedule'|'getState'>} PWMAPI */
+/** @typedef {Pick<PWM32XPlayback, 'write'|'writeRegister'|'read'|'reset'|'scheduleWrites'|'clearSchedule'|'getState'|'setClock'>} PWMAPI */
 /** @typedef {{[K in keyof PWMAPI]: (...args: Parameters<PWMAPI[K]>) => Promise<ReturnType<PWMAPI[K]>>}} AsyncPWMAPI */
 /** MAME-derived PWM plus output-frame scheduling; no timers or audio device. */
 export declare class PWM32XPlayback {
@@ -19,6 +19,8 @@ export declare class PWM32XPlayback {
     order: number;
     /** @param {import("./pwm32x.js").PWM32XOptions} [options] @param {PWM32X} [chip] */
     constructor(options?: import("./pwm32x.js").PWM32XOptions, chip?: PWM32X);
+    /** Change master Hz without resetting FIFO, phase or output-frame reservations. @param {number} hz */
+    setClock(hz: number): void;
     sampleRate(): number;
     /** @param {number} register @param {number} value */
     write(register: number, value: number): void;

@@ -30,13 +30,18 @@ export declare class Rf5c164 {
      * Initialize Rf5c164 and its native WASM module.
      * The generated module factory is injected so browser and Node callers can choose asset loading.
      * @param {Object} [options={}] Chip and Emscripten initialization settings.
-     * @param {function(Object): (Object|Promise<Object>)} options.moduleFactory Generated WASM module factory.
-     * @param {Object} [options.moduleOptions] Forwarded loader options, e.g. wasmBinary or locateFile.
+     * @param {import('./soundchip.js').WasmModuleFactory} options.moduleFactory Generated WASM module factory.
+     * @param {import('./soundchip.js').WasmModuleOptions} [options.moduleOptions] Forwarded loader options, e.g. wasmBinary or locateFile.
      * @param {number} [options.clock] Input chip clock in Hz.
      * @param {number} [options.sampleRate=44100] Generated PCM frames per second.
      * @returns {Promise<Rf5c164>} Ready-to-use chip; the caller must dispose it.
      */
-    static create(options?: Object): Promise<Rf5c164>;
+    static create(options?: {
+        moduleFactory: import('./soundchip.js').WasmModuleFactory;
+        moduleOptions?: import('./soundchip.js').WasmModuleOptions;
+        clock?: number;
+        sampleRate?: number;
+    }): Promise<Rf5c164>;
     supportsState(): boolean;
     saveState(): Readonly<{
         byteLength: any;
@@ -61,7 +66,8 @@ export declare class Rf5c164 {
      */
     writeRegister(register: number, value: number): void;
     clearMemory(): void;
-    readMemory(offset: any): any;
+    /** @param {number} offset */
+    readMemory(offset: number): any;
     /**
      * Read a chip bus/status value; not a saved copy of all written voice registers.
      * @param {number} offset Native bus offset.

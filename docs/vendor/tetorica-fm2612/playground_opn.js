@@ -1,8 +1,17 @@
+import {attachChipClock, CHIP_CLOCKS} from './playground_chip_clock.js';
 /** Independent OPN client. All writes and memory uploads use one ordered port. */
 import {YM2612Synth} from './ym2612synth.js';
 import {YM2203Synth} from './ym2203synth.js';
 import {YM2610BSynth, NeoGeoFMSynth} from './ym2610bsynth.js';
 
+/**
+ * Create a high-level OPN synth backed by ordered Worklet port commands.
+ * The client owns the port; dispose rejects pending requests and closes it.
+ * @param {'ym2612' | 'ym2203' | 'ym2610'} name Chip family to expose.
+ * @param {MessagePort} port Paired with the chip's audio processor.
+ * @returns The chip-specific synth and its disposal/optional scheduling controls.
+ * @throws {Error} For an unsupported chip name.
+ */
 export function createOpnClient(name, port) {
   let disposed = false, sequence = 0;
   const pending = new Map();
@@ -44,7 +53,6 @@ export function createOpnClient(name, port) {
     Object.assign(synth, {ssg: full.ssg, adpcmA: full.adpcmA, adpcmB: full.adpcmB, adpcm: full.adpcm});
   } else throw new Error(`Unsupported OPN chip: ${name}`);
   if (name === 'ym2203') {
-    synth.setClock = async clock => { await request('clock', [clock]); synth.ssg.clock = clock / 2; };
     // Relative VGM sample positions, executed in the audio processor.
     synth.scheduleRegisters = (entries, durationSamples) => request('schedule', [entries, durationSamples]);
   }
@@ -54,5 +62,9 @@ export function createOpnClient(name, port) {
     for (const request of pending.values()) request.reject(new Error(`${name} disposed`));
     pending.clear(); port.close();
   };
-  return synth;
+  return attachChipClock(synth, port, CHIP_CLOCKS[name], {onApplied: hz => {
+    if (name === 'ym2610') synth.fm.clock = hz;
+    if (synth.ssg) synth.ssg.clock = hz / (name === 'ym2203' ? 2 : 4);
+    if (synth.adpcmB) synth.adpcmB.clock = hz;
+  }});
 }

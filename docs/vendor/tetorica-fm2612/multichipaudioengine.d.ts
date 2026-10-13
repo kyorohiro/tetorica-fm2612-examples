@@ -13,9 +13,14 @@ export declare class MultiChipAudioEngine {
     entries: Map<any, any>;
     outputSampleRate: number;
     volume: number | undefined;
+    /** @param {number} [outputSampleRate]
+     * @param {number} [masterVolume] */
     constructor(entries: any, outputSampleRate?: number, masterVolume?: number);
+    /** @param {number} [index] */
     getVgmTarget(type: any, index?: number): any;
-    setChipMuted(type: any, index: any, muted: any): void;
+    /** @param {number} index
+     * @param {boolean} muted */
+    setChipMuted(type: any, index: number, muted: boolean): void;
     /**
      * Return the rate used by process() and processFrames().
      * @returns {number} Output stereo frames per second (Hz).

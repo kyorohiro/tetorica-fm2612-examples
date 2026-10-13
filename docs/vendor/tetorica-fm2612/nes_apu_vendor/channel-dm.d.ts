@@ -1,0 +1,36 @@
+declare class ChannelDM {
+    papu: any;
+    isEnabled: boolean;
+    hasSample: boolean;
+    irqGenerated: boolean;
+    playMode: number;
+    dmaFrequency: number;
+    dmaCounter: number;
+    deltaCounter: number;
+    playStartAddress: number;
+    playAddress: number;
+    playLength: number;
+    playLengthCounter: number;
+    sample: number;
+    dacLsb: number;
+    shiftCounter: number;
+    reg4012: number;
+    reg4013: number;
+    data: number;
+    lastFetchedByte: number;
+    static MODE_NORMAL: number;
+    static MODE_LOOP: number;
+    static MODE_IRQ: number;
+    static JSON_PROPERTIES: string[];
+    constructor(papu: any);
+    clockDmc(): void;
+    endOfSample(): void;
+    nextSample(): void;
+    writeReg(address: any, value: any): void;
+    setEnabled(value: any): void;
+    getLengthStatus(): 0 | 1;
+    getIrqStatus(): 0 | 1;
+    toJSON(): {};
+    fromJSON(s: any): void;
+}
+export default ChannelDM;

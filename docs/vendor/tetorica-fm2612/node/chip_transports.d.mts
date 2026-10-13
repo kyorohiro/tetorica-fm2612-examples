@@ -4,6 +4,7 @@ import { YM2608DirectTransport } from '../ym2608synth.js';
 import { GameboyDirectTransport } from '../gameboysynth.js';
 import { SegaPSGDirectTransport } from '../segapsgsynth.js';
 import { YM2151DirectTransport } from '../ym2151synth.js';
+import { NesApuDirectTransport } from '../nesapusynth.js';
 export type AudifyTransportOptions = import('./megasynth.mjs').OutputConnectionOptions & {
     sampleRate?: number;
     gain?: number;
@@ -34,7 +35,7 @@ export declare const YM2612AudifyTransport: new (chip: {
         output: Record<string, unknown> | null;
     };
 };
-export declare const YM2608AudifyTransport: new (chip: any, options?: AudifyTransportOptions) => Omit<YM2608DirectTransport, "getState"> & {
+export declare const YM2608AudifyTransport: new (chip: import("../ym2608.js").Ym2608, options?: AudifyTransportOptions) => Omit<YM2608DirectTransport, "getState"> & {
     start(): Promise<void>;
     stop(): Promise<void>;
     close(): Promise<void>;
@@ -44,7 +45,7 @@ export declare const YM2608AudifyTransport: new (chip: any, options?: AudifyTran
         output: Record<string, unknown> | null;
     };
 };
-export declare const GameboyAudifyTransport: new (chip: any, options?: AudifyTransportOptions) => Omit<GameboyDirectTransport, "getState"> & {
+export declare const GameboyAudifyTransport: new (chip: import("../gameboyapu.js").GameboyApu, options?: AudifyTransportOptions) => Omit<GameboyDirectTransport, "getState"> & {
     start(): Promise<void>;
     stop(): Promise<void>;
     close(): Promise<void>;
@@ -75,6 +76,16 @@ export declare const YM2151AudifyTransport: new (chip: import("../ym2151.js").Ym
     };
 };
 export declare const PWM32XAudifyTransport: new (chip: import("../pwm32x.js").PWM32X | import("../pwm32x_playback.js").PWM32XPlayback, options?: AudifyTransportOptions) => Omit<PWM32XDirectTransport, "getState"> & {
+    start(): Promise<void>;
+    stop(): Promise<void>;
+    close(): Promise<void>;
+    getState(): {
+        running: boolean;
+        error: string | null;
+        output: Record<string, unknown> | null;
+    };
+};
+export declare const NesApuAudifyTransport: new (chip: import("../nesapu.js").NesApu, options?: AudifyTransportOptions) => Omit<NesApuDirectTransport, "getState"> & {
     start(): Promise<void>;
     stop(): Promise<void>;
     close(): Promise<void>;

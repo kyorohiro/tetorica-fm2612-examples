@@ -10,8 +10,8 @@
  * Dispose the engine when done to release its underlying chips.
  */
 export declare class Huc6280AudioEngine {
-    module: any;
-    rate: any;
+    module: import("./soundchip.js").WasmChipModule;
+    rate: number;
     ptr: number;
     capacity: number;
     selectedChannel: number;
@@ -19,19 +19,22 @@ export declare class Huc6280AudioEngine {
     volume: number | undefined;
     /**
      * Create the chip instances required by this engine.
-     * @param {Object} options Chip factories, clocks in Hz and loader settings.
+     * @param {{moduleFactory: import('./soundchip.js').WasmModuleFactory, clock: number, outputSampleRate?: number, masterVolume?: number}} options Chip factories, clocks in Hz and loader settings.
      * @param {number} [options.outputSampleRate=44100] Output stereo frames per second.
      * @param {number} [options.masterVolume=1] Linear output gain, not dB.
      * @returns {Promise<Huc6280AudioEngine>} Initialized engine owned by the caller.
      */
-    /** @param {{moduleFactory: Function, clock: number, outputSampleRate?: number, masterVolume?: number}} options */
     static create({ moduleFactory, clock, outputSampleRate, masterVolume }: {
-        moduleFactory: Function;
+        moduleFactory: import('./soundchip.js').WasmModuleFactory;
         clock: number;
         outputSampleRate?: number;
         masterVolume?: number;
     }): Promise<Huc6280AudioEngine>;
-    constructor(module: any, clock: any, rate: any, volume: any);
+    /** @param {import('./soundchip.js').WasmChipModule} module
+     * @param {number} clock
+     * @param {number} rate
+     * @param {number} volume */
+    constructor(module: import('./soundchip.js').WasmChipModule, clock: number, rate: number, volume: number);
     /**
      * Return the rate used by process() and processFrames().
      * @returns {number} Output stereo frames per second (Hz).

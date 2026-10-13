@@ -29,18 +29,25 @@ export declare class Ym2610B {
      * Initialize Ym2610B and its native WASM module.
      * The generated module factory is injected so browser and Node callers can choose asset loading.
      * @param {import("./soundchip.js").SoundChipOptions} [options={}] Chip and Emscripten initialization settings.
-     * @param {function(Object): (Object|Promise<Object>)} options.moduleFactory Generated WASM module factory.
-     * @param {Object} [options.moduleOptions] Forwarded loader options, e.g. wasmBinary or locateFile.
+     * @param {import('./soundchip.js').WasmModuleFactory} options.moduleFactory Generated WASM module factory.
+     * @param {import('./soundchip.js').WasmModuleOptions} [options.moduleOptions] Forwarded loader options, e.g. wasmBinary or locateFile.
      * @param {boolean} [options.variant=true] True for YM2610B; false for YM2610.
      * @returns {Promise<Ym2610B>} Ready-to-use chip; the caller must dispose it.
      */
     static create({ moduleFactory, moduleOptions, variant }?: import("./soundchip.js").SoundChipOptions): Promise<Ym2610B>;
     supportsState(): boolean;
+    /** @returns {Readonly<{byteLength:number}>} Opaque snapshot owned by this instance. */
     saveState(): Readonly<{
-        byteLength: any;
+        byteLength: number;
     }>;
-    validateState(state: any): void;
-    loadState(state: any): void;
+    /** @param {Readonly<{byteLength:number}>} state Snapshot returned by this instance. */
+    validateState(state: Readonly<{
+        byteLength: number;
+    }>): void;
+    /** @param {Readonly<{byteLength:number}>} state Snapshot returned by this instance. */
+    loadState(state: Readonly<{
+        byteLength: number;
+    }>): void;
     /**
      * Release native chip state and allocated WASM buffers. Do not use the chip afterward.
      * @returns {void}
@@ -51,8 +58,13 @@ export declare class Ym2610B {
      * @returns {void}
      */
     clearAdpcmRoms(): void;
-    setSourceMuteMask(mask: any): void;
-    loadAdpcmRom(type: any, bytes: any, offset?: number, size?: any): void;
+    /** @param {number} mask */
+    setSourceMuteMask(mask: number): void;
+    /** @param {Uint8Array} bytes
+     * @param {0|1} type
+     * @param {number} size
+     * @param {number} [offset] */
+    loadAdpcmRom(type: 0 | 1, bytes: Uint8Array, offset?: number, size?: number): void;
     /**
      * Reset synthesis state for a new playback pass. Reapply voice and key registers afterward.
      * @returns {void}

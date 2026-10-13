@@ -10,6 +10,79 @@ its default entry point provides chip creation without starting browser audio.
 npm install tetorica-fm2612
 ```
 
+## API entry points
+
+Find an API by task below. Import paths are complete npm module specifiers;
+these modules ship with the package. The table lists the main application-facing
+entry points, rather than every internal Worker or Worklet module.
+
+| Task | Import from | Main APIs |
+| --- | --- | --- |
+| Create a chip / mix browser outputs / encode WAV | `tetorica-fm2612` | `createSoundChip`, `SoundChipMixer`, `encodeWav` |
+| Convert Hz or MIDI to YM2612 BLOCK/FNUM | `tetorica-fm2612/pitch.js` | `hzToBlockFnum`, `createPitchFromMidi` |
+| FM preset sounds | `tetorica-fm2612/megasynth-fm-presets.js` | `FM_PRESETS`, `FM_PRESET_ORDER` |
+| YM2612 FM and DAC | `tetorica-fm2612/ym2612synth.js` | `YM2612Synth`, `YM2612DirectTransport`, `YM2612WorkletTransport` |
+| YM2203 FM and SSG | `tetorica-fm2612/ym2203synth.js` | `YM2203Synth`, `YM2203DirectTransport`, `YM2203RuntimeSynth` |
+| YM2608 FM, SSG, rhythm and ADPCM-B | `tetorica-fm2612/ym2608synth.js` | `YM2608Synth`, `YM2608DirectTransport`, `YM2608WorkletTransport` |
+| YM2610 / YM2610B FM, SSG and ADPCM | `tetorica-fm2612/ym2610bsynth.js` | `YM2610BSynth`, `YM2610BDirectTransport`, `NeoGeoFMSynth`, `NeoGeoSynth` |
+| YM2151 FM | `tetorica-fm2612/ym2151synth.js` | `YM2151Synth`, `YM2151DirectTransport`, `YM2151WorkletTransport` |
+| Game Boy pulse, wave and noise | `tetorica-fm2612/gameboysynth.js` | `GameboySynth`, `GameboyDirectTransport` |
+| NES APU and FDS | `tetorica-fm2612/nesapusynth.js` | `NesApuSynth`, `NesApuDirectTransport`, `NesApuWorkletTransport` |
+| Sega PSG tone and noise | `tetorica-fm2612/segapsgsynth.js` | `SegaPSGSynth`, `SegaPSGDirectTransport`, `psgPeriodFromFrequency`, `psgPeriodFromNote` |
+| RF5C164 PCM | `tetorica-fm2612/rf5c164synth.js` | `RF5C164Synth`, `RF5C164DirectTransport` |
+| 32X PWM | `tetorica-fm2612/pwm32x_transport.js` | `PWM32XDirectTransport`, `PWM32XWorkletTransport` |
+| Shared browser chip transports | `tetorica-fm2612/chip_worklet_transport.js` | `GameboyWorkletTransport`, `SegaPSGWorkletTransport`, `YM2151WorkletTransport` |
+| Real-time chip playback on Node | `tetorica-fm2612/node/transports` | `YM2612AudifyTransport`, `YM2608AudifyTransport`, `YM2151AudifyTransport`, `GameboyAudifyTransport`, `SegaPSGAudifyTransport`, `NesApuAudifyTransport`, `PWM32XAudifyTransport` |
+| Browser synth with FX, recording and looping | `tetorica-fm2612/megasynth.js` | `MegaSynth` |
+| Browser live-code runtime | `tetorica-fm2612/playground_runtime.js` | `Playground`, `createPlaygroundRuntime` |
+| Offline FM + native FX rendering | `tetorica-fm2612/megasynth_offline.js` | `createMegaSynthOffline` (experimental) |
+| Offline recording and looping | `tetorica-fm2612/megasynth_session.js` | `createMegaSynthSession` (experimental) |
+| Node synth with Worker audio output | `tetorica-fm2612/node` | `MegaSynthNode` (experimental) |
+| PCM to WAV | `tetorica-fm2612/wav.js` | `encodeWav` |
+| PCM to YM2608 ADPCM-B | `tetorica-fm2612/adpcm_b_sample.js` | `readSamplePCM`, `encodeAdpcmB` |
+| PCM to RF5C164 sample RAM | `tetorica-fm2612/rf5c164_pcm.js` | `encodeRf5c164` |
+| TFI voice files | `tetorica-fm2612/tfi.js` | `parseTfi`, `applyTfiToSynth`, `createTfiFromPreset` |
+| VGI voice files | `tetorica-fm2612/vgi.js` | `parseVgi`, `createVgiFromPreset` |
+| Browser VGM playback | `tetorica-fm2612/vgm_runtime.js` | `VgmRuntime`, `createVgmRuntime` |
+| VGM metadata / VGZ decoding | `tetorica-fm2612/vgm_file.js` | `parseVgmMetadata`, `maybeDecodeVgmFile` |
+| Resolve packaged assets | `tetorica-fm2612/assets` | `runtimeAssetUrl` |
+
+Direct transports generate PCM without a speaker. Worklet transports require
+browser Web Audio; Audify transports require Node and the optional `audify`
+package. Pure helpers such as `pitch.js`, `wav.js`, `tfi.js` and `vgi.js` can run
+in both browser and Node without opening an audio device.
+
+### Pitch conversion example
+
+```js
+import {hzToBlockFnum} from 'tetorica-fm2612/pitch.js';
+
+const {block, fnum} = hzToBlockFnum(440);
+console.log({block, fnum}); // {block: 4, fnum: 1083}
+```
+
+Pass the result to an initialized YM2612 Synth:
+`fm.setFrequency(channel, block, fnum)`. This changes pitch without triggering a
+new note. The optional second argument to `hzToBlockFnum(hz, clock)` is the
+chip's input clock in Hz (default `7670454`), not the audio sample rate.
+`createPitchFromMidi(midi, {referenceMidi, referenceBlock, referenceFnum})`
+converts relative to a caller-selected MIDI/BLOCK/FNUM reference.
+
+### Find signatures and options
+
+After installing, use your editor's import completion, hover and Go to Definition.
+Declarations are shipped beside each module, for example
+`node_modules/tetorica-fm2612/pitch.d.ts` and
+`node_modules/tetorica-fm2612/node/chip_transports.d.mts`. They describe exported
+functions/classes, parameter types, options and return types. Plain JavaScript
+projects can use the same editor assistance with JSDoc-aware tooling.
+
+`node_modules/tetorica-fm2612/runtime-manifest.json` lists every shipped runtime
+module and asset. It is a distribution inventory, including internal modules;
+start with the task table above when choosing an application API. See the
+[runnable examples](https://github.com/kyorohiro/tetorica-fm2612-examples) for
+complete setup, playback and cleanup.
+
 ## Chip mixer
 
 Browser outputs share `SoundChipMixer`: `volume` is a linear multiplier (0–2),
@@ -67,7 +140,7 @@ stopping the runtime removes its output route.
 | Yamaha OPN | YM2203, YM2608, YM2610/YM2610B, YM2612, YM3438, YMF276, YMF288 |
 | Yamaha OPM | YM2151 |
 | Yamaha OPL | YM2413, YM3526, YM3812, Y8950, YMF262, YMF278B |
-| PSG and console audio | AY8910, Sega PSG, Game Boy APU, HuC6280, K051649 |
+| PSG and console audio | AY8910, Sega PSG, Game Boy APU, NES APU + FDS, HuC6280, K051649 |
 | PCM and ADPCM | RF5C164, Sega PCM, OKIM6258, OKIM6295 |
 
 YM2612 includes ymfm and Nuked-OPN2 backends. YM2610 uses the YM2610B core
@@ -371,6 +444,18 @@ and generator. External instrument/sample ROMs are not included.
 
 ## Release notes
 
+`0.2.13` adds common Hz/note/key controls to FM, PSG, Game Boy, NES and SSG
+Synth APIs, with explicit `setBlockFnum` / `noteOnRaw` FM methods. Existing
+three-argument raw FM calls remain supported. Playground's ten SoundChip
+clients can change their master clock with `await setClock(hz)`.
+
+Playground `play()` and internal MIDI FM playback now tune A4 to 440 Hz,
+matching `setNote` and the MIDI Playground. **Existing Playground songs using
+the old reference will change pitch** (A4 was approximately 337 Hz at the
+default YM2612 clock). MIDI interfaces and raw BLOCK/F-NUM/VGM writes remain
+unchanged. This release also includes NES PAL/NTSC clock selection and exact
+register reset/memory upload helpers for VGM playback.
+
 `0.2.8` includes JSDoc-generated TypeScript declarations for browser and Node
 entry points, typed Direct/Worklet chip creation and async Worker APIs.
 The build validates every declaration and strict installed-package examples
@@ -457,3 +542,115 @@ Development validation: `npm run build:fm2612` generates and checks every
 declaration; `npm run test:fm2612:types` verifies strict consumer examples under
 NodeNext and Bundler resolution, including expected errors. The tarball
 installation check also runs the consumer type tests against the installed package.
+
+## NES APU + FDS Synth
+
+Version 0.2.12 adds `createSoundChip('nes')` and `NesApuSynth`. Enable FDS
+with `{fds: true}`. It reuses the Analyzer's JSNES APU and fixNES-derived FDS
+engines; no WASM, CPU program, cartridge or instrument ROM is needed.
+
+```javascript
+import {createSoundChip} from 'tetorica-fm2612';
+import {NesApuSynth, NesApuWorkletTransport} from 'tetorica-fm2612/nesapusynth.js';
+
+const chip = await createSoundChip('nes', {execution: 'worklet', fds: true, signal});
+const transport = new NesApuWorkletTransport(chip);
+try {
+  const nes = new NesApuSynth({transport});
+  nes.pulse.setVoice(0, {duty: 0.5, volume: 10});
+  await transport.start();
+  nes.pulse.noteOn(0, 'C4');
+  nes.fds.noteOn('E4'); // Default 64-sample sine wave.
+  // Wait for the desired duration with your app's abortable timer.
+  nes.pulse.noteOff(0);
+  nes.fds.noteOff();
+  await transport.flush();
+} finally {
+  await transport.close();
+  await chip.dispose();
+}
+```
+
+Use `NesApuDirectTransport(chip)` for owned stereo PCM via
+`chip.generateStereo(frames)` or `transport.generateStereo(frames)`.
+For Hz instead of musical notes, use `nes.pulse.setFrequency(0, 440)` followed
+by `nes.pulse.keyOn(0)`. `nes.pulse.keyOff(0)` stops the voice and keeps its
+configured pitch for the next `keyOn`. Frequency can also change while sounding.
+The common `nes.setFrequency(channel, hz)` / `nes.keyOn(channel)` controls support
+tone channels 0, 1, 2 (triangle) and 5 (FDS). `noteOn(channel, note)` continues to
+set a note name or MIDI note number before starting playback.
+Use `NesApuAudifyTransport(chip)` from `tetorica-fm2612/node/transports` for
+Node device output. Transports borrow the chip. The Synth borrows the transport.
+Version 0.2.13 supports source clocks from 1600000–1900000 Hz. Clocks below
+1700000 Hz select PAL noise/DMC periods and frame-counter timing; higher clocks
+use NTSC/Dendy timing. Playground VGM import passes the recorded clock through
+`createSoundChip("nes", {clock, fds})`. Published 0.2.12 remains NTSC-only.
+`clock` and FDS capability are inferred from the provided transport. For a custom
+register transport or bare MessagePort, supply `clock` / `fds` explicitly.
+
+| Part | API |
+| --- | --- |
+| Pulse 1 / 2 | `pulse.setVoice(0 or 1, {duty, volume, envelope, sweep})`, `setNote`, `noteOn`, `noteOff` |
+| Triangle | `triangle.setNote(note)`, `noteOn(note)`, `noteOff()`; hardware has fixed volume |
+| Noise | `noise.setVoice({volume, period, shortMode})`, `noteOn()`, `noteOff()`; period index 0–15 |
+| DMC | `await dmc.loadSample(encodedBytes, {address})`, `dmc.play({rate, loop, level})`, `dmc.stop()` |
+| FDS | `fds.setWave(samples)`, `setVolume(gain, masterScale)`, `setNote`, `noteOn`, `noteOff`, `setModulation(options)` |
+
+Notes are names such as `C4` / `F#3` or MIDI integers. `setFrequency(channel, hz)`
+accepts Hz; each channel's timer range is checked and rounded to hardware steps.
+Common tone channels are 0/1 (Pulse), 2 (Triangle), 5 (FDS).
+Noise uses a hardware period index and DMC uses a rate index, not musical notes.
+Pulse duty is .125 / .25 / .5 / .75; fixed volume is 0–15. Envelope `{period, loop}`
+selects the hardware decay mode instead of fixed volume; period is 0–15.
+Sweep `{enabled, period, negate, shift}` uses 0–7 period/shift fields.
+
+FDS waves contain 64 integers 0–63. Replacing a wave temporarily halts the
+oscillator, writes RAM, then restores its control state. Fixed gain is 0–32;
+master scale is 0–3. `fds.setModulation({table, rate, depth, bias, enabled})`
+accepts 32 entries 0–7, raw 12-bit modulation rate 0–4095, depth 0–63 and
+signed bias -64..63. Volume/wave helpers use fixed-gain mode; advanced hardware
+envelopes can be programmed through `writeRegister()` after note-on.
+
+DMC takes **pre-encoded DPCM**, not PCM/WAV. Samples contain 1–4081 bytes and are
+padded with alternating-bit bytes to 16*n+1. Addresses are 64-byte aligned in
+$C000–$FFFF and must fit the padded sample. Load completion is acknowledged before
+playback; reset invalidates pending descriptors. DMC upload through Worklet needs
+its full `createSoundChip` endpoint. Rate index is 0–15, initial DAC level 0–127.
+
+`writeRegister(address, value)` uses native CPU addresses ($4000–$4017,
+$4023, $4040–$408A), unlike VGM's packed NES offsets. FDS addresses require
+`fds: true`. `reset()` resets the chip, voices and loaded DMC descriptor.
+Version 0.2.13 also adds `resetRegisters()` for native reset without Synth defaults,
+and `loadMemory(bytes, address)` for exact CPU RAM uploads without DMC padding;
+Playground VGM import uses these to preserve the original writes and memory blocks.
+The wrapper seeds the integer core's silent DAC baseline and applies a floating
+10 Hz DC blocker so startup and held-DAC residuals do not produce a steady offset.
+The existing Analyzer engine remains available separately.
+Chip-level `SoundChipMixer`, automatic `chip.id`, and abortable creation work
+with the NES Worklet endpoint like the other chips.
+
+Register semantics follow [NESdev APU documentation](https://www.nesdev.org/wiki/APU)
+and [FDS audio documentation](https://www.nesdev.org/wiki/FDS_audio).
+
+## Common tone controls
+
+YM2612/OPN FM, YM2151, Sega PSG, Game Boy tone channels, NES tone channels and
+SSG expose `setFrequency(channel, hz)`, `setNote(channel, note)`, `keyOn(channel)`,
+`keyOff(channel)` and `noteOn(channel, note)`. Notes are names or integer MIDI
+numbers (A4 = 69 = 440 Hz); numbers passed to `noteOn` are never Hz. Hardware
+pitch limits and quantization apply. Single-channel wave/triangle/FDS facades
+omit the channel argument. Configure the voice/volume first; Game Boy still
+requires `initialize()` or `adoptRegisterState()`, and FDS requires `{fds:true}`.
+
+FM raw pitch has explicit `setBlockFnum(channel, block, fnum)` and
+`noteOnRaw(channel, block, fnum)` methods. Existing three-argument
+`setFrequency`/`noteOn` forms remain compatible; the new two-argument forms
+mean Hz and musical notes respectively. PSG and SSG keyOff remember the
+configured attenuation/volume for keyOn. Noise, rhythm, PCM and PWM retain
+their chip-specific controls.
+
+Playground `play()` and internal MIDI FM playback now use the standard A4 =
+MIDI 69 = 440 Hz conversion, matching MIDI Playground and the Synth note API.
+Scripts using the previous Playground reference tuning will sound higher.
+MIDI handles, channels, velocity and beat-based legacy duration keep their
+existing interface. Explicit raw BLOCK/F-NUM playback is unchanged.

@@ -1,5 +1,6 @@
 /** Optional Node Worker output adapter. Requires audify 1.10.x, loaded only here. */
-export declare function createOutput({ sampleRate, bufferFrames, onDrain, onError, moduleUrl, deviceId }: {
+export declare function createOutput({ sampleRate, bufferFrames, onDrain, onError, moduleUrl, deviceId, api }: {
+    api: any;
     bufferFrames: any;
     deviceId: any;
     moduleUrl: any;

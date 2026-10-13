@@ -34,6 +34,7 @@ export type YM2612Preset = {
     operators?: [YM2612OperatorParams?, YM2612OperatorParams?, YM2612OperatorParams?, YM2612OperatorParams?];
 };
 export type YM2612SynthOptions = {
+    clock?: number;
     transport: YM2612Transport;
 };
 /**
@@ -91,14 +92,18 @@ export declare class YM2612DirectTransport {
         getIrq?: () => boolean;
     });
     reset(): void;
-    write(port: any, register: any, value: any): void;
+    /** @param {number} port
+     * @param {number} register
+     * @param {number} value */
+    write(port: number, register: number, value: number): void;
     dacCommand(command: any): void;
-    /** Render through this transport to advance PCM playback and the Node timeline together. */
-    generateStereo(frames: any): {
-        left: Float32Array<any>;
-        right: Float32Array<any>;
+    /** Render through this transport to advance PCM playback and the Node timeline together. @param {number} frames */
+    generateStereo(frames: number): {
+        left: Float32Array<ArrayBuffer>;
+        right: Float32Array<ArrayBuffer>;
     };
-    read(offset: any): number;
+    /** @param {number} offset */
+    read(offset: number): number;
     readStatus(): number;
     getIrq(): boolean;
 }
@@ -121,7 +126,10 @@ export declare class YM2612WorkletTransport {
     /** Call before disconnecting/closing the node to reject unfinished registrations. */
     dispose(): void;
     reset(): void;
-    write(port: any, register: any, value: any): void;
+    /** @param {number} port
+     * @param {number} register
+     * @param {number} value */
+    write(port: number, register: number, value: number): void;
     scheduleWrites(entries: any): void;
     clearScheduledWrites(): void;
     loadDacBank(name: any, bytes: any): void;
@@ -131,6 +139,7 @@ export declare class YM2612WorkletTransport {
 }
 export declare class YM2612Synth {
     transport: YM2612Transport;
+    clock: number;
     hooks: {
         onWrite: undefined;
         onRead: undefined;
@@ -276,19 +285,21 @@ export declare class YM2612Synth {
      * @returns {void}
      */
     writeDac(value: number): void;
-    /**
-     * Write BLOCK / F-NUM without triggering KEY ON.
-     *
-     * This is the explicit YM2612-shaped frequency helper:
-     * - setFrequency(CH1, 4, 553)
-     * - keyOn(CH1)
-     *
-     * @param {number} channel
-     * @param {number} block
-     * @param {number} fnum
-     * @returns {void}
-     */
+    /** Set frequency in Hz without KEY ON. @overload @param {number} channel @param {number} hz @returns {void} */
+    /** @overload @param {number} channel @param {number} block @param {number} fnum @returns {void} */
+    /** Frequency in Hz with two arguments; legacy three-argument form is raw BLOCK/F-NUM.
+     * @param {number} channel @param {number} hzOrBlock @param {number} [fnum] */
+    setFrequency(channel: number, hz: number): void;
+    /** Set frequency in Hz without KEY ON. @overload @param {number} channel @param {number} hz @returns {void} */
+    /** @overload @param {number} channel @param {number} block @param {number} fnum @returns {void} */
+    /** Frequency in Hz with two arguments; legacy three-argument form is raw BLOCK/F-NUM.
+     * @param {number} channel @param {number} hzOrBlock @param {number} [fnum] */
     setFrequency(channel: number, block: number, fnum: number): void;
+    /** Configure a note name or integer MIDI 0..127 without triggering.
+     * @param {number} channel @param {string|number} note */
+    setNote(channel: number, note: string | number): void;
+    /** Raw hardware pitch, without triggering. @param {number} channel @param {number} block @param {number} fnum */
+    setBlockFnum(channel: number, block: number, fnum: number): void;
     /**
      * Trigger KEY ON on one channel.
      *
@@ -310,15 +321,18 @@ export declare class YM2612Synth {
      * @returns {void}
      */
     keyOff(channel: number, operators?: number[]): void;
-    /**
-     * Write BLOCK/FNUM and trigger Key On for all operators on one channel.
-     *
-     * @param {number} channel
-     * @param {number} block
-     * @param {number} fnum
-     * @returns {void}
-     */
+    /** Note name or integer MIDI plus KEY ON. @overload @param {number} channel @param {string|number} note @returns {void} */
+    /** @overload @param {number} channel @param {number} block @param {number} fnum @returns {void} */
+    /** Set a musical note and trigger. Legacy three-argument form uses raw pitch.
+     * @param {number} channel @param {string|number} noteOrBlock @param {number} [fnum] */
+    noteOn(channel: number, note: string | number): void;
+    /** Note name or integer MIDI plus KEY ON. @overload @param {number} channel @param {string|number} note @returns {void} */
+    /** @overload @param {number} channel @param {number} block @param {number} fnum @returns {void} */
+    /** Set a musical note and trigger. Legacy three-argument form uses raw pitch.
+     * @param {number} channel @param {string|number} noteOrBlock @param {number} [fnum] */
     noteOn(channel: number, block: number, fnum: number): void;
+    /** Raw pitch plus trigger. @param {number} channel @param {number} block @param {number} fnum */
+    noteOnRaw(channel: number, block: number, fnum: number): void;
     /**
      * Trigger Key Off for all operators on one channel.
      *
@@ -444,6 +458,7 @@ export declare class YM2612Synth {
      */
     _write(port: number, register: number, value: number): void;
     getState(): any;
-    _notifyRead(offset: any, value: any): void;
+    /** @param {number} offset */
+    _notifyRead(offset: number, value: any): void;
     _syncIrq(): void;
 }

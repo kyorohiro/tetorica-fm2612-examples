@@ -206,11 +206,18 @@ export declare class Ym2612 {
         };
     }): Promise<Ym2612>;
     supportsState(): boolean;
+    /** @returns {Readonly<{byteLength:number}>} Opaque snapshot owned by this instance. */
     saveState(): Readonly<{
-        byteLength: any;
+        byteLength: number;
     }>;
-    validateState(state: any): void;
-    loadState(state: any): void;
+    /** @param {Readonly<{byteLength:number}>} state Snapshot returned by this instance. */
+    validateState(state: Readonly<{
+        byteLength: number;
+    }>): void;
+    /** @param {Readonly<{byteLength:number}>} state Snapshot returned by this instance. */
+    loadState(state: Readonly<{
+        byteLength: number;
+    }>): void;
     /**
      * Free the chip and its WASM buffers. Repeated disposal is safe.
      * Previously returned PCM arrays remain valid because they are copies.

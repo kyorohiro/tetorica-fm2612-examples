@@ -1,7 +1,7 @@
 # tetorica-fm2612 examples
 
 `tetorica-fm2612` を import して使う、機能別の小さなサンプル集。
-チップ別の基本例は npm 0.2.12 の WorkletTransport / AudifyTransport を使います。導入手順は末尾の「Transport の例」を参照してください。
+チップ別の基本例は npm 0.2.13 の WorkletTransport / AudifyTransport を使います。導入手順は末尾の「Transport の例」を参照してください。
 チップ別の基本例は WorkletTransport / AudifyTransport を使います。PCM 生成・WAV 保存は専用例に置き、Web Audio を使う埋め込み例と、Node の nativeFX / 音声デバイス出力の例も掲載しています。本体リポジトリには依存しません。
 
 [公開 examples](https://kyorohiro.github.io/tetorica-fm2612-examples/) と
@@ -159,7 +159,7 @@ Node 専用の場合は `environments: ["node"]`、ブラウザ専用の場合�
 
 ## MegaSynth Node examples
 
-`embedding/06`〜`10` は `tetorica-fm2612@0.2.11` の実験用 MegaSynth API を使います。
+`embedding/06`〜`10` は `tetorica-fm2612@0.2.13` の実験用 MegaSynth API を使います。
 通常の `npm ci` で公開 package を導入できます。
 
 ```sh
@@ -182,7 +182,7 @@ WAV の RIFF ヘッダー・非ゼロ PCM とイベント JSON を確認しま�
 ## Transport の例
 
 Genesis / PC-98 / Game Boy / X68000 FM の基本例は、WorkletTransport / AudifyTransport を使用します。
-公開済み npm 0.2.12 を使用します。Node のリアルタイム再生には audify を追加してください。
+公開済み npm 0.2.13 を使用します。Node のリアルタイム再生には audify を追加してください。
 
 ```sh
 npm install

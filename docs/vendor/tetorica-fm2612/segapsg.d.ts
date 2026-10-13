@@ -19,6 +19,7 @@ export declare class SegaPSG {
     leftPtr: number;
     rightPtr: number;
     bufferFrames: number;
+    muteMask: number;
     pcmView: {
         left: Float32Array<any>;
         right: Float32Array<any>;
@@ -34,13 +35,18 @@ export declare class SegaPSG {
      * Initialize SegaPSG and its native WASM module.
      * The generated module factory is injected so browser and Node callers can choose asset loading.
      * @param {Object} [options={}] Chip and Emscripten initialization settings.
-     * @param {function(Object): (Object|Promise<Object>)} options.moduleFactory Generated WASM module factory.
-     * @param {Object} [options.moduleOptions] Forwarded loader options, e.g. wasmBinary or locateFile.
+     * @param {import('./soundchip.js').WasmModuleFactory} options.moduleFactory Generated WASM module factory.
+     * @param {import('./soundchip.js').WasmModuleOptions} [options.moduleOptions] Forwarded loader options, e.g. wasmBinary or locateFile.
      * @param {number} [options.clock] Input chip clock in Hz.
      * @param {number} [options.sampleRate=44100] Generated PCM frames per second.
      * @returns {Promise<SegaPSG>} Ready-to-use chip; the caller must dispose it.
      */
-    static create(options?: Object): Promise<SegaPSG>;
+    static create(options?: {
+        moduleFactory: import('./soundchip.js').WasmModuleFactory;
+        moduleOptions?: import('./soundchip.js').WasmModuleOptions;
+        clock?: number;
+        sampleRate?: number;
+    }): Promise<SegaPSG>;
     supportsState(): boolean;
     saveState(): Readonly<{
         byteLength: any;
@@ -63,6 +69,8 @@ export declare class SegaPSG {
      * @returns {void}
      */
     write(data: number): void;
+    /** Mute Tone 1–3 / Noise (0–3) without changing registers or oscillator state. */
+    setChannelMuted(channel: any, muted: any): void;
     /**
      * Return the configured PCM output rate.
      * @returns {number} Stereo frames per second.

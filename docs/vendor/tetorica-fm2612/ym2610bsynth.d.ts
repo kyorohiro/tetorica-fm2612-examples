@@ -7,10 +7,12 @@
 import { OPNDirectTransport, OPNFMSynth } from "./opn_fm_synth.js";
 import { OPNRuntimeSynth } from "./opn_runtime_synth.js";
 import { SSGSynth } from "./ssgsynth.js";
-export declare class YM2610BDirectTransport extends OPNDirectTransport {
-    constructor(chip: any);
-    /** Transfer encoded A/B data. Keep the full address space so later loads never truncate earlier samples. */
-    loadAdpcmMemory(type: any, bytes: any, address: any): any;
+/** @extends {OPNDirectTransport<import('./ym2610b.js').Ym2610B>} */
+export declare class YM2610BDirectTransport extends OPNDirectTransport<import('./ym2610b.js').Ym2610B> {
+    /** @param {import('./ym2610b.js').Ym2610B} chip */
+    constructor(chip: import('./ym2610b.js').Ym2610B);
+    /** Transfer encoded A/B data. Keep the full address space so later loads never truncate earlier samples. @param {Uint8Array} bytes @param {number} address  @param {0|1} type */
+    loadAdpcmMemory(type: 0 | 1, bytes: Uint8Array, address: number): void;
 }
 /** YM2610B ADPCM-B external-memory playback, using ROM addressing (256-byte units).
  * Browser / Worker / Node.js: no file decoding, audio output or memory ownership here.
@@ -31,9 +33,10 @@ export declare class YM2610BAdpcmBSynth {
     }, clock?: number);
     /** Clear the register shadow after the parent chip resets. Memory is preserved. */
     resetState(): void;
-    /** Track normalized ADPCM-B writes through the parent Synth. */
-    observeWrite(register: any, value: any): void;
-    _write(register: any, value: any): void;
+    /** Track normalized ADPCM-B writes through the parent Synth. @param {number} register  @param {number} value */
+    observeWrite(register: number, value: number): void;
+    /** @param {number} register  @param {number} value */
+    _write(register: number, value: number): void;
     /** Transfer encoded ADPCM-B, not WAV, PCM or rhythm ADPCM-A.
      * @param {Uint8Array|ArrayBuffer} bytes
      * @param {number} [address=0] Byte offset in the 16 MiB memory.
@@ -51,12 +54,13 @@ export declare class YM2610BAdpcmBSynth {
     setDeltaN(value: any): void;
     /** Set decoded PCM samples/second, not byte rate. Returns the quantized actual rate.
      * A byte contains two samples; changing this rate changes both speed and pitch.
+     * @param {number} rate
      */
-    setPlaybackRate(rate: any): number;
-    /** Linear level 0..255 (0=silence). */
-    setVolume(volume: any): void;
-    /** Stereo gates; preserves memory-mode bits from raw register writes. */
-    setPan(left: any, right: any): void;
+    setPlaybackRate(rate: number): number;
+    /** Linear level 0..255 (0=silence). @param {number} volume */
+    setVolume(volume: number): void;
+    /** Stereo gates; preserves memory-mode bits from raw register writes.  @param {boolean} right  @param {boolean} left */
+    setPan(left: boolean, right: boolean): void;
     /** Start/retrigger the selected range. Repeat loops the entire range, not a separate loop point. */
     keyOn({ repeat }?: {
         repeat?: boolean | undefined;
@@ -80,19 +84,20 @@ export declare class YM2610BAdpcmASynth {
     });
     /** Reset only the register shadow after a whole-chip reset. */
     resetState(): void;
-    /** Track normalized port-1 register writes. */
-    observeWrite(reg: any, value: any): void;
-    /** Transfer ADPCM-A bytes (not ADPCM-B or WAV) into the 16 MiB ROM address space. */
-    loadMemory(bytes: any, address?: number): void;
+    /** Track normalized port-1 register writes.  @param {number} value */
+    observeWrite(reg: any, value: number): void;
+    /** Transfer ADPCM-A bytes (not ADPCM-B or WAV) into the 16 MiB ROM address space. @param {Uint8Array} bytes @param {number} [address] */
+    loadMemory(bytes: Uint8Array, address?: number): void;
     /** Select [start,end) byte addresses on a voice 0..5, both aligned to 256 bytes.
      * Limit each range to less than 1 MiB: the core compares only the low 20 address bits at the end.
+     * @param {number} ch
      */
-    setSample(ch: any, { start, end }: {
+    setSample(ch: number, { start, end }: {
         end: any;
         start: any;
     }): void;
-    /** Global hardware level 0..63, increasing loudness. */
-    setVolume(volume: any): void;
+    /** Global hardware level 0..63, increasing loudness. @param {number} volume */
+    setVolume(volume: number): void;
     /** Individual level 0..31 and stereo gates; omitted values are retained. */
     /** @param {number} ch @param {{volume?: number, left?: boolean, right?: boolean}} [options] */
     setVoice(ch: number, { volume, left, right }?: {
@@ -114,14 +119,17 @@ export declare class YM2610BSynth extends OPNFMSynth {
     adpcmA: YM2610BAdpcmASynth;
     adpcmB: YM2610BAdpcmBSynth;
     adpcm: YM2610BAdpcmBSynth;
-    /** @param {{transport: OPNDirectTransport, clock?: number}} options Master clock in Hz, default 8 MHz. */
+    /** @param {{transport: import('./opn_fm_synth.js').OPNTransport, clock?: number}} options Master clock in Hz, default 8 MHz. */
     constructor({ transport, clock }?: {
-        transport: OPNDirectTransport;
+        transport: import('./opn_fm_synth.js').OPNTransport;
         clock?: number;
     });
     /** Reset the chip, retaining ROM contents. */
     reset(): void;
-    _write(port: any, register: any, value: any): void;
+    /** @param {number} port
+     * @param {number} value
+     * @param {number} register */
+    _write(port: number, register: number, value: number): void;
 }
 /** Browser-hosted full YM2610B core. */
 export declare class YM2610BRuntimeSynth extends OPNRuntimeSynth {
@@ -136,6 +144,8 @@ export declare class NeoGeoFMSynth {
     fm: any;
     channelCount: number;
     constructor(fm: any);
+    get clock(): any;
+    set clock(hz: any);
     reset(): void;
     write(...args: any[]): any;
     read(...args: any[]): any;
@@ -144,17 +154,31 @@ export declare class NeoGeoFMSynth {
     setLfo(...args: any[]): any;
     setChannel3SpecialMode(...args: any[]): any;
     setChannel3SpecialFrequency(...args: any[]): any;
-    setPreset(channel: any, ...args: any[]): any;
-    setOperators(channel: any, ...args: any[]): any;
-    setOperator(channel: any, ...args: any[]): any;
-    setAlgo(channel: any, ...args: any[]): any;
-    setPan(channel: any, ...args: any[]): any;
-    setModulation(channel: any, ...args: any[]): any;
+    /** @param {number} channel */
+    setPreset(channel: number, ...args: any[]): any;
+    /** @param {number} channel */
+    setOperators(channel: number, ...args: any[]): any;
+    /** @param {number} channel */
+    setOperator(channel: number, ...args: any[]): any;
+    /** @param {number} channel */
+    setAlgo(channel: number, ...args: any[]): any;
+    /** @param {number} channel */
+    setPan(channel: number, ...args: any[]): any;
+    /** @param {number} channel */
+    setModulation(channel: number, ...args: any[]): any;
+    /** @param {number} channel */
+    setNote(channel: number, note: any): any;
+    setBlockFnum(channel: any, block: any, fnum: any): any;
+    noteOnRaw(channel: any, block: any, fnum: any): any;
     setFrequency(channel: any, ...args: any[]): any;
-    keyOn(channel: any, ...args: any[]): any;
-    keyOff(channel: any, ...args: any[]): any;
-    noteOn(channel: any, ...args: any[]): any;
-    noteOff(channel: any, ...args: any[]): any;
+    /** @param {number} channel */
+    keyOn(channel: number, ...args: any[]): any;
+    /** @param {number} channel */
+    keyOff(channel: number, ...args: any[]): any;
+    /** @param {number} channel */
+    noteOn(channel: number, ...args: any[]): any;
+    /** @param {number} channel */
+    noteOff(channel: number, ...args: any[]): any;
 }
 /** Neo Geo YM2610 profile built on the YM2610B core. */
 export declare class NeoGeoSynth extends YM2610BRuntimeSynth {

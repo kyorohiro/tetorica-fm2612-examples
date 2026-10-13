@@ -1,33 +1,55 @@
+/**
+ * @file ym2610baudioengine.js
+ * 実行環境: Browser / Node.js
+ * 依存: 音源チップ／WASM バックエンド（ファクトリーまたはエンジンを注入）。
+ * 同期 PCM 生成・ミックス用。DOM・AudioContext・スピーカー出力は不要。
+ */
+import { Ym2610B } from "./ym2610b.js";
 /** YM2610 / YM2610B FM, SSG and ADPCM playback engine. */
 export declare class Ym2610BAudioEngine {
     #private;
-    chip: any;
-    chipSampleRate: any;
-    outputSampleRate: any;
+    chip: Ym2610B;
+    chipSampleRate: number;
+    outputSampleRate: number;
     masterVolume: number;
     remainder: number;
     lastLeft: number;
     lastRight: number;
     sourceMuteMask: number;
-    constructor(chip: any, chipSampleRate: any, outputSampleRate: any, masterVolume?: number);
+    /** @param {Ym2610B} chip
+     * @param {number} chipSampleRate
+     * @param {number} outputSampleRate
+     * @param {number} [masterVolume] */
+    constructor(chip: Ym2610B, chipSampleRate: number, outputSampleRate: number, masterVolume?: number);
     /**
      * Create the chip instances required by this engine.
-     * @param {Object} [options={}] Chip factories, clocks in Hz and loader settings.
+     * @param {{moduleFactory: import('./soundchip.js').WasmModuleFactory, moduleOptions?: import('./soundchip.js').WasmModuleOptions, clock?: number, outputSampleRate?: number, masterVolume?: number, variant?: boolean}} [options={}] Chip factories, clocks in Hz and loader settings.
      * @param {number} [options.outputSampleRate=44100] Output stereo frames per second.
      * @param {number} [options.masterVolume=1] Linear output gain, not dB.
      * @returns {Promise<Ym2610BAudioEngine>} Initialized engine owned by the caller.
      */
     static create(options?: {
+        moduleFactory: import('./soundchip.js').WasmModuleFactory;
+        moduleOptions?: import('./soundchip.js').WasmModuleOptions;
+        clock?: number;
         outputSampleRate?: number;
         masterVolume?: number;
+        variant?: boolean;
     }): Promise<Ym2610BAudioEngine>;
     supportsState(): boolean;
     stateSettingsKey(): string;
+    /** @returns {Readonly<{byteLength:number}>} Opaque snapshot owned by this instance. */
     saveState(): Readonly<{
-        byteLength: any;
+        byteLength: number;
     }>;
-    validateState(state: any): void;
-    loadState(state: any): void;
+    /** @param {Readonly<{byteLength:number}>} state Snapshot returned by this instance. */
+    validateState(state: Readonly<{
+        byteLength: number;
+    }>): void;
+    /** @param {Readonly<{byteLength:number}>} state Snapshot returned by this instance. */
+    loadState(state: Readonly<{
+        byteLength: number;
+    }>): void;
     /**
      * Release the underlying chips and their resources. Do not render after disposal.
      * @returns {void}
@@ -60,12 +82,20 @@ export declare class Ym2610BAudioEngine {
      * @param {number} value Register/command data value.
      */
     writeYm2610B(port: number, register: number, value: number): void;
-    loadAdpcmRom(type: any, data: any, offset: any, size: any): void;
+    /** @param {Uint8Array} data
+     * @param {0|1} type
+     * @param {number} size
+     * @param {number} offset */
+    loadAdpcmRom(type: 0 | 1, data: Uint8Array, offset: number, size: number): void;
     clearAdpcmRoms(): void;
-    setSsgMuted(muted: any): void;
-    setRhythmMuted(muted: any): void;
-    setAdpcmBMuted(muted: any): void;
-    setSourceMuted(bit: any, muted: any): void;
+    /** @param {boolean} muted */
+    setSsgMuted(muted: boolean): void;
+    /** @param {boolean} muted */
+    setRhythmMuted(muted: boolean): void;
+    /** @param {boolean} muted */
+    setAdpcmBMuted(muted: boolean): void;
+    /** @param {boolean} muted  @param {number} bit */
+    setSourceMuted(bit: number, muted: boolean): void;
     /**
      * Advance synthesis and fill caller-owned stereo buffers.
      * @param {Float32Array} left Left output buffer with capacity for frames samples.
@@ -83,4 +113,5 @@ export declare class Ym2610BAudioEngine {
         right: Float32Array;
     };
 }
-export declare function createYm2610BAudioEngine(options: any): Promise<Ym2610BAudioEngine>;
+/** @param {Parameters<typeof Ym2610BAudioEngine.create>[0]} [options] */
+export declare function createYm2610BAudioEngine(options?: Parameters<typeof Ym2610BAudioEngine.create>[0]): Promise<Ym2610BAudioEngine>;

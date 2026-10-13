@@ -350,7 +350,18 @@ export declare class Ym2612VGM {
      */
     describeCommandAt(position: number): string;
 }
-export declare function decodePwmBlock(data: any, tables?: Map<any, any>): Uint8Array<ArrayBuffer>;
+/**
+ * Decode a VGM compressed data-bank block (also shared by recorded PWM banks).
+ * @param {Uint8Array} data Compressed block contents including its compression header.
+ * @param {Map<string, {bits: number, packed: number, values: number[] | Uint16Array}>} [tables] Decompression tables keyed by compression type/subtype.
+ * @returns {Uint8Array} Unpacked little-endian sample bytes.
+ * @throws {Error} For invalid/unsupported encoding, missing tables or excessive allocation.
+ */
+export declare function decodePwmBlock(data: Uint8Array, tables?: Map<string, {
+    bits: number;
+    packed: number;
+    values: number[] | Uint16Array;
+}>): Uint8Array;
 /**
  * @param {ArrayBuffer | ArrayBufferView | Ym2612VGM} source
  * @param {{
@@ -416,15 +427,51 @@ export declare function exportYm2203FmVgmToPlaygroundJavaScript(source: ArrayBuf
 /**
  * Export YM2203 FM writes for a native YM2203 target without changing FNUM.
  */
-export declare function exportYm2203VgmToPlaygroundJavaScript(source: any, options?: {}): string;
+/**
+ * @param {ArrayBuffer | ArrayBufferView | Ym2612VGM} source VGM file or parsed source.
+ * @param {{includeHeaderComment?: boolean, scheduled?: boolean, totalLoopSamples?: number | null}} [options={}] Source formatting, timed batches and loop expansion.
+ * @returns {string} Playground JavaScript source for the selected FM target.
+ */
+export declare function exportYm2203VgmToPlaygroundJavaScript(source: ArrayBuffer | ArrayBufferView | Ym2612VGM, options?: {
+    includeHeaderComment?: boolean;
+    scheduled?: boolean;
+    totalLoopSamples?: number | null;
+}): string;
 /**
  * Export YM2608 FM writes for a native YM2608 target without changing FNUM.
  */
-export declare function exportYm2608VgmToPlaygroundJavaScript(source: any, options?: {}): string;
+/**
+ * @param {ArrayBuffer | ArrayBufferView | Ym2612VGM} source VGM file or parsed source.
+ * @param {{includeHeaderComment?: boolean, scheduled?: boolean, totalLoopSamples?: number | null}} [options={}] Source formatting, timed batches and loop expansion.
+ * @returns {string} Playground JavaScript source for the selected FM target.
+ */
+export declare function exportYm2608VgmToPlaygroundJavaScript(source: ArrayBuffer | ArrayBufferView | Ym2612VGM, options?: {
+    includeHeaderComment?: boolean;
+    scheduled?: boolean;
+    totalLoopSamples?: number | null;
+}): string;
 /** Export YM2610B FM writes while omitting SSG and ADPCM registers. */
-export declare function exportYm2610BVgmToPlaygroundJavaScript(source: any, options?: {}): string;
+/**
+ * @param {ArrayBuffer | ArrayBufferView | Ym2612VGM} source VGM file or parsed source.
+ * @param {{includeHeaderComment?: boolean, scheduled?: boolean, totalLoopSamples?: number | null}} [options={}] Source formatting, timed batches and loop expansion.
+ * @returns {string} Playground JavaScript source for the selected FM target.
+ */
+export declare function exportYm2610BVgmToPlaygroundJavaScript(source: ArrayBuffer | ArrayBufferView | Ym2612VGM, options?: {
+    includeHeaderComment?: boolean;
+    scheduled?: boolean;
+    totalLoopSamples?: number | null;
+}): string;
 /** Export Neo Geo FM through the YM2612 compatibility target. */
-export declare function exportYm2610FmVgmToPlaygroundJavaScript(source: any, options?: {}): string;
+/**
+ * @param {ArrayBuffer | ArrayBufferView | Ym2612VGM} source VGM file or parsed source.
+ * @param {{includeHeaderComment?: boolean, scheduled?: boolean, totalLoopSamples?: number | null}} [options={}] Source formatting, timed batches and loop expansion.
+ * @returns {string} Playground JavaScript source for the selected FM target.
+ */
+export declare function exportYm2610FmVgmToPlaygroundJavaScript(source: ArrayBuffer | ArrayBufferView | Ym2612VGM, options?: {
+    includeHeaderComment?: boolean;
+    scheduled?: boolean;
+    totalLoopSamples?: number | null;
+}): string;
 /**
  * @param {0|1} port
  * @param {number} register

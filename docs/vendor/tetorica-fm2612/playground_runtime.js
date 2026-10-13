@@ -1,3 +1,7 @@
+import {midiToOpnPitch, opnPitchFromHz} from './soundchip_pitch.js';
+import {attachChipClock, CHIP_CLOCKS} from './playground_chip_clock.js';
+import {createNesAudio} from './playground_nes_audio.js';
+import {createNesClient} from './playground_nes.js';
 import {createPWM32XAudio} from './playground_pwm_audio.js';
 import {createPWM32XClient} from './pwm32x_playback.js';
 import {createYm2151Audio} from './playground_ym2151_audio.js';
@@ -15,34 +19,30 @@ import {createYm2608Client} from './playground_ym2608.js?v=loop-async-tasks-1';
 import {createRf5c164Client} from './playground_rf5c164.js';
 import {createRf5c164Audio} from './playground_rf5c164_audio.js';
 import {samplePCM} from './native_sample.js';
+import {formatLogArgs} from './playground_log.js';
+import {createLiveFxLifecycle} from './native_fx.js?v=live-fx-definitions-1';
 /**
  * @file playground_runtime.js
  * 実行環境: Browser（メインスレッド）
  * 依存: window のイベント処理、Web Audio 対応 Synth、Worker（Worker モード時）。
  * import とブラウザー上の実行・音声初期化は別。Node.js での実再生用ではない。
  */
-import {createMidiRack, createMidiApi, validateBendRange, MIDI_SUPPORTED_CC} from './playground_midi.js?v=play-units-1';
+import {createMidiRack, createMidiApi, validateBendRange, MIDI_SUPPORTED_CC} from './playground_midi.js?v=shared-beat-clock-1';
 import {parseMidiFile} from './midi_file.js?v=readable-midi-1';
 import { createAudioScheduler } from "./playground_audio_scheduler.js";
 import {
   FM_PRESETS,
-} from "./megasynth.js";
+} from "./megasynth.js?v=prepared-fx-rerun-2";
 import { createTetoricaSynth } from "./tetorica_synth.js";
-import {
-  createPitchFromMidi,
-} from "./pitch.js";
-import { createPlaygroundClock } from "./playground_clock.js?v=loop-async-tasks-1";
+import { createPlaygroundClock } from "./playground_clock.js?v=shared-beat-clock-1";
 import { executeWithPlaygroundGuards } from "./playground_execution.js";
-import { createPlaygroundLive } from "./playground_live.js?v=loop-async-tasks-1";
-import { createPlaygroundMusic } from "./playground_music.js?v=play-units-1";
+import { createPlaygroundLive } from "./playground_live.js?v=prepared-fx-rerun-2";
+import { createPlaygroundMusic } from "./playground_music.js?v=shared-beat-clock-1";
 import { createPlaygroundNoiseApi } from "./playground_noise.js";
 import { createFmProxy } from "./playground_sync.js?v=dac-pcm-1";
 import { parseTfi } from "./tfi.js";
 import { parseVgi } from "./vgi.js";
 
-const REFERENCE_MIDI = 62;
-const REFERENCE_BLOCK = 4;
-const REFERENCE_FNUM = 553;
 const NOTE_TO_SEMITONE = {
   C: 0,
   "C#": 1,
@@ -70,6 +70,7 @@ const SCALE_INTERVALS = {
 };
 
 /**
+ * Create a reusable browser runtime with clocks, music helpers and execution lifecycle.
  * @param {{
  *   synth?: object | null,
  *   megaDrive?: object | null,
@@ -89,6 +90,7 @@ const SCALE_INTERVALS = {
  *   onReady?: ((context: { synth: object, megaDrive: object }) => void) | null,
  *   onMegaDriveEvent?: ((event: object) => void) | null,
  * }} [options]
+ * @returns Runtime controls and accessors; initialize audio before using the synth.
  */
 export function createPlaygroundRuntime(
   options = {}
@@ -137,6 +139,7 @@ export function createPlaygroundRuntime(
     };
   const sourceMap =
     new Map();
+  const liveFxLifecycle = createLiveFxLifecycle();
   const runtime = {
     bpm: 120,
     clockStartTime: null,
@@ -172,12 +175,12 @@ export function createPlaygroundRuntime(
     options.execution ?? "main";
   const defaultLogicWorkerUrl =
     new URL(
-      "./playground_logic_worker.js?v=native-fx-1",
+      "./playground_logic_worker.js?v=shared-beat-clock-1",
       import.meta.url
     );
   defaultLogicWorkerUrl.searchParams.set(
     "v",
-    "play-units-1"
+    "stop-media-race-1"
   );
   const logicWorkerUrl =
     options.logicWorkerUrl ??
@@ -189,6 +192,25 @@ export function createPlaygroundRuntime(
   let midiWriteBatch = null;
   let synth = null;
   let prepareAudioPromise = null;
+  let stopFadeNode = null;
+  let previousOutputNode = null;
+  let pendingFadeStop = null;
+  function resumeStopFade() {
+    const context = megaDrive.audioContext;
+    const audio = megaDrive.audio;
+    if (!stopFadeNode && context?.createGain && audio?.connectOutput) {
+      previousOutputNode = audio.outputNode ?? null;
+      stopFadeNode = context.createGain();
+      stopFadeNode.connect(previousOutputNode ?? context.destination);
+      audio.connectOutput(stopFadeNode);
+    }
+    if (stopFadeNode && stopFadeNode.gain.value !== 1) {
+      const now = context.currentTime;
+      stopFadeNode.gain.cancelScheduledValues(now);
+      stopFadeNode.gain.setValueAtTime(stopFadeNode.gain.value, now);
+      stopFadeNode.gain.linearRampToValueAtTime(1, now + 0.008);
+    }
+  }
   let currentRunToken = 0;
   let currentLoopContext = null;
   const keyboardHandlers = new Map();
@@ -205,15 +227,16 @@ export function createPlaygroundRuntime(
   let sharedFm;
   let sharedFmSynth;
   async function openPcm(name, token = currentRunToken, options = {}) {
-    if (!options || typeof options !== 'object' || Array.isArray(options) || Object.keys(options).some(k => k !== 'id')) throw new TypeError('createSoundChip supports {id}');
-    if(!['ym2612', 'ym2203', 'ym2610', 'rf5c164', 'ym2608', 'gameboy', 'segapsg', 'ym2151', 'pwm'].includes(name)) throw new Error('Unsupported Playground sound chip: ' + name);
+    if (!options || typeof options !== 'object' || Array.isArray(options) || Object.keys(options).some(k => !['id', ...(name === 'nes' ? ['fds', 'clock'] : [])].includes(k))) throw new TypeError('createSoundChip supports {id}, and {fds, clock} for NES');
+    if (name === 'nes' && options.fds !== undefined && typeof options.fds !== 'boolean') throw new TypeError('fds must be boolean');
+    if(!['ym2612', 'ym2203', 'ym2610', 'rf5c164', 'ym2608', 'gameboy', 'segapsg', 'ym2151', 'pwm', 'nes'].includes(name)) throw new Error('Unsupported Playground sound chip: ' + name);
     const occupied = id => pendingPcmIds.has(id) || megaDrive.mixer?.list().some(s => s.id === id && s.connected);
     const reservation = megaDrive.mixer?.reserveId?.(name, options.id);
     let mixerId = reservation?.id ?? options.id;
     if (mixerId === undefined) do {mixerId = `${name}:${++pcmSequence}`;} while (occupied(mixerId));
     if (typeof mixerId !== 'string' || !mixerId.trim()) throw new TypeError('Mixer id must be a nonempty string');
     if (occupied(mixerId)) {reservation?.release(); throw new Error(`Mixer id is already connected: ${mixerId}`);}
-    const createAudio = name === 'pwm' ? createPWM32XAudio : ['ym2612', 'ym2203', 'ym2610'].includes(name) ? (context, destination) => createOpnAudio(context, destination, name) : name === 'ym2151' ? createYm2151Audio : name === 'segapsg' ? createSegaPsgAudio : name === 'gameboy' ? createGameboyAudio : name === 'ym2608' ? createYm2608Audio : createRf5c164Audio;
+    const createAudio = name === 'nes' ? (context, destination) => createNesAudio(context, destination, options) : name === 'pwm' ? createPWM32XAudio : ['ym2612', 'ym2203', 'ym2610'].includes(name) ? (context, destination) => createOpnAudio(context, destination, name) : name === 'ym2151' ? createYm2151Audio : name === 'segapsg' ? createSegaPsgAudio : name === 'gameboy' ? createGameboyAudio : name === 'ym2608' ? createYm2608Audio : createRf5c164Audio;
     pendingPcmIds.add(mixerId);
     let device;
     try {device = await createAudio(megaDrive.audioContext, megaDrive.audio.masterInputNode);}
@@ -244,6 +267,7 @@ export function createPlaygroundRuntime(
   let workerCommandQueue = Promise.resolve();
   let resolveLogicWorkerStop = null;
   let logicWorkerStopPromise = null;
+  let workerLevelsMuted = false;
   const workerRunRequests = [];
   // Test doubles may not expose an audio runtime; production handles live there.
   const fallbackAudioHandles = new Map();
@@ -307,7 +331,7 @@ export function createPlaygroundRuntime(
           options.onMegaDriveEvent?.(event);
           if(logicWorker && !applyingChipObserver) {
             const core=synth?.fm??synth;
-            logicWorker.postMessage({type:"chip-state",state:core?.getState?.()});
+            logicWorker.postMessage({type:"chip-state",state:{...core?.getState?.(),clock:sharedFm?.clock}});
           }
         }
       );
@@ -399,11 +423,19 @@ export function createPlaygroundRuntime(
     apply(voice.filter.q, options.q);
   }
 
+  async function ensureMediaReady() {
+    const token = currentRunToken, loop = currentLoopContext;
+    if (pendingFadeStop || logicWorkerStopPromise || loop?.stopped) throw new Error('Run stopped');
+    // Media preparation must never reopen the output gate after Stop.
+    await ensureReady({resumeOutput: false});
+    if (token !== currentRunToken || pendingFadeStop || logicWorkerStopPromise || loop?.stopped) throw new Error('Run stopped');
+  }
+
   async function loadSample(
     name,
     source
   ) {
-    await ensureReady();
+    await ensureMediaReady();
     return megaDrive.sample.load(
       name,
       source
@@ -414,7 +446,7 @@ export function createPlaygroundRuntime(
     name,
     sampleOptions = {}
   ) {
-    await ensureReady();
+    await ensureMediaReady();
     return megaDrive.sample.play(
       name,
       sampleOptions
@@ -433,7 +465,7 @@ export function createPlaygroundRuntime(
     name,
     url
   ) {
-    await ensureReady();
+    await ensureMediaReady();
     return megaDrive.stream.load(
       name,
       url
@@ -444,7 +476,7 @@ export function createPlaygroundRuntime(
     name,
     streamOptions = {}
   ) {
-    await ensureReady();
+    await ensureMediaReady();
     return megaDrive.stream.play(
       name,
       streamOptions
@@ -690,14 +722,34 @@ export function createPlaygroundRuntime(
     });
   }
 
-  async function ensureReady() {
+  async function ensureReady({resumeOutput = true} = {}) {
+    const token = currentRunToken;
+    const resumeOutputIfCurrent = () => {
+      if (resumeOutput && token === currentRunToken && !pendingFadeStop) resumeStopFade();
+    };
+    if (pendingFadeStop) await pendingFadeStop;
     if (prepareAudioPromise) {
       await prepareAudioPromise;
+      resumeOutputIfCurrent();
       return synth;
     }
 
     if (synth) {
+      if (logicWorkerStopPromise) await logicWorkerStopPromise;
       await megaDrive.resume();
+      // Worker Stop silences hardware TL registers without changing saved patches.
+      // Restore them before a main-thread keyboard audition or the next Run.
+      if (workerLevelsMuted) {
+        const core = synth.fm ?? synth;
+        const channels = core.getState?.()?.channels;
+        if (channels && typeof core.setOperator === 'function') {
+          channels.forEach((channel, index) => channel.operators.forEach((operator, slot) => {
+            core.setOperator(index, slot, {tl: operator.tl});
+          }));
+        }
+        workerLevelsMuted = false;
+      }
+      resumeOutputIfCurrent();
       emitRuntimeState(
         "Audio ready"
       );
@@ -715,6 +767,7 @@ export function createPlaygroundRuntime(
       (async () => {
         await megaDrive.start();
         await megaDrive.audio?.prepareNativeFX?.();
+        resumeOutputIfCurrent();
         if (megaDrive.audio?.nativeFX) {
           megaDrive.audio.nativeFX.onError = (message) => {
             options.onLog?.(`[FX] ${message}`);
@@ -748,6 +801,12 @@ export function createPlaygroundRuntime(
 
   async function initialize() {
     await ensureReady();
+  }
+
+  /** An explicit keyboard audition starts after the preceding Stop has finished. */
+  async function prepareAudition() {
+    if (pendingFadeStop) await pendingFadeStop;
+    return ensureReady();
   }
 
   function registerKeyboardHandler(
@@ -800,6 +859,7 @@ export function createPlaygroundRuntime(
     }
     if (logicWorkerStopPromise) return logicWorkerStopPromise;
     const worker = logicWorker;
+    workerLevelsMuted = true;
     let timer;
     let finish;
     const stopped = new Promise((resolve) => {
@@ -814,7 +874,15 @@ export function createPlaygroundRuntime(
     });
     logicWorkerStopPromise = stopped;
     resolveLogicWorkerStop = finish;
-    timer = setTimeout(finish, 100);
+    // A timeout is not a stop acknowledgement: old cleanup commands can still
+    // arrive and mute the next Run. Retire an unresponsive Worker instead.
+    timer = setTimeout(() => {
+      if (logicWorker === worker) {
+        terminateLogicWorker();
+        stopAllAudio();
+      }
+      finish();
+    }, 2000);
     worker.postMessage({ type: "stop" });
     return stopped;
   }
@@ -874,7 +942,7 @@ export function createPlaygroundRuntime(
       throw new Error("Playground Worker is not running");
     }
 
-    if(command==='pcm.create'){const device=await openPcm(args[0], currentRunToken, args[1]);return {port:device.port,id:device.mixerId};}
+    if(command==='pcm.create'){const device=await openPcm(args[0], currentRunToken, args[1]);return {port:device.port,id:device.mixerId,clock:device.clock,fdsEnabled:device.fdsEnabled};}
     if(command==='pcm.dispose') {for(const device of pcmDevices) if(device.mixerId===args[0]) device.dispose(); return;}
     if(command.startsWith('mixer.')) {const method=command.slice(6);if(!['set','get','reset','list'].includes(method)) throw new Error('Unknown mixer method');return megaDrive.mixer[method](...args);}
     if(command==='pcm.decode')return decodePcm(args[0]);
@@ -1018,6 +1086,12 @@ export function createPlaygroundRuntime(
 
   function handleWorkerMessage(event) {
     const message = event.data ?? {};
+    // Tempo bypasses the command queue: a queued play may still be waiting.
+    if (message.type === 'tempo') {
+      clockApi.setBpm(message.bpm);
+      megaDrive.audio?.nativeFX?.controller.syncTempo();
+      return;
+    }
     if (message.type === "command" || message.type === "request") {
       if (message.command === "keyboard.register") {
         registerWorkerKeyboardHandler(
@@ -1069,6 +1143,7 @@ export function createPlaygroundRuntime(
           applyingChipObserver=true;
           if(core) core.transport={write(port,register,value){},reset(){}};
           const {method,args}=message.event;
+          if (method === 'setClock') sharedFm?._adoptClock(args[0]);
           if(typeof synth?.[method]==="function" && !method.startsWith("_")) synth[method](...args);
         } catch(error){emitLog(`Observer: ${error.message}`);}
         finally {if(core)core.transport=transport;applyingChipObserver=false;}
@@ -1122,6 +1197,10 @@ export function createPlaygroundRuntime(
       while (workerRunRequests.length > 0) {
         workerRunRequests.shift().reject(error);
       }
+      if (resolveLogicWorkerStop) {
+        terminateLogicWorker();
+        stopAllAudio();
+      }
     };
   }
 
@@ -1156,7 +1235,7 @@ export function createPlaygroundRuntime(
   function getMidiRack() {
     if (synth?.dac?.enabled) throw new Error('Disable DAC before using MIDI FM playback');
     if (capabilities.chip !== "ym2612") throw new Error("MIDI outputs currently require YM2612 mode");
-    return midiRack ??= createMidiRack({preset: Object.values(presets)[0],
+    return midiRack ??= createMidiRack({getClockScale:() => CHIP_CLOCKS.ym2612 / (sharedFm?.clock ?? CHIP_CLOCKS.ym2612),preset: Object.values(presets)[0],
       write: entry => entry.time === undefined ? synth.write(entry.port,entry.register,entry.value) : midiWriteBatch ? midiWriteBatch.push(entry) : audioScheduler.enqueue([entry]),
       writePsg: entry => entry.time === undefined ? megaDrive.psg.write(entry.value) : (midiWriteBatch ? midiWriteBatch.push({...entry,type:"psg-write"}) : audioScheduler.enqueue([{...entry,type:"psg-write"}])),
     });
@@ -1228,6 +1307,7 @@ export function createPlaygroundRuntime(
   ) {
     const evaluationState = {
       loopDefinitions: new Map(),
+      liveFxDefinitions: new Map(),
       cleanupDefinitions: [],
       cleanupCallIndex: 0,
       keyboardDefinitions: new Map(),
@@ -1235,8 +1315,22 @@ export function createPlaygroundRuntime(
         currentSourceName ??
         "__anonymous__",
     };
-    const fx = createFxApi();
-    if (sharedFmSynth !== synth) { sharedFm = createFmProxy(synth); Object.defineProperty(sharedFm, 'id', {value: capabilities.chip ?? 'ym2612', enumerable: true}); sharedFmSynth = synth; }
+    const fx = liveFxLifecycle.track(createFxApi(), evaluationState.liveFxDefinitions);
+    if (sharedFmSynth !== synth) {
+      sharedFm = createFmProxy(synth);
+      if (megaDrive.node?.port) attachChipClock(sharedFm, megaDrive.node.port, CHIP_CLOCKS[capabilities.chip ?? 'ym2612'], {
+        primary:true,
+        onApplied: hz => {
+          (synth.fm ?? synth).clock = hz;
+          if (synth.ssg) synth.ssg.clock = hz / (capabilities.chip === 'ym2203' ? 2 : 4);
+          if (synth.adpcmB) synth.adpcmB.clock = hz;
+          if (synth.adpcm) synth.adpcm.clock = hz;
+          logicWorker?.postMessage({type:'chip-clock-state',clock:hz});
+        },
+      });
+      Object.defineProperty(sharedFm, 'id', {value: capabilities.chip ?? 'ym2612', enumerable: true});
+      sharedFmSynth = synth;
+    }
     const fm = sharedFm;
     const psg = megaDrive.psg;
     const musicApi =
@@ -1245,19 +1339,13 @@ export function createPlaygroundRuntime(
           NOTE_TO_SEMITONE,
         scaleIntervals:
           SCALE_INTERVALS,
-        createPitchFromMidi,
-        pitchReference: {
-          referenceMidi:
-            REFERENCE_MIDI,
-          referenceBlock:
-            REFERENCE_BLOCK,
-          referenceFnum:
-            REFERENCE_FNUM,
-        },
+        getPitch: midi => midiToOpnPitch(midi, fm.clock ?? CHIP_CLOCKS[capabilities.chip ?? 'ym2612'], capabilities.chip === 'ym2203' ? 72 : 144),
+        getFrequencyPitch: (hz, clock) => opnPitchFromHz(hz, clock ?? fm.clock ?? CHIP_CLOCKS[capabilities.chip ?? 'ym2612'], capabilities.chip === 'ym2203' ? 72 : 144, {clamp:true}),
         synth: () => synth,
         presets,
         activeNotes,
         getBpm: () => runtime.bpm,
+        waitBeats: beats => clockApi.waitForBeat(clockApi.currentBeat() + beats, runToken),
         sleep: (seconds) =>
           clockApi.sleep(
             seconds,
@@ -1367,7 +1455,7 @@ export function createPlaygroundRuntime(
       const rack=getMidiRack();
       if(method==='release')return rack.noteOff(args[0],args[1],args[2],undefined,args[3],args[4]);
       return rack[method](...args);
-    }, {now:clockApi.nowSeconds,sleep:seconds=>clockApi.sleep(seconds,runToken),bpm:()=>runtime.bpm,owner:()=>currentLoopContext?.name??null,
+    }, {now:clockApi.nowSeconds,sleep:seconds=>clockApi.sleep(seconds,runToken),waitBeats:beats=>clockApi.waitForBeat(clockApi.currentBeat()+beats,runToken),bpm:()=>runtime.bpm,owner:()=>currentLoopContext?.name??null,
       check:()=>{if(runToken!==currentRunToken)throw new DOMException('Run stopped','AbortError');}});
     midiApis.add(midi);
     const pg = {
@@ -1386,7 +1474,7 @@ export function createPlaygroundRuntime(
       },
       createSoundChip: async (name, options = {}) => {
         const device=await openPcm(name,runToken,options);
-        const client=name === 'pwm' ? createPWM32XClient(device.port) : ['ym2612', 'ym2203', 'ym2610'].includes(name) ? createOpnClient(name, device.port) : name === 'ym2151' ? createYm2151Client(device.port) : name === 'segapsg' ? createSegaPsgClient(device.port) : name === 'gameboy' ? createGameboyClient(device.port) : name === 'ym2608' ? createYm2608Client(device.port) : createRf5c164Client(device.port,decodePcm);
+        const client=name === 'nes' ? createNesClient(device.port, device) : name === 'pwm' ? createPWM32XClient(device.port) : ['ym2612', 'ym2203', 'ym2610'].includes(name) ? createOpnClient(name, device.port) : name === 'ym2151' ? createYm2151Client(device.port) : name === 'segapsg' ? createSegaPsgClient(device.port) : name === 'gameboy' ? createGameboyClient(device.port) : name === 'ym2608' ? createYm2608Client(device.port) : createRf5c164Client(device.port,decodePcm);
         Object.defineProperty(client, 'id', {value: device.mixerId, enumerable: true});
         const dispose=device.dispose, disposeClient=client.dispose.bind(client); let disposed=false;
         client.dispose=()=>{if(disposed)return;disposed=true;disposeClient();dispose();};
@@ -1430,11 +1518,11 @@ export function createPlaygroundRuntime(
       tfiToPreset: parseTfi,
       vgiToPreset: parseVgi,
       livePrepare: (name, fn) =>
-        liveApi.livePrepare(
+        liveFxLifecycle.prepare(name, evaluationState.liveFxDefinitions, () => liveApi.livePrepare(
           name,
           fn,
           livePrepareApi
-        ),
+        )),
       play: (note, playOptions) =>
         musicApi.play(
           note,
@@ -1762,6 +1850,7 @@ export function createPlaygroundRuntime(
     clearKeyboardHandlers();
     liveApi.stopAllLoops();
     if (!logicWorker) {
+      liveFxLifecycle.clear();
       liveApi.clearRunFxChain();
       liveApi.clearPrepared();
     }
@@ -1783,7 +1872,7 @@ export function createPlaygroundRuntime(
         const channel=new MessageChannel();
         megaDrive.node.port.postMessage({type:"attach-chip-port",port:channel.port1},[channel.port1]);
         const core=synth?.fm??synth;
-        worker.postMessage({type:"chip-port",port:channel.port2,state:core?.getState?.()},[channel.port2]);
+        worker.postMessage({type:"chip-port",port:channel.port2,state:{...core?.getState?.(),clock:sharedFm?.clock}},[channel.port2]);
       }
       const port = megaDrive.audio?.nativeFX?.workerPort();
       if (port) worker.postMessage({type: "native-fx", port}, [port]);
@@ -1794,10 +1883,11 @@ export function createPlaygroundRuntime(
       worker.postMessage({
         type: "run",
         sourceCode,
+        bpm: runtime.bpm,
         presets,
         scaleIntervals: SCALE_INTERVALS,
         capabilities,
-        timing: getTiming(),
+        timing: {...getTiming(),chipClock:sharedFm?.clock ?? CHIP_CLOCKS[capabilities.chip ?? 'ym2612']},
       });
     });
   }
@@ -1807,6 +1897,7 @@ export function createPlaygroundRuntime(
     sourceCode,
     playOptions = {}
   ) {
+    if (pendingFadeStop) await pendingFadeStop;
     const execution =
       playOptions.execution ??
       defaultExecution;
@@ -1842,7 +1933,7 @@ export function createPlaygroundRuntime(
     await ensureReady();
     if (runToken !== currentRunToken) return;
     clearKeyboardHandlers();
-    liveApi.clearRunFxChain();
+    liveApi.clearRunFxChain({preservePrepared: true});
     setPlaybackState("running");
     emitStatus("Running...");
     emitRuntimeState("Running");
@@ -1877,6 +1968,7 @@ export function createPlaygroundRuntime(
       );
 
       if (runToken !== currentRunToken) return;
+      liveFxLifecycle.commit(evaluationState.liveFxDefinitions);
       liveApi.commitLiveLoops(
         evaluationState.loopDefinitions
       );
@@ -2003,6 +2095,7 @@ export function createPlaygroundRuntime(
       );
       liveApi.clearRunFxChain();
       liveApi.clearPrepared();
+      liveFxLifecycle.clear();
       megaDrive.audio?.nativeFX?.controller.dispose();
       runtime.context = {};
       megaDrive.stopRecordingPlayback?.();
@@ -2012,6 +2105,43 @@ export function createPlaygroundRuntime(
     emitRuntimeState(
       "Audio ready"
     );
+  }
+
+  /** Fade the complete output (including FX tails) before destructive audio cleanup. */
+  function stopWithFade() {
+    if (pendingFadeStop) return pendingFadeStop;
+    const context = megaDrive.audioContext;
+    if (!stopFadeNode || context?.state !== 'running') {
+      stop();
+      return Promise.resolve();
+    }
+    const runToken = currentRunToken;
+    const now = context.currentTime, duration = 0.12, end = now + duration;
+    const gain = stopFadeNode.gain;
+    if (typeof gain.cancelAndHoldAtTime === 'function') gain.cancelAndHoldAtTime(now);
+    else {gain.cancelScheduledValues(now);gain.setValueAtTime(gain.value, now);}
+    // Zero slope at both ends avoids a sharp envelope change on sustained
+    // samples and reverb tails. The gate sits after the entire FX chain.
+    const startGain = gain.value;
+    if (typeof gain.setValueCurveAtTime === 'function') {
+      const curve = Float32Array.from({length: 65}, (_, i) =>
+        startGain * (1 + Math.cos(Math.PI * i / 64)) / 2);
+      gain.setValueCurveAtTime(curve, now, duration);
+    } else {
+      gain.linearRampToValueAtTime(0, end);
+    }
+    pendingFadeStop = (async () => {
+      // Follow the audio clock: a wall timer alone may fire before the ramp is rendered.
+      while (runToken === currentRunToken && context.state === 'running' && context.currentTime < end) {
+        await new Promise(resolve => setTimeout(resolve, 5));
+      }
+      gain.cancelScheduledValues(context.currentTime);
+      gain.setValueAtTime(0, context.currentTime);
+      if (runToken !== currentRunToken) return;
+      stop();
+      if (logicWorkerStopPromise) await logicWorkerStopPromise;
+    })().finally(() => {pendingFadeStop = null;});
+    return pendingFadeStop;
   }
 
   function clear() {
@@ -2032,6 +2162,9 @@ export function createPlaygroundRuntime(
     removeMegaDriveListener =
       null;
     await megaDrive.close();
+    stopFadeNode?.disconnect();
+    if (stopFadeNode && megaDrive.audio) megaDrive.audio.outputNode = previousOutputNode;
+    stopFadeNode = null;
     emitStatus("Finalized.");
     emitRuntimeState("Audio idle");
   }
@@ -2072,12 +2205,14 @@ export function createPlaygroundRuntime(
     logicWorkerUrl,
     initialize,
     ensureReady,
+    prepareAudition,
     load,
     put,
     get,
     play,
     playSource,
     stop,
+    stopWithFade,
     clear,
     finalize,
     getState,
@@ -2085,6 +2220,12 @@ export function createPlaygroundRuntime(
     getMasterVolume,
     setTiming,
     getTiming,
+    setBpm(value) {
+      clockApi.setBpm(value);
+      if (logicWorker) logicWorker.postMessage({type:'tempo',bpm:value});
+      else megaDrive.audio?.nativeFX?.controller.syncTempo();
+    },
+    getBpm: () => runtime.bpm,
     get presets() {
       return presets;
     },
@@ -2116,7 +2257,9 @@ export function createPlaygroundRuntime(
 }
 
 /**
+ * Compatibility factory for createPlaygroundRuntime.
  * @param {Parameters<typeof createPlaygroundRuntime>[0]} [options]
+ * @returns {ReturnType<typeof createPlaygroundRuntime>} Playground runtime.
  */
 export function Playground(
   options = {}
@@ -2124,22 +2267,4 @@ export function Playground(
   return createPlaygroundRuntime(
     options
   );
-}
-
-function formatLogArgs(args) {
-  return args
-    .map((value) =>
-      typeof value === "string"
-        ? value
-        : safeStringify(value)
-    )
-    .join(" ");
-}
-
-function safeStringify(value) {
-  try {
-    return JSON.stringify(value);
-  } catch {
-    return String(value);
-  }
 }

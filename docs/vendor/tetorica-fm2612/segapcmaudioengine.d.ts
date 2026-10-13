@@ -1,35 +1,45 @@
 /**
+ * @file segapcmaudioengine.js
+ * 実行環境: Browser / Node.js
+ * 依存: 音源チップ／WASM バックエンド（ファクトリーまたはエンジンを注入）。
+ * 同期 PCM 生成・ミックス用。DOM・AudioContext・スピーカー出力は不要。
+ */
+import { SegaPcm } from './segapcm.js';
+import { SegaPSG } from './segapsg.js';
+/**
  * SegaPcmAudioEngine adapter for synchronous stereo rendering and VGM register dispatch.
  * Output timing uses sampleRate() frames per second. No browser audio device is opened.
  * Dispose the engine when done to release its underlying chips.
  */
 export declare class SegaPcmAudioEngine {
-    segapcm: any;
-    psg: any;
+    segapcm: SegaPcm;
+    psg: SegaPSG | undefined;
     channelMask: number;
     muted: boolean;
     psgMuted: boolean;
     volume: number | undefined;
     /**
      * Create the chip instances required by this engine.
-     * @param {Object} [options={}] Chip factories, clocks in Hz and loader settings.
+     * @param {{moduleFactory: import('./soundchip.js').WasmModuleFactory, moduleOptions?: import('./soundchip.js').WasmModuleOptions, clock?: number, bankShift?: number, bankMask?: number, segaPsgModuleFactory?: import('./soundchip.js').WasmModuleFactory, psgClock?: number, outputSampleRate?: number, masterVolume?: number}} [options={}] Chip factories, clocks in Hz and loader settings.
      * @param {number} [options.outputSampleRate=44100] Output stereo frames per second.
      * @param {number} [options.masterVolume=1] Linear output gain, not dB.
      * @returns {Promise<SegaPcmAudioEngine>} Initialized engine owned by the caller.
      */
-    /** @param {{moduleFactory: Function, moduleOptions?: Record<string, unknown>, clock: number, bankShift?: number, bankMask?: number, segaPsgModuleFactory?: Function, psgClock?: number, outputSampleRate?: number, masterVolume?: number}} options */
     static create({ moduleFactory, moduleOptions, clock, bankShift, bankMask, segaPsgModuleFactory, psgClock, outputSampleRate, masterVolume }?: {
-        moduleFactory: Function;
-        moduleOptions?: Record<string, unknown>;
-        clock: number;
+        moduleFactory: import('./soundchip.js').WasmModuleFactory;
+        moduleOptions?: import('./soundchip.js').WasmModuleOptions;
+        clock?: number;
         bankShift?: number;
         bankMask?: number;
-        segaPsgModuleFactory?: Function;
+        segaPsgModuleFactory?: import('./soundchip.js').WasmModuleFactory;
         psgClock?: number;
         outputSampleRate?: number;
         masterVolume?: number;
     }): Promise<SegaPcmAudioEngine>;
-    constructor(chip: any, psg: any, volume?: number);
+    /** @param {SegaPcm} chip
+     * @param {SegaPSG | undefined} psg
+     * @param {number} [volume] */
+    constructor(chip: SegaPcm, psg: SegaPSG | undefined, volume?: number);
     /**
      * Return the rate used by process() and processFrames().
      * @returns {number} Output stereo frames per second (Hz).
@@ -51,16 +61,24 @@ export declare class SegaPcmAudioEngine {
      * @param {number} value Register/command data value.
      */
     writeSegaPcm(offset: number, value: number): void;
-    loadSampleMemory(data: any, offset: any, memorySize: any): void;
+    /** @param {Uint8Array} data
+     * @param {number} memorySize
+     * @param {number} offset */
+    loadSampleMemory(data: Uint8Array, offset: number, memorySize: number): void;
     clearSampleMemory(): void;
     /**
      * Dispatch a VGM register/command write to the corresponding sound chip.
      * @param {number} value Register/command data value.
      */
     writePsg(value: number): void;
+    /** @param {boolean} value */
+    setPsgChannelMuted(channel: any, muted: any): void;
     setPsgMuted(value: any): void;
-    setSegaPcmMuted(muted: any): void;
-    setSegaPcmChannelMuted(channel: any, muted: any): void;
+    /** @param {boolean} muted */
+    setSegaPcmMuted(muted: boolean): void;
+    /** @param {number} channel
+     * @param {boolean} muted */
+    setSegaPcmChannelMuted(channel: number, muted: boolean): void;
     applyMute(): void;
     /**
      * Set the linear master gain; validation/clamping follows this engine.
@@ -89,4 +107,5 @@ export declare class SegaPcmAudioEngine {
      */
     process(left: Float32Array, right: Float32Array, frames: number): void;
 }
-export declare const createSegaPcmAudioEngine: (options: any) => Promise<SegaPcmAudioEngine>;
+/** @param {Parameters<typeof SegaPcmAudioEngine.create>[0]} [options] */
+export declare const createSegaPcmAudioEngine: (options?: Parameters<typeof SegaPcmAudioEngine.create>[0]) => Promise<SegaPcmAudioEngine>;

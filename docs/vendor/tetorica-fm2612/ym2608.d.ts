@@ -36,17 +36,27 @@ export declare class Ym2608 {
      * Initialize Ym2608 and its native WASM module.
      * The generated module factory is injected so browser and Node callers can choose asset loading.
      * @param {Object} [options={}] Chip and Emscripten initialization settings.
-     * @param {function(Object): (Object|Promise<Object>)} options.moduleFactory Generated WASM module factory.
-     * @param {Object} [options.moduleOptions] Forwarded loader options, e.g. wasmBinary or locateFile.
+     * @param {import('./soundchip.js').WasmModuleFactory} options.moduleFactory Generated WASM module factory.
+     * @param {import('./soundchip.js').WasmModuleOptions} [options.moduleOptions] Forwarded loader options, e.g. wasmBinary or locateFile.
      * @returns {Promise<Ym2608>} Ready-to-use chip; the caller must dispose it.
      */
-    static create(options?: Object): Promise<Ym2608>;
+    static create(options?: {
+        moduleFactory: import('./soundchip.js').WasmModuleFactory;
+        moduleOptions?: import('./soundchip.js').WasmModuleOptions;
+    }): Promise<Ym2608>;
     supportsState(): boolean;
+    /** @returns {Readonly<{byteLength:number}>} Opaque snapshot owned by this instance. */
     saveState(): Readonly<{
-        byteLength: any;
+        byteLength: number;
     }>;
-    validateState(state: any): void;
-    loadState(state: any): void;
+    /** @param {Readonly<{byteLength:number}>} state Snapshot returned by this instance. */
+    validateState(state: Readonly<{
+        byteLength: number;
+    }>): void;
+    /** @param {Readonly<{byteLength:number}>} state Snapshot returned by this instance. */
+    loadState(state: Readonly<{
+        byteLength: number;
+    }>): void;
     /**
      * Release native chip state and allocated WASM buffers. Do not use the chip afterward.
      * @returns {void}
@@ -101,10 +111,16 @@ export declare class Ym2608 {
      * @returns {number} Stereo frames per second.
      */
     sampleRate(clock?: number): number;
-    loadAdpcmARom(bytes: any, offset?: number): void;
-    loadAdpcmBMemory(bytes: any, offset?: number, memorySize?: number): void;
+    /** @param {Uint8Array} bytes
+     * @param {number} [offset] */
+    loadAdpcmARom(bytes: Uint8Array, offset?: number): void;
+    /** @param {Uint8Array} bytes
+     * @param {number} memorySize
+     * @param {number} [offset] */
+    loadAdpcmBMemory(bytes: Uint8Array, offset?: number, memorySize?: number): void;
     clearAdpcmBMemory(): void;
-    setSourceMuteMask(mask: any): void;
+    /** @param {number} mask */
+    setSourceMuteMask(mask: number): void;
     /**
      * Generate PCM synchronously, advancing the chip by the requested number of frames.
      * Returned arrays are copied from WASM memory and survive later generation/disposal.

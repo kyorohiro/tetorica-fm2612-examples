@@ -1,35 +1,47 @@
 /**
+ * @file ym2413audioengine.js
+ * 実行環境: Browser / Node.js
+ * 依存: 音源チップ／WASM バックエンド（ファクトリーまたはエンジンを注入）。
+ * 同期 PCM 生成・ミックス用。DOM・AudioContext・スピーカー出力は不要。
+ */
+import { Ym2413 } from './ym2413.js';
+import { SegaPSG } from './segapsg.js';
+/**
  * Ym2413AudioEngine adapter for synchronous stereo rendering and VGM register dispatch.
  * Output timing uses sampleRate() frames per second. No browser audio device is opened.
  * Dispose the engine when done to release its underlying chips.
  */
 export declare class Ym2413AudioEngine {
-    ym2413: any;
-    psg: any;
-    chipRate: any;
-    outputRate: any;
+    ym2413: Ym2413;
+    psg: SegaPSG | undefined;
+    chipRate: number;
+    outputRate: number;
     psgMuted: boolean;
     remainder: number;
     lastSample: number;
     volume: number | undefined;
     /**
      * Create the chip instances required by this engine.
-     * @param {Object} [options={}] Chip factories, clocks in Hz and loader settings.
+     * @param {{ym2413ModuleFactory: import('./soundchip.js').WasmModuleFactory, ym2413ModuleOptions?: import('./soundchip.js').WasmModuleOptions, ym2413Clock?: number, segaPsgModuleFactory?: import('./soundchip.js').WasmModuleFactory, psgClock?: number, outputSampleRate?: number, masterVolume?: number}} [options={}] Chip factories, clocks in Hz and loader settings.
      * @param {number} [options.outputSampleRate=44100] Output stereo frames per second.
      * @param {number} [options.masterVolume=1] Linear output gain, not dB.
      * @returns {Promise<Ym2413AudioEngine>} Initialized engine owned by the caller.
      */
-    /** @param {{ym2413ModuleFactory: Function, ym2413ModuleOptions?: Record<string, unknown>, ym2413Clock?: number, segaPsgModuleFactory?: Function, psgClock?: number, outputSampleRate?: number, masterVolume?: number}} options */
     static create({ ym2413ModuleFactory, ym2413ModuleOptions, ym2413Clock, segaPsgModuleFactory, psgClock, outputSampleRate, masterVolume }?: {
-        ym2413ModuleFactory: Function;
-        ym2413ModuleOptions?: Record<string, unknown>;
+        ym2413ModuleFactory: import('./soundchip.js').WasmModuleFactory;
+        ym2413ModuleOptions?: import('./soundchip.js').WasmModuleOptions;
         ym2413Clock?: number;
-        segaPsgModuleFactory?: Function;
+        segaPsgModuleFactory?: import('./soundchip.js').WasmModuleFactory;
         psgClock?: number;
         outputSampleRate?: number;
         masterVolume?: number;
     }): Promise<Ym2413AudioEngine>;
-    constructor(chip: any, psg: any, chipRate: any, outputRate: any, volume: any);
+    /** @param {Ym2413} chip
+     * @param {SegaPSG | undefined} psg
+     * @param {number} chipRate
+     * @param {number} outputRate
+     * @param {number} volume */
+    constructor(chip: Ym2413, psg: SegaPSG | undefined, chipRate: number, outputRate: number, volume: number);
     /**
      * Return the rate used by process() and processFrames().
      * @returns {number} Output stereo frames per second (Hz).
@@ -45,6 +57,8 @@ export declare class Ym2413AudioEngine {
      * @returns {number} Gain multiplier, not a dB value.
      */
     getMasterVolume(): number;
+    /** @param {boolean} value */
+    setPsgChannelMuted(channel: any, muted: any): void;
     setPsgMuted(value: any): void;
     /**
      * Change one physical channel mute flag.
@@ -91,4 +105,5 @@ export declare class Ym2413AudioEngine {
         right: Float32Array;
     };
 }
-export declare const createYm2413AudioEngine: (options: any) => Promise<Ym2413AudioEngine>;
+/** @param {Parameters<typeof Ym2413AudioEngine.create>[0]} [options] */
+export declare const createYm2413AudioEngine: (options?: Parameters<typeof Ym2413AudioEngine.create>[0]) => Promise<Ym2413AudioEngine>;

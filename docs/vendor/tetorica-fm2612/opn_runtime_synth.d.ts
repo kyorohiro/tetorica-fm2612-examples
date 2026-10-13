@@ -1,3 +1,8 @@
+export type OPNRuntimeSynthOptions = Pick<import('./megasynth.js').MegaSynthOptions, 'audioContext' | 'outputNode' | 'sampleOutputNode' | 'masterVolume' | 'mixer' | 'workletUrl'> & {
+    wasmUrl?: string;
+    rhythmRom?: Uint8Array;
+    rhythmRomUrl?: string;
+};
 /**
  * Browser lifecycle wrapper for an OPN FM synth. Chip-specific subclasses
  * provide their worklet protocol and high-level FM constructor.
@@ -19,7 +24,7 @@ export declare class OPNRuntimeSynth {
     chipName: any;
     portCount: any;
     FMSynth: any;
-    rhythmRom: any;
+    rhythmRom: Uint8Array<ArrayBufferLike> | undefined;
     rhythmRomUrl: any;
     mixerRelease: (() => void) | null;
     node: AudioWorkletNode | null;
@@ -31,7 +36,8 @@ export declare class OPNRuntimeSynth {
     initializationController: AbortController | null;
     state: string;
     noise: any;
-    constructor(options: {} | undefined, config: any);
+    /** @param {OPNRuntimeSynthOptions|undefined} options */
+    constructor(options: OPNRuntimeSynthOptions | undefined, config: any);
     /** @returns {import('./soundchip_mixer.js').SoundChipMixer} */
     get mixer(): import('./soundchip_mixer.js').SoundChipMixer;
     get audioContext(): any;
@@ -47,7 +53,8 @@ export declare class OPNRuntimeSynth {
     isStarting(): boolean;
     addListener(listener: any): () => boolean;
     removeListener(listener: any): void;
-    setMasterVolume(volume: any): any;
+    /** @param {number} volume */
+    setMasterVolume(volume: number): any;
     getMasterVolume(): any;
     setFXChain(effects?: any[], options?: {}): any;
     getFXChain(): any;

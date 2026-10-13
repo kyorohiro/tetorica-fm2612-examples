@@ -1,0 +1,34 @@
+declare class ChannelNoise {
+    papu: any;
+    progTimerCount: number;
+    progTimerMax: number;
+    isEnabled: boolean;
+    lengthCounter: number;
+    lengthCounterEnable: boolean;
+    envDecayDisable: boolean;
+    envDecayLoopEnable: boolean;
+    envReset: boolean;
+    shiftNow: boolean;
+    envDecayRate: number;
+    envDecayCounter: number;
+    envVolume: number;
+    masterVolume: number;
+    shiftReg: number;
+    randomBit: number;
+    randomMode: number;
+    sampleValue: number;
+    tmp: number;
+    accValue: number;
+    accCount: number;
+    constructor(papu: any);
+    clockLengthCounter(): void;
+    clockEnvDecay(): void;
+    updateSampleValue(): void;
+    writeReg(address: any, value: any): void;
+    setEnabled(value: any): void;
+    getLengthStatus(): 0 | 1;
+    toJSON(): {};
+    fromJSON(s: any): void;
+    static JSON_PROPERTIES: string[];
+}
+export default ChannelNoise;

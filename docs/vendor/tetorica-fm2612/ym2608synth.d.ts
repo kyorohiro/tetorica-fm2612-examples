@@ -7,15 +7,18 @@
 import { OPNDirectTransport, OPNWorkletTransport, OPNFMSynth } from "./opn_fm_synth.js";
 import { OPNRuntimeSynth } from "./opn_runtime_synth.js";
 /** Direct transport for YM2608 register operations. */
-export declare class YM2608DirectTransport extends OPNDirectTransport {
-    constructor(chip: any);
-    /** Transfer caller-provided rhythm ROM to the core. */
-    loadRhythmRom(bytes: any): any;
-    /** Transfer already encoded ADPCM-B bytes to external sample memory. */
-    loadAdpcmMemory(bytes: any, offset: any): any;
+/** @extends {OPNDirectTransport<import('./ym2608.js').Ym2608>} */
+export declare class YM2608DirectTransport extends OPNDirectTransport<import('./ym2608.js').Ym2608> {
+    /** @param {import('./ym2608.js').Ym2608} chip */
+    constructor(chip: import('./ym2608.js').Ym2608);
+    /** Transfer caller-provided rhythm ROM to the core. @param {Uint8Array} bytes */
+    loadRhythmRom(bytes: Uint8Array): void;
+    /** Transfer already encoded ADPCM-B bytes to external sample memory. @param {Uint8Array} bytes @param {number} offset */
+    loadAdpcmMemory(bytes: Uint8Array, offset: number): void;
 }
 export declare class YM2608WorkletTransport extends OPNWorkletTransport {
-    constructor(endpoint: any);
+    /** @param {AudioWorkletNode|MessagePort|import('./soundchip_worklet.js').WorkletSoundChip} endpoint */
+    constructor(endpoint: AudioWorkletNode | MessagePort | import('./soundchip_worklet.js').WorkletSoundChip);
 }
 /** YM2608's six fixed rhythm voices. Names follow the ROM's hardware order. */
 export declare const YM2608_RHYTHM_VOICES: Readonly<{
@@ -40,14 +43,14 @@ export declare class YM2608RhythmSynth {
     });
     /** Clear the register shadow after a whole-chip reset, without bus writes. */
     resetState(): void;
-    /** Track raw port-0 writes made through the parent Synth. */
-    observeWrite(register: any, value: any): void;
+    /** Track raw port-0 writes made through the parent Synth. @param {number} register  @param {number} value */
+    observeWrite(register: number, value: number): void;
     /** Load the complete 8 KiB rhythm ROM supplied by the caller. No ROM is bundled here.
      * @param {Uint8Array} bytes Encoded ADPCM-A ROM, not WAV or ADPCM-B.
      */
     loadRom(bytes: Uint8Array): void;
-    /** Set global hardware level 0..63; larger values are louder. */
-    setVolume(volume: any): void;
+    /** Set global hardware level 0..63; larger values are louder. @param {number} volume */
+    setVolume(volume: number): void;
     /** Set one voice's hardware level 0..31 and/or stereo gates; omitted settings are preserved.
      * @param {number|string} voice 0..5 or a key of YM2608_RHYTHM_VOICES.
      * @param {{volume?: number, left?: boolean, right?: boolean}} options
@@ -84,9 +87,10 @@ export declare class YM2608AdpcmSynth {
     }, clock?: number);
     /** Clear the register shadow after the parent chip resets. Memory is preserved. */
     resetState(): void;
-    /** Track raw port-1 writes through the parent Synth. */
-    observeWrite(register: any, value: any): void;
-    _write(register: any, value: any): void;
+    /** Track raw port-1 writes through the parent Synth. @param {number} register  @param {number} value */
+    observeWrite(register: number, value: number): void;
+    /** @param {number} register  @param {number} value */
+    _write(register: number, value: number): void;
     /** Transfer encoded ADPCM-B, not WAV, PCM or rhythm ADPCM-A.
      * @param {Uint8Array|ArrayBuffer} bytes
      * @param {number} [address=0] Byte offset in the 2 MiB memory.
@@ -125,12 +129,13 @@ export declare class YM2608AdpcmSynth {
     setDeltaN(value: any): void;
     /** Set decoded PCM samples/second, not byte rate. Returns the quantized actual rate.
      * A byte contains two samples; changing this rate changes both speed and pitch.
+     * @param {number} rate
      */
-    setPlaybackRate(rate: any): number;
-    /** Linear level 0..255 (0=silence). */
-    setVolume(volume: any): void;
-    /** Stereo gates; preserves memory-mode bits from raw register writes. */
-    setPan(left: any, right: any): void;
+    setPlaybackRate(rate: number): number;
+    /** Linear level 0..255 (0=silence). @param {number} volume */
+    setVolume(volume: number): void;
+    /** Stereo gates; preserves memory-mode bits from raw register writes.  @param {boolean} right  @param {boolean} left */
+    setPan(left: boolean, right: boolean): void;
     /** Start/retrigger the selected range. Repeat loops the entire range, not a separate loop point. */
     keyOn({ repeat }?: {
         repeat?: boolean | undefined;
@@ -145,16 +150,19 @@ export declare class YM2608Synth extends OPNFMSynth {
     adpcm: YM2608AdpcmSynth;
     rhythm: YM2608RhythmSynth;
     ssg: any;
-    /** @param {{transport: OPNDirectTransport, clock?: number}} options
+    /** @param {{transport: import('./opn_fm_synth.js').OPNTransport, clock?: number}} options
      * clock is the master clock in Hz. SSG frequency helpers assume standard prescaling.
      */
     constructor({ transport, clock }?: {
-        transport: OPNDirectTransport;
+        transport: import('./opn_fm_synth.js').OPNTransport;
         clock?: number;
     });
     /** Reset the chip and enable all six FM channels, preserving default IRQ enables. */
     reset(): void;
-    _write(port: any, register: any, value: any): void;
+    /** @param {number} port
+     * @param {number} value
+     * @param {number} register */
+    _write(port: number, register: number, value: number): void;
 }
 /** Browser-hosted YM2608 FM synth with shared Tetorica audio services. */
 export declare class YM2608RuntimeSynth extends OPNRuntimeSynth {

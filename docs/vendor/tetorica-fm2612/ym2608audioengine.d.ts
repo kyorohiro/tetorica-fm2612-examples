@@ -1,38 +1,59 @@
 /**
+ * @file ym2608audioengine.js
+ * 実行環境: Browser / Node.js
+ * 依存: 音源チップ／WASM バックエンド（ファクトリーまたはエンジンを注入）。
+ * 同期 PCM 生成・ミックス用。DOM・AudioContext・スピーカー出力は不要。
+ */
+import { Ym2608 } from "./ym2608.js";
+/**
  * Ym2608AudioEngine adapter for synchronous stereo rendering and VGM register dispatch.
  * Output timing uses sampleRate() frames per second. No browser audio device is opened.
  * Dispose the engine when done to release its underlying chips.
  */
 export declare class Ym2608AudioEngine {
     #private;
-    ym2608: any;
-    _chipSampleRate: any;
-    _sampleRate: any;
+    ym2608: Ym2608;
+    _chipSampleRate: number;
+    _sampleRate: number;
     _masterVolume: number;
     _sourceMuteMask: number;
     _rhythmRomRevision: number;
     _resampleRemainder: number;
     _lastLeft: number;
     _lastRight: number;
-    constructor(ym2608: any, chipSampleRate: any, outputSampleRate: any, masterVolume?: number);
+    /** @param {Ym2608} ym2608
+     * @param {number} chipSampleRate
+     * @param {number} outputSampleRate
+     * @param {number} [masterVolume] */
+    constructor(ym2608: Ym2608, chipSampleRate: number, outputSampleRate: number, masterVolume?: number);
     /**
      * Create the chip instances required by this engine.
-     * @param {Object} [options={}] Chip factories, clocks in Hz and loader settings.
+     * @param {{ym2608ModuleFactory: import('./soundchip.js').WasmModuleFactory, ym2608ModuleOptions?: import('./soundchip.js').WasmModuleOptions, ym2608Clock?: number, outputSampleRate?: number, masterVolume?: number}} [options={}] Chip factories, clocks in Hz and loader settings.
      * @param {number} [options.outputSampleRate=44100] Output stereo frames per second.
      * @param {number} [options.masterVolume=1] Linear output gain, not dB.
      * @returns {Promise<Ym2608AudioEngine>} Initialized engine owned by the caller.
      */
     static create(options?: {
+        ym2608ModuleFactory: import('./soundchip.js').WasmModuleFactory;
+        ym2608ModuleOptions?: import('./soundchip.js').WasmModuleOptions;
+        ym2608Clock?: number;
         outputSampleRate?: number;
         masterVolume?: number;
     }): Promise<Ym2608AudioEngine>;
     supportsState(): boolean;
     stateSettingsKey(): string;
+    /** @returns {Readonly<{byteLength:number}>} Opaque snapshot owned by this instance. */
     saveState(): Readonly<{
-        byteLength: any;
+        byteLength: number;
     }>;
-    validateState(state: any): void;
-    loadState(state: any): void;
+    /** @param {Readonly<{byteLength:number}>} state Snapshot returned by this instance. */
+    validateState(state: Readonly<{
+        byteLength: number;
+    }>): void;
+    /** @param {Readonly<{byteLength:number}>} state Snapshot returned by this instance. */
+    loadState(state: Readonly<{
+        byteLength: number;
+    }>): void;
     /**
      * Release the underlying chips and their resources. Do not render after disposal.
      * @returns {void}
@@ -65,13 +86,22 @@ export declare class Ym2608AudioEngine {
      * @param {number} value Register/command data value.
      */
     writeYm2608(port: number, register: number, value: number): void;
-    loadAdpcmARom(bytes: any, offset?: number): void;
-    loadAdpcmBMemory(bytes: any, offset: number | undefined, memorySize: any): void;
+    /** @param {Uint8Array} bytes
+     * @param {number} [offset] */
+    loadAdpcmARom(bytes: Uint8Array, offset?: number): void;
+    /** @param {Uint8Array} bytes
+     * @param {number} memorySize
+     * @param {number} offset */
+    loadAdpcmBMemory(bytes: Uint8Array, offset: number | undefined, memorySize: number): void;
     clearAdpcmBMemory(): void;
-    setSsgMuted(muted: any): void;
-    setRhythmMuted(muted: any): void;
-    setAdpcmBMuted(muted: any): void;
-    setSourceMuted(bit: any, muted: any): void;
+    /** @param {boolean} muted */
+    setSsgMuted(muted: boolean): void;
+    /** @param {boolean} muted */
+    setRhythmMuted(muted: boolean): void;
+    /** @param {boolean} muted */
+    setAdpcmBMuted(muted: boolean): void;
+    /** @param {boolean} muted  @param {number} bit */
+    setSourceMuted(bit: number, muted: boolean): void;
     /**
      * Dispatch a VGM register/command write to the corresponding sound chip.
      * @param {number} _value Ignored; this engine has no Sega PSG output.
@@ -94,4 +124,5 @@ export declare class Ym2608AudioEngine {
         right: Float32Array;
     };
 }
-export declare function createYm2608AudioEngine(options: any): Promise<Ym2608AudioEngine>;
+/** @param {Parameters<typeof Ym2608AudioEngine.create>[0]} [options] */
+export declare function createYm2608AudioEngine(options?: Parameters<typeof Ym2608AudioEngine.create>[0]): Promise<Ym2608AudioEngine>;

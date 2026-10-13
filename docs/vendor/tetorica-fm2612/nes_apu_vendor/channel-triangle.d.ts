@@ -1,0 +1,30 @@
+declare class ChannelTriangle {
+    papu: any;
+    progTimerCount: number;
+    progTimerMax: number;
+    triangleCounter: number;
+    isEnabled: boolean;
+    sampleCondition: boolean;
+    lengthCounter: number;
+    lengthCounterEnable: boolean;
+    linearCounter: number;
+    lcLoadValue: number;
+    lcHalt: boolean;
+    lcControl: boolean;
+    tmp: number;
+    sampleValue: number;
+    constructor(papu: any);
+    clockLengthCounter(): void;
+    clockLinearCounter(): void;
+    getLengthStatus(): 0 | 1;
+    readReg(address: any): number;
+    writeReg(address: any, value: any): void;
+    clockProgrammableTimer(nCycles: any): void;
+    clockTriangleGenerator(): void;
+    setEnabled(value: any): void;
+    updateSampleCondition(): void;
+    toJSON(): {};
+    fromJSON(s: any): void;
+    static JSON_PROPERTIES: string[];
+}
+export default ChannelTriangle;

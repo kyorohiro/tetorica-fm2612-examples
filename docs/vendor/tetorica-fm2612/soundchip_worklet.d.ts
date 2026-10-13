@@ -6,6 +6,8 @@ export type WorkletSoundChip = {
     audioContext: AudioContext;
     mixer: import('./soundchip_mixer.js').SoundChipMixer;
     readonly id: string;
+    readonly fdsEnabled?: boolean;
+    readonly clock?: number;
     sampleRate(): number;
     request(method: string, args?: unknown[]): Promise<unknown>;
     createTransportPort(): MessagePort;

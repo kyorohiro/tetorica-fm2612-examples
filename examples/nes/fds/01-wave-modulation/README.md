@@ -1,7 +1,7 @@
 # FDS の波形と変調
 
 64点の波形を作り、変調なし／ありの音色を比較する。
-`tetorica-fm2612` 0.2.12 の `NesApuSynth` を使います。標準クロックは NTSC 1789773 Hz。ROM は不要です。
+`tetorica-fm2612` 0.2.13 の `NesApuSynth` を使います。標準クロックは NTSC 1789773 Hz。ROM は不要です。
 
 ## Web
 

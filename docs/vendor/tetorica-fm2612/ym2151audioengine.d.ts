@@ -1,15 +1,24 @@
 /**
+ * @file ym2151audioengine.js
+ * 実行環境: Browser / Node.js
+ * 依存: 音源チップ／WASM バックエンド（ファクトリーまたはエンジンを注入）。
+ * 同期 PCM 生成・ミックス用。DOM・AudioContext・スピーカー出力は不要。
+ */
+import { Ym2151 } from './ym2151.js';
+import { SegaPSG } from './segapsg.js';
+import { SegaPcm } from './segapcm.js';
+/**
  * Ym2151AudioEngine adapter for synchronous stereo rendering and VGM register dispatch.
  * Output timing uses sampleRate() frames per second. No browser audio device is opened.
  * Dispose the engine when done to release its underlying chips.
  */
 export declare class Ym2151AudioEngine {
     #private;
-    ym2151: any;
-    psg: any;
-    segapcm: any;
-    chipRate: any;
-    outputRate: any;
+    ym2151: Ym2151;
+    psg: SegaPSG | undefined;
+    segapcm: SegaPcm | undefined;
+    chipRate: number;
+    outputRate: number;
     psgMuted: boolean;
     segapcmMuted: boolean;
     segapcmChannelMask: number;
@@ -19,28 +28,33 @@ export declare class Ym2151AudioEngine {
     volume: number | undefined;
     /**
      * Create the chip instances required by this engine.
-     * @param {Object} [options={}] Chip factories, clocks in Hz and loader settings.
+     * @param {{ym2151ModuleFactory: import('./soundchip.js').WasmModuleFactory, ym2151ModuleOptions?: import('./soundchip.js').WasmModuleOptions, ym2151Clock?: number, ym2151Variant?: 'ym2151'|'ym2164', segaPsgModuleFactory?: import('./soundchip.js').WasmModuleFactory, psgClock?: number, segaPcmModuleFactory?: import('./soundchip.js').WasmModuleFactory, segaPcmModuleOptions?: import('./soundchip.js').WasmModuleOptions, segaPcmClock?: number, segaPcmBankShift?: number, segaPcmBankMask?: number, outputSampleRate?: number, masterVolume?: number}} [options={}] Chip factories, clocks in Hz and loader settings.
      * @param {number} [options.outputSampleRate=44100] Output stereo frames per second.
      * @param {number} [options.masterVolume=1] Linear output gain, not dB.
      * @returns {Promise<Ym2151AudioEngine>} Initialized engine owned by the caller.
      */
-    /** @param {{ym2151ModuleFactory: Function, ym2151ModuleOptions?: Record<string, unknown>, ym2151Clock?: number, ym2151Variant?: 'ym2151'|'ym2164', segaPsgModuleFactory?: Function, psgClock?: number, segaPcmModuleFactory?: Function, segaPcmModuleOptions?: Record<string, unknown>, segaPcmClock?: number, segaPcmBankShift?: number, segaPcmBankMask?: number, outputSampleRate?: number, masterVolume?: number}} options */
     static create({ ym2151ModuleFactory, ym2151ModuleOptions, ym2151Clock, ym2151Variant, segaPsgModuleFactory, psgClock, segaPcmModuleFactory, segaPcmModuleOptions, segaPcmClock, segaPcmBankShift, segaPcmBankMask, outputSampleRate, masterVolume }?: {
-        ym2151ModuleFactory: Function;
-        ym2151ModuleOptions?: Record<string, unknown>;
+        ym2151ModuleFactory: import('./soundchip.js').WasmModuleFactory;
+        ym2151ModuleOptions?: import('./soundchip.js').WasmModuleOptions;
         ym2151Clock?: number;
         ym2151Variant?: 'ym2151' | 'ym2164';
-        segaPsgModuleFactory?: Function;
+        segaPsgModuleFactory?: import('./soundchip.js').WasmModuleFactory;
         psgClock?: number;
-        segaPcmModuleFactory?: Function;
-        segaPcmModuleOptions?: Record<string, unknown>;
+        segaPcmModuleFactory?: import('./soundchip.js').WasmModuleFactory;
+        segaPcmModuleOptions?: import('./soundchip.js').WasmModuleOptions;
         segaPcmClock?: number;
         segaPcmBankShift?: number;
         segaPcmBankMask?: number;
         outputSampleRate?: number;
         masterVolume?: number;
     }): Promise<Ym2151AudioEngine>;
-    constructor(chip: any, psg: any, segapcm: any, chipRate: any, outputRate: any, volume: any);
+    /** @param {Ym2151} chip
+     * @param {SegaPSG | undefined} psg
+     * @param {SegaPcm | undefined} segapcm
+     * @param {number} chipRate
+     * @param {number} outputRate
+     * @param {number} volume */
+    constructor(chip: Ym2151, psg: SegaPSG | undefined, segapcm: SegaPcm | undefined, chipRate: number, outputRate: number, volume: number);
     /**
      * Return the rate used by process() and processFrames().
      * @returns {number} Output stereo frames per second (Hz).
@@ -56,6 +70,8 @@ export declare class Ym2151AudioEngine {
      * @returns {number} Gain multiplier, not a dB value.
      */
     getMasterVolume(): number;
+    /** @param {boolean} value */
+    setPsgChannelMuted(channel: any, muted: any): void;
     setPsgMuted(value: any): void;
     /**
      * Change one physical channel mute flag.
@@ -81,10 +97,16 @@ export declare class Ym2151AudioEngine {
      * @param {number} value Register/command data value.
      */
     writeSegaPcm(offset: number, value: number): void;
-    loadSampleMemory(data: any, offset: any, memorySize: any): void;
+    /** @param {Uint8Array} data
+     * @param {number} memorySize
+     * @param {number} offset */
+    loadSampleMemory(data: Uint8Array, offset: number, memorySize: number): void;
     clearSampleMemory(): void;
-    setSegaPcmMuted(value: any): void;
-    setSegaPcmChannelMuted(channel: any, muted: any): void;
+    /** @param {boolean} value */
+    setSegaPcmMuted(value: boolean): void;
+    /** @param {number} channel
+     * @param {boolean} muted */
+    setSegaPcmChannelMuted(channel: number, muted: boolean): void;
     applySegaPcmMute(): void;
     /**
      * Reset chip/playback state for a new pass. This is not pause/resume; replay setup writes afterward.
@@ -93,11 +115,18 @@ export declare class Ym2151AudioEngine {
     reset(): void;
     supportsState(): boolean;
     stateSettingsKey(): string;
+    /** @returns {Readonly<{byteLength:number}>} Opaque snapshot owned by this instance. */
     saveState(): Readonly<{
-        byteLength: any;
+        byteLength: number;
     }>;
-    validateState(state: any): void;
-    loadState(state: any): void;
+    /** @param {Readonly<{byteLength:number}>} state Snapshot returned by this instance. */
+    validateState(state: Readonly<{
+        byteLength: number;
+    }>): void;
+    /** @param {Readonly<{byteLength:number}>} state Snapshot returned by this instance. */
+    loadState(state: Readonly<{
+        byteLength: number;
+    }>): void;
     /**
      * Release the underlying chips and their resources. Do not render after disposal.
      * @returns {void}
@@ -120,4 +149,5 @@ export declare class Ym2151AudioEngine {
         right: Float32Array;
     };
 }
-export declare const createYm2151AudioEngine: (options: any) => Promise<Ym2151AudioEngine>;
+/** @param {Parameters<typeof Ym2151AudioEngine.create>[0]} [options] */
+export declare const createYm2151AudioEngine: (options?: Parameters<typeof Ym2151AudioEngine.create>[0]) => Promise<Ym2151AudioEngine>;

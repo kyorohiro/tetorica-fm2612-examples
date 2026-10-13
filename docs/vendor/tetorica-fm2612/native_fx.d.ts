@@ -18,6 +18,13 @@ export declare const FX_TYPES: {
     slicer: number;
     chorus: number;
 };
+/** Keep named liveFx declarations in sync with successful script evaluations. */
+export declare function createLiveFxLifecycle(): {
+    track(api: any, definitions: any): any;
+    prepare(name: any, definitions: any, create: any): Promise<any>;
+    commit(definitions: any): void;
+    clear(): void;
+};
 export declare const FX_PARAMS: {
     gain: {
         gain: number[];
@@ -92,8 +99,14 @@ export declare const FX_PARAMS: {
         mix: number[];
     };
 };
-export declare function createNativeFXController(send: any, { getBeatSeconds }?: {
-    getBeatSeconds?: (() => 0.5) | undefined;
+/**
+ * Create native effect units and parameter controls without AudioNode dependencies.
+ * @param {(message:Record<string,unknown>)=>void} send Ordered transport sender.
+ * @param {{getBeatSeconds?: () => number}} [options={}] Current beat duration in seconds for modulation.
+ * @returns Effect factories, chain management and controller lifecycle methods.
+ */
+export declare function createNativeFXController(send: (message: Record<string, unknown>) => void, { getBeatSeconds }?: {
+    getBeatSeconds?: () => number;
 }): {
     /** @param {string} name @param {{process: (input: Float32Array[], output: Float32Array[], state: Record<string, unknown>, context: Record<string, unknown>) => void, context?: Record<string, unknown>, resetState?: boolean}} [options] */
     liveFx(name: string, { process, context, resetState }?: {

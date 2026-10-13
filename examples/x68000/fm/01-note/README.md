@@ -2,7 +2,7 @@
 
 YM2151Synth と FM_PRESETS.sine を使い、A4 を1つのオペレーターで発音します。標準クロックは3579545 Hzです。
 
-チップ生成 → Transport → Synth の基本例です。npm 0.2.11 の API を使います。
+チップ生成 → Transport → Synth の基本例です。npm 0.2.13 の API を使います。
 導入は [repository README](../../../../README.md#transport-の例) を参照してください。
 
 ## Web

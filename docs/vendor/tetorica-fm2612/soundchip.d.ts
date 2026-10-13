@@ -1,5 +1,51 @@
 export { SoundChipMixer, soundChipMixDefaults } from './soundchip_mixer.js';
 export { encodeWav } from './wav.js';
+export type WasmLoaderOptions = {
+    /**
+     * Preloaded WASM bytes.
+     */
+    wasmBinary?: Uint8Array | ArrayBuffer;
+    /**
+     * Resolve generated assets.
+     */
+    locateFile?: (path: string, prefix: string) => string;
+    /**
+     * Standard output callback.
+     */
+    print?: (message: string) => void;
+    /**
+     * Error output callback.
+     */
+    printErr?: (message: string) => void;
+    /**
+     * Skip the generated main entry point.
+     */
+    noInitialRun?: boolean;
+};
+export type WasmChipModule = {
+    /**
+     * Native float sample memory.
+     */
+    HEAPF32: Float32Array;
+    /**
+     * Native byte memory.
+     */
+    HEAPU8: Uint8Array;
+    /**
+     * Allocate native memory.
+     */
+    _malloc: (bytes: number) => number;
+    /**
+     * Release native memory.
+     */
+    _free: (pointer: number) => void;
+    /**
+     * Bind a native chip entry point.
+     */
+    cwrap: ((name: string, result: 'number', args: string[]) => (...values: number[]) => number) & ((name: string, result: null, args: string[]) => (...values: number[]) => void);
+};
+export type WasmModuleOptions = WasmLoaderOptions & Record<string, unknown>;
+export type WasmModuleFactory = (options?: WasmModuleOptions) => WasmChipModule | Promise<WasmChipModule>;
 export type SoundChipOptions = {
     /**
      * 生成済み *_wasm.js / .wasm のディレクトリURL（末尾 /）。
@@ -8,11 +54,11 @@ export type SoundChipOptions = {
     /**
      * 注入する Emscripten factory。指定時は自動ロードを省略。
      */
-    moduleFactory?: Function;
+    moduleFactory?: WasmModuleFactory;
     /**
      * wasmBinary、locateFile などをそのまま渡す。
      */
-    moduleOptions?: Object;
+    moduleOptions?: WasmModuleOptions;
     /**
      * Worklet output mixer.
      */
@@ -38,6 +84,10 @@ export type SoundChipOptions = {
      */
     clock?: number;
     /**
+     * Enable the FDS expansion on NES.
+     */
+    fds?: boolean;
+    /**
      * Requested PCM/output sample rate.
      */
     sampleRate?: number;
@@ -52,7 +102,7 @@ export type SoundChipOptions = {
     /**
      * Chip variant selection.
      */
-    variant?: boolean;
+    variant?: boolean | 'ym2151' | 'ym2164';
     /**
      * PWM amplitude scaling.
      */
@@ -70,6 +120,7 @@ export type SoundChipMap = {
     gameboy: import('./gameboyapu.js').GameboyApu;
     segapsg: import('./segapsg.js').SegaPSG;
     pwm: import('./pwm32x.js').PWM32X;
+    nes: import('./nesapu.js').NesApu;
     ay8910: import('./ay8910.js').Ay8910;
     y8950: import('./y8950.js').Y8950;
     ym2610b: import('./ym2610b.js').Ym2610B;
@@ -86,7 +137,7 @@ export type SoundChipMap = {
     ymf278b: import('./ymf278b.js').Ymf278b;
     ymf288: import('./ymf288.js').Ymf288;
 };
-export type WorkletChipName = 'ym2612' | 'ym2608' | 'ym2151' | 'gameboy' | 'segapsg' | 'pwm';
+export type WorkletChipName = 'ym2612' | 'ym2608' | 'ym2151' | 'gameboy' | 'segapsg' | 'pwm' | 'nes';
 export declare function createSoundChip<Name extends WorkletChipName>(name: Name, options: SoundChipOptions & {
     execution: 'worklet';
 }): Promise<import('./soundchip_worklet.js').WorkletSoundChip & {

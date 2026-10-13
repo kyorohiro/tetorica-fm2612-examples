@@ -20,13 +20,15 @@ export declare function midiNote(note: string | number): number;
  * @param {Function} options.write Receives FM writes with port, register, value and optional time in seconds.
  * @param {Function} options.writePsg Receives PSG writes.
  * @param {Object} options.preset Initial FM voice, validated by YM2612Synth.
+ * @param {() => number} [options.getClockScale] Default/master-clock ratio for new FM notes.
  * @param {number} [options.fmChannels=6] Number of available physical FM voices.
  * @returns {Object} Rack command handlers and voice lifecycle operations.
  */
-export declare function createMidiRack({ write, writePsg, preset, fmChannels }: {
+export declare function createMidiRack({ write, writePsg, preset, fmChannels, getClockScale }: {
     write: Function;
     writePsg: Function;
     preset: Object;
+    getClockScale?: () => number;
     fmChannels?: number;
 }): Object;
 /**
@@ -35,14 +37,16 @@ export declare function createMidiRack({ write, writePsg, preset, fmChannels }: 
  * @param {Function} invoke Dispatch a rack method and its argument array.
  * @param {Object} options Timing and execution context callbacks.
  * @param {Function} options.sleep Await a duration in seconds.
+ * @param {Function} [options.waitBeats] Await elapsed beats on the shared tempo clock.
  * @param {Function} options.bpm Read the current beats-per-minute value.
  * @param {Function} [options.check] Throw when the current run is cancelled.
  * @param {Function} [options.owner] Return the current live-loop ownership token.
  * @param {Function} [options.now] Read the scheduling clock in seconds.
  * @returns {Object} MIDI API with output handles, sound-chip mode selection and cleanup helpers.
  */
-export declare function createMidiApi(invoke: Function, { sleep, bpm, check, owner, now }: {
+export declare function createMidiApi(invoke: Function, { sleep, bpm, waitBeats, check, owner, now }: {
     sleep: Function;
+    waitBeats?: Function;
     bpm: Function;
     check?: Function;
     owner?: Function;

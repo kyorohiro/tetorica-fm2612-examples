@@ -70,4 +70,17 @@ export declare class YM2612DacPlayer {
     reset(): void;
 }
 /** Receiver acknowledges only after the PCM is installed in the audio backend. */
-export declare function receiveDacCommand(player: any, command: any, frame: any, reply: any): boolean;
+/** @param {YM2612DacPlayer} player Native DAC bank/voice manager.
+ * @param {{type: string, id?: number, command?: object}} command Worklet input message.
+ * @param {number} frame Current rendered sample frame.
+ * @param {(message: {type: string, id?: number, error?: string}) => void} reply Acknowledgement sender.
+ * @returns {boolean} Whether the message was a handled PCM DAC request. */
+export declare function receiveDacCommand(player: YM2612DacPlayer, command: {
+    type: string;
+    id?: number;
+    command?: object;
+}, frame: number, reply: (message: {
+    type: string;
+    id?: number;
+    error?: string;
+}) => void): boolean;

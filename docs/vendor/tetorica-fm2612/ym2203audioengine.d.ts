@@ -1,38 +1,59 @@
 /**
+ * @file ym2203audioengine.js
+ * 実行環境: Browser / Node.js
+ * 依存: 音源チップ／WASM バックエンド（ファクトリーまたはエンジンを注入）。
+ * 同期 PCM 生成・ミックス用。DOM・AudioContext・スピーカー出力は不要。
+ */
+import { Ym2203 } from "./ym2203.js";
+/**
  * Ym2203AudioEngine adapter for synchronous stereo rendering and VGM register dispatch.
  * Output timing uses sampleRate() frames per second. No browser audio device is opened.
  * Dispose the engine when done to release its underlying chips.
  */
 export declare class Ym2203AudioEngine {
     #private;
-    ym2203: any;
-    _chipSampleRate: any;
-    _sampleRate: any;
+    ym2203: Ym2203;
+    _chipSampleRate: number;
+    _sampleRate: number;
     _masterVolume: number;
     _sourceMuteMask: number;
     channelMuteMask: number;
     _resampleRemainder: number;
     _lastLeft: number;
     _lastRight: number;
-    constructor(ym2203: any, chipSampleRate: any, outputSampleRate: any, masterVolume?: number);
+    /** @param {Ym2203} ym2203
+     * @param {number} chipSampleRate
+     * @param {number} outputSampleRate
+     * @param {number} [masterVolume] */
+    constructor(ym2203: Ym2203, chipSampleRate: number, outputSampleRate: number, masterVolume?: number);
     /**
      * Create the chip instances required by this engine.
-     * @param {Object} [options={}] Chip factories, clocks in Hz and loader settings.
+     * @param {{ym2203ModuleFactory: import('./soundchip.js').WasmModuleFactory, ym2203ModuleOptions?: import('./soundchip.js').WasmModuleOptions, ym2203Clock?: number, outputSampleRate?: number, masterVolume?: number}} [options={}] Chip factories, clocks in Hz and loader settings.
      * @param {number} [options.outputSampleRate=44100] Output stereo frames per second.
      * @param {number} [options.masterVolume=1] Linear output gain, not dB.
      * @returns {Promise<Ym2203AudioEngine>} Initialized engine owned by the caller.
      */
     static create(options?: {
+        ym2203ModuleFactory: import('./soundchip.js').WasmModuleFactory;
+        ym2203ModuleOptions?: import('./soundchip.js').WasmModuleOptions;
+        ym2203Clock?: number;
         outputSampleRate?: number;
         masterVolume?: number;
     }): Promise<Ym2203AudioEngine>;
     supportsState(): boolean;
     stateSettingsKey(): string;
+    /** @returns {Readonly<{byteLength:number}>} Opaque snapshot owned by this instance. */
     saveState(): Readonly<{
-        byteLength: any;
+        byteLength: number;
     }>;
-    validateState(state: any): void;
-    loadState(state: any): void;
+    /** @param {Readonly<{byteLength:number}>} state Snapshot returned by this instance. */
+    validateState(state: Readonly<{
+        byteLength: number;
+    }>): void;
+    /** @param {Readonly<{byteLength:number}>} state Snapshot returned by this instance. */
+    loadState(state: Readonly<{
+        byteLength: number;
+    }>): void;
     /**
      * Release the underlying chips and their resources. Do not render after disposal.
      * @returns {void}
@@ -71,8 +92,10 @@ export declare class Ym2203AudioEngine {
      * @returns {void}
      */
     setChannelMuted(channel: number, muted: boolean): void;
-    setSsgMuted(muted: any): void;
-    setSourceMuted(bit: any, muted: any): void;
+    /** @param {boolean} muted */
+    setSsgMuted(muted: boolean): void;
+    /** @param {boolean} muted  @param {number} bit */
+    setSourceMuted(bit: number, muted: boolean): void;
     /**
      * Dispatch a VGM register/command write to the corresponding sound chip.
      * @param {number} _value Ignored; this engine has no Sega PSG output.
@@ -95,4 +118,5 @@ export declare class Ym2203AudioEngine {
         right: Float32Array;
     };
 }
-export declare function createYm2203AudioEngine(options: any): Promise<Ym2203AudioEngine>;
+/** @param {Parameters<typeof Ym2203AudioEngine.create>[0]} [options] */
+export declare function createYm2203AudioEngine(options?: Parameters<typeof Ym2203AudioEngine.create>[0]): Promise<Ym2203AudioEngine>;

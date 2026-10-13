@@ -1,13 +1,21 @@
 /**
+ * @file ymf262audioengine.js
+ * 実行環境: Browser / Node.js
+ * 依存: 音源チップ／WASM バックエンド（ファクトリーまたはエンジンを注入）。
+ * 同期 PCM 生成・ミックス用。DOM・AudioContext・スピーカー出力は不要。
+ */
+import { Ymf262 } from './ymf262.js';
+import { SegaPSG } from './segapsg.js';
+/**
  * Ymf262AudioEngine adapter for synchronous stereo rendering and VGM register dispatch.
  * Output timing uses sampleRate() frames per second. No browser audio device is opened.
  * Dispose the engine when done to release its underlying chips.
  */
 export declare class Ymf262AudioEngine {
-    ymf262: any;
-    psg: any;
-    chipRate: any;
-    outputRate: any;
+    ymf262: Ymf262;
+    psg: SegaPSG | undefined;
+    chipRate: number;
+    outputRate: number;
     scratchLeft: Float32Array<ArrayBuffer>;
     scratchRight: Float32Array<ArrayBuffer>;
     psgMuted: boolean;
@@ -17,22 +25,26 @@ export declare class Ymf262AudioEngine {
     volume: number | undefined;
     /**
      * Create the chip instances required by this engine.
-     * @param {Object} [options={}] Chip factories, clocks in Hz and loader settings.
+     * @param {{ymf262ModuleFactory: import('./soundchip.js').WasmModuleFactory, ymf262ModuleOptions?: import('./soundchip.js').WasmModuleOptions, ymf262Clock?: number, segaPsgModuleFactory?: import('./soundchip.js').WasmModuleFactory, psgClock?: number, outputSampleRate?: number, masterVolume?: number}} [options={}] Chip factories, clocks in Hz and loader settings.
      * @param {number} [options.outputSampleRate=44100] Output stereo frames per second.
      * @param {number} [options.masterVolume=1] Linear output gain, not dB.
      * @returns {Promise<Ymf262AudioEngine>} Initialized engine owned by the caller.
      */
-    /** @param {{ymf262ModuleFactory: Function, ymf262ModuleOptions?: Record<string, unknown>, ymf262Clock?: number, segaPsgModuleFactory?: Function, psgClock?: number, outputSampleRate?: number, masterVolume?: number}} options */
     static create({ ymf262ModuleFactory, ymf262ModuleOptions, ymf262Clock, segaPsgModuleFactory, psgClock, outputSampleRate, masterVolume }?: {
-        ymf262ModuleFactory: Function;
-        ymf262ModuleOptions?: Record<string, unknown>;
+        ymf262ModuleFactory: import('./soundchip.js').WasmModuleFactory;
+        ymf262ModuleOptions?: import('./soundchip.js').WasmModuleOptions;
         ymf262Clock?: number;
-        segaPsgModuleFactory?: Function;
+        segaPsgModuleFactory?: import('./soundchip.js').WasmModuleFactory;
         psgClock?: number;
         outputSampleRate?: number;
         masterVolume?: number;
     }): Promise<Ymf262AudioEngine>;
-    constructor(chip: any, psg: any, chipRate: any, outputRate: any, volume: any);
+    /** @param {Ymf262} chip
+     * @param {SegaPSG | undefined} psg
+     * @param {number} chipRate
+     * @param {number} outputRate
+     * @param {number} volume */
+    constructor(chip: Ymf262, psg: SegaPSG | undefined, chipRate: number, outputRate: number, volume: number);
     /**
      * Return the rate used by process() and processFrames().
      * @returns {number} Output stereo frames per second (Hz).
@@ -48,6 +60,8 @@ export declare class Ymf262AudioEngine {
      * @returns {number} Gain multiplier, not a dB value.
      */
     getMasterVolume(): number;
+    /** @param {boolean} value */
+    setPsgChannelMuted(channel: any, muted: any): void;
     setPsgMuted(value: any): void;
     /**
      * Change one physical channel mute flag.
@@ -95,4 +109,5 @@ export declare class Ymf262AudioEngine {
         right: Float32Array;
     };
 }
-export declare const createYmf262AudioEngine: (options: any) => Promise<Ymf262AudioEngine>;
+/** @param {Parameters<typeof Ymf262AudioEngine.create>[0]} [options] */
+export declare const createYmf262AudioEngine: (options?: Parameters<typeof Ymf262AudioEngine.create>[0]) => Promise<Ymf262AudioEngine>;
