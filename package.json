@@ -11,9 +11,13 @@
   "scripts": {
     "dev": "node scripts/dev.mjs",
     "build": "node scripts/build.mjs",
-    "check:node": "node scripts/check-node.mjs"
+    "check:node": "node scripts/check-node.mjs",
+    "check:dx7": "node scripts/check-dx7-browser.mjs"
   },
   "dependencies": {
-    "tetorica-fm2612": "0.2.13"
+    "tetorica-fm2612": "0.2.14"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
   }
 }

@@ -10,6 +10,11 @@ import { createRf5c164Client } from "./playground_rf5c164.js";
 export { createFXBranch, createBitcrusherFX, createChorusFX, createFXParallel, createDelayFX, createEqFX, createFilterFX, createGainFX, createLofiFX, createRadioToneFX, createReverbFX, createSlicerFX, createStereoWidthFX, createTapeSaturationFX, } from "./megasynth_fx.js";
 export { MegaSynthLooper } from "./looper.js";
 export { FM_PRESETS, FM_PRESET_ORDER, } from "./megasynth-fm-presets.js";
+export type OutputEnvelopeOptions = {
+    samplesPerPoint?: number;
+    pointsPerMessage?: number;
+    enabled?: boolean;
+};
 export type AnyFXUnit = import("./megasynth_fx.js").AnyFXUnit;
 export type YM2612SynthType = import("./ym2612synth.js").YM2612Synth;
 export type YM2612Transport = import("./ym2612synth.js").YM2612Transport;
@@ -89,6 +94,7 @@ export type MegaSynthOptions = {
     rf5c164WasmUrl?: string;
     rf5c164WorkletUrl?: string;
     rf5c164Fetch?: typeof fetch;
+    outputSampleRate?: number;
     chipSampleRate?: number;
     mixer?: import('./soundchip_mixer.js').SoundChipMixer;
     masterVolume?: number;
@@ -232,6 +238,7 @@ export declare class MegaSynth {
     bitcrusherWorkletUrl: string;
     ym2612WasmUrl: string;
     chipSampleRate: number;
+    outputSampleRate: number | undefined;
     /**
      * Optional. When set, the worklet also loads a Sega PSG core and mixes
      * it with the YM2612 output, exposed on `this.psg`. Left unset by
@@ -270,6 +277,12 @@ export declare class MegaSynth {
     } | null;
     pcmDecodeId: number;
     node: AudioWorkletNode | null;
+    /** @type {{samplesPerPoint: number, pointsPerMessage: number, enabled: boolean} | null} */
+    outputEnvelopeOptions: {
+        samplesPerPoint: number;
+        pointsPerMessage: number;
+        enabled: boolean;
+    } | null;
     recordingManager: MegaSynthRecordingManager | null;
     _recordingHooksInstalled: boolean;
     listeners: Set<any>;
@@ -360,6 +373,18 @@ export declare class MegaSynth {
      * @returns {MegaSynth}
      */
     connectOutput(node?: AudioNode | null): MegaSynth;
+    /**
+     * Configure chip-output RMS messages (`output-envelope`, `rmsValues`) on
+     * node.port. Calling this enables monitoring unless enabled is false.
+     * samplesPerPoint: integer 1..65536 output frames per RMS point (default 512).
+     * pointsPerMessage: integer 1..1024 points per message (default 16).
+     * Omitted fields retain their previous values. Changes discard partial data.
+     * May be called before start() or during playback; settings survive close/start.
+     * This does not configure Playground's final-output AnalyserNode.
+     * @param {OutputEnvelopeOptions} options
+     * @returns {MegaSynth}
+     */
+    setOutputEnvelopeOptions(options: OutputEnvelopeOptions): MegaSynth;
     /**
      * Set the final browser-side output gain after the current FX chain.
      *

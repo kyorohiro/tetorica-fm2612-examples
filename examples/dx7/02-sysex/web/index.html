@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ja"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DX7：SysEx と音色選択 — tetorica-fm2612 examples</title>
+  <link rel="stylesheet" href="../../../../style.css">
+  <script type="importmap">{"imports":{"tetorica-fm2612":"../../../../vendor/tetorica-fm2612/soundchip.js","tetorica-fm2612/":"../../../../vendor/tetorica-fm2612/"}}</script>
+</head><body><main>
+  <nav><a href="../../../../index.html">← Examples</a><a href="./main.js">Source ↗</a></nav>
+  <header><p class="eyebrow">dx7/02-sysex · WEB</p><h1>DX7：SysEx と音色選択</h1>
+    <p>1音色または32音色の SysEx を読み込み、音色を選んでメロディと和音を試聴します。</p></header>
+  <section class="sample-panel">
+    <p>未選択なら同梱の自作32音色を使います。ファイルを選択し、Load bank → 音色を選択 → Play の順に操作します。</p>
+    <p><label for="file">DX7 SysEx（.syx、任意）</label><br><input id="file" type="file" accept=".syx,application/octet-stream"></p>
+    <div class="actions">
+      <label for="execution">演奏コード</label><select id="execution"><option value="worker">Worker</option><option value="main">Main</option></select>
+      <button id="load">Load bank</button>
+      <label for="voice">音色</label><select id="voice" disabled><option value="0">Load a bank first</option></select>
+      <button id="play" disabled>Play</button><button id="stop" disabled>Stop</button>
+    </div>
+    <p id="status" role="status" aria-live="polite">Ready.</p>
+    <pre><code id="detail"></code></pre>
+    <p class="muted">音色番号は0始まり。loadSysex() の完了を待ってから selectVoice() と noteOn() を呼びます。不正なファイルでは前に読み込めた音色を保持します。</p>
+    <pre><code>const dx7 = await useSoundChip('dx7');
+await dx7.loadSysex(bankBytes);
+console.log(dx7.voices); // [{index, name}, ...]
+dx7.selectVoice(0);
+dx7.noteOn(60, 100); // MIDI C4, velocity 100
+await beat(1);
+dx7.noteOff(60);</code></pre>
+    <p><a href="../assets/original-bank.syx" download>自作 SysEx バンクをダウンロード</a> · <a href="../assets/create-bank.mjs">バンク生成コード</a></p>
+    <h2>Web — 全コード</h2><pre class="source"><code data-source="./main.js">Loading…</code></pre>
+    <p class="muted">Web Audio を使うブラウザ専用の例です。HTTPS または localhost で実行してください。</p>
+    <p><a href="../README.md">README</a></p>
+  </section>
+</main><script type="module" src="./main.js"></script><script type="module">
+for (const code of document.querySelectorAll('[data-source]')) {
+  try {
+    const response = await fetch(code.dataset.source);
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    code.textContent = await response.text();
+  } catch (error) { code.textContent = error.message; }
+}
+</script></body></html>

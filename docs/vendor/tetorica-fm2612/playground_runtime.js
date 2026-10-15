@@ -2,6 +2,8 @@ import {midiToOpnPitch, opnPitchFromHz} from './soundchip_pitch.js';
 import {attachChipClock, CHIP_CLOCKS} from './playground_chip_clock.js';
 import {createNesAudio} from './playground_nes_audio.js';
 import {createNesClient} from './playground_nes.js';
+import {createDx7Audio} from './playground_dx7_audio.js';
+import {createDx7Client} from './playground_dx7.js';
 import {createPWM32XAudio} from './playground_pwm_audio.js';
 import {createPWM32XClient} from './pwm32x_playback.js';
 import {createYm2151Audio} from './playground_ym2151_audio.js';
@@ -35,7 +37,7 @@ import {
 } from "./megasynth.js?v=prepared-fx-rerun-2";
 import { createTetoricaSynth } from "./tetorica_synth.js";
 import { createPlaygroundClock } from "./playground_clock.js?v=shared-beat-clock-1";
-import { executeWithPlaygroundGuards } from "./playground_execution.js";
+import { capturePlaygroundNativeIpc, executeWithPlaygroundGuards } from "./playground_execution.js";
 import { createPlaygroundLive } from "./playground_live.js?v=prepared-fx-rerun-2";
 import { createPlaygroundMusic } from "./playground_music.js?v=shared-beat-clock-1";
 import { createPlaygroundNoiseApi } from "./playground_noise.js";
@@ -171,6 +173,9 @@ export function createPlaygroundRuntime(
     new Set();
   const guardExecution =
     options.guardExecution !== false;
+  // Tauri's invoke transport calls fetch dynamically. Keep only its native IPC
+  // endpoint available while Main scripts/live callbacks block network access.
+  const nativeIpc = capturePlaygroundNativeIpc(window);
   const defaultExecution =
     options.execution ?? "main";
   const defaultLogicWorkerUrl =
@@ -180,7 +185,7 @@ export function createPlaygroundRuntime(
     );
   defaultLogicWorkerUrl.searchParams.set(
     "v",
-    "stop-media-race-1"
+    "dx7-soundchip-1"
   );
   const logicWorkerUrl =
     options.logicWorkerUrl ??
@@ -229,14 +234,14 @@ export function createPlaygroundRuntime(
   async function openPcm(name, token = currentRunToken, options = {}) {
     if (!options || typeof options !== 'object' || Array.isArray(options) || Object.keys(options).some(k => !['id', ...(name === 'nes' ? ['fds', 'clock'] : [])].includes(k))) throw new TypeError('createSoundChip supports {id}, and {fds, clock} for NES');
     if (name === 'nes' && options.fds !== undefined && typeof options.fds !== 'boolean') throw new TypeError('fds must be boolean');
-    if(!['ym2612', 'ym2203', 'ym2610', 'rf5c164', 'ym2608', 'gameboy', 'segapsg', 'ym2151', 'pwm', 'nes'].includes(name)) throw new Error('Unsupported Playground sound chip: ' + name);
+    if(!['ym2612', 'ym2203', 'ym2610', 'rf5c164', 'ym2608', 'gameboy', 'segapsg', 'ym2151', 'pwm', 'nes', 'dx7'].includes(name)) throw new Error('Unsupported Playground sound chip: ' + name);
     const occupied = id => pendingPcmIds.has(id) || megaDrive.mixer?.list().some(s => s.id === id && s.connected);
     const reservation = megaDrive.mixer?.reserveId?.(name, options.id);
     let mixerId = reservation?.id ?? options.id;
     if (mixerId === undefined) do {mixerId = `${name}:${++pcmSequence}`;} while (occupied(mixerId));
     if (typeof mixerId !== 'string' || !mixerId.trim()) throw new TypeError('Mixer id must be a nonempty string');
     if (occupied(mixerId)) {reservation?.release(); throw new Error(`Mixer id is already connected: ${mixerId}`);}
-    const createAudio = name === 'nes' ? (context, destination) => createNesAudio(context, destination, options) : name === 'pwm' ? createPWM32XAudio : ['ym2612', 'ym2203', 'ym2610'].includes(name) ? (context, destination) => createOpnAudio(context, destination, name) : name === 'ym2151' ? createYm2151Audio : name === 'segapsg' ? createSegaPsgAudio : name === 'gameboy' ? createGameboyAudio : name === 'ym2608' ? createYm2608Audio : createRf5c164Audio;
+    const createAudio = name === 'dx7' ? createDx7Audio : name === 'nes' ? (context, destination) => createNesAudio(context, destination, options) : name === 'pwm' ? createPWM32XAudio : ['ym2612', 'ym2203', 'ym2610'].includes(name) ? (context, destination) => createOpnAudio(context, destination, name) : name === 'ym2151' ? createYm2151Audio : name === 'segapsg' ? createSegaPsgAudio : name === 'gameboy' ? createGameboyAudio : name === 'ym2608' ? createYm2608Audio : createRf5c164Audio;
     pendingPcmIds.add(mixerId);
     let device;
     try {device = await createAudio(megaDrive.audioContext, megaDrive.audio.masterInputNode);}
@@ -554,6 +559,7 @@ export function createPlaygroundRuntime(
       window,
       {
         enabled: guardExecution,
+        nativeIpc,
       }
     );
   }
@@ -942,7 +948,7 @@ export function createPlaygroundRuntime(
       throw new Error("Playground Worker is not running");
     }
 
-    if(command==='pcm.create'){const device=await openPcm(args[0], currentRunToken, args[1]);return {port:device.port,id:device.mixerId,clock:device.clock,fdsEnabled:device.fdsEnabled};}
+    if(command==='pcm.create'){const device=await openPcm(args[0], currentRunToken, args[1]);return {port:device.port,id:device.mixerId,clock:device.clock,fdsEnabled:device.fdsEnabled,sampleRate:device.sampleRate,internalSampleRate:device.internalSampleRate,voices:device.voices,selectedVoice:device.selectedVoice};}
     if(command==='pcm.dispose') {for(const device of pcmDevices) if(device.mixerId===args[0]) device.dispose(); return;}
     if(command.startsWith('mixer.')) {const method=command.slice(6);if(!['set','get','reset','list'].includes(method)) throw new Error('Unknown mixer method');return megaDrive.mixer[method](...args);}
     if(command==='pcm.decode')return decodePcm(args[0]);
@@ -1112,7 +1118,7 @@ export function createPlaygroundRuntime(
           worker.postMessage(error
             ? { type: "response", id: message.id, error: error?.message ?? String(error) }
             : { type: "response", id: message.id, value }, !error && message.command === "pcm.create" ? [value.port] : []);
-        } else if (error) emitLog(error?.stack ?? String(error));
+        } else if (error) emitLog(formatLogArgs([error]));
       };
       workerCommandQueue = workerCommandQueue
         .catch(() => undefined)
@@ -1213,7 +1219,7 @@ export function createPlaygroundRuntime(
           () => definition.fn(event)
         ).catch((error) => {
           emitLog(
-            `[keyboard:${definition.name}] ${error?.stack ?? String(error)}`
+            `[keyboard:${definition.name}] ${formatLogArgs([error])}`
           );
           emitStatus("Keyboard handler error");
         });
@@ -1474,11 +1480,13 @@ export function createPlaygroundRuntime(
       },
       createSoundChip: async (name, options = {}) => {
         const device=await openPcm(name,runToken,options);
-        const client=name === 'nes' ? createNesClient(device.port, device) : name === 'pwm' ? createPWM32XClient(device.port) : ['ym2612', 'ym2203', 'ym2610'].includes(name) ? createOpnClient(name, device.port) : name === 'ym2151' ? createYm2151Client(device.port) : name === 'segapsg' ? createSegaPsgClient(device.port) : name === 'gameboy' ? createGameboyClient(device.port) : name === 'ym2608' ? createYm2608Client(device.port) : createRf5c164Client(device.port,decodePcm);
+        const client=name === 'dx7' ? createDx7Client(device.port, device) : name === 'nes' ? createNesClient(device.port, device) : name === 'pwm' ? createPWM32XClient(device.port) : ['ym2612', 'ym2203', 'ym2610'].includes(name) ? createOpnClient(name, device.port) : name === 'ym2151' ? createYm2151Client(device.port) : name === 'segapsg' ? createSegaPsgClient(device.port) : name === 'gameboy' ? createGameboyClient(device.port) : name === 'ym2608' ? createYm2608Client(device.port) : createRf5c164Client(device.port,decodePcm);
         Object.defineProperty(client, 'id', {value: device.mixerId, enumerable: true});
         const dispose=device.dispose, disposeClient=client.dispose.bind(client); let disposed=false;
         client.dispose=()=>{if(disposed)return;disposed=true;disposeClient();dispose();};
-        device.dispose=client.dispose;
+        // Keep the current method visible: useSoundChip wraps it to evict the
+        // cached endpoint, including when a device fails asynchronously.
+        device.dispose=()=>client.dispose();
         return client;
       },
       midi,
@@ -1911,7 +1919,7 @@ export function createPlaygroundRuntime(
         setPlaybackState("stopped");
         emitStatus(`Error: ${error.message}`);
         emitRuntimeState("Error");
-        emitLog(error?.stack ?? String(error));
+        emitLog(formatLogArgs([error]));
         throw error;
       }
     }
@@ -1964,6 +1972,7 @@ export function createPlaygroundRuntime(
         window,
         {
           enabled: guardExecution,
+          nativeIpc,
         }
       );
 
@@ -2029,10 +2038,7 @@ export function createPlaygroundRuntime(
         `Error: ${error.message}`
       );
       emitRuntimeState("Error");
-      emitLog(
-        error?.stack ??
-          String(error)
-      );
+      emitLog(formatLogArgs([error]));
       throw error;
     }
   }

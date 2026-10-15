@@ -1,9 +1,19 @@
+/**
+ * Snapshot Tauri's authenticated IPC endpoint before user code starts. The
+ * returned capability does not expose fetch and accepts no ordinary network
+ * URLs. Tauri still validates its private invoke key and command permissions.
+ * @param {typeof globalThis} [realm=globalThis] Trusted application realm.
+ * @returns {object | null} Opaque capability for the execution guard, or null outside Tauri.
+ */
+export declare function capturePlaygroundNativeIpc(realm?: typeof globalThis): object | null;
 export type PlaygroundExecutionGuardOptions = {
     enabled?: boolean;
+    nativeIpc?: object | null;
 };
 /**
  * @typedef {{
  *   enabled?: boolean,
+ *   nativeIpc?: object | null,
  * }} PlaygroundExecutionGuardOptions
  */
 /**

@@ -9,7 +9,7 @@
     <p>公開済み npm package のどの API を使うか、アプリ・ゲームへの組み込み方に合わせて選びます。</p>
     <pre><code>npm install tetorica-fm2612</code></pre>
   </header>
-  <section><h2>チップ別の基本例（npm 0.2.13）</h2>
+  <section><h2>チップ別の基本例（npm 0.2.14）</h2>
 <pre><code>Web: createSoundChip(name, {execution: 'worklet'})
      → WorkletTransport → Synth（Main）→ WASM（Worklet）
 Node: createSoundChip(name)
@@ -49,6 +49,16 @@ Web Audio / encodeWav()  ブラウザ再生 / Web・Node の WAV 保存</code></
       <code>load()</code> → <code>play(name, {execution: 'worker'})</code> でゲームの UI と演奏コードを別スレッドに置けます。
       <code>stop()</code> は演奏停止、<code>finalize()</code> は Worker・音声リソースの解放です。</p>
     <p><a href="./examples/embedding/04-playground-worker/web/index.html">Playground Runtime を組み込む</a></p>
+  </section>
+  <section class="sample-panel"><h2>DX7：Playground の音源</h2>
+    <p>DX7 は <code>Playground</code> の script 内で <code>await useSoundChip('dx7')</code> として生成します。
+      MIDI ノート番号を指定し、最大16ボイスでメロディと和音を演奏できます。音声生成は Main / Worker のどちらも AudioWorklet 内です。</p>
+    <p><code>await dx7.loadSysex(bytes)</code> → <code>dx7.voices</code> → <code>dx7.selectVoice(index)</code> で音色を読み込んで選択します。
+      ファイル読込みはホストで行い、データを script に渡します。</p>
+    <p>この API は package root の <code>createSoundChip()</code> と別です。直接 PCM を生成する Node / ブラウザ向けコアは
+      別 package <code>tetorica-msfa-dx7-wasm</code> の <code>createDX7()</code> を使用します。</p>
+    <p><a href="./examples/dx7/01-notes/web/index.html">DX7 メロディと和音</a> ·
+      <a href="./examples/dx7/02-sysex/web/index.html">SysEx と音色選択</a></p>
   </section>
   <section class="sample-panel"><h2>VGM と音色ファイル</h2>
     <p><code>VgmPlayer</code> は VGM のコマンドと待ち時間を処理し、<code>GenesisAudioEngine</code> が YM2612 + Sega PSG の PCM を生成します。

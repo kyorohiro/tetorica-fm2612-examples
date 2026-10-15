@@ -36,6 +36,18 @@
     "nodeAudioOutput": true
   },
   {
+    "id": "dx7/01-notes",
+    "title": "DX7：メロディと和音",
+    "description": "useSoundChip('dx7') と MIDI ノート番号で、INIT SINE のメロディと和音を演奏。Main / Worker を切り替える。",
+    "environments": ["web"]
+  },
+  {
+    "id": "dx7/02-sysex",
+    "title": "DX7：SysEx と音色選択",
+    "description": "1音色 / 32音色の SysEx を読み込み、音色一覧から選んで試聴する。未選択なら自作バンク。",
+    "environments": ["web"]
+  },
+  {
     "id": "chip-raw/01-register-note",
     "title": "レジスタを直接書く",
     "description": "YM2612 の OP4・algorithm・pan・周波数・key on/off をレジスタで設定。"

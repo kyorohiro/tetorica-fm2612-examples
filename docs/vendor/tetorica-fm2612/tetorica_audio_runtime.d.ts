@@ -11,6 +11,7 @@ export declare class TetoricaAudioRuntime {
     outputNode: AudioNode | null;
     sampleOutputNode: AudioNode | null;
     masterVolume: number;
+    listeningVolume: number;
     /** @type {SoundChipMixer} */
     mixer: SoundChipMixer;
     masterInputNode: GainNode | null;
@@ -143,8 +144,11 @@ export declare class TetoricaAudioRuntime {
      * @returns {() => void} Disconnect this observation branch.
      */
     connectOutputMonitor(node: AudioNode): () => void;
-    /** @param {number} volume */
+    /** @param {number} volume Requested gain; running output approaches it with a 1 ms time constant (~99.3% in 5 ms). */
     setMasterVolume(volume: number): number;
+    /** Host playback level (0..8), retained when scripts set their master gain.
+     * The final output and its monitors include both gains. @param {number} volume */
+    setListeningVolume(volume: number): number;
     disconnectRouting(): void;
     closeMedia(): void;
     rebuildFXChain(): void;

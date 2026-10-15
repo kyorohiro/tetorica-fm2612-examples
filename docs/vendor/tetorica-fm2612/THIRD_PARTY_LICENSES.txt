@@ -11,4 +11,5 @@ mame-segapcm: see licenses/mame-segapcm/LICENSE and README.md.
 mame-32x-pwm: see licenses/mame-32x-pwm/LICENSE and README.md.
 Nuked-OPN2 is LGPL-2.1-or-later; the MAME adaptations listed above are BSD-3-Clause.
 NES APU: JSNES (Apache-2.0), FDS: fixNES (MIT); see licenses/jsnes and licenses/fixnes-fds.
+DX7: tetorica-msfa-dx7-wasm 0.1.0 / Google MSFA (Apache-2.0); see msfa_dx7/LICENSE, THIRD_PARTY_NOTICES.md and README.vendor.md.
 No external instrument/sample ROMs are included.

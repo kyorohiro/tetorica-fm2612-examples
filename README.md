@@ -1,8 +1,8 @@
 # tetorica-fm2612 examples
 
 `tetorica-fm2612` を import して使う、機能別の小さなサンプル集。
-チップ別の基本例は npm 0.2.13 の WorkletTransport / AudifyTransport を使います。導入手順は末尾の「Transport の例」を参照してください。
-チップ別の基本例は WorkletTransport / AudifyTransport を使います。PCM 生成・WAV 保存は専用例に置き、Web Audio を使う埋め込み例と、Node の nativeFX / 音声デバイス出力の例も掲載しています。本体リポジトリには依存しません。
+公開済み npm `tetorica-fm2612@0.2.14` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7 はブラウザの Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
+PCM 生成・WAV 保存は専用例に置き、Web Audio を使う埋め込み例と、Node の nativeFX / 音声デバイス出力の例も掲載しています。本体リポジトリには依存しません。
 
 [公開 examples](https://kyorohiro.github.io/tetorica-fm2612-examples/) と
 [Runtime の構成と選び方](public/runtime.html) から読み始められます。
@@ -49,6 +49,8 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 | FM | [04-operators](examples/genesis/fm/04-operators/README.md) | algorithm / operator |
 | FM | [05-stereo-pan](examples/genesis/fm/05-stereo-pan/README.md) | 左・右・両側の出力 |
 | FM | [06-chord](examples/genesis/fm/06-chord/README.md) | 複数チャンネルで和音 |
+| DX7（Web） | [01-notes](examples/dx7/01-notes/README.md) | MIDI ノート番号でメロディと和音、Main / Worker の切替 |
+| DX7（Web） | [02-sysex](examples/dx7/02-sysex/README.md) | 1音色 / 32音色の SysEx 読込み、音色選択、試聴 |
 | Chip raw | [01-register-note](examples/chip-raw/01-register-note/README.md) | YM2612 レジスタ直接操作 |
 | PSG | [01-tone](examples/genesis/psg/01-tone/README.md) | Sega PSG のトーン |
 | PSG | [02-noise](examples/genesis/psg/02-noise/README.md) | 周期 / ホワイトノイズ |
@@ -159,7 +161,7 @@ Node 専用の場合は `environments: ["node"]`、ブラウザ専用の場合�
 
 ## MegaSynth Node examples
 
-`embedding/06`〜`10` は `tetorica-fm2612@0.2.13` の実験用 MegaSynth API を使います。
+`embedding/06`〜`10` は `tetorica-fm2612@0.2.14` の実験用 MegaSynth API を使います。
 通常の `npm ci` で公開 package を導入できます。
 
 ```sh
@@ -182,7 +184,7 @@ WAV の RIFF ヘッダー・非ゼロ PCM とイベント JSON を確認しま�
 ## Transport の例
 
 Genesis / PC-98 / Game Boy / X68000 FM の基本例は、WorkletTransport / AudifyTransport を使用します。
-公開済み npm 0.2.13 を使用します。Node のリアルタイム再生には audify を追加してください。
+公開済み npm 0.2.14 を使用します。Node のリアルタイム再生には audify を追加してください。
 
 ```sh
 npm install
@@ -205,3 +207,24 @@ Web の `SoundChipMixer` でチップ別の音量・Pan・Mute を設定でき�
 ## YM2151 の高水準 API
 
 `YM2151Synth` は Web / Node 共通で `setPreset(0, FM_PRESETS.sine)`、`noteOn(0, 'A4')`、`noteOff(0)` を使えます。[X68000 の基本例](examples/x68000/fm/01-note/README.md) で Worklet / Audify の使い方を示しています。DirectTransport では PCM を生成できます。
+
+## DX7
+
+`dx7/01-notes` と `dx7/02-sysex` はブラウザ専用で、`Playground` の script 内の
+`useSoundChip('dx7')` を使います。package root の `createSoundChip()` と別の入口です。
+両方とも Main / Worker を選べ、音声生成は AudioWorklet 内で行います。
+最大16ボイス、MIDI ノート番号・velocity は0..127、channel 引数はありません。
+
+最初の例は外部音色不要の `INIT SINE`、次の例は自作32音色バンクを同梱しています。
+手元の1音色 / 32音色 SysEx `.syx` も読み込めます。第三者の音色集は配布しません。
+Node で直接 DX7 PCM を生成する場合は別 package `tetorica-msfa-dx7-wasm` を使用します。
+
+ブラウザの回帰確認には Playwright のブラウザーを導入してから実行します。
+
+```sh
+npm exec playwright install chromium webkit
+npm run build
+npm run check:dx7
+```
+
+実際の出力音声、Main / Worker、音色選択、不正な SysEx、読込み中の Stop と再実行を確認します。

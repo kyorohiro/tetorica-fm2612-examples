@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ja"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DX7：メロディーと和音 — tetorica-fm2612 examples</title>
+  <link rel="stylesheet" href="../../../../style.css">
+  <script type="importmap">{"imports":{"tetorica-fm2612":"../../../../vendor/tetorica-fm2612/soundchip.js","tetorica-fm2612/":"../../../../vendor/tetorica-fm2612/"}}</script>
+  <style>
+    #code { width: 100%; box-sizing: border-box; font-family: monospace; }
+    .execution-control { display: inline-flex; align-items: center; gap: 8px; }
+    .actions { flex-wrap: wrap; }
+  </style>
+</head><body><main>
+  <nav><a href="../../../../index.html">← Examples</a><a href="./main.js">Source ↗</a></nav>
+  <header><p class="eyebrow">dx7/01-notes · WEB</p><h1>DX7：メロディーと和音</h1><p>Playground の <code>useSoundChip('dx7')</code> で INIT SINE 音色を呼び出し、MIDI ノート番号で演奏します。</p></header>
+  <section class="sample-panel">
+    <label for="code">実行する Playground コード</label>
+    <textarea id="code" rows="21" spellcheck="false" aria-describedby="code-help"></textarea>
+    <div class="actions">
+      <label for="execution" class="execution-control">実行先
+        <select id="execution"><option value="worker" selected>Worker</option><option value="main">Main</option></select>
+      </label>
+      <button id="play" type="button">Play</button><button id="stop" type="button" disabled>Stop</button>
+    </div>
+    <p id="status" role="status" aria-live="polite">Ready.</p>
+    <pre><code id="detail"></code></pre>
+    <p id="code-help">Play で実行し、メロディーと和音が終わると音声リソースを解放します。Stop は読み込み中にも使えます。コードの変更は次の Play に反映されます。</p>
+    <p>最大16音。ノート番号 60 は C4、velocity は 0〜127。<code>beat(1)</code> は BPM 120 で0.5秒です。</p>
+    <h2>Web — 全コード</h2><pre class="source"><code data-source="./main.js">Loading…</code></pre>
+    <p class="muted">HTTPS または localhost で実行する Web Audio / AudioWorklet の例です。Node 版はありません。</p>
+    <p><a href="../README.md">README</a></p>
+  </section>
+</main><script type="module" src="./main.js"></script><script type="module">
+for (const code of document.querySelectorAll('[data-source]')) {
+  try {
+    const response = await fetch(code.dataset.source);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    code.textContent = await response.text();
+  } catch (error) { code.textContent = error.message; }
+}
+</script></body></html>

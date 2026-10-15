@@ -3,6 +3,8 @@ import { NativeFXEngine } from './native_fx_engine.js';
 export declare class NativeFXProcessor extends AudioWorkletProcessor {
     engine: NativeFXEngine;
     active: boolean;
+    emptySource: any[];
+    reportError: (error: any) => any;
     monitor: {
         id: any;
         name: any;

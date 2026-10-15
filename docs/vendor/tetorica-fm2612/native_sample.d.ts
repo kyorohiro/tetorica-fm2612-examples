@@ -15,7 +15,8 @@ export declare function createNativeSampleController(send: (message: Record<stri
         duration: number;
     }>;
     /** Negative playbackRate reads backward. Offset counts from the playback start
-     * (the end for reverse); duration counts source seconds, loops use original-file bounds. */
+     * (the end for reverse); duration counts source seconds, loops use original-file bounds.
+     * fadeIn/fadeOut are output seconds; fadeOut applies at a bounded natural end and on stop. */
     /** @param {string} name
      * @param {import('./megasynth.js').MegaSynthSamplePlayOptions} [options] */
     play(name: string, options?: import('./megasynth.js').MegaSynthSamplePlayOptions): Promise<{
