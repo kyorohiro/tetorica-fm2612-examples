@@ -1,6 +1,6 @@
 # DX7：メロディーと和音
 
-公開済み **`tetorica-fm2612@0.2.14`** の Playground runtime を使い、DX7 の
+公開済み **`tetorica-fm2612@0.2.20`** の Playground runtime を使い、DX7 の
 初期音色 **INIT SINE** で短いメロディーと C メジャーの和音を演奏します。
 [Web ページ](web/index.html) と [全コード](web/main.js) を参照してください。
 repository ルートで `npm install` → `npm run dev` を実行し、一覧から開きます。

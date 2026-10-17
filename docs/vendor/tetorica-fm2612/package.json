@@ -1,10 +1,10 @@
 {
   "name": "tetorica-fm2612",
-  "version": "0.2.14",
+  "version": "0.2.20",
   "description": "Tetorica sound chip WASM cores, Synth helpers and browser audio runtime",
   "type": "module",
   "license": "BSD-3-Clause",
-  "homepage": "https://github.com/kyorohiro/tetorica-fm2612-examples",
+  "homepage": "https://kyorohiro.github.io/hello_ymfm_wasm/playground/index.html",
   "engines": {
     "node": ">=22"
   },
@@ -94,7 +94,13 @@
     "fds",
     "dpcm",
     "dx7",
-    "sysex"
+    "msfa",
+    "sysex",
+    "snes",
+    "spc700",
+    "s-dsp",
+    "spc",
+    "brr"
   ],
   "types": "./soundchip.d.ts"
 }

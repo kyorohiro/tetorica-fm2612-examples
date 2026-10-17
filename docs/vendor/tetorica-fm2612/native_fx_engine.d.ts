@@ -11,15 +11,20 @@ export declare class NativeFXEngine {
     samples: {
         clear: () => void;
         reset: () => void;
+        reserve: (d: any, performance: any) => number;
+        startReserved: (id: any) => void;
+        cancelReservation: (id: any) => void;
+        stopOwner: (owner: any, session: any) => void;
         command(d: any): number | undefined;
     };
     units: Map<any, any>;
     ramps: Map<any, any>;
     beatSeconds: number;
+    outputViews: Map<any, any>;
     input: Float32Array<any> | undefined;
     output: Float32Array<any> | undefined;
-    outputLeft: Float32Array<any> | null | undefined;
-    outputRight: Float32Array<any> | undefined;
+    outputLeft: any;
+    outputRight: any;
     constructor(module: any, sampleRate: any);
     resetNoise(): void;
     reset(): void;

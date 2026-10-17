@@ -10,6 +10,7 @@
  * @param {{clearFXChain: () => object[]}} options.megaDrive Audio owner used to detach effects.
  * @param {Set<object>} options.preparedFxUnits Effect units retained across evaluations.
  * @param {() => number} options.currentBeat Current beat position.
+ * @param {() => number} [options.currentSampleCursor] Current position in seconds on the shared sample timeline.
  * @param {() => object | null} options.getCurrentLoopContext Current loop.
  * @param {(loop: object | null) => void} options.setCurrentLoopContext Restore a loop context.
  * @param {(loop: object) => void} [options.cancelWaits] Wake a stopped loop's waits.
@@ -31,6 +32,7 @@ export declare function createPlaygroundLive(options: {
     };
     preparedFxUnits: Set<object>;
     currentBeat: () => number;
+    currentSampleCursor?: () => number;
     getCurrentLoopContext: () => object | null;
     setCurrentLoopContext: (loop: object | null) => void;
     cancelWaits?: (loop: object) => void;

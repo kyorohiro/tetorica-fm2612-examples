@@ -18,6 +18,15 @@ export async function copyRuntime(destination) {
   } catch {
     throw new Error('The DX7 examples require tetorica-fm2612 >= 0.2.14. Run npm install to install the declared version.');
   }
+  try {
+    for (const file of ['snessynth.js', 'spc.js', 'spc_audio.js', 'playground_snes_worklet.js',
+      'generated/spc_wasm.js', 'generated/spc_wasm.wasm', 'licenses/snes-spc/LICENSE',
+      'sources/wasm/spc_wasm.cpp', 'sources/scripts/build_spc_wasm.sh']) {
+      await readFile(join(source, file));
+    }
+  } catch {
+    throw new Error('The experimental SNES/SPC examples require tetorica-fm2612 >= 0.2.20, including its WASM and LGPL source. Run npm install.');
+  }
   const target = join(destination, 'vendor/tetorica-fm2612');
   await mkdir(join(destination, 'vendor'), {recursive: true});
   await rm(target, {recursive: true, force: true});

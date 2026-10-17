@@ -1,9 +1,13 @@
 import {ChipClockResampler, CHIP_CLOCKS} from './playground_chip_clock.js';
+import {PsgInspectorState, receiveChipInspector} from './playground_chip_inspector_state.js';
 import {SegaPSG} from './segapsg.js';
 import factory from './generated/segapsg_wasm.js';
+import {createProcessorPerformance} from './playground_performance_processor.js';
 class Processor extends AudioWorkletProcessor {
   constructor(options) {
     super(); this.chip = null; this.dead = false;
+    this.performance=createProcessorPerformance({chip:'segapsg',apply:(data,port)=>this.apply(data,port)});
+    this.renderSegment=this.renderSegment.bind(this);
     this.port.onmessage = ({data}) => {
       if (data.port) {
         if (this.dead) { data.port.close(); return; }
@@ -15,11 +19,16 @@ class Processor extends AudioWorkletProcessor {
     SegaPSG.create({moduleFactory: factory, moduleOptions: {wasmBinary: options.processorOptions.wasmBinary}, sampleRate})
       .then(chip => {
         if (this.dead) { chip.dispose(); return; }
-        this.chip = chip; this.port.postMessage({ready: true});
+        this.chip = chip; this.inspector = new PsgInspectorState(chip, {clock:()=>CHIP_CLOCKS.segapsg*(this.clockResampler?.ratio??1),sampleRate}); this.port.postMessage({ready: true});
       }).catch(error => { this.dispose(); this.port.postMessage({error: error.message}); });
   }
-  dispose() { this.dead = true; this.chip?.dispose(); this.chip = null; this.remote?.close(); }
-  receive(data, port) {
+  dispose() { this.performance.clear(); this.dead = true; this.chip?.dispose(); this.chip = null; this.remote?.close(); }
+  receive(data, port=this.port) {
+    if(data?.type==='chip-inspector'&&receiveChipInspector(data,port,this.inspector ? (action,method,args)=>action==='read'?this.inspector.read():this.inspector.invoke(method,args) : null))return;
+    if(this.performance.receive(data,port))return;
+    this.apply(data,port);
+  }
+  apply(data,port) {
     if (data.method === 'dispose') { this.dispose(); return; }
     if (data.method === 'clock') {
       try {
@@ -36,10 +45,12 @@ class Processor extends AudioWorkletProcessor {
   process(inputs, outputs) {
     if (this.dead) return false;
     const [left, right] = outputs[0];
+    this.performance.render(left,right,this.renderSegment);return true;
+  }
+  renderSegment(left,right) {
     if (this.chip && this.clockResampler) this.clockResampler.render(this.chip, left, right);
     else if (this.chip) { const pcm = this.chip.generateStereo(left.length); left.set(pcm.left); right.set(pcm.right); }
     else { left.fill(0); right.fill(0); }
-    return true;
   }
 }
 registerProcessor('tetorica-segapsg', Processor);

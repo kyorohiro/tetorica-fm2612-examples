@@ -142,7 +142,8 @@ export declare function runTween(duration: number | {
  * @param {PlaygroundClockOptions} options Runtime state, loop context and clock hooks.
  * @returns {{cancelWaits: DeadlineScheduler['cancel'], nowSeconds: () => number,
  *   ensureMusicClock: () => void, beatsToSeconds: (beats: number) => number,
- *   currentBeat: () => number, sleep: (seconds: number, runToken?: number) => Promise<void>,
+ *   currentBeat: () => number, currentSampleCursor: () => number,
+ *   sleep: (seconds: number, runToken?: number) => Promise<void>,
  *   sleepSamples: (samples: number, sampleRate?: number, runToken?: number) => Promise<void>,
  *   waitForBeat: (targetBeat: number, runToken?: number, loopState?: PlaygroundClockLoop | null) => Promise<void>,
  *   beat: (beats?: number) => Promise<void>, nextBeat: () => Promise<void>,
@@ -155,6 +156,7 @@ export declare function createPlaygroundClock(options: PlaygroundClockOptions): 
     ensureMusicClock: () => void;
     beatsToSeconds: (beats: number) => number;
     currentBeat: () => number;
+    currentSampleCursor: () => number;
     sleep: (seconds: number, runToken?: number) => Promise<void>;
     sleepSamples: (samples: number, sampleRate?: number, runToken?: number) => Promise<void>;
     waitForBeat: (targetBeat: number, runToken?: number, loopState?: PlaygroundClockLoop | null) => Promise<void>;

@@ -4,6 +4,13 @@
  * 依存: 注入された runtime・音源操作・待機関数。実際の再生環境は渡すオブジェクトに依存する。
  */
 import { hzToBlockFnum } from "./pitch.js";
+/** Create an evaluation's sequences, using persistent loop-local slots when active.
+ * @param {() => {cycleState: Map<string, number>, cycleCallIndex: number} | null} [getCurrentLoopContext]
+ */
+export declare function createCycle(getCurrentLoopContext?: () => {
+    cycleState: Map<string, number>;
+    cycleCallIndex: number;
+} | null): <T>(keyOrValues: string | T[], maybeValues?: T[]) => T;
 /**
  * Linear interpolation; t is not clamped, so values outside 0..1 extrapolate.
  * @param {number} a Starting value.

@@ -4,6 +4,12 @@ Tetorica sound-chip cores, Synth helpers and browser audio runtime, distributed 
 ES modules with prebuilt WASM. The package retains the existing web runtime;
 its default entry point provides chip creation without starting browser audio.
 
+**[Try the Playground in your browser](https://kyorohiro.github.io/hello_ymfm_wasm/playground/index.html)**
+— no installation needed. Open it and press **Run** to hear the default example.
+
+For browser and Node.js projects, see the
+[runnable examples](https://github.com/kyorohiro/tetorica-fm2612-examples).
+
 ## Install
 
 ```sh
@@ -36,6 +42,7 @@ entry points, rather than every internal Worker or Worklet module.
 | Browser synth with FX, recording and looping | `tetorica-fm2612/megasynth.js` | `MegaSynth` |
 | Browser live-code runtime | `tetorica-fm2612/playground_runtime.js` | `Playground`, `createPlaygroundRuntime` |
 | DX7 inside browser Playground scripts | `tetorica-fm2612/playground_runtime.js` | Script globals `useSoundChip('dx7')`, `createSoundChip('dx7')` |
+| SNES S-DSP / SPC700 | `tetorica-fm2612/snessynth.js`, `tetorica-fm2612/spc.js` | CPU-free BRR instrument / SPC file PCM core |
 | Offline FM + native FX rendering | `tetorica-fm2612/megasynth_offline.js` | `createMegaSynthOffline` (experimental) |
 | Offline recording and looping | `tetorica-fm2612/megasynth_session.js` | `createMegaSynthSession` (experimental) |
 | Node synth with Worker audio output | `tetorica-fm2612/node` | `MegaSynthNode` (experimental) |
@@ -89,7 +96,9 @@ complete setup, playback and cleanup.
 Browser outputs share `SoundChipMixer`: `volume` is a linear multiplier (0–2),
 `pan` is stereo balance (-1 left, 0 center, 1 right), and `muted` silences the
 output while the chip keeps running. Game Boy starts at 28%; other chips start
-at 100%. `reset(id)` restores that chip's balance; `reset()` restores all strips.
+at 100%. Multiple strips can be `solo: true`; other connected strips are
+suppressed without overwriting their manual `muted` settings. `list()` exposes
+`effectiveMuted` separately. `reset(id)` restores that chip's balance; `reset()` restores all strips.
 
 ```js
 import {createSoundChip, SoundChipMixer} from 'tetorica-fm2612';
@@ -116,6 +125,20 @@ Built-in strip IDs are `ym2612`, `segapsg` when enabled, `rf5c164` in Mega CD
 mode and `pwm` in Mega 32X mode. Settings can be specified before `start()`.
 Mixer output feeds the existing FX chain, then the master volume. Closing the
 synth removes its connected strips. A shared mixer can be passed as `{mixer}`.
+Explicit IDs (including MegaSynth's built-in IDs) retain their settings in that
+mixer when disconnected and reconnected. Automatic IDs are transient and do
+not transfer settings to newly created chips. This is session state, not
+persistent storage.
+
+Hosts can observe source lifetimes and settings with `mixer.subscribe(listener)`;
+read `mixer.list()` for the initial state. `mixer.subscribeMeters(listener)` opts
+into stereo peak summaries (`[{id, left, right}]`) at approximately 15 Hz per
+source. Levels are after the chip trim and before shared FX/master, and can
+exceed 1. Unsubscribe when the view is hidden: the last meter unsubscribe stops
+measurement and removes dedicated analyser branches. No continuous PCM stream
+is transferred to the UI. These subscription methods belong to the host-side
+`SoundChipMixer`; Playground Worker scripts use the asynchronous settings API.
+
 
 Inside Playground Main or Worker code:
 
@@ -228,6 +251,26 @@ Initialize audio from a user gesture. Worklets, the logic Worker, native effects
 WASM, chip loader JS/WASM pairs and Tetorica's generated OPNA rhythm data are
 included. Website/editor pages and the Introduction/Ebook are separate consumers.
 
+Playground Worker scripts reserve FM/PSG, native sample/noise/FX and independent
+chip commands 500 ms ahead by default on the shared audio clock. UI Keyboard audition and
+Main execution remain immediate. Adjust the lead before a fresh performance:
+
+```js
+runtime.setTiming({workerLookaheadSeconds: 0.5}); // 0..2 seconds; 0 disables the lead
+```
+
+Changes apply after Stop, then Run; a hot Run keeps the current clock and lead.
+The website also exposes this setting in Menu as **Worker lookahead (ms)**.
+Saved preferences, including 0 or 150 ms, are preserved; 500 ms is the default
+when no valid preference exists. A larger lead tolerates longer command-delivery
+stalls, with the same added delay for script playback and live code changes.
+Explicit absolute audio-time and DAC/VGM sample schedules retain their own
+clocks and lead settings (`lookaheadSeconds` / `schedulerIntervalMs`). HTML media
+`stream` playback, external MIDI and MIDI-file scheduling use their existing
+paths; this transport lead does not automatically align those paths. Stop
+retires pending Worker reservations. The lead absorbs short delivery stalls;
+it does not smooth waveform discontinuities or prevent device-level underruns.
+
 For a static site, copy the contents of `node_modules/tetorica-fm2612/` to a
 public directory, preserving its layout, and use module URLs:
 
@@ -277,6 +320,67 @@ settings survive close/start. Omitted sizes keep their previous values. Each cal
 discards incomplete points and batches and enables monitoring unless
 `{enabled: false}` is supplied. Message intervals are approximately
 `samplesPerPoint * pointsPerMessage / audioContext.sampleRate` seconds.
+
+## Experimental SNES BRR instrument and SPC playback (0.2.20)
+
+**Experimental implementation.** SNES/SPC support has been checked with
+original synthetic fixtures, native/WASM PCM comparisons, and Chromium/WebKit
+in Main and Worker modes. Real-game SPC compatibility, Tauri application
+behavior, and long-running playback still need verification. These new APIs
+and their behavior may change as testing continues.
+
+The Playground script factory supports `useSoundChip('snes')` and
+`createSoundChip('snes', {id:'snes-bass'})` in Main and Worker modes.
+Each instance has its own 64 KiB RAM and eight physical S-DSP voices, numbered
+0..7. It runs no game CPU and never writes into an SPC player's RAM.
+
+```javascript
+const snes = await useSoundChip('snes');
+const sample = await snes.loadBRR(
+  new Uint8Array([0xc3,0x13,0x57,0x75,0x31,0xfd,0xb9,0x9b,0xdf]),
+  {baseFrequencyHz:2000, loopStartSamples:0}
+);
+snes.setPreset(0, {sample, adsr1:0x8f, adsr2:0xe0, volumeLeft:90, volumeRight:90});
+snes.noteOn(0, 'C4');
+await beat(1);
+snes.noteOff(0);
+```
+
+BRR has no root-note metadata. Declare exactly one of `rootNote` (MIDI number
+or note name) and `baseFrequencyHz`, measured at `basePitch` (default 4096).
+Looping BRR also requires `loopStartSamples`, a multiple of 16 within the sample.
+Await `loadBRR()` before using its returned sample descriptor or numeric id.
+`setFrequency(channel, hz)` and `setNote(channel, note)` use this tuning;
+`setPitch(channel, pitch)` accepts the raw 14-bit DSP pitch value.
+ADSR1/ADSR2/GAIN and signed left/right volume are raw DSP values.
+Abrupt changes may click; no automatic smoothing is applied.
+
+`reset()` releases voices and reloads uploaded samples with the same ids.
+Samples occupy the instance's fixed 64 KiB RAM (directory at 0..1023); there is
+no automatic voice stealing, sample unloading or compaction. Echo writes are
+disabled by default. Raw `writeDsp()` edits must keep directory, BRR and echo
+RAM regions from conflicting. `await getState()`, `getPreset(channel)`, and
+`snapshot()` inspect applied state; future lookahead commands may still be pending.
+Mixer, FX, script lookahead and Stop resource ownership use the existing Playground paths.
+
+The native rate is fixed at **32,000 stereo frames/second**, with output-side
+resampling for the device. There is no `setClock()` or BPM-controlled DSP rate.
+`new SnesSynth({core: await SnesDspCore.create({moduleFactory})})` from
+`snessynth.js` / `spc.js` exposes direct PCM rendering outside Playground;
+pass the generated `spc_wasm.js` factory and its `moduleOptions.wasmBinary`
+when loading WASM explicitly. `SpcCore` in `spc.js` instead runs the SPC700 CPU, timers and DSP
+from an SPC file. Both offer `renderInto(left, right)` at the native rate.
+`SpcRuntimeSynth` in `spc_audio.js` supplies browser AudioWorklet playback.
+The package-root Yamaha `createSoundChip` factory remains a separate API.
+
+SPC support uses the accurate `snes_spc` 0.9.0 core, pinned in
+`sources/third_party/snes-spc/`. Its LGPL-2.1-or-later license, corresponding
+modified source and Emscripten build recipe ship with the runtime. No Nintendo
+IPL ROM, game music or game samples are bundled. SPC files requiring additional
+transfers from the game host or a complete IPL ROM may not play correctly.
+Stop restores the original file, including echo RAM; it is not a mid-song
+checkpoint. Voice mute removes dry output and new echo sends while CPU, BRR,
+envelopes and pitch modulation continue; existing echo tails can remain.
 
 ## DX7 in browser Playground (0.2.14)
 
@@ -328,6 +432,55 @@ For direct PCM generation or DX7 playback outside Playground, use the separate
 package (`createDX7` in Node/browsers, `createDX7Node` for browser audio).
 The pinned engine, WASM and Apache-2.0 notices are included in this package's
 `msfa_dx7/` directory; no extra runtime dependency or CDN request is required.
+
+### Object-based DX7 presets (0.2.15)
+
+Version 0.2.15 provides `await dx7.setPreset(preset)`,
+`await dx7.setOperator(operator, params)`, `await dx7.setOperators(entries)`,
+and `await dx7.getPreset()`. Version 0.2.18 bundles `tetorica-msfa-dx7-wasm` 0.3.1.
+
+```js
+const dx7 = await useSoundChip('dx7');
+await dx7.setPreset({
+  name: 'JS BELL', algorithm: 0,
+  operators: {
+    1: {coarse: 1, outputLevel: 90},
+    2: {coarse: 2, outputLevel: 68},
+  },
+});
+await dx7.setOperator(2, {outputLevel: 60});
+await dx7.setOperators([[1, {fine: 25}], [2, {coarse: 3}]]);
+console.log(await dx7.getPreset());
+dx7.noteOn(60, 100);
+```
+
+Public operators are OP1..6, with no channel argument. `setPreset` fills omitted
+fields from INIT SINE and replaces the selected slot; operator setters patch it.
+The selected bank index and other voices remain intact. Tuple batches reject
+duplicate operators and invalid values atomically; an empty array is a no-op.
+Objects are copied at the boundary, and `getPreset` returns a full independent copy.
+Algorithm numbers are zero based (0..31); outputLevel is 0..99, higher is louder;
+envelopes use four DX7 rate/level values 0..99 rather than seconds or YM2612 AR/TL.
+Since 0.2.16, outputLevel/mode/coarse/fine/detune edits apply
+to sounding notes of the edited patch, including release tails. Its additive
+`await dx7.setFeedback(3)` edits feedback (raw range 0..7).
+`setPreset`/`loadSysex` replace patch identities; old notes retain the previous
+patch. `selectVoice` preserves each bank slot's identity. General EG/algorithm
+edits remain future-note-only. Phase/key/EG state and original velocity/scaling
+are retained, with edits applied at the next ungenerated 64-frame internal block.
+An acknowledgement does not bypass generated PCM or device buffering.
+Abrupt frequency/feedback changes apply directly; their waveform discontinuities
+and clicks are accepted API behavior. No automatic parameter smoothing, glide,
+feedback interpolation, crossfade or click suppression is added. Phase, EG and
+feedback history are retained. Existing upstream operator-gain interpolation and
+PCM output resampling remain. NaN/Infinity reject atomically; non-finite output,
+corrupted amplitude, divergence and crashes are not accepted behavior.
+Return async setters from Playground `tween` callbacks, e.g.
+`await tween(1, p => dx7.setOperator(2, {outputLevel: Math.round(99*p)}))`.
+Live edits leave the shared LFO untouched; selection/replacement can reconfigure
+it while retaining its phase. MSFA's documented AM,
+transpose and oscillator-sync limitations still apply.
+The standalone DX7 PCM core exposes the same methods synchronously.
 
 ## Mega CD PCM with MegaSynth
 
@@ -501,10 +654,10 @@ FM/PSG/PCM mixing, stop/reset and close/restart. Playwright is a development
 dependency; it is not required by users of the sound-chip runtime.
 
 The build is staged in `dist/fm2612/`; packing produces
-`tetorica-fm2612-0.2.14.tgz`. To install a local build in another project:
+`tetorica-fm2612-0.2.20.tgz`. To install a local build in another project:
 
 ```sh
-npm install /absolute/path/to/tetorica-fm2612-0.2.14.tgz
+npm install /absolute/path/to/tetorica-fm2612-0.2.20.tgz
 ```
 
 The existing `tetorica-vgm` CLI package is built separately. This first package
@@ -514,13 +667,49 @@ adapter packages can reuse the core later without duplicating it.
 ## Licenses and assets
 
 Project code is BSD-3-Clause. Third-party notices and component licenses are
-included; Nuked-OPN2 is LGPL-2.1-or-later, with its source and build script in
+included; Nuked-OPN2 and snes_spc are LGPL-2.1-or-later, with their source and build scripts in
 `sources/`. The bundled DX7 engine is Apache-2.0; its license, MSFA provenance
 and third-party notices are in `msfa_dx7/`. The OPNA rhythm data is
 Tetorica-generated and includes its license and generator. External
 instrument/sample ROMs are not included.
 
 ## Release notes
+
+`0.2.20` adds **experimental SNES/SPC support**: a CPU-free, eight-voice
+S-DSP BRR instrument through Playground's `useSoundChip('snes')` and
+`createSoundChip('snes')`, plus SPC700/DSP file playback cores and a browser
+AudioWorklet player. Native audio is fixed at 32,000 Hz with output resampling.
+Main/Worker, Mixer/FX, explicit sample tuning, declarations, and corresponding
+LGPL source/build instructions are included. Real-game SPC and Tauri
+compatibility testing remains ongoing; no game data or Nintendo IPL ROM is bundled.
+
+`0.2.19` optimizes the prebuilt YM2612, Sega PSG, YM2203, YM2608,
+YM2610 / YM2610B, YM2413, RF5C164 and Nuked-OPN2 WASM cores. Tested PCM
+remains identical to the previous builds; runtime assertions remain enabled.
+It also fixes Neo Geo runtime cleanup when closing or restarting the synth.
+
+`0.2.18` adds the `msfa` keyword, points the package homepage to the browser
+Playground, and adds a prominent try-it link alongside the runnable examples.
+Runtime code and bundled engines are unchanged.
+
+`0.2.17` bundles `tetorica-msfa-dx7-wasm` 0.3.1. It clarifies that abrupt
+frequency/feedback changes apply directly, their clicks are accepted, and no
+automatic parameter smoothing is added. Runtime JavaScript, declarations and
+WASM are unchanged; the standalone suite now includes 77 passing tests.
+
+`0.2.16` bundles `tetorica-msfa-dx7-wasm` 0.3.0. DX7 operator output level,
+ratio/fixed frequency, fine and detune can change while notes sound, and the new
+`setFeedback(0..7)` edits feedback. **Supported operator edits now also affect
+sounding notes of the edited patch, including release tails.** Patch replacement
+and bank loading isolate old notes; algorithm and general EG edits remain
+future-note-only. This release retains ordinary unedited PCM, defines extreme
+frequency phase wraparound, and fixes stale selection metadata acknowledgements.
+
+`0.2.15` adds Object-based DX7 presets and operator editing in browser
+Playground, with acknowledged async setters in Main and Worker modes.
+It bundles `tetorica-msfa-dx7-wasm` 0.2.0, including the synchronous PCM-core
+API, validation, public types, and English/Japanese documentation.
+Existing SysEx loading and other sound-chip APIs remain unchanged.
 
 `0.2.14` adds DX7 to browser Playground in Main and Worker modes, including
 single-voice / 32-voice-bank SysEx loading, 16-voice polyphony, mixer/FX routing

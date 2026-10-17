@@ -2,9 +2,12 @@
  * The callback executes existing chip commands; it never asks the UI for audio work.
  * @param {(command: Record<string, unknown>, reply?: (message: unknown) => void) => void} apply Processor command dispatcher.
  * @param {() => number} [now] Current audio time in seconds; defaults to currentFrame/sampleRate in a Worklet.
+ * @param {{performanceQueue?: ReturnType<typeof import('./playground_performance_queue.js').createPerformanceQueue>}} [options] Optional Worker audio reservations.
  * @returns {(data: {type: string, port?: MessagePort}) => boolean} Attach/detach handler; true means the message was handled.
  */
-export declare function createChipPortReceiver(apply: (command: Record<string, unknown>, reply?: (message: unknown) => void) => void, now?: () => number): (data: {
+export declare function createChipPortReceiver(apply: (command: Record<string, unknown>, reply?: (message: unknown) => void) => void, now?: () => number, { performanceQueue }?: {
+    performanceQueue?: ReturnType<typeof import('./playground_performance_queue.js').createPerformanceQueue>;
+}): (data: {
     type: string;
     port?: MessagePort;
 }) => boolean;

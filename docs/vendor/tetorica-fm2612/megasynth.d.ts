@@ -7,6 +7,7 @@
 import { MegaSynthRecordingManager } from "./megasynth_recording.js";
 import { createSegaPsgApi } from "./segapsg_api.js";
 import { createRf5c164Client } from "./playground_rf5c164.js";
+import { TetoricaAudioRuntime } from "./tetorica_audio_runtime.js";
 export { createFXBranch, createBitcrusherFX, createChorusFX, createFXParallel, createDelayFX, createEqFX, createFilterFX, createGainFX, createLofiFX, createRadioToneFX, createReverbFX, createSlicerFX, createStereoWidthFX, createTapeSaturationFX, } from "./megasynth_fx.js";
 export { MegaSynthLooper } from "./looper.js";
 export { FM_PRESETS, FM_PRESET_ORDER, } from "./megasynth-fm-presets.js";
@@ -231,7 +232,7 @@ export type MegaSynthListener = (event: MegaSynthEvent) => void;
  */
 export declare class MegaSynth {
     #private;
-    audio: any;
+    audio: TetoricaAudioRuntime;
     mixerReleases: any[];
     workletUrl: string;
     stereoWidthWorkletUrl: string;
@@ -294,7 +295,10 @@ export declare class MegaSynth {
     psg: (ReturnType<typeof createSegaPsgApi> & {
         readonly id: string;
     }) | null;
-    noise: any;
+    noise: {
+        create: (options?: {}) => any;
+        stopAll: () => void;
+    };
     /** @type {Promise<void> | null} */
     readyPromise: Promise<void> | null;
     closePromise: Promise<void> | null;

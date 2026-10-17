@@ -1,7 +1,7 @@
 # tetorica-fm2612 examples
 
 `tetorica-fm2612` を import して使う、機能別の小さなサンプル集。
-公開済み npm `tetorica-fm2612@0.2.14` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7 はブラウザの Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
+公開済み npm `tetorica-fm2612@0.2.20` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
 PCM 生成・WAV 保存は専用例に置き、Web Audio を使う埋め込み例と、Node の nativeFX / 音声デバイス出力の例も掲載しています。本体リポジトリには依存しません。
 
 [公開 examples](https://kyorohiro.github.io/tetorica-fm2612-examples/) と
@@ -51,6 +51,8 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 | FM | [06-chord](examples/genesis/fm/06-chord/README.md) | 複数チャンネルで和音 |
 | DX7（Web） | [01-notes](examples/dx7/01-notes/README.md) | MIDI ノート番号でメロディと和音、Main / Worker の切替 |
 | DX7（Web） | [02-sysex](examples/dx7/02-sysex/README.md) | 1音色 / 32音色の SysEx 読込み、音色選択、試聴 |
+| SNES（実験用・Web / Node） | [01-brr-notes](examples/snes/01-brr-notes/README.md) | 自作 BRR、基準音程、8ボイス、Main / Worker、Node WAV |
+| SPC（実験用・Web / Node） | [02-spc-player](examples/snes/02-spc-player/README.md) | SPC700＋S-DSP の再生・停止、32kHz PCM / WAV |
 | Chip raw | [01-register-note](examples/chip-raw/01-register-note/README.md) | YM2612 レジスタ直接操作 |
 | PSG | [01-tone](examples/genesis/psg/01-tone/README.md) | Sega PSG のトーン |
 | PSG | [02-noise](examples/genesis/psg/02-noise/README.md) | 周期 / ホワイトノイズ |
@@ -161,7 +163,7 @@ Node 専用の場合は `environments: ["node"]`、ブラウザ専用の場合�
 
 ## MegaSynth Node examples
 
-`embedding/06`〜`10` は `tetorica-fm2612@0.2.14` の実験用 MegaSynth API を使います。
+`embedding/06`〜`10` は `tetorica-fm2612@0.2.20` の実験用 MegaSynth API を使います。
 通常の `npm ci` で公開 package を導入できます。
 
 ```sh
@@ -177,14 +179,14 @@ node examples/embedding/10-megasynth-node-audio/node/main.mjs
 06〜09 は音声デバイス不要、10 は audify による Worker 内リアルタイム出力です。
 各例は独立したファイルに処理をすべて記述し、package の export だけを import します。
 一覧では Node source / README のみを表示し、Web へのリンクは付けません。
-Node オフライン全12例は `npm run check:node` で検証できます。
+Node オフライン例は `npm run check:node` で検証できます。
 WAV の RIFF ヘッダー・非ゼロ PCM とイベント JSON を確認します。
 音声デバイスを使うチップ別の基本例と embedding/01・10の Node 例は、このコマンドには含めません。
 
 ## Transport の例
 
 Genesis / PC-98 / Game Boy / X68000 FM の基本例は、WorkletTransport / AudifyTransport を使用します。
-公開済み npm 0.2.14 を使用します。Node のリアルタイム再生には audify を追加してください。
+公開済み npm 0.2.20 を使用します。Node のリアルタイム再生には audify を追加してください。
 
 ```sh
 npm install
@@ -228,3 +230,30 @@ npm run check:dx7
 ```
 
 実際の出力音声、Main / Worker、音色選択、不正な SysEx、読込み中の Stop と再実行を確認します。
+
+## SNES / SPC（実験的実装）
+
+`snes/01-brr-notes` は自作 BRR を `useSoundChip('snes')` で演奏します。
+Web は Main / Worker を選択でき、Node は独立した `SnesDspCore` と `SnesSynth` で WAV を生成します。
+BRR 自体に基準音程はないため、`rootNote` または `baseFrequencyHz` を指定します。
+チャンネルは0〜7の固定8ボイスで、ADSR/GAIN はハードウェアの値です。
+
+`snes/02-spc-player` は SPC700 CPU と S-DSP を動かすファイル再生の例です。
+手元の SPC を選ぶか、未選択なら同梱の自作テスト SPC を再生します。
+Web は `SpcRuntimeSynth`、Node は `SpcCore` を使用します。
+内部 PCM は **32,000 Hz ステレオ**で、Web のデバイス出力時だけリサンプリングします。
+
+**実験的実装です。** 実ゲーム SPC・Tauri・長時間再生の互換性確認は継続中で、新 API や挙動が変わる場合があります。
+ゲーム音楽・ゲーム由来サンプル・Nintendo IPL ROM は同梱しません。
+`snes_spc` の LGPL 表示、改変済みソース、ビルド手順は vendor 内に含まれます。
+
+```sh
+node examples/snes/01-brr-notes/node/main.mjs
+node examples/snes/02-spc-player/node/main.mjs
+npm run build
+npm run check:snes
+```
+
+`check:snes` は上の DX7 と同じ Playwright の Chromium / WebKit を使い、
+サブパス配置での BRR 演奏・Main / Worker・初期化中の Stop・SPC の
+Pause / Resume・音量・不正ファイル後の再実行を確認します。

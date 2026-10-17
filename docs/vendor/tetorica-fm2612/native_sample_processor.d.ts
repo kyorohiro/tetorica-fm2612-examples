@@ -20,5 +20,9 @@ export declare function createSampleProcessor(api: {
 }, rate: number): {
     clear: () => void;
     reset: () => void;
+    reserve: (d: any, performance: any) => number;
+    startReserved: (id: any) => void;
+    cancelReservation: (id: any) => void;
+    stopOwner: (owner: any, session: any) => void;
     command(d: any): number | undefined;
 };

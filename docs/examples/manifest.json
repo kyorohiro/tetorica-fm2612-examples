@@ -48,6 +48,18 @@
     "environments": ["web"]
   },
   {
+    "id": "snes/01-brr-notes",
+    "title": "SNES：BRR でメロディと和音（実験的）",
+    "description": "自作 BRR の調律・ADSR・8ボイス。Web は Main / Worker、Node は32kHz stereo WAV。",
+    "environments": ["web", "node"]
+  },
+  {
+    "id": "snes/02-spc-player",
+    "title": "SPC：ファイルを再生（実験的）",
+    "description": "自作テスト SPC または手元の SPC を再生・停止する。Web は AudioWorklet、Node は32kHz WAV。",
+    "environments": ["web", "node"]
+  },
+  {
     "id": "chip-raw/01-register-note",
     "title": "レジスタを直接書く",
     "description": "YM2612 の OP4・algorithm・pan・周波数・key on/off をレジスタで設定。"

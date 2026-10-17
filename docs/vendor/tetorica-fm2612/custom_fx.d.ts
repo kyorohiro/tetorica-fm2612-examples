@@ -6,6 +6,7 @@ export declare class LiveFX {
     rate: any;
     effects: Map<any, any>;
     hasProcessed: boolean;
+    buffers: Map<any, any>;
     input: any;
     output: any;
     constructor(rate: any);

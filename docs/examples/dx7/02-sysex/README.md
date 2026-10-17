@@ -1,6 +1,6 @@
 # DX7：SysEx と音色選択
 
-`tetorica-fm2612@0.2.14` の Playground Runtime から、DX7 の1音色 / 32音色バンクを読み込みます。
+`tetorica-fm2612@0.2.20` の Playground Runtime から、DX7 の1音色 / 32音色バンクを読み込みます。
 [Web ページ](web/index.html) / [全コード](web/main.js)。`npm run dev` の一覧から開いてください。
 
 1. 必要なら手元の DX7 `.syx` を選択します。未選択なら同梱の自作バンクです。

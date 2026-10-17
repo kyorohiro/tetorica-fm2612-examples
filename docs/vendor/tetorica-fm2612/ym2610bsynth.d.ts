@@ -144,6 +144,7 @@ export declare class NeoGeoFMSynth {
     fm: any;
     channelCount: number;
     constructor(fm: any);
+    get transport(): any;
     get clock(): any;
     set clock(hz: any);
     reset(): void;

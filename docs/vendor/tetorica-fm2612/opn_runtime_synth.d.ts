@@ -1,3 +1,10 @@
+/**
+ * @file opn_runtime_synth.js
+ * 実行環境: Browser（メインスレッド）
+ * 依存: 音声初期化・再生時に AudioContext / AudioWorkletNode と WASM アセットが必要。
+ * import だけでは音声デバイスを開かない。アセット読み込みには fetch を使用する。
+ */
+import { TetoricaAudioRuntime } from "./tetorica_audio_runtime.js";
 export type OPNRuntimeSynthOptions = Pick<import('./megasynth.js').MegaSynthOptions, 'audioContext' | 'outputNode' | 'sampleOutputNode' | 'masterVolume' | 'mixer' | 'workletUrl'> & {
     wasmUrl?: string;
     rhythmRom?: Uint8Array;
@@ -17,7 +24,7 @@ export declare class OPNRuntimeSynth {
         dac: false;
         recorder: false;
     }>;
-    audio: any;
+    audio: TetoricaAudioRuntime;
     workletUrl: any;
     wasmUrl: any;
     processorName: any;
@@ -35,14 +42,17 @@ export declare class OPNRuntimeSynth {
     closePromise: Promise<void> | null;
     initializationController: AbortController | null;
     state: string;
-    noise: any;
+    noise: {
+        create: (options?: {}) => any;
+        stopAll: () => void;
+    };
     /** @param {OPNRuntimeSynthOptions|undefined} options */
     constructor(options: OPNRuntimeSynthOptions | undefined, config: any);
     /** @returns {import('./soundchip_mixer.js').SoundChipMixer} */
     get mixer(): import('./soundchip_mixer.js').SoundChipMixer;
-    get audioContext(): any;
-    set audioContext(value: any);
-    get ownsAudioContext(): any;
+    get audioContext(): AudioContext | null;
+    set audioContext(value: AudioContext | null);
+    get ownsAudioContext(): boolean;
     get sample(): any;
     get stream(): any;
     start(): Promise<this>;
@@ -54,8 +64,8 @@ export declare class OPNRuntimeSynth {
     addListener(listener: any): () => boolean;
     removeListener(listener: any): void;
     /** @param {number} volume */
-    setMasterVolume(volume: number): any;
-    getMasterVolume(): any;
+    setMasterVolume(volume: number): number;
+    getMasterVolume(): number;
     setFXChain(effects?: any[], options?: {}): any;
     getFXChain(): any;
     clearFXChain(options?: {}): any;
