@@ -97,6 +97,19 @@ export type PlaygroundClockOptions = {
  * @returns {DeadlineScheduler} Queue waits and wake cancelled owners; callers check cancellation themselves.
  */
 export declare function createDeadlineScheduler({ now, setTimer, clearTimer, createTaskChannel, }: DeadlineSchedulerOptions): DeadlineScheduler;
+/**
+ * Create an elapsed-seconds timeline anchored once, avoiding accumulated timer
+ * lateness between events. This resumes JavaScript; it does not reserve audio.
+ * @param {{now:()=>number,sleep:(seconds:number)=>Promise<void>,check?:()=>void}} options
+ * @returns {{waitUntil:(seconds:number)=>Promise<void>}}
+ */
+export declare function createSecondsTimeline({ now, sleep, check }: {
+    now: () => number;
+    sleep: (seconds: number) => Promise<void>;
+    check?: () => void;
+}): {
+    waitUntil: (seconds: number) => Promise<void>;
+};
 /** Shared beat clock: BPM changes preserve phase and retime outstanding beat waits.
  * State belongs to one active runtime, not to individual liveLoops.
  * @param {{now:()=>number, scheduler:DeadlineScheduler, state:{bpm:number,clockStartTime:number|null}}} options

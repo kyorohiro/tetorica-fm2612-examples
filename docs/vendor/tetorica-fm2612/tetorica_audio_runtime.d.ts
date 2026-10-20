@@ -19,6 +19,8 @@ export declare class TetoricaAudioRuntime {
     /** @type {Set<AudioNode>} Non-audible observation branches after FX and master volume. */
     outputMonitors: Set<AudioNode>;
     fxChain: any[];
+    nativeFXPreparation: any;
+    nativeFXGeneration: number;
     sampleBuffers: Map<any, any>;
     sampleVoices: Set<any>;
     streamEntries: Map<any, any>;

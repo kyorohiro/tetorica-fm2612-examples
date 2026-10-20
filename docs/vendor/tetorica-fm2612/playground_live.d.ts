@@ -16,6 +16,7 @@
  * @param {(loop: object) => void} [options.cancelWaits] Wake a stopped loop's waits.
  * @param {(loop: object) => Promise<void>} [options.finishTasks] Await loop-owned asynchronous tasks.
  * @param {(loop: object) => void} [options.releaseTasks] Release completed loop task state.
+ * @param {() => string[]} [options.getKeyboardNames] Registered keyboard resources retained by liveCleanup.
  * @param {(line: string) => void} options.logLine Error/log sink.
  * @param {(message: string) => void} options.setStatus Status sink.
  * @param {(callback: () => unknown) => unknown | Promise<unknown>} [options.executeCallback] Optional execution guard wrapper.
@@ -38,6 +39,7 @@ export declare function createPlaygroundLive(options: {
     cancelWaits?: (loop: object) => void;
     finishTasks?: (loop: object) => Promise<void>;
     releaseTasks?: (loop: object) => void;
+    getKeyboardNames?: () => string[];
     logLine: (line: string) => void;
     setStatus: (message: string) => void;
     executeCallback?: (callback: () => unknown) => unknown | Promise<unknown>;

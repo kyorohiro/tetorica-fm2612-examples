@@ -82,6 +82,14 @@ export declare class GameboySynth {
     writeRegister(offset: number, value: number): void;
     /** Adopt writes made through this Synth without resetting or writing defaults. */
     adoptRegisterState(): void;
+    /** Internal snapshot for switching execution threads without replaying triggers. */
+    _getState(): {
+        clock: number;
+        initialized: boolean;
+        registers: number[];
+        voice: number[];
+    };
+    _adoptState(state: any): void;
     reset(): void;
     initialize(): void;
     /** Tone channel 0/1=pulse, 2=wave. Configure Hz without triggering.

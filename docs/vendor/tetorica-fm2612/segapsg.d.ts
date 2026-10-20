@@ -69,6 +69,8 @@ export declare class SegaPSG {
      * @returns {void}
      */
     write(data: number): void;
+    /** Game Gear routing: bits 0..3 right, bits 4..7 left; 0xff is mono. */
+    setStereo(mask: any): void;
     /** Mute Tone 1–3 / Noise (0–3) without changing registers or oscillator state. */
     setChannelMuted(channel: any, muted: any): void;
     /**

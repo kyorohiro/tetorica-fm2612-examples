@@ -5,10 +5,12 @@ export { sampleBytes, encodeRf5c164 } from './rf5c164_pcm.js';
  * @returns RF5C164 register, memory, voice and disposal controls. */
 export declare function createRf5c164Client(port: MessagePort, decode: (source: unknown) => Promise<import('./wav.js').ChannelPCM>): {
     loadMemory(bytes: any, address?: number): Promise<any>;
-    /** @param {unknown} source @param {{address?: number, loopStart?: number}} [options] */
-    loadSample(source: unknown, { address, loopStart }?: {
+    /** endGuardBytes requests consecutive end markers for large pitch steps; 0 retains the legacy trailer.
+     * @param {unknown} source @param {{address?: number, loopStart?: number, endGuardBytes?: number}} [options] */
+    loadSample(source: unknown, { address, loopStart, endGuardBytes }?: {
         address?: number;
         loopStart?: number;
+        endGuardBytes?: number;
     }): Promise<{
         start: number;
         loopStart: any;

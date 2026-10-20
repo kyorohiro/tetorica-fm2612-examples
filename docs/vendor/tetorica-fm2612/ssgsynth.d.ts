@@ -17,6 +17,16 @@ export declare class SSGSynth {
     });
     /** Reset tracked registers after the parent chip was reset. Does not write hardware. */
     resetState(): void;
+    /** Internal performance snapshot, including levels retained while keyed off. */
+    _getState(): {
+        registers: number[];
+        levels: number[];
+    };
+    /** Adopt a performance shadow without bus writes; older register-only snapshots remain supported. */
+    _adoptState({ registers, levels }: {
+        levels: any;
+        registers: any;
+    }): void;
     /** Track parent Synth raw writes so mixer changes preserve other channels and I/O bits. @param {number} register  @param {number} value */
     observeWrite(register: number, value: number): void;
     /** @param {number} register

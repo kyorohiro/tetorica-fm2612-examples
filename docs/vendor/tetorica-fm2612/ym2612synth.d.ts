@@ -1,6 +1,11 @@
 import { YM2612DacPlayer } from "./ym2612_dac.js";
 export type YM2612Transport = {
     write(port: number, register: number, value: number): void;
+    writeBatch?: (writes: Array<{
+        port: number;
+        register: number;
+        value: number;
+    }>) => void;
     reset?: () => void;
     read?: (offset: number) => number;
     readStatus?: () => number;
@@ -44,6 +49,7 @@ export type YM2612SynthOptions = {
  * A future AudioWorklet transport can implement the same `write` / `reset` shape.
  */
 export declare class YM2612DirectTransport {
+    #private;
     chip: {
         writeRegister(register: number, value: number, port?: number): void;
         sampleRate?: () => number;
@@ -63,6 +69,10 @@ export declare class YM2612DirectTransport {
     frame: number;
     dacPlayer: YM2612DacPlayer | null;
     dacPanRegister: number;
+    stereoView: {
+        left: Float32Array<ArrayBuffer>;
+        right: Float32Array<ArrayBuffer>;
+    } | undefined;
     /**
      * @param {{
      *   writeRegister(register: number, value: number, port?: number): void,
@@ -102,6 +112,13 @@ export declare class YM2612DirectTransport {
         left: Float32Array<ArrayBuffer>;
         right: Float32Array<ArrayBuffer>;
     };
+    /** Borrowed PCM, valid until the next render. Views can include spare capacity.
+     * Use generateStereo() when the caller needs to retain the samples.
+     * @param {number} frames */
+    generateStereoView(frames: number): {
+        left: Float32Array;
+        right: Float32Array;
+    };
     /** @param {number} offset */
     read(offset: number): number;
     readStatus(): number;
@@ -130,6 +147,13 @@ export declare class YM2612WorkletTransport {
      * @param {number} register
      * @param {number} value */
     write(port: number, register: number, value: number): void;
+    /** Apply a related register group in one worklet message.
+     * @param {Array<{port:number,register:number,value:number}>} writes */
+    writeBatch(writes: Array<{
+        port: number;
+        register: number;
+        value: number;
+    }>): void;
     scheduleWrites(entries: any): void;
     clearScheduledWrites(): void;
     loadDacBank(name: any, bytes: any): void;
@@ -457,6 +481,7 @@ export declare class YM2612Synth {
      * @returns {void}
      */
     _write(port: number, register: number, value: number): void;
+    _writeBatch(commands: any): void;
     getState(): any;
     /** @param {number} offset */
     _notifyRead(offset: number, value: any): void;

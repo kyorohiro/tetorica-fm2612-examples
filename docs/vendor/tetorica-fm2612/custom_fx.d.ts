@@ -9,6 +9,9 @@ export declare class LiveFX {
     buffers: Map<any, any>;
     input: any;
     output: any;
+    inputStorage: any;
+    outputStorage: any;
+    channelBuffers: any;
     constructor(rate: any);
     command(d: any): void;
     clear(): void;

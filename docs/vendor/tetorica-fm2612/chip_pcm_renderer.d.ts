@@ -38,4 +38,8 @@ export declare class ChipPCMRenderer {
         right: Float32Array<any>;
         sampleRate: number;
     };
+    /** Fill an output span without allocating PCM arrays on the audio thread.
+     * @param {Float32Array} left @param {Float32Array} right
+     * @param {number} [outputOffset] @param {number} [frames] */
+    renderInto(left: Float32Array, right: Float32Array, outputOffset?: number, frames?: number): void;
 }

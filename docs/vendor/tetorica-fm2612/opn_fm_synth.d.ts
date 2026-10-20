@@ -47,7 +47,7 @@ export declare class OPNWorkletTransport {
         data: any;
     }) => void;
     /** @param {Uint8Array} bytes */
-    loadRhythmRom(bytes: Uint8Array): void;
+    loadRhythmRom(bytes: Uint8Array): Promise<any>;
     /** @param {AudioWorkletNode|MessagePort|import('./soundchip_worklet.js').WorkletSoundChip} node
      * @param {{portCount:number,chipName:string}} config */
     constructor(node: AudioWorkletNode | MessagePort | import('./soundchip_worklet.js').WorkletSoundChip, { portCount, chipName }: {
@@ -58,15 +58,26 @@ export declare class OPNWorkletTransport {
     stop(): Promise<void>;
     close(): Promise<void>;
     flush(): Promise<unknown>;
-    /** @param {Uint8Array} bytes
+    /** YM2608: (bytes, address). YM2610/B: (memoryType, bytes, address), A=0 / B=1.
+     * @param {Uint8Array|0|1} typeOrBytes
+     * @param {Uint8Array|number} [bytesOrAddress]
      * @param {number} [address] */
-    loadAdpcmMemory(bytes: Uint8Array, address?: number): Promise<any>;
+    loadAdpcmMemory(typeOrBytes: Uint8Array | 0 | 1, bytesOrAddress?: Uint8Array | number, address?: number): Promise<any>;
+    _loadMemory(command: any, resultType: any): Promise<any>;
     dispose(): void;
+    cancelPending(reason?: string): void;
     reset(): void;
     /** @param {number} port
      * @param {number} register
      * @param {number} value */
     write(port: number, register: number, value: number): void;
+    /** Apply a related register group in one worklet message.
+     * @param {Array<{port:number,register:number,value:number}>} writes */
+    writeBatch(writes: Array<{
+        port: number;
+        register: number;
+        value: number;
+    }>): void;
 }
 export declare class OPNFMSynth {
     transport: import("./ym2612synth.js").YM2612Transport;
@@ -231,5 +242,6 @@ export declare class OPNFMSynth {
     /** @param {number} port
      * @param {number} register */
     _write(port: number, register: number, value: any): void;
+    _writeBatch(commands: any): void;
     _syncIrq(): void;
 }

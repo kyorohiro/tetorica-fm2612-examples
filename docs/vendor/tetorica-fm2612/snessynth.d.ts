@@ -82,6 +82,10 @@ export declare class SnesSynth {
     nextAddress: number;
     pendingKon: number;
     koff: number;
+    timeline: {
+        playing: boolean;
+        totalFrames: number;
+    } | null | undefined;
     konFrame: any;
     /** @type {SnesVoiceState[]} */
     channels: SnesVoiceState[];
@@ -147,6 +151,39 @@ export declare class SnesSynth {
     };
     /** @returns {SnesState} */
     getState(): SnesState;
+    _instrumentOnly(): void;
+    /** Prepare captured initial RAM/DSP plus editable 1,024,000-Hz DSP/RAM events.
+     * Playback remains paused until playTimeline(). No SPC700 driver is executed.
+     * @param {import('./spc.js').SpcTimeline} trace */
+    prepareTimeline(trace: import('./spc.js').SpcTimeline): {
+        loaded: boolean;
+        positionFrames: number;
+        totalFrames: number;
+        ended: boolean;
+        playing: boolean;
+    };
+    /** Restart the prepared timeline from its captured DSP phase. */
+    playTimeline(): {
+        loaded: boolean;
+        positionFrames: number;
+        totalFrames: number;
+        ended: boolean;
+        playing: boolean;
+    };
+    stopTimeline(): {
+        loaded: boolean;
+        positionFrames: number;
+        totalFrames: number;
+        ended: boolean;
+        playing: boolean;
+    };
+    getTimelineState(): {
+        loaded: boolean;
+        positionFrames: number;
+        totalFrames: number;
+        ended: boolean;
+        playing: boolean;
+    };
     /** Optional rendering convenience; core.renderInto() is equally supported.
      * Multiple keyOn calls at the same native frame form one KON mask.
      * @param {Float32Array} left @param {Float32Array} right @param {number} [frames] @param {number} [offset] */

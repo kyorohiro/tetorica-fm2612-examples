@@ -6,6 +6,7 @@ export declare class SegaPSGDirectTransport {
     /** @param {number} value */
     write(value: number): void;
     reset(): void;
+    setStereo(mask: any): void;
 }
 /** Tone/noise register generation shared by Node.js and browser transports. */
 export declare class SegaPSGSynth {
@@ -13,14 +14,16 @@ export declare class SegaPSGSynth {
     transport: {
         clock?: number;
         write: (value: number) => void;
+        setStereo?: (mask: number) => void;
         reset?: () => void;
         resetAll?: () => void;
     };
-    /** @param {{transport: {clock?:number, write: (value: number) => void, reset?: () => void, resetAll?: () => void}}} [options] Ordered register transport. */
+    /** @param {{transport: {clock?:number, write: (value: number) => void, setStereo?:(mask:number)=>void, reset?: () => void, resetAll?: () => void}}} [options] Ordered register transport. */
     constructor({ transport }?: {
         transport: {
             clock?: number;
             write: (value: number) => void;
+            setStereo?: (mask: number) => void;
             reset?: () => void;
             resetAll?: () => void;
         };
@@ -29,6 +32,17 @@ export declare class SegaPSGSynth {
     write(value: number): void;
     reset(): void | undefined;
     resetAll(): void | undefined;
+    /** Game Gear routing: bits 0..3 right, bits 4..7 left. */
+    setStereo(mask: any): void;
+    /** Silence all four voices while keeping configured attenuation and routing. */
+    allNotesOff(): void;
+    _forceKeyOff(channel: any): void;
+    _getState(): {
+        attenuations: number[];
+        latched: number;
+        stereo: number;
+    };
+    _adoptState(state?: {}): void;
     /** @param {number} channel Physical tone channel, 0..2.
      * @param {{note?: string, frequency?: number, period?: number, attenuation?: number, volume?: number}} [options]
      * @returns {number} Written 10-bit period, calculated using SEGAPSG_CLOCK.

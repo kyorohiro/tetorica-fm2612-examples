@@ -1,7 +1,7 @@
 # tetorica-fm2612 examples
 
 `tetorica-fm2612` を import して使う、機能別の小さなサンプル集。
-公開済み npm `tetorica-fm2612@0.2.20` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
+公開済み npm `tetorica-fm2612@0.2.21` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES・PC Engine の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
 PCM 生成・WAV 保存は専用例に置き、Web Audio を使う埋め込み例と、Node の nativeFX / 音声デバイス出力の例も掲載しています。本体リポジトリには依存しません。
 
 [公開 examples](https://kyorohiro.github.io/tetorica-fm2612-examples/) と
@@ -60,6 +60,9 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 | AudioWorklet | [01-note](examples/audio-worklet/01-note/README.md) | 音声スレッドで FM 発音、初期化・停止・解放 |
 | PC-98 | [01-note](examples/pc98/fm/01-note/README.md) | PC-98 YM2608 の FM 発音 |
 | PC-98 | [01-tone](examples/pc98/ssg/01-tone/README.md) | PC-98 YM2608 の SSG トーン |
+| PC Engine | [01-waveform](examples/pc-engine/wave/01-waveform/README.md) | 32点・5-bit波形、メロディ、左右Pan |
+| PC Engine | [01-noise](examples/pc-engine/noise/01-noise/README.md) | CH4・5のNoise、周波数コード、左右Pan |
+| PC Engine | [01-modulation](examples/pc-engine/lfo/01-modulation/README.md) | CH1からCH0へのハードウェアLFO |
 | Game Boy | [01-duty](examples/gameboy/pulse/01-duty/README.md) | Game Boy pulse のデューティ比 |
 | Game Boy | [01-waveform](examples/gameboy/wave/01-waveform/README.md) | Game Boy wave の波形メモリー |
 | Game Boy | [01-width](examples/gameboy/noise/01-width/README.md) | Game Boy noise の幅 |
@@ -163,7 +166,7 @@ Node 専用の場合は `environments: ["node"]`、ブラウザ専用の場合�
 
 ## MegaSynth Node examples
 
-`embedding/06`〜`10` は `tetorica-fm2612@0.2.20` の実験用 MegaSynth API を使います。
+`embedding/06`〜`10` は `tetorica-fm2612@0.2.21` の実験用 MegaSynth API を使います。
 通常の `npm ci` で公開 package を導入できます。
 
 ```sh
@@ -186,7 +189,7 @@ WAV の RIFF ヘッダー・非ゼロ PCM とイベント JSON を確認しま�
 ## Transport の例
 
 Genesis / PC-98 / Game Boy / X68000 FM の基本例は、WorkletTransport / AudifyTransport を使用します。
-公開済み npm 0.2.20 を使用します。Node のリアルタイム再生には audify を追加してください。
+公開済み npm 0.2.21 を使用します。Node のリアルタイム再生には audify を追加してください。
 
 ```sh
 npm install
@@ -209,6 +212,29 @@ Web の `SoundChipMixer` でチップ別の音量・Pan・Mute を設定でき�
 ## YM2151 の高水準 API
 
 `YM2151Synth` は Web / Node 共通で `setPreset(0, FM_PRESETS.sine)`、`noteOn(0, 'A4')`、`noteOff(0)` を使えます。[X68000 の基本例](examples/x68000/fm/01-note/README.md) で Worklet / Audify の使い方を示しています。DirectTransport では PCM を生成できます。
+
+## PC Engine / HuC6280
+
+`pc-engine/` の3例は公開済み `tetorica-fm2612@0.2.21` を使います。
+Web は `Playground({chip:'huc6280'})` の主音源 `pce` を Main / Worker から操作します。
+Node は `Huc6280AudioEngine` → `Huc6280DirectTransport` → `Huc6280Synth` でPCMを生成し、WAVへ保存します。音声ドライバーは不要です。
+package root の `createSoundChip('huc6280')` や専用 AudifyTransport は使いません。
+
+物理6CH、各32点・0〜31の波形、音量0〜31、左右Pan0〜15です。
+Noiseは0始まりのCH4・5のみ。LFOはCH1の波形でCH0を変調します。
+波形の書き込みは対象CHを停止するため、その後に `noteOn()` / `keyOn()` します。
+ゲーム由来のROMや波形ファイルは使わず、コード内で波形を作ります。
+
+```sh
+node examples/pc-engine/wave/01-waveform/node/main.mjs
+node examples/pc-engine/noise/01-noise/node/main.mjs
+node examples/pc-engine/lfo/01-modulation/node/main.mjs
+npm run build
+npm run check:pcengine
+```
+
+`check:pcengine` はChromium / WebKitのMain / Workerで実際の出音、
+初期化中・演奏中のStop、コード編集後の再実行、音声リソース解放を確認します。
 
 ## DX7
 

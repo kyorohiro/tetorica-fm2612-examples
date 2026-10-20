@@ -1,13 +1,36 @@
+export type PlaygroundChip = 'ym2612' | 'ym2203' | 'ym2608' | 'ym2610' | 'ym2610b' | 'gameboy' | 'nes' | 'snes' | 'x68000' | 'huc6280' | 'segapsg';
+export type PlaygroundKeyboardEvent = {
+    id: string;
+    midi: number;
+    velocity?: number;
+};
+export type PlaygroundKeyboardTarget = {
+    name: string;
+    noteOn: (event: PlaygroundKeyboardEvent) => unknown;
+    noteOff: (event: PlaygroundKeyboardEvent) => unknown;
+    allNotesOff: () => unknown;
+};
+/**
+ * @typedef {'ym2612'|'ym2203'|'ym2608'|'ym2610'|'ym2610b'|'gameboy'|'nes'|'snes'|'x68000'|'huc6280'|'segapsg'} PlaygroundChip
+ * @typedef {{id:string,midi:number,velocity?:number}} PlaygroundKeyboardEvent
+ * @typedef {{name:string,noteOn:(event:PlaygroundKeyboardEvent)=>unknown,
+ * noteOff:(event:PlaygroundKeyboardEvent)=>unknown,allNotesOff:()=>unknown}} PlaygroundKeyboardTarget
+ */
 /**
  * Create a reusable browser runtime with clocks, music helpers and execution lifecycle.
  * @param {{
  *   synth?: object | null,
  *   megaDrive?: object | null,
- *   chip?: "ym2612" | "ym2203" | "ym2608" | "ym2610",
+ *   chip?: PlaygroundChip,
+ *   clock?: number,
+ *   stereoEnabled?: boolean,
+ *   fetch?: typeof globalThis.fetch,
+ *   wasmUrl?: string | URL,
  *   workletUrl?: string,
  *   audioWorkletUrl?: string,
  *   ym2612WasmUrl?: string,
  *   segaPsgWasmUrl?: string,
+ *   gameboyWasmUrl?: string,
  *   presets?: Record<string, object>,
  *   logicWorkerUrl?: string | null,
  *   execution?: "main" | "worker",
@@ -20,17 +43,24 @@
  *   onReady?: ((context: { synth: object, megaDrive: object }) => void) | null,
  *   onMegaDriveEvent?: ((event: object) => void) | null,
  *   onAuditionReset?: (() => void) | null,
+ *   onKeyboardTargetChange?: ((target:PlaygroundKeyboardTarget|null) => void) | null,
+ *   inputAudio?: ((options: {title?:string,asset?:string,edit?:boolean}, context: {signal:AbortSignal}) => Promise<null|{name:string,source:'file'|'microphone',sampleRate:number,channels:Float32Array[]}>) | null,
  * }} [options]
  * @returns Runtime controls and accessors; initialize audio before using the synth.
  */
 export declare function createPlaygroundRuntime(options?: {
     synth?: object | null;
     megaDrive?: object | null;
-    chip?: "ym2612" | "ym2203" | "ym2608" | "ym2610";
+    chip?: PlaygroundChip;
+    clock?: number;
+    stereoEnabled?: boolean;
+    fetch?: typeof globalThis.fetch;
+    wasmUrl?: string | URL;
     workletUrl?: string;
     audioWorkletUrl?: string;
     ym2612WasmUrl?: string;
     segaPsgWasmUrl?: string;
+    gameboyWasmUrl?: string;
     presets?: Record<string, object>;
     logicWorkerUrl?: string | null;
     execution?: "main" | "worker";
@@ -46,6 +76,19 @@ export declare function createPlaygroundRuntime(options?: {
     }) => void) | null;
     onMegaDriveEvent?: ((event: object) => void) | null;
     onAuditionReset?: (() => void) | null;
+    onKeyboardTargetChange?: ((target: PlaygroundKeyboardTarget | null) => void) | null;
+    inputAudio?: ((options: {
+        title?: string;
+        asset?: string;
+        edit?: boolean;
+    }, context: {
+        signal: AbortSignal;
+    }) => Promise<null | {
+        name: string;
+        source: 'file' | 'microphone';
+        sampleRate: number;
+        channels: Float32Array[];
+    }>) | null;
 }): {
     mixer: any;
     chipInspector: {
@@ -69,6 +112,7 @@ export declare function createPlaygroundRuntime(options?: {
         noteOn(channel: any, block: any, fnum: any): void;
         noteOff(channel: any): void;
     };
+    getKeyboardTarget: () => any;
     load: (name: any, sourceCode: any) => void;
     put: (name: any, sourceCode: any) => void;
     get: (name: any) => any;
@@ -351,6 +395,7 @@ export declare function createPlaygroundRuntime(options?: {
     readonly megaDrive: object;
     readonly capabilities: any;
     readonly fm: any;
+    readonly gameboy: any;
     readonly psg: any;
     readonly sample: any;
     readonly stream: any;

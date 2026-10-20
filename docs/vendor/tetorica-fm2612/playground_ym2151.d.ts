@@ -1,6 +1,8 @@
 /** Independent OPM client. Operator indices follow register order M1, C1, M2, C2. */
 /** @param {MessagePort} port */
 export declare function createYm2151Client(port: MessagePort): {
+    _getState(): any;
+    _adoptState(state: any): void;
     writeRegister: (register: any, value: any) => void;
     reset(): void;
     setOperator(ch: any, operator: any, options: any): void;
@@ -17,6 +19,9 @@ export declare function createYm2151Client(port: MessagePort): {
     setPitch(ch: any, keyCode: any, keyFraction?: number): void;
     keyOn(ch: any, mask?: number): void;
     keyOff(ch: any): void;
+    _forceKeyOff(ch: any): void;
+    _stopVoices(): void;
+    allNotesOff(): void;
     setNoise(enabled: any, frequency?: number): void;
     dispose(): void;
 } & {

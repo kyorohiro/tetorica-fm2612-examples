@@ -131,12 +131,26 @@ export declare class NesApuSynth {
             enabled?: boolean;
         }) => void;
     };
-    /** @param {{transport:NesApuTransport, clock?:number, fds?:boolean}} options */
-    constructor({ transport, clock, fds }?: {
+    /** @param {{transport:NesApuTransport, clock?:number, fds?:boolean, initialize?:boolean}} options */
+    constructor({ transport, clock, fds, initialize }?: {
         transport: NesApuTransport;
         clock?: number;
         fds?: boolean;
+        initialize?: boolean;
     });
+    _getState(): {
+        clock: number;
+        registers: number[];
+        enabled: number;
+        fdsActive: boolean;
+        fdsGain: number;
+        fdsMaster: number;
+        sample: {
+            address: number;
+            length: number;
+        } | null;
+    };
+    _adoptState(state: any): void;
     /** @param {number} address @param {number} value */
     writeRegister(address: number, value: number): void;
     /** Reset native registers and the shadow without writing Synth voice defaults. */

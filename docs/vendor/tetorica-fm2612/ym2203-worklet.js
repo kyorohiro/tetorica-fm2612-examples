@@ -18,13 +18,14 @@ class YM2203Processor extends AudioWorkletProcessor {
     this.auditions = null;
     this.chipRate = sampleRate;
     this.remainder = 0; this.lastLeft = 0; this.lastRight = 0;
+    this.ssgOwners = new Array(3).fill(null);
     this.performanceOwnership = createPerformanceChipOwnership({
       writeFm: (register, value, port) => this.chip?.writeRegister(register, value, port),
       channelCount: 3,
     });
     this.performanceQueue = createPerformanceQueue({
       apply: (data, reply, _frame, performance) => handle(data, reply, performance),
-      onCancelOwner: owner => this.performanceOwnership.cancel(owner),
+      onCancelOwner: owner => { this.performanceOwnership.cancel(owner); this.cancelSsgOwner(owner); },
       nowFrame: () => currentFrame, sampleRate,
       prepare: (data, reply) => {
         if (data.type !== 'chip-clock') return data;
@@ -39,6 +40,7 @@ class YM2203Processor extends AudioWorkletProcessor {
     const receiveChipPort = createChipPortReceiver((data, reply) => handle(data, reply), undefined, {performanceQueue: this.performanceQueue});
     const handle = (data, reply = message => this.port.postMessage(message), performance) => {
       this.performanceOwnership.observe(data, performance);
+      this.observeSsgOwnership(data, performance);
       if (receiveOpnAuditionCommand(this.auditions, data, reply)) return;
       if (data.type === 'chip-clock') {
         try { if (!this.chip) throw new Error('Chip not ready'); this.chipRate = this.chip.sampleRate(validateChipClock(data.clock)); if (!data.performanceAcknowledged) reply({type:'chip-clock-result',id:data.id}); }
@@ -63,6 +65,7 @@ class YM2203Processor extends AudioWorkletProcessor {
       });
       this.auditions = createOpnAuditionGuard(this.chip, 3);
       this.chipRate = this.chip.sampleRate(YM2203_CLOCK);
+      this.chip.reserveStereoFrames(Math.ceil(128 * this.chipRate / sampleRate));
       this.port.postMessage({ type: "ready" });
     } catch (error) {
       this.chip?.dispose();
@@ -78,21 +81,50 @@ class YM2203Processor extends AudioWorkletProcessor {
     this.chip.writeRegister(register, value, 0);
   }
 
+  observeSsgOwnership(data, performance) {
+    if (data.type === 'reset') this.ssgOwners.fill(null);
+    if (data.type !== 'write' || (data.port ?? 0) !== 0) return;
+    if (data.register >= 8 && data.register <= 10) {
+      this.ssgOwners[data.register - 8] = data.value & 31 ? performance?.owner ?? null : null;
+    }
+  }
+
+  cancelSsgOwner(owner) {
+    for (let ch = 0; ch < 3; ch++) if (this.ssgOwners[ch] === owner) {
+      this.ssgOwners[ch] = null; this.chip?.writeRegister(8 + ch, 0, 0);
+    }
+  }
+
   process(_inputs, outputs) {
     const [left, right] = outputs[0];
     if (!this.chip) { left.fill(0); right.fill(0); return true; }
-    for (let frame = 0; frame < left.length; frame += 1) {
+    // Render only as far as the next timed register/clock change. The native
+    // chip can then generate the whole segment in one call, avoiding tens of
+    // thousands of tiny PCM allocations per second on the audio thread.
+    if (!this.sampleCounts || this.sampleCounts.length < left.length) this.sampleCounts = new Uint32Array(left.length);
+    let frame = 0;
+    while (frame < left.length) {
       if (this.performanceQueue.nextFrame() <= currentFrame + frame) this.performanceQueue.advance(currentFrame + frame);
-      this.remainder += this.chipRate;
-      const samples = Math.floor(this.remainder / sampleRate);
-      this.remainder -= samples * sampleRate;
-      if (samples) {
-      const pcm = this.chip.generateStereo(samples);
-      let mixedLeft = 0, mixedRight = 0;
-      for (let index = 0; index < samples; index += 1) { mixedLeft += pcm.left[index]; mixedRight += pcm.right[index]; }
-      this.lastLeft = mixedLeft / samples; this.lastRight = mixedRight / samples;
+      const end = Math.min(left.length, this.performanceQueue.nextFrame() - currentFrame);
+      let samples = 0;
+      for (let index = frame; index < end; index++) {
+        this.remainder += this.chipRate;
+        const count = Math.floor(this.remainder / sampleRate);
+        this.remainder -= count * sampleRate;
+        this.sampleCounts[index] = count;
+        samples += count;
       }
-      left[frame] = this.lastLeft; right[frame] = this.lastRight;
+      const pcm = samples ? this.chip.generateStereoView(samples) : null;
+      let offset = 0;
+      for (; frame < end; frame++) {
+        const count = this.sampleCounts[frame];
+        if (count) {
+          let l = 0, r = 0;
+          for (let index = 0; index < count; index++, offset++) { l += pcm.left[offset]; r += pcm.right[offset]; }
+          this.lastLeft = l / count; this.lastRight = r / count;
+        }
+        left[frame] = this.lastLeft; right[frame] = this.lastRight;
+      }
     }
     return true;
   }

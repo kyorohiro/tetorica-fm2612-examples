@@ -21,6 +21,7 @@ export declare class Ym2608AudioEngine {
     _resampleRemainder: number;
     _lastLeft: number;
     _lastRight: number;
+    _sampleCounts: Uint32Array<ArrayBuffer>;
     /** @param {Ym2608} ym2608
      * @param {number} chipSampleRate
      * @param {number} outputSampleRate

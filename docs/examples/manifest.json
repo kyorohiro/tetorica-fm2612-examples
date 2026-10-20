@@ -99,6 +99,33 @@
     "nodeAudioOutput": true
   },
   {
+    "id": "pc-engine/wave/01-waveform",
+    "title": "PC Engine：32点波形とメロディ",
+    "description": "HuC6280の32点・5-bit波形を作り、サイン波・三角波・ノコギリ波と左右Panを比較。WebはMain / Worker、NodeはWAV出力。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
+    "id": "pc-engine/noise/01-noise",
+    "title": "PC Engine：Noiseと左右の出力",
+    "description": "物理CH4・5のNoiseをハードウェアの周波数コードと左右Panで聴き比べる。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
+    "id": "pc-engine/lfo/01-modulation",
+    "title": "PC Engine：波形によるハードウェアLFO",
+    "description": "CH1の波形でCH0の音程を変調し、LFOなし・ありを比較。変調側の音声はミュートする。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
     "id": "gameboy/pulse/01-duty",
     "title": "Game Boy pulse のデューティ比",
     "description": "pulse チャンネルで 12.5%・25%・50%・75% の矩形波を比較する。",

@@ -5,3 +5,9 @@ export declare function createGameboyClient(port: MessagePort): GameboySynth & {
     readonly clock: number;
     setClock(hz: number): Promise<void>;
 };
+/** Safe builtin controls borrow the primary device, whose lifetime belongs to the runtime. */
+export declare function createPrimaryGameboyApi(raw: any): {
+    pulse: any;
+    wave: any;
+    noise: any;
+};

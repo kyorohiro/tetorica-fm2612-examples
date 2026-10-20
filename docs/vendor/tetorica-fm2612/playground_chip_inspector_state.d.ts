@@ -40,16 +40,18 @@ export declare class PsgInspectorState {
     invoke(method: any, args?: any[]): any;
 }
 /** A compact waveform is derived from encoded RAM data, so it also matches mono downmix/clamping. */
-/** @param {Uint8Array} bytes @param {{name?:string,frames?:number,step?:number}} [options] */
-export declare function rfSampleMetadata(bytes: Uint8Array, { name, frames, step }?: {
+/** @param {Uint8Array} bytes @param {{name?:string,frames?:number,step?:number,endGuardBytes?:number}} [options] */
+export declare function rfSampleMetadata(bytes: Uint8Array, { name, frames, step, endGuardBytes }?: {
     name?: string;
     frames?: number;
     step?: number;
+    endGuardBytes?: number;
 }): {
     name: string;
     frames: number | undefined;
     step: number | undefined;
     waveform: number[];
+    endGuardBytes?: number | undefined;
 };
 export declare class RfInspectorState {
     clock: () => 12500000;
@@ -83,6 +85,7 @@ export declare class RfInspectorState {
         frames: number | undefined;
         step: number | undefined;
         waveform: number[];
+        endGuardBytes?: number | undefined;
         address: any;
         end: any;
         loopStart: any;

@@ -9,7 +9,7 @@
     <p>公開済み npm package のどの API を使うか、アプリ・ゲームへの組み込み方に合わせて選びます。</p>
     <pre><code>npm install tetorica-fm2612</code></pre>
   </header>
-  <section><h2>チップ別の基本例（npm 0.2.20）</h2>
+  <section><h2>チップ別の基本例（npm 0.2.21）</h2>
 <pre><code>Web: createSoundChip(name, {execution: 'worklet'})
      → WorkletTransport → Synth（Main）→ WASM（Worklet）
 Node: createSoundChip(name)
@@ -59,6 +59,15 @@ Web Audio / encodeWav()  ブラウザ再生 / Web・Node の WAV 保存</code></
       別 package <code>tetorica-msfa-dx7-wasm</code> の <code>createDX7()</code> を使用します。</p>
     <p><a href="./examples/dx7/01-notes/web/index.html">DX7 メロディと和音</a> ·
       <a href="./examples/dx7/02-sysex/web/index.html">SysEx と音色選択</a></p>
+  </section>
+  <section class="sample-panel"><h2>PC Engine / HuC6280</h2>
+    <p>Webは <code>Playground({chip:'huc6280'})</code> の主音源 <code>pce</code> をMain / Workerから操作します。
+      物理6CH、各32点・5-bit波形、独立した左右Panを使えます。NoiseはCH4・5、LFOはCH1からCH0への変調です。</p>
+    <p>Nodeは <code>Huc6280AudioEngine</code> と <code>Huc6280DirectTransport</code> を <code>Huc6280Synth</code> へ渡し、
+      <code>processFrames()</code> で時間を進めてWAVを生成します。音声ドライバーやゲームROMは不要です。</p>
+    <p><a href="./examples/pc-engine/wave/01-waveform/web/index.html">波形とメロディ</a> ·
+      <a href="./examples/pc-engine/noise/01-noise/web/index.html">NoiseとPan</a> ·
+      <a href="./examples/pc-engine/lfo/01-modulation/web/index.html">ハードウェアLFO</a></p>
   </section>
   <section class="sample-panel"><h2>SNES / SPC（実験的実装）</h2>
     <p>楽器として使う <code>useSoundChip('snes')</code> は、SPC700 CPU を実行しない独立した S-DSP です。

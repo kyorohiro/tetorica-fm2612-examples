@@ -6,11 +6,20 @@ export declare function createSnesClient(port: MessagePort, initial?: {
     sampleRate?: number;
     nativeSampleRate?: number;
 }): {
+    _getState(): import("./snessynth.js").SnesState;
+    _adoptState(state: any): void;
     sampleRate: number;
     nativeSampleRate: number;
     /** @param {ArrayBuffer|ArrayBufferView} input @param {import('./snessynth.js').SnesBRROptions} options
      * @returns {Promise<import('./snessynth.js').SnesSample>} */
     loadBRR(input: ArrayBuffer | ArrayBufferView, options: import('./snessynth.js').SnesBRROptions): Promise<import('./snessynth.js').SnesSample>;
+    /** Resource upload; clocks are 1,024,000 Hz, not native PCM frames.
+     * @param {import('./spc.js').SpcTimeline} trace */
+    prepareTimeline(trace: import('./spc.js').SpcTimeline): Promise<any>;
+    /** Resolves at the output end. Stop/dispose rejects pending playback. */
+    playTimeline(): Promise<any>;
+    stopTimeline(): Promise<any>;
+    getTimelineState(): Promise<any>;
     /** @param {number} ch @param {import('./snessynth.js').SnesPreset} preset */
     setPreset(ch: number, preset: import('./snessynth.js').SnesPreset): void;
     /** @param {number} ch @param {import('./snessynth.js').SnesPreset} params */

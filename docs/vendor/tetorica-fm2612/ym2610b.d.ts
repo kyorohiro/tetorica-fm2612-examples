@@ -18,6 +18,10 @@ export declare class Ym2610B {
     leftPtr: number;
     rightPtr: number;
     bufferFrames: number;
+    pcmView: {
+        left: Float32Array<any>;
+        right: Float32Array<any>;
+    } | undefined;
     /**
      * Wrap native resources allocated by create(); prefer the asynchronous factory.
      * @param {Object} module Initialized Emscripten module.
@@ -111,6 +115,24 @@ export declare class Ym2610B {
      * @returns {{left: Float32Array, right: Float32Array}} Owned PCM arrays at sampleRate().
      */
     generateStereo(frames: number): {
+        left: Float32Array;
+        right: Float32Array;
+    };
+    /**
+     * Reserve PCM capacity without advancing the chip (for realtime initialization).
+     * @param {number} frames Maximum expected stereo frame count.
+     * @returns {void}
+     */
+    reserveStereoFrames(frames: number): void;
+    /**
+     * Generate borrowed views of WASM PCM, reusing arrays and the result object.
+     * Read only the first `frames` entries; array length is reserved capacity.
+     * Consume immediately: generation, buffer growth, or disposal invalidates the data.
+     * Do not retain/mutate these views. Use generateStereo() for owned copies.
+     * @param {number} frames Nonnegative integer frame count, up to 16777216.
+     * @returns {{left: Float32Array, right: Float32Array}} Borrowed PCM views.
+     */
+    generateStereoView(frames: number): {
         left: Float32Array;
         right: Float32Array;
     };

@@ -5,11 +5,18 @@ export declare class SnesInstrumentProcessor extends AudioWorkletProcessor {
     synth: SnesSynth | null;
     dead: boolean;
     remote: any;
+    timelineCompletion: {
+        id: any;
+        port: any;
+    } | null;
     validation: SnesSynth;
     performance: {
         receive(data: any, port: any): boolean;
         render(left: any, right: any, render: any): void;
-        clear: () => void;
+        beginAudition(channel: any, owner: any): void;
+        endAudition(channel: any, owner: any): void;
+        applyImmediate(command: any, port: any, metadata: any): void;
+        clear(): void;
         getStats: () => {
             activeSession: number;
             latestSession: number;
@@ -21,7 +28,10 @@ export declare class SnesInstrumentProcessor extends AudioWorkletProcessor {
             discardedCommands: number;
         };
     };
+    workerRemote: any;
     ready: Promise<void>;
+    instrumentResampler: SpcResampler;
+    timelineResampler: SpcResampler;
     resampler: SpcResampler;
     constructor({ processorOptions }?: {
         processorOptions?: {} | undefined;
@@ -32,6 +42,7 @@ export declare class SnesInstrumentProcessor extends AudioWorkletProcessor {
         id: any;
         method: any;
     }, port: any, queued?: boolean): void;
+    finishTimeline(message: any): void;
     fail(error: any): void;
     dispose(): void;
     renderSegment(left: any, right: any): void;
