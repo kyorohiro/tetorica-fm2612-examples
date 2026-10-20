@@ -1,23 +1,33 @@
 export declare class PsgInspectorState {
-    clock: () => 3579545;
+    clock: () => number;
     sampleRate: number;
-    api: {
-        [k: string]: any;
-    };
+    dispatch: (command: import("./playground_native_voice_inspector.js").NativeVoiceCommand, owner?: string, metadata?: {
+        preserveOwner?: boolean;
+    }) => void;
+    beginAudition: (channel: number, owner: string) => void;
+    endAudition: (channel: number, owner: string) => void;
+    auditions: Map<any, any>;
     periods: number[] | undefined;
     attenuations: number[] | undefined;
     lastVolumes: number[] | undefined;
     latched: number | undefined;
     mode: number | undefined;
-    constructor(chip: any, { clock, sampleRate }?: {
-        clock?: (() => 3579545) | undefined;
-        sampleRate?: number | undefined;
-    });
+    /** @param {any} chip @param {import('./playground_native_voice_inspector.js').NativeVoiceInspectorOptions} [options] */
+    constructor(chip: any, { clock, sampleRate, dispatch, beginAudition, endAudition }?: import('./playground_native_voice_inspector.js').NativeVoiceInspectorOptions);
+    resetAuditions(): void;
     reset(): void;
+    prepare(callback: any): {
+        commands: any[];
+        value: any;
+    };
+    commit({ commands, value }: {
+        commands: any;
+        value: any;
+    }, owner: any): any;
     write(value: any): void;
     read(): {
         kind: string;
-        clock: 3579545;
+        clock: number;
         sampleRate: number;
         channels: {
             channel: any;
@@ -36,6 +46,10 @@ export declare class PsgInspectorState {
             type: string;
             rate: string;
         };
+        auditions: {
+            channel: any;
+            id: any;
+        }[];
     };
     invoke(method: any, args?: any[]): any;
 }
@@ -54,14 +68,22 @@ export declare function rfSampleMetadata(bytes: Uint8Array, { name, frames, step
     endGuardBytes?: number | undefined;
 };
 export declare class RfInspectorState {
-    clock: () => 12500000;
+    clock: () => number;
     sampleRate: number;
     samples: any[];
     memoryRanges: any[];
     memoryRevision: number;
+    dispatch: (command: import("./playground_native_voice_inspector.js").NativeVoiceCommand, owner?: string, metadata?: {
+        preserveOwner?: boolean;
+    }) => void;
+    beginAudition: (channel: number, owner: string) => void;
+    endAudition: (channel: number, owner: string) => void;
+    auditions: Map<any, any>;
+    auditionWriting: number;
     selected: number | undefined;
     enabled: boolean | undefined;
     mask: any;
+    configuredSteps: any[] | undefined;
     channels: {
         channel: number;
         start: number;
@@ -73,10 +95,9 @@ export declare class RfInspectorState {
             right: number;
         };
     }[] | undefined;
-    constructor(chip: any, { clock, sampleRate }?: {
-        clock?: (() => 12500000) | undefined;
-        sampleRate?: number | undefined;
-    });
+    /** @param {any} chip @param {import('./playground_native_voice_inspector.js').NativeVoiceInspectorOptions} [options] */
+    constructor(chip: any, { clock, sampleRate, dispatch, beginAudition, endAudition }?: import('./playground_native_voice_inspector.js').NativeVoiceInspectorOptions);
+    resetAuditions(): void;
     reset(): void;
     write(register: any, value: any): void;
     memoryWrite(address: any, length: any): void;
@@ -92,9 +113,10 @@ export declare class RfInspectorState {
         valid: boolean;
     };
     allocate(length: any, requested: any): any;
+    invoke(method: any, args?: any[]): boolean;
     read(): {
         kind: string;
-        clock: 12500000;
+        clock: number;
         sampleRate: number;
         enabled: boolean | undefined;
         memoryRevision: number;
@@ -112,6 +134,10 @@ export declare class RfInspectorState {
         }[];
         samples: any[];
         memoryRanges: any[];
+        auditions: {
+            channel: any;
+            id: any;
+        }[];
     };
 }
 /** Separate admin messages from performance/client RPC: reads never consume or reschedule data. */

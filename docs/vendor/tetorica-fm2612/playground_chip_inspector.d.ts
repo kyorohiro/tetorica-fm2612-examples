@@ -5,7 +5,8 @@ export declare function createChipInspector({ endpoints, decode }: {
 }): {
     list: () => any;
     notify: () => void;
-    subscribe(listener: any): () => boolean;
+    getConnectionToken: (id: any) => any;
+    subscribe(listener: any): () => void;
     read(id: any): Promise<any>;
     invoke(id: any, method: any, args?: any[]): Promise<any>;
     loadSample(id: any, source: any, options?: {}): Promise<any>;

@@ -21,3 +21,17 @@ export declare class SegaPSGWorkletTransport extends ChipWorkletTransport {
 }
 export declare class YM2151WorkletTransport extends ChipWorkletTransport {
 }
+export declare class YM2413WorkletTransport extends ChipWorkletTransport {
+}
+export declare class OPLWorkletTransport extends ChipWorkletTransport {
+}
+export declare class YM3526WorkletTransport extends OPLWorkletTransport {
+}
+export declare class YM3812WorkletTransport extends OPLWorkletTransport {
+}
+export declare class Y8950WorkletTransport extends OPLWorkletTransport {
+}
+export declare class YMF262WorkletTransport extends OPLWorkletTransport {
+}
+export declare class AY8910WorkletTransport extends ChipWorkletTransport {
+}

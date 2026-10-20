@@ -36,6 +36,25 @@ export async function copyRuntime(destination) {
   } catch {
     throw new Error('The PC Engine examples require tetorica-fm2612 >= 0.2.21, including HuC6280 Synth, Worklet, WASM and license. Run npm install.');
   }
+  try {
+    for (const file of ['opl_synth.js','opl_synth.d.ts','chip_worklet_transport.js','soundchip_worklet.js','soundchip-output-worklet.js',
+      ...['ym3526','ym3812','y8950','ymf262'].flatMap(chip=>[`${chip}synth.js`,`${chip}synth.d.ts`,`${chip}.js`,`generated/${chip}_wasm.js`,`generated/${chip}_wasm.wasm`])]) {
+      await readFile(join(source, file));
+    }
+  } catch {
+    throw new Error('The OPL examples require tetorica-fm2612 >= 0.2.22, including OPL Synth, Worklet transports and all four WASM engines. Run npm install.');
+  }
+  try {
+    for (const file of ['ay8910synth.js', 'ay8910synth.d.ts', 'ym2413synth.js', 'ym2413synth.d.ts',
+      'playground_ay8910.js', 'playground_ay8910_worklet.js', 'playground_ym2413.js', 'playground_ym2413_worklet.js',
+      'msxaudioengine.js', 'generated/ay8910_wasm.js', 'generated/ay8910_wasm.wasm',
+      'generated/ym2413_wasm.js', 'generated/ym2413_wasm.wasm',
+      'licenses/mame-ay8910/LICENSE', 'THIRD_PARTY_LICENSES.txt']) {
+      await readFile(join(source, file));
+    }
+  } catch {
+    throw new Error('The AY / OPLL / MSX examples require tetorica-fm2612 >= 0.2.23, including Synths, composite modes, Worklets, WASM and licenses. Run npm install.');
+  }
   const target = join(destination, 'vendor/tetorica-fm2612');
   await mkdir(join(destination, 'vendor'), {recursive: true});
   await rm(target, {recursive: true, force: true});

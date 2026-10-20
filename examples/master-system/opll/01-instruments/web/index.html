@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ja"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Master System：OPLLのROM音色と共有User Patch — tetorica-fm2612 examples</title>
+  <link rel="stylesheet" href="../../../../../style.css">
+  <script type="importmap">{"imports":{"tetorica-fm2612":"../../../../../vendor/tetorica-fm2612/soundchip.js","tetorica-fm2612/":"../../../../../vendor/tetorica-fm2612/"}}</script>
+  <style>#code {width: 100%; box-sizing: border-box; font-family: monospace;} .actions {flex-wrap: wrap;}</style>
+</head><body><main>
+  <nav><a href="../../../../../index.html">← Examples</a><a href="./main.js">Source ↗</a></nav>
+  <header><p class="eyebrow">master-system/opll/01-instruments · WEB / NODE</p><h1>Master System：OPLLのROM音色と共有User Patch</h1><p>YM2413の内蔵音色を同じA4で比較し、2つのCHが共有するuser patchを演奏中に変更します。Sega PSGを控えめな伴奏に使います。</p></header>
+  <section class="sample-panel">
+    <label for="code">実行する YM2413Synth コード</label>
+    <textarea id="code" rows="32" spellcheck="false" aria-describedby="code-help"></textarea>
+    <div class="actions"><button id="play" type="button">Play</button><button id="stop" type="button" disabled>Stop</button></div>
+    <p id="status" role="status" aria-live="polite">Ready.</p>
+    <pre><code id="detail"></code></pre>
+    <p id="code-help">編集は次のPlayに反映されます。opll、OPLL_INSTRUMENTS、OPLL_USER_PRESETS、psg、sleep(秒)、consoleが使えます。終了・Stop時はすべてのWorkletとAudioContextを解放します。ページを開くだけでは音声を開始しません。</p>
+    <p>YM2413のinstrument 1〜15は内蔵ROM音色、0はチップ全体で1つだけのuser patchです。CH0・CH1のinstrument 0を同時に変更しても、CH2の内蔵Fluteは変わりません。音量はattenuation 0が最大、15が最小。Sega PSGも同じAudioContext内の独立したWorkletです。</p>
+    <p>A4 = MIDI 69 = 440 Hz。YM2413はモノラルで、同じ音声を左右へ出力します。外部ROM・音声サンプルは不要です。</p>
+    <h2>Web — 全コード</h2><pre class="source"><code data-source="./main.js">Loading…</code></pre>
+    <h2>Node — WAV 保存</h2>
+    <pre><code>node examples/master-system/opll/01-instruments/node/main.mjs ./opll-01-instruments.wav</code></pre>
+    <pre class="source"><code data-source="../node/main.mjs">Loading…</code></pre>
+    <p><a href="../README.md">README</a>。Node版はDirectTransportとPCM変換で同じ演奏を44,100 HzのWAVへ保存します。</p>
+  </section>
+</main><script type="module" src="./main.js"></script><script type="module">
+for (const code of document.querySelectorAll('[data-source]')) {
+  try {const response = await fetch(code.dataset.source); if (!response.ok) throw new Error(`HTTP ${response.status}`); code.textContent = await response.text();}
+  catch (error) {code.textContent = error.message;}
+}
+</script></body></html>

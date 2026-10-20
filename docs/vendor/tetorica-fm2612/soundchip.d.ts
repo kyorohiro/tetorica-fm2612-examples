@@ -137,7 +137,7 @@ export type SoundChipMap = {
     ymf278b: import('./ymf278b.js').Ymf278b;
     ymf288: import('./ymf288.js').Ymf288;
 };
-export type WorkletChipName = 'ym2612' | 'ym2608' | 'ym2151' | 'gameboy' | 'segapsg' | 'pwm' | 'nes';
+export type WorkletChipName = 'ym2612' | 'ym2608' | 'ym2151' | 'gameboy' | 'segapsg' | 'pwm' | 'nes' | 'ym3526' | 'ym3812' | 'y8950' | 'ymf262' | 'ym2413' | 'ay8910';
 export declare function createSoundChip<Name extends WorkletChipName>(name: Name, options: SoundChipOptions & {
     execution: 'worklet';
 }): Promise<import('./soundchip_worklet.js').WorkletSoundChip & {

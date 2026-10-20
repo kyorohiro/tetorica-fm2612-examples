@@ -1,4 +1,6 @@
 /** Primary non-OPN machines share media, mixer and FX without a hidden FM synth. */
+import {createAy8910Audio} from './playground_ay8910_audio.js';
+import {createAy8910Client} from './playground_ay8910.js';
 import {TetoricaAudioRuntime} from './tetorica_audio_runtime.js';
 import {createNesAudio} from './playground_nes_audio.js';
 import {createNesClient} from './playground_nes.js';
@@ -12,12 +14,21 @@ import {createHuc6280Audio} from './playground_huc6280_audio.js';
 import {createHuc6280Client} from './playground_huc6280.js';
 import {createSegaPsgAudio} from './playground_segapsg_audio.js';
 import {createSegaPsgClient} from './playground_segapsg.js';
+import {createYm2413Audio} from './playground_ym2413_audio.js';
+import {createYm2413Client} from './playground_ym2413.js';
+import {createOplAudio} from './playground_opl_audio.js';
+import {createOplClient, OPL_CHIPS} from './playground_opl.js';
+import {createDx7Audio} from './playground_dx7_audio.js';
+import {createDx7Client} from './playground_dx7.js';
 
-const PRIMARY_CHIPS = Object.freeze(['nes', 'snes', 'x68000', 'huc6280', 'segapsg']);
+const PRIMARY_CHIPS = Object.freeze(['nes', 'snes', 'x68000', 'huc6280', 'segapsg', 'dx7', 'ym3526', 'ym3812', 'y8950', 'ymf262', 'ym2413', 'ay8910', 'msx', 'msx-audio']);
 
 /** @typedef {Pick<import('./megasynth.js').MegaSynthOptions,'audioContext'|'outputNode'|'sampleOutputNode'|'masterVolume'|'mixer'> & {
- * chip?:'nes'|'snes'|'x68000'|'huc6280'|'segapsg', clock?:number, stereoEnabled?:boolean, fds?:boolean,
+ * chip?:'nes'|'snes'|'x68000'|'huc6280'|'segapsg'|'dx7'|'ym3526'|'ym3812'|'y8950'|'ymf262'|'ym2413'|'ay8910'|'msx'|'msx-audio', ym2413?:boolean, clock?:number, stereoEnabled?:boolean, fds?:boolean,
  * wasmUrl?:string|URL, workletUrl?:string|URL, fetch?:typeof globalThis.fetch,
+ * ayOptions?:{fetch?:typeof globalThis.fetch,wasmUrl?:string|URL,workletUrl?:string|URL},
+ * oplOptions?:{fetch?:typeof globalThis.fetch,wasmUrl?:string|URL,workletUrl?:string|URL},
+ * opllOptions?:{fetch?:typeof globalThis.fetch,wasmUrl?:string|URL,workletUrl?:string|URL},
  * extraOki?:{fetch?:typeof globalThis.fetch,wasmUrl?:string|URL,workletUrl?:string|URL}
  * }} NativeRuntimeSynthOptions */
 
@@ -32,6 +43,8 @@ export class NativeRuntimeSynth {
     const chip = String(options.chip ?? 'nes').toLowerCase();
     if (!PRIMARY_CHIPS.includes(chip)) throw new Error(`Unsupported native primary chip: ${chip}`);
     this.chip = chip;
+    if(options.ym2413!==undefined&&typeof options.ym2413!=='boolean')throw new TypeError('ym2413 must be boolean');
+    if(options.ym2413&&chip!=='segapsg')throw new TypeError('The ym2413 expansion is available only for a Sega PSG primary');
     this.options = options;
     this.capabilities = Object.freeze({chip, fmChannels:0, psg:chip === 'segapsg', dac:false, recorder:false});
     this.audio = new TetoricaAudioRuntime({
@@ -41,13 +54,17 @@ export class NativeRuntimeSynth {
     this.node = null;
     this.fm = null;
     this.psg = null;
-    /** @type {{nes?:ReturnType<typeof createNesClient>,snes?:ReturnType<typeof createSnesClient>,opm?:ReturnType<typeof createYm2151Client>,adpcm?:ReturnType<typeof createOki6258Client>,pce?:ReturnType<typeof createHuc6280Client>,psg?:ReturnType<typeof createSegaPsgClient>}} */
+    /** @type {{nes?:ReturnType<typeof createNesClient>,snes?:ReturnType<typeof createSnesClient>,opm?:ReturnType<typeof createYm2151Client>,adpcm?:ReturnType<typeof createOki6258Client>,pce?:ReturnType<typeof createHuc6280Client>,psg?:ReturnType<typeof createSegaPsgClient>,dx7?:ReturnType<typeof createDx7Client>,opl?:ReturnType<typeof createOplClient>,opll?:ReturnType<typeof createYm2413Client>,ay?:ReturnType<typeof createAy8910Client>}} */
     this.primaryApis = {};
     /** @type {ReturnType<typeof createNesClient>|null} */ this.nes = null;
     /** @type {ReturnType<typeof createSnesClient>|null} */ this.snes = null;
     /** @type {ReturnType<typeof createYm2151Client>|null} */ this.opm = null;
     /** @type {ReturnType<typeof createOki6258Client>|null} */ this.adpcm = null;
     /** @type {ReturnType<typeof createHuc6280Client>|null} */ this.pce = null;
+    /** @type {ReturnType<typeof createDx7Client>|null} */ this.dx7 = null;
+    /** @type {ReturnType<typeof createOplClient>|null} */ this.opl = null;
+    /** @type {ReturnType<typeof createYm2413Client>|null} */ this.opll = null;
+    /** @type {ReturnType<typeof createAy8910Client>|null} */ this.ay = null;
     this.primaryEndpoints = [];
     this.listeners = new Set();
     this.readyPromise = null;
@@ -117,24 +134,39 @@ export class NativeRuntimeSynth {
 
   /** Stop voices while keeping uploaded samples, patches, waveforms and clocks. */
   stopAllNative() {
-    const {nes, snes, opm, adpcm, pce, psg} = this.primaryApis;
-    if (nes?._stopVoices) nes._stopVoices();
+    const {nes, snes, opm, adpcm, pce, psg, dx7, opl, opll, ay} = this.primaryApis;
+    const pending=[],track=result=>{if(result?.then)pending.push(Promise.resolve(result));};
+    if (nes?._stopVoices) track(nes._stopVoices());
     else if (nes) for (let channel = 0; channel < 6; channel++) nes.keyOff(channel);
-    if (snes) {
+    if (snes?._stopVoices) track(snes._stopVoices());
+    else if (snes) {
       try { snes.allNotesOff(); }
       catch (error) {
         if (!/timeline mode is exclusive/.test(String(error?.message))) throw error;
         // Timeline playback has a separate stop path and keeps its prepared data.
-        snes.stopTimeline().catch(() => {});
+        track(snes.stopTimeline());
       }
     }
-    if (opm?._stopVoices) opm._stopVoices();
+    if (opm?._stopVoices) track(opm._stopVoices());
     else opm?.allNotesOff();
-    if (adpcm?._stopVoices) adpcm._stopVoices();
+    if (adpcm?._stopVoices) track(adpcm._stopVoices());
     else adpcm?.stop();
-    if (pce?._stopVoices) pce._stopVoices();
+    if (pce?._stopVoices) track(pce._stopVoices());
     else pce?.allNotesOff();
-    psg?.allNotesOff();
+    if (psg?._stopVoices) track(psg._stopVoices());
+    else psg?.allNotesOff();
+    if(dx7)track(dx7._stopVoices());
+    if(opl)track(opl._stopVoices());
+    if(opll)track(opll._stopVoices());
+    if(ay)track(ay._stopVoices());
+    if(!pending.length)return;
+    // A failed endpoint must not let a later audition overtake another chip's
+    // still-pending Stop. Preserve rejection after every endpoint has settled.
+    const stopped=Promise.allSettled(pending).then(results=>{
+      const failed=results.find(result=>result.status==='rejected');if(failed)throw failed.reason;
+    });
+    stopped.catch(()=>{});
+    return stopped;
   }
   reset() { this.stopAllNative(); }
 
@@ -165,6 +197,7 @@ export class NativeRuntimeSynth {
 
   #releasePrimaries() {
     for (const endpoint of this.primaryEndpoints.splice(0)) {
+      endpoint.detachObserver?.();
       endpoint.release?.();
       endpoint.client?.dispose();
       endpoint.dispose();
@@ -174,7 +207,7 @@ export class NativeRuntimeSynth {
     this.node = null;
   }
 
-  #createAudioContext() { return new AudioContext(); }
+  #createAudioContext() { return this.chip === 'dx7' ? new AudioContext({sampleRate:44100}) : new AudioContext(); }
 
   async #initialize(signal) {
     if (!this.audioContext) this.audioContext = this.#createAudioContext();
@@ -182,20 +215,54 @@ export class NativeRuntimeSynth {
     signal.throwIfAborted();
     this.audio.ensureRouting(this.audioContext);
     const options = {...this.options, signal};
-    if (this.chip === 'nes') {
+    if(this.chip==='msx'||this.chip==='msx-audio'){
+      await this.#addAy({...options,...this.options.ayOptions,clock:options.clock??1789773,signal},signal);
+      await this.#addOpll({fetch:this.options.fetch,...this.options.opllOptions,clock:3579545,signal},signal);
+      if(this.chip==='msx-audio')await this.#addOpl('y8950',{fetch:this.options.fetch,...this.options.oplOptions,clock:3579545,signal},signal);
+    }else if(this.chip==='ay8910'){
+      await this.#addAy(options,signal);
+    }else if (this.chip === 'nes') {
       await this.#addPrimary('nes', 'nes', createNesAudio, device => createNesClient(device.port, {clock:device.clock, fdsEnabled:true}), {...options, fds:true}, signal);
     } else if (this.chip === 'snes') {
       await this.#addPrimary('snes', 'snes', createSnesAudio, device => createSnesClient(device.port, device), options, signal);
     } else if (this.chip === 'segapsg') {
       await this.#addPrimary('segapsg', 'psg', createSegaPsgAudio, device => createSegaPsgClient(device.port, {clock:device.clock, stereoEnabled:device.stereoEnabled}), options, signal);
+      if(this.options.ym2413)await this.#addOpll({fetch:this.options.fetch,...this.options.opllOptions,clock:3579545,signal},signal);
     } else if (this.chip === 'huc6280') {
       const endpoint = await this.#addPrimary('huc6280', 'pce', createHuc6280Audio, device => createHuc6280Client(device.port, {clock:device.clock}), options, signal);
       endpoint.client.initialize();
+    } else if(this.chip==='ym2413'){
+      await this.#addOpll(options,signal);
+    } else if (OPL_CHIPS.includes(this.chip)) {
+      await this.#addOpl(this.chip,options,signal);
+    } else if (this.chip === 'dx7') {
+      await this.#addPrimary('dx7', 'dx7', createDx7Audio, device => createDx7Client(device.port, device), {
+        ...options,onError:() => {
+          if (this.initializationController?.signal !== signal || signal.aborted) return;
+          this.#releasePrimaries();this.readyPromise=null;this.state='error';
+        },
+      }, signal);
     } else {
       const opm = await this.#addPrimary('ym2151', 'opm', createYm2151Audio, device => createYm2151Client(device.port), options, signal);
       await waitForInitialization(opm.client.setClock(4000000), signal);
       await this.#addPrimary('okim6258', 'adpcm', createOki6258Audio, device => createOki6258Client(device.port, {clock:device.clock}), {fetch:this.options.fetch,...this.options.extraOki, signal, clock:8000000}, signal);
     }
+  }
+
+  async #addAy(options,signal){
+    const endpoint=await this.#addPrimary('ay8910','ay',createAy8910Audio,device=>createAy8910Client(device.port,{clock:device.clock}),{...options,onError:()=>{if(this.initializationController?.signal!==signal||signal.aborted)return;this.#releasePrimaries();this.readyPromise=null;this.state='error';}},signal);
+    endpoint.client.initialize();return endpoint;
+  }
+
+  async #addOpl(chip,options,signal){
+    const endpoint=await this.#addPrimary(chip,'opl',createOplAudio,device=>createOplClient(device.port,{chip,clock:device.clock}),{...options,chip,onError:()=>{if(this.initializationController?.signal!==signal||signal.aborted)return;this.#releasePrimaries();this.readyPromise=null;this.state='error';}},signal);
+    endpoint.client.initialize();return endpoint;
+  }
+
+  async #addOpll(options,signal){
+    const endpoint=await this.#addPrimary('ym2413','opll',createYm2413Audio,device=>createYm2413Client(device.port,{clock:device.clock}),{...options,onError:()=>{if(this.initializationController?.signal!==signal||signal.aborted)return;this.#releasePrimaries();this.readyPromise=null;this.state='error';}},signal);
+    endpoint.client.initialize();
+    return endpoint;
   }
 
   async #addPrimary(name, globalName, createAudio, createClient, options, signal) {
@@ -204,6 +271,11 @@ export class NativeRuntimeSynth {
     const endpoint = {...device, name, globalName, client:null, release:null};
     this.primaryEndpoints.push(endpoint);
     endpoint.client = createClient(device);
+    if(OPL_CHIPS.includes(name)||name==='ym2413'||name==='ay8910'){
+      const observer=({data})=>{if(!['opl-state','opll-state','ay-state'].includes(data?.type))return;endpoint.client._adoptState(data.state);for(const listener of this.listeners)listener({type:'native-state',name:globalName,state:data.state});};
+      endpoint.node.port.addEventListener?.('message',observer);endpoint.node.port.start?.();
+      endpoint.detachObserver=()=>endpoint.node.port.removeEventListener?.('message',observer);
+    }
     Object.defineProperty(endpoint, 'clock', {enumerable:true, get:() => endpoint.client.clock});
     Object.defineProperty(endpoint, 'state', {enumerable:true, get:() => endpoint.client._getState?.()});
     endpoint.release = this.mixer.connect(name, name, device.node, this.audio.masterInputNode, this.audioContext);

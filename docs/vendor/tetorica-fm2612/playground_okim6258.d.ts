@@ -5,4 +5,5 @@ export declare function createOki6258Client(port: any, { clock }?: {
 }): Oki6258Synth & {
     readonly clock: number;
     setClock(hz: number): Promise<void>;
+    _requestControl(method: string, args?: any[]): Promise<any>;
 };

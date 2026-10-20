@@ -4,4 +4,5 @@ import { YM2608Synth } from './ym2608synth.js';
 export declare function createYm2608Client(port: MessagePort): YM2608Synth & {
     readonly clock: number;
     setClock(hz: number): Promise<void>;
+    _requestControl(method: string, args?: any[]): Promise<any>;
 };

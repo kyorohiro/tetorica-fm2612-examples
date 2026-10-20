@@ -1,6 +1,7 @@
 declare class AudioWorkletProcessor { readonly port: MessagePort; }
 import { SnesSynth } from './snessynth.js';
 import { SpcResampler } from './spc_resampler.js';
+import { SnesVoiceInspector } from './playground_snes_inspector.js';
 export declare class SnesInstrumentProcessor extends AudioWorkletProcessor {
     synth: SnesSynth | null;
     dead: boolean;
@@ -15,7 +16,7 @@ export declare class SnesInstrumentProcessor extends AudioWorkletProcessor {
         render(left: any, right: any, render: any): void;
         beginAudition(channel: any, owner: any): void;
         endAudition(channel: any, owner: any): void;
-        applyImmediate(command: any, port: any, metadata: any): void;
+        applyImmediate(command: any, port: any, metadata: any): boolean | undefined;
         clear(): void;
         getStats: () => {
             activeSession: number;
@@ -30,6 +31,7 @@ export declare class SnesInstrumentProcessor extends AudioWorkletProcessor {
     };
     workerRemote: any;
     ready: Promise<void>;
+    inspector: SnesVoiceInspector;
     instrumentResampler: SpcResampler;
     timelineResampler: SpcResampler;
     resampler: SpcResampler;
@@ -37,6 +39,7 @@ export declare class SnesInstrumentProcessor extends AudioWorkletProcessor {
         processorOptions?: {} | undefined;
     });
     receive(data: any, port: any): void;
+    stopVoices(): void;
     apply({ method, args, id }: {
         args?: never[] | undefined;
         id: any;

@@ -9,4 +9,5 @@ export declare function createSegaPsgClient(port: MessagePort, { clock, stereoEn
 } & {
     readonly clock: number;
     setClock(hz: number): Promise<void>;
+    _requestControl(method: string, args?: any[]): Promise<any>;
 };

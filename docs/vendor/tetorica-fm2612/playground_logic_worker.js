@@ -7,6 +7,9 @@ import {createNesClient} from './playground_nes.js';
 import {borrowNativeApi, createNativeWorkerApis, createNativePrimaryClient} from './playground_native_primary.js';
 import {createDx7Client} from './playground_dx7.js';
 import {createPWM32XClient} from './pwm32x_playback.js';
+import {OPL_CHIPS} from './playground_opl.js';
+import {YM2413_INSTRUMENTS as OPLL_INSTRUMENTS,YM2413_USER_PRESETS as OPLL_USER_PRESETS} from './ym2413synth.js';
+import {OPL_PRESETS} from './opl_synth.js';
 import {createYm2151Client} from './playground_ym2151.js';
 import {createSegaPsgClient} from './playground_segapsg.js';
 import {resolvePlaySeconds,resolvePlayDuration} from './playground_duration.js?v=shared-beat-clock-1';
@@ -370,7 +373,7 @@ function createRun(sourceCode, presets, scaleIntervals, capabilities = {}, timin
   run.resetSampleClock = () => clock.resetSampleClock();
   const commandProxy = (command) => (...args) => postCommand(command, args);
   const requestProxy = (command) => (...args) => request(command, args, run.currentLoop);
-  const nativePrimary = ['nes','snes','x68000','huc6280','segapsg'].includes(capabilities.chip);
+  const nativePrimary = ['nes','snes','x68000','huc6280','segapsg','dx7','ym3526','ym3812','y8950','ymf262','ym2413','ay8910','msx','msx-audio'].includes(capabilities.chip);
   const hasOpn = !nativePrimary && capabilities.chip !== 'gameboy';
   const nativeBase = createNativeWorkerApis(nativeConnections,performanceTransport,(name,state)=>postMessage({type:'native-observer',name,state}));
   const native = {...nativeBase,apis:Object.fromEntries(Object.entries(nativeBase.apis).map(([name,api])=>[name,keyboardApi(api)]))};
@@ -383,6 +386,8 @@ function createRun(sourceCode, presets, scaleIntervals, capabilities = {}, timin
     postMessage({type:'primary-pcm-clock',clock:primaryPcmClient.clock});
   }, () => (!run.stopped || run.currentLoop?.keyboardCleanup) && !run.currentLoop?.stopped)) : null;
   const chip = !nativePrimary && chipConnection ? createWorkerChip({...chipConnection,port:performanceTransport.port(chipConnection.port,'chip'),capabilities,observe:event=>postMessage({type:"chip-observer",event})}) : null;
+  run.adoptNativeState=(name,state)=>native.adopt(name,state);
+  run.adoptExtraOplState=(id,state)=>{for(const client of pcmClients)if(client.id===id)client._adoptState?.(state);};
   run.resumeChip = () => chip?.resume();
   const workerDac = chip && capabilities.dac ? createWorkerDac(chip.send, timing) : null;
   run.resetSampleClock = () => { clock.resetSampleClock(); workerDac?.reset(); };
@@ -596,7 +601,7 @@ function createRun(sourceCode, presets, scaleIntervals, capabilities = {}, timin
       nativeSample?.stopAll();
       nativeNoise?.disposeAll();
       chip?.stop();
-      native.stop();
+      primaryPcmReleases.push(native.stop().catch(()=>{}));
       primaryPcmClient?._cancelClockRequests('Run stopped');
       if (primaryPcmClient) for (let channel = 0; channel < 8; channel++) primaryPcmReleases.push(Promise.resolve(primaryPcmClient.keyOff(channel)).catch(() => {}));
       localMidiRack?.stop();
@@ -724,7 +729,7 @@ function createRun(sourceCode, presets, scaleIntervals, capabilities = {}, timin
       const pcm=name === 'spc' ? createSpcClient(port, response, {
         captureContext:()=>run.currentLoop,restoreContext:loop=>{run.currentLoop=loop;},
         invokeEvent:(callback,event)=>executeWithWorkerGuards(()=>callback(event)),
-      }) : ['huc6280','okim6258'].includes(name) ? createNativePrimaryClient(name,port,response) : name === 'snes' ? createSnesClient(port, response) : name === 'dx7' ? createDx7Client(port, response) : name === 'nes' ? createNesClient(port, response) : name === 'pwm' ? createPWM32XClient(port) : ['ym2612', 'ym2203', 'ym2610'].includes(name) ? createOpnClient(name, port) : name === 'ym2151' ? createYm2151Client(port) : name === 'segapsg' ? createSegaPsgClient(port) : name === 'gameboy' ? createGameboyClient(port) : name === 'ym2608' ? createYm2608Client(port) : createRf5c164Client(port,source=>request('pcm.decode',[source]));
+      }) : ['huc6280','okim6258','ym3526','ym3812','y8950','ymf262','ym2413','ay8910'].includes(name) ? createNativePrimaryClient(name,port,response) : name === 'snes' ? createSnesClient(port, response) : name === 'dx7' ? createDx7Client(port, response) : name === 'nes' ? createNesClient(port, response) : name === 'pwm' ? createPWM32XClient(port) : ['ym2612', 'ym2203', 'ym2610'].includes(name) ? createOpnClient(name, port) : name === 'ym2151' ? createYm2151Client(port) : name === 'segapsg' ? createSegaPsgClient(port) : name === 'gameboy' ? createGameboyClient(port) : name === 'ym2608' ? createYm2608Client(port) : createRf5c164Client(port,source=>request('pcm.decode',[source]));
       if(run.stopped || token!==run.token){pcm.dispose();throw new Error('Run stopped');}
       Object.defineProperty(pcm, 'id', {value: mixerId, enumerable: true});
       const dispose=pcm.dispose.bind(pcm); let disposed=false;
@@ -742,6 +747,8 @@ function createRun(sourceCode, presets, scaleIntervals, capabilities = {}, timin
     ...native.apis, ...(gameboy ? {gameboy} : {}), fm, ...sections, fx, psg, dac, sample, stream, noise,
     context: run.context,
     FM_PRESETS: presets,
+    OPL_PRESETS,
+    OPLL_INSTRUMENTS,OPLL_USER_PRESETS,
     tfiToPreset,
     CH1: 0, CH2: 1, CH3: 2, CH4: 3, CH5: 4, CH6: 5,
     CH7: 6, CH8: 7, CH9: 8, CH10: 9, CH11: 10, CH12: 11, CH13: 12, CH14: 13, CH15: 14, CH16: 15,
@@ -962,6 +969,8 @@ self.onmessage = (event) => {
   const message = event.data;
   if (message.type === 'musical-keyboard') {currentRun?.handleMusicalKeyboard(message);return;}
   if (message.type === 'tempo') { currentRun?.setBpm(message.bpm); return; }
+  if (message.type === 'extra-opl-state') {currentRun?.adoptExtraOplState(message.id,message.state);return;}
+  if (message.type === 'native-primary-state') {currentRun?.adoptNativeState(message.name,message.state);return;}
   if (message.type === 'chip-clock-state') { currentRun?.adoptChipClock(message.clock); return; }
   if (message.type === "chip-state") { currentRun?.adoptChipState(message.state); return; }
   if (message.type === "chip-port") { chipConnection?.port.close(); chipConnection={port:message.port,state:message.state}; return; }

@@ -32,6 +32,9 @@ entry points, rather than every internal Worker or Worklet module.
 | YM2608 FM, SSG, rhythm and ADPCM-B | `tetorica-fm2612/ym2608synth.js` | `YM2608Synth`, `YM2608DirectTransport`, `YM2608WorkletTransport` |
 | YM2610 / YM2610B FM, SSG and ADPCM | `tetorica-fm2612/ym2610bsynth.js` | `YM2610BSynth`, `YM2610BDirectTransport`, `NeoGeoFMSynth`, `NeoGeoSynth` |
 | YM2151 FM | `tetorica-fm2612/ym2151synth.js` | `YM2151Synth`, `YM2151DirectTransport`, `YM2151WorkletTransport` |
+| OPL / OPL2 / Y8950 FM / OPL3 | `tetorica-fm2612/opl_synth.js` | `OPLSynth`, `OPLDirectTransport`, `OPL_PRESETS` |
+| YM2413 OPLL | `tetorica-fm2612/ym2413synth.js` | `YM2413Synth`, `YM2413DirectTransport`, `YM2413_INSTRUMENTS`, `YM2413_USER_PRESETS` |
+| AY-3-8910 PSG | `tetorica-fm2612/ay8910synth.js` | `AY8910Synth`, `AY8910DirectTransport`, `AY8910WorkletTransport` |
 | Game Boy pulse, wave and noise | `tetorica-fm2612/gameboysynth.js` | `GameboySynth`, `GameboyDirectTransport` |
 | NES APU and FDS | `tetorica-fm2612/nesapusynth.js` | `NesApuSynth`, `NesApuDirectTransport`, `NesApuWorkletTransport` |
 | Sega PSG tone and noise | `tetorica-fm2612/segapsgsynth.js` | `SegaPSGSynth`, `SegaPSGDirectTransport`, `psgPeriodFromFrequency`, `psgPeriodFromNote` |
@@ -88,11 +91,125 @@ Declarations are shipped beside each module, for example
 functions/classes, parameter types, options and return types. Plain JavaScript
 projects can use the same editor assistance with JSDoc-aware tooling.
 
+### OPL family instruments
+
+Available in `tetorica-fm2612@0.2.22` and later.
+
+`OPLSynth` shares one API across `ym3526`, `ym3812`, `y8950` (FM only), and
+`ymf262`. Channels are zero-based: 0–8 for the first three, 0–17 for OPL3.
+Operator indices are modulator/carrier 0/1; enabled OPL3 pairs use 0–3.
+`initialize()` explicitly resets the chip and prepares silent voices. Constructing
+a Synth alone never resets or writes to a borrowed chip.
+
+```js
+import {createSoundChip, encodeWav} from 'tetorica-fm2612';
+import {OPLSynth, OPLDirectTransport, OPL_PRESETS} from 'tetorica-fm2612/opl_synth.js';
+
+const chip = await createSoundChip('ym3812');
+try {
+  const opl = new OPLSynth({chip:'ym3812', transport:new OPLDirectTransport(chip)});
+  opl.initialize();
+  opl.setPreset(0, OPL_PRESETS.sine);
+  opl.noteOn(0, 'A4');
+  const pcm = chip.generateStereo(Math.round(chip.sampleRate() * 0.5));
+  const wav = encodeWav({...pcm, sampleRate:chip.sampleRate()});
+  opl.noteOff(0);
+  // Save wav to a file, or send pcm to your own output.
+} finally { chip.dispose(); }
+```
+
+Use `OPLWorkletTransport` from `chip_worklet_transport.js` with a
+`createSoundChip(name, {execution:'worklet'})` endpoint for browser audio.
+`OPLAudifyTransport` from `node/transports` provides optional Node device output.
+The chip-specific `ym3526synth.js`, `ym3812synth.js`, `y8950synth.js` and
+`ymf262synth.js` entry points also export named Synth and DirectTransport wrappers.
+
+OPL3 enables stereo with `setPan(ch, left, right)` and pairs with
+`setFourOp(ch, true)` for primary channels 0–2 and 9–11. Each enabled pair owns
+the secondary channel three positions later; address its four operators through
+the primary. `setPreset(0, OPL_PRESETS['four-op-bell'])` configures such a pair.
+Mono chips send the same output to both speakers. Their operators support sine
+only on YM3526/Y8950, four waveforms on YM3812, and eight on YMF262.
+
+Playground modes `ym3526`, `ym3812`, `msx-audio` and `ymf262` expose the primary
+instrument as `opl` and provide `OPL_PRESETS`. Use `opl.noteOn()` / `noteOff()`;
+the OPN `fm` and `play()` conveniences are absent. Operators and Keyboard share
+this same primary instrument. OPLL/YM2413 is a separate API and is not included
+in this high-level OPL family implementation.
+
 `node_modules/tetorica-fm2612/runtime-manifest.json` lists every shipped runtime
 module and asset. It is a distribution inventory, including internal modules;
 start with the task table above when choosing an application API. See the
 [runnable examples](https://github.com/kyorohiro/tetorica-fm2612-examples) for
 complete setup, playback and cleanup.
+
+### Master System: Sega PSG and YM2413 OPLL
+
+Available in `tetorica-fm2612@0.2.23` and later.
+
+The Master System Playground mode prepares both a mono Sega PSG (`psg`) and
+YM2413 (`opll`). They have separate mixer strips and Keyboard chip/channel
+targets. Game Gear prepares its stereo PSG only.
+
+```js
+// Playground script in Master System mode.
+opll.setInstrument(0, 3, 4); // Piano, hardware attenuation 4.
+opll.noteOn(0, 'C4');
+psg.tone(PSG1, {note:'C3', attenuation:10});
+await beat(1);
+opll.noteOff(0);
+psg.off(PSG1);
+```
+
+For an embedded Playground, choose
+`Playground({chip:'segapsg', stereoEnabled:false, ym2413:true})`.
+Use `useSoundChip('ym2413')` to borrow the mode's OPLL; `createSoundChip('ym2413')`
+creates an independent instance. `YM2413Synth` also supports Direct, Worklet
+and optional Node Audify transports.
+
+YM2413 has nine melody channels, or six melody channels and five rhythm voices.
+Instrument IDs 1–15 select built-in voices; instrument 0 selects the single
+chip-wide user patch. `setUserPatch()` / `setUserOperator()` therefore change
+every channel using instrument 0. Carrier loudness is set by each channel's
+`attenuation` (0 loudest, 15 quietest), rather than a shared carrier TL field.
+The Operators panel keeps built-in voices separate from this shared patch.
+Rhythm levels share CH6–8's instrument/attenuation registers; select those
+channels' melody voices again after changing rhythm levels when needed.
+
+### MSX and MSX Audio
+
+Available in `tetorica-fm2612@0.2.23` and later.
+
+The MSX Playground mode combines `ay` (AY-3-8910 PSG) and `opll` (YM2413
+MSX-MUSIC). MSX Audio adds `opl` (Y8950 MSX-AUDIO FM). Each instrument has
+its own mixer strip, chip tab and Keyboard channel selector in the same audio
+context. These are authoring sound sets. The Y8950 uses the existing OPL FM API; its ADPCM sample player has
+no high-level adapter in this mode.
+
+```js
+// Playground script in MSX Audio mode. AY volume: 0 silent .. 15 loudest.
+ay.tone(0, {note:'A4', volume:9});
+opll.setVoice(0, {instrument:3, attenuation:5});
+opll.noteOn(0, 'A4');
+opl.setPreset(0, OPL_PRESETS.sine);
+opl.noteOn(0, 'A4');
+await beat(1);
+ay.keyOff(0); opll.keyOff(0); opl.keyOff(0);
+```
+
+Embed the two-chip set with `Playground({chip:'msx'})`, or the three-chip set
+with `Playground({chip:'msx-audio'})`. Optional `ayOptions`,
+`opllOptions` and `oplOptions` accept `{fetch, wasmUrl, workletUrl}` for custom
+asset loading. `useSoundChip('ay8910'|'ym2413')` borrows a primary device in
+both modes; `useSoundChip('y8950')` borrows MSX Audio's primary, or adds an
+independent Y8950 in MSX. `createSoundChip()` creates an independent instance.
+
+The AY has three channels, each mixing tone and noise. Noise period and
+hardware envelope are shared across those channels. `setMixer()` preserves
+the other channels and I/O bits; `keyOff()` preserves the configured voice,
+and the next `keyOn()` restores its level. `setEnvelope({shape})` explicitly
+retriggers the shared envelope. AY uses a twelve-bit tone period and
+`frequency = clock / (16 * period)`; it is mono, copied to both outputs.
 
 ## Chip mixer
 
@@ -699,10 +816,10 @@ FM/PSG/PCM mixing, stop/reset and close/restart. Playwright is a development
 dependency; it is not required by users of the sound-chip runtime.
 
 The build is staged in `dist/fm2612/`; packing produces
-`tetorica-fm2612-0.2.21.tgz`. To install a local build in another project:
+`tetorica-fm2612-0.2.23.tgz`. To install a local build in another project:
 
 ```sh
-npm install /absolute/path/to/tetorica-fm2612-0.2.21.tgz
+npm install /absolute/path/to/tetorica-fm2612-0.2.23.tgz
 ```
 
 The existing `tetorica-vgm` CLI package is built separately. This first package
@@ -719,6 +836,23 @@ Tetorica-generated and includes its license and generator. External
 instrument/sample ROMs are not included.
 
 ## Release notes
+
+`0.2.23` adds **AY-3-8910 and YM2413 high-level Synth APIs**, direct and Worklet
+transports, native voice inspectors and Keyboard channel adapters. AY exposes
+three tone/noise voices with a shared noise generator and hardware envelope;
+OPLL exposes nine melodic voices or six voices plus five drums, fifteen built-in
+instruments and one shared user patch. Native sound sets include Master System's
+PSG + OPLL, `Playground({chip:'msx'})` with AY + OPLL, and
+`Playground({chip:'msx-audio'})` with AY + OPLL + Y8950 FM. Main/Worker execution,
+independent mixer strips, retained voice settings, Stop and initialization
+cancellation are supported. Keyboard rhythm choices follow the applied audio
+state, without audio polling. The website editor and mode selector remain
+separate from this npm runtime payload.
+
+`0.2.22` adds **OPL-family Synth APIs** for YM3526, YM3812, Y8950 FM and YMF262,
+including two-operator voices, rhythm controls, OPL3 four-operator pairs and
+stereo routing. Direct, Worklet and Node output transports share the chip-specific
+register mapping. Y8950 ADPCM remains outside the high-level API.
 
 `0.2.21` extends the **shared Playground runtime** with native primary synth
 configurations, applied-state voice inspectors, channel-owned audition,

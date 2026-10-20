@@ -9,7 +9,7 @@
     <p>公開済み npm package のどの API を使うか、アプリ・ゲームへの組み込み方に合わせて選びます。</p>
     <pre><code>npm install tetorica-fm2612</code></pre>
   </header>
-  <section><h2>チップ別の基本例（npm 0.2.21）</h2>
+  <section><h2>チップ別の基本例（npm 0.2.23）</h2>
 <pre><code>Web: createSoundChip(name, {execution: 'worklet'})
      → WorkletTransport → Synth（Main）→ WASM（Worklet）
 Node: createSoundChip(name)
@@ -59,6 +59,29 @@ Web Audio / encodeWav()  ブラウザ再生 / Web・Node の WAV 保存</code></
       別 package <code>tetorica-msfa-dx7-wasm</code> の <code>createDX7()</code> を使用します。</p>
     <p><a href="./examples/dx7/01-notes/web/index.html">DX7 メロディと和音</a> ·
       <a href="./examples/dx7/02-sysex/web/index.html">SysEx と音色選択</a></p>
+  </section>
+  <section class="sample-panel"><h2>OPL / OPL2 / Y8950 FM / OPL3</h2>
+    <p><code>OPLSynth</code> の音名・音色APIで4モデルを操作します。Webは <code>createSoundChip(name, {execution:'worklet'})</code>
+      → <code>OPLWorkletTransport</code> → <code>OPLSynth</code>、Nodeは <code>OPLDirectTransport</code> とPCM生成によるWAV保存です。</p>
+    <p>0始まりの9CH、OPL3は18CH。OPL3は4-opペアと左右出力に対応します。Y8950の例はFM部分です。</p>
+    <p><a href="./examples/opl/fm/01-models/web/index.html">4モデルで基本演奏</a> ·
+      <a href="./examples/opl2/fm/01-operators/web/index.html">OPL2の音作り</a> ·
+      <a href="./examples/opl2/rhythm/01-drums/web/index.html">5種類のRhythm</a> ·
+      <a href="./examples/opl3/fm/01-four-operators/web/index.html">OPL3の4-opとStereo</a></p>
+  </section>
+  <section class="sample-panel"><h2>Master System / MSX / MSX Audio</h2>
+    <p><code>AY8910Synth</code> は3CHのトーンと共有ノイズ・エンベロープ、<code>YM2413Synth</code> は9CHのOPLL音色と5種類のRhythmを操作します。
+      OPLLのUser patchは全User音色CHで共有されます。RhythmモードはメロディーCH6〜8を使います。</p>
+    <p>単体のWeb例は <code>createSoundChip()</code> → <code>AY8910WorkletTransport / YM2413WorkletTransport</code> → Synth。
+      合奏例は <code>Playground({chip:'msx'})</code> の <code>ay</code> と <code>opll</code>、
+      <code>chip:'msx-audio'</code> ではさらにY8950 FMの <code>opl</code> を使います。Main / Workerの両方で音声生成はAudioWorklet内です。</p>
+    <p>NodeはDirectTransportで生成した各音源のPCMを共通レートへ変換して混ぜ、WAVに保存します。音声デバイスは不要です。</p>
+    <p><a href="./examples/master-system/opll/01-instruments/web/index.html">OPLL音色とPSG</a> ·
+      <a href="./examples/master-system/opll/02-rhythm/web/index.html">OPLL Rhythm</a> ·
+      <a href="./examples/msx/ay/01-tone-noise/web/index.html">AYトーンとノイズ</a> ·
+      <a href="./examples/msx/ay/02-envelope/web/index.html">AYエンベロープ</a> ·
+      <a href="./examples/msx/music/01-duet/web/index.html">MSX合奏</a> ·
+      <a href="./examples/msx-audio/fm/01-three-chips/web/index.html">MSX Audio合奏</a></p>
   </section>
   <section class="sample-panel"><h2>PC Engine / HuC6280</h2>
     <p>Webは <code>Playground({chip:'huc6280'})</code> の主音源 <code>pce</code> をMain / Workerから操作します。

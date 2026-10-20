@@ -1,3 +1,4 @@
+import {AY8910DirectTransport} from '../ay8910synth.js';
 import {PWM32XDirectTransport} from '../pwm32x_transport.js';
 import {YM2612DirectTransport} from '../ym2612synth.js';
 import {YM2608DirectTransport} from '../ym2608synth.js';
@@ -5,6 +6,12 @@ import {GameboyDirectTransport} from '../gameboysynth.js';
 import {SegaPSGDirectTransport} from '../segapsgsynth.js';
 import {YM2151DirectTransport} from '../ym2151synth.js';
 import {NesApuDirectTransport} from '../nesapusynth.js';
+import {YM2413DirectTransport} from '../ym2413synth.js';
+import {OPLDirectTransport} from '../opl_synth.js';
+import {YM3526DirectTransport} from '../ym3526synth.js';
+import {YM3812DirectTransport} from '../ym3812synth.js';
+import {Y8950DirectTransport} from '../y8950synth.js';
+import {YMF262DirectTransport} from '../ymf262synth.js';
 import {ChipPCMRenderer} from '../chip_pcm_renderer.js';
 import {createThreadOutput} from './output_thread.mjs';
 
@@ -38,6 +45,7 @@ class Playback {
         gain: this.options.gain ?? .25, removeIdleOffset: this.name === 'ym2612',
         generate: typeof this.transport.generateStereo === 'function' ? this.transport.generateStereo.bind(this.transport) : undefined});
     }
+    if (this.transport instanceof OPLDirectTransport || this.transport instanceof YM2413DirectTransport) this.renderer.rate=this.transport.sampleRate();
     this.running = true; this.ramp = 0; this.pump(); await this.output.start();
     if (this.error) throw this.error;
   }
@@ -73,7 +81,7 @@ class Playback {
     return this.closing;
   }
 }
-/** @typedef {import('./megasynth.mjs').OutputConnectionOptions & {sampleRate?: number, gain?: number, queueBlocks?: number}} AudifyTransportOptions */
+/** @typedef {import('./megasynth.mjs').OutputConnectionOptions & {sampleRate?: number, gain?: number, queueBlocks?: number, clock?:number, chip?:import('../opl_synth.js').OPLChip}} AudifyTransportOptions */
 /** @template {new (...args: any[]) => any} T
  * @param {T} Direct @param {string} name
  * @returns {{new(chip: ConstructorParameters<T>[0], options?: AudifyTransportOptions): Omit<InstanceType<T>, 'getState'> & {
@@ -83,7 +91,7 @@ class Playback {
  */
 function audifyTransport(Direct, name) {
   return class extends Direct {
-    constructor(chip, options = {}) {super(chip); this.playback = new Playback(this, options, name);}
+    constructor(chip, options = {}) {super(chip, options); this.playback = new Playback(this, options, name);}
     reset() {super.reset(); this.playback?.renderer?.resetHistory();}
     start() {return this.playback.start();}
     stop() {return this.playback.stop();}
@@ -100,3 +108,13 @@ export const YM2151AudifyTransport = audifyTransport(YM2151DirectTransport, 'ym2
 export const PWM32XAudifyTransport = audifyTransport(PWM32XDirectTransport, 'pwm');
 
 export const NesApuAudifyTransport = audifyTransport(NesApuDirectTransport, 'nes');
+
+export const OPLAudifyTransport = audifyTransport(OPLDirectTransport, 'opl');
+export const YM3526AudifyTransport = audifyTransport(YM3526DirectTransport, 'ym3526');
+export const YM3812AudifyTransport = audifyTransport(YM3812DirectTransport, 'ym3812');
+export const Y8950AudifyTransport = audifyTransport(Y8950DirectTransport, 'y8950');
+export const YMF262AudifyTransport = audifyTransport(YMF262DirectTransport, 'ymf262');
+
+export const YM2413AudifyTransport = audifyTransport(YM2413DirectTransport, 'ym2413');
+
+export const AY8910AudifyTransport = audifyTransport(AY8910DirectTransport, 'ay8910');

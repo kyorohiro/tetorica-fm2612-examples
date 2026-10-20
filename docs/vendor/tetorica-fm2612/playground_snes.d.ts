@@ -7,6 +7,7 @@ export declare function createSnesClient(port: MessagePort, initial?: {
     nativeSampleRate?: number;
 }): {
     _getState(): import("./snessynth.js").SnesState;
+    _stopVoices(): Promise<any>;
     _adoptState(state: any): void;
     sampleRate: number;
     nativeSampleRate: number;

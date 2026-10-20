@@ -20,11 +20,13 @@ export declare function createYm2151Client(port: MessagePort): {
     keyOn(ch: any, mask?: number): void;
     keyOff(ch: any): void;
     _forceKeyOff(ch: any): void;
-    _stopVoices(): void;
+    /** @returns {Promise<void>} */
+    _stopVoices(): Promise<void>;
     allNotesOff(): void;
     setNoise(enabled: any, frequency?: number): void;
     dispose(): void;
 } & {
     readonly clock: number;
     setClock(hz: number): Promise<void>;
+    _requestControl(method: string, args?: any[]): Promise<any>;
 };

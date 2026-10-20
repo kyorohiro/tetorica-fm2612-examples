@@ -1,7 +1,7 @@
 # tetorica-fm2612 examples
 
 `tetorica-fm2612` を import して使う、機能別の小さなサンプル集。
-公開済み npm `tetorica-fm2612@0.2.21` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES・PC Engine の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
+公開済み npm `tetorica-fm2612@0.2.23` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES・PC Engine・MSX 合奏の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
 PCM 生成・WAV 保存は専用例に置き、Web Audio を使う埋め込み例と、Node の nativeFX / 音声デバイス出力の例も掲載しています。本体リポジトリには依存しません。
 
 [公開 examples](https://kyorohiro.github.io/tetorica-fm2612-examples/) と
@@ -60,6 +60,16 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 | AudioWorklet | [01-note](examples/audio-worklet/01-note/README.md) | 音声スレッドで FM 発音、初期化・停止・解放 |
 | PC-98 | [01-note](examples/pc98/fm/01-note/README.md) | PC-98 YM2608 の FM 発音 |
 | PC-98 | [01-tone](examples/pc98/ssg/01-tone/README.md) | PC-98 YM2608 の SSG トーン |
+| OPL系 | [01-models](examples/opl/fm/01-models/README.md) | YM3526 / YM3812 / Y8950 FM / YMF262で音名から演奏 |
+| OPL2 | [01-operators](examples/opl2/fm/01-operators/README.md) | 2-op FM・加算・波形・AM / Vibrato |
+| OPL2 | [01-drums](examples/opl2/rhythm/01-drums/README.md) | 5種類のハードウェアRhythm |
+| OPL3 | [01-four-operators](examples/opl3/fm/01-four-operators/README.md) | 4-opペア・4アルゴリズム・Stereo |
+| Master System | [01-instruments](examples/master-system/opll/01-instruments/README.md) | OPLLの内蔵音色・共有User patch・Sega PSG伴奏 |
+| Master System | [02-rhythm](examples/master-system/opll/02-rhythm/README.md) | OPLLの5種類の打楽器とメロディー |
+| MSX / AY | [01-tone-noise](examples/msx/ay/01-tone-noise/README.md) | 3CHのトーン・共有ノイズ・ミキサー |
+| MSX / AY | [02-envelope](examples/msx/ay/02-envelope/README.md) | 共有エンベロープの周期・波形・再トリガー |
+| MSX | [01-duet](examples/msx/music/01-duet/README.md) | AY＋OPLL合奏、Main / Worker、Node WAV |
+| MSX Audio | [01-three-chips](examples/msx-audio/fm/01-three-chips/README.md) | AY＋OPLL＋Y8950 FM合奏、Main / Worker、Node WAV |
 | PC Engine | [01-waveform](examples/pc-engine/wave/01-waveform/README.md) | 32点・5-bit波形、メロディ、左右Pan |
 | PC Engine | [01-noise](examples/pc-engine/noise/01-noise/README.md) | CH4・5のNoise、周波数コード、左右Pan |
 | PC Engine | [01-modulation](examples/pc-engine/lfo/01-modulation/README.md) | CH1からCH0へのハードウェアLFO |
@@ -166,7 +176,7 @@ Node 専用の場合は `environments: ["node"]`、ブラウザ専用の場合�
 
 ## MegaSynth Node examples
 
-`embedding/06`〜`10` は `tetorica-fm2612@0.2.21` の実験用 MegaSynth API を使います。
+`embedding/06`〜`10` は `tetorica-fm2612@0.2.23` の実験用 MegaSynth API を使います。
 通常の `npm ci` で公開 package を導入できます。
 
 ```sh
@@ -189,7 +199,7 @@ WAV の RIFF ヘッダー・非ゼロ PCM とイベント JSON を確認しま�
 ## Transport の例
 
 Genesis / PC-98 / Game Boy / X68000 FM の基本例は、WorkletTransport / AudifyTransport を使用します。
-公開済み npm 0.2.21 を使用します。Node のリアルタイム再生には audify を追加してください。
+公開済み npm 0.2.23 を使用します。Node のリアルタイム再生には audify を追加してください。
 
 ```sh
 npm install
@@ -213,9 +223,61 @@ Web の `SoundChipMixer` でチップ別の音量・Pan・Mute を設定でき�
 
 `YM2151Synth` は Web / Node 共通で `setPreset(0, FM_PRESETS.sine)`、`noteOn(0, 'A4')`、`noteOff(0)` を使えます。[X68000 の基本例](examples/x68000/fm/01-note/README.md) で Worklet / Audify の使い方を示しています。DirectTransport では PCM を生成できます。
 
+## OPL / OPL2 / Y8950 FM / OPL3
+
+`tetorica-fm2612@0.2.23` の `OPLSynth` とオリジナル音色 `OPL_PRESETS` を使います。
+Webは `createSoundChip(name, {execution:'worklet'})` → `OPLWorkletTransport` → `OPLSynth` でリアルタイム再生。
+Nodeは `OPLDirectTransport` と `generateStereo()` でPCMを生成し、WAVへ保存します。音声デバイスや `audify` は不要です。
+Webのコード欄を編集して再実行でき、Stopは読み込み中にも使えます。
+
+物理CHは0始まりで9CH、OPL3は18CHです。OPL3の4-opはprimaryのCH0〜2・9〜11と、その3つ後のCHを組にします。
+ペアの4オペレーターはprimaryから操作します。左右の出力を選べるのはOPL3だけで、monoのチップは同じ音を両側に出します。
+このOPLの4例ではY8950のFM部分を扱います。YM2413 / OPLLは次節のMaster System / MSXの例を参照してください。
+
+```sh
+node examples/opl/fm/01-models/node/main.mjs
+node examples/opl/fm/01-models/node/main.mjs ./y8950.wav y8950
+node examples/opl2/fm/01-operators/node/main.mjs
+node examples/opl2/rhythm/01-drums/node/main.mjs
+node examples/opl3/fm/01-four-operators/node/main.mjs
+npm run build
+npm run check:opl
+```
+
+`check:opl` はChromium / WebKitで出音・音程・OPL3の左右Pan、
+初期化中／演奏中のStop、編集後の再実行、音声リソース解放を確認します。
+
+## AY / OPLL / MSX
+
+新しい6例は `tetorica-fm2612@0.2.23` の AY / OPLL API を使います。
+MSX は AY-3-8910＋YM2413、MSX Audio はさらに Y8950 の FM 部分を加えた構成です。
+Master System の2例は YM2413 を使い、音色比較では Sega PSG も伴奏します。
+
+AY の3CHは1つのノイズ源とエンベロープを共有します。
+OPLL の内蔵音色は1〜15、User patchは0で、その8レジスタを全User音色CHで共有します。
+OPLLのRhythmモードはメロディーCH6〜8を5つの打楽器に切り替えます。
+チャンネルは0始まり、音名の A4 は MIDI 69＝440 Hz です。
+
+WebはAudioWorkletで音声を生成し、コード編集・初期化中や演奏中のStop・再実行に対応します。
+MSX合奏はPlaygroundのMain / Workerを選べます。NodeはDirectTransportでPCMを生成し、
+複数音源の合奏では各音源を共通の44.1kHzへ変換してWAVに保存します。
+
+```sh
+node examples/msx/ay/01-tone-noise/node/main.mjs
+node examples/master-system/opll/01-instruments/node/main.mjs
+node examples/msx/music/01-duet/node/main.mjs
+node examples/msx-audio/fm/01-three-chips/node/main.mjs
+npm run build
+npm run check:msx
+```
+
+`check:msx` はPlaywrightのChromium / WebKitを使い、repository配下の配置、実際の出力音声、
+編集コード、初期化中／演奏中のStop、終了処理と再実行を確認します。
+ブラウザー未導入時は `npm exec playwright install chromium webkit` を実行してください。
+
 ## PC Engine / HuC6280
 
-`pc-engine/` の3例は公開済み `tetorica-fm2612@0.2.21` を使います。
+`pc-engine/` の3例は公開済み `tetorica-fm2612@0.2.23` を使います。
 Web は `Playground({chip:'huc6280'})` の主音源 `pce` を Main / Worker から操作します。
 Node は `Huc6280AudioEngine` → `Huc6280DirectTransport` → `Huc6280Synth` でPCMを生成し、WAVへ保存します。音声ドライバーは不要です。
 package root の `createSoundChip('huc6280')` や専用 AudifyTransport は使いません。

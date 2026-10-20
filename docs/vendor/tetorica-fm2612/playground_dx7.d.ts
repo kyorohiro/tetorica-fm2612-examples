@@ -3,7 +3,7 @@
  * Worker. Tone uploads are acknowledged before resolving; subsequent commands
  * on this port cannot overtake an upload. This API uses integer MIDI notes.
  * @param {MessagePort} port
- * @param {{sampleRate?:number,internalSampleRate?:number,voices?:Array<{index:number,name:string}>,selectedVoice?:number}} [initial]
+ * @param {{sampleRate?:number,internalSampleRate?:number,voices?:Array<{index:number,name:string}>,selectedVoice?:number,stateRevision?:number}} [initial]
  */
 export declare function createDx7Client(port: MessagePort, initial?: {
     sampleRate?: number;
@@ -13,6 +13,7 @@ export declare function createDx7Client(port: MessagePort, initial?: {
         name: string;
     }>;
     selectedVoice?: number;
+    stateRevision?: number;
 }): {
     sampleRate: number;
     internalSampleRate: number;
@@ -21,6 +22,19 @@ export declare function createDx7Client(port: MessagePort, initial?: {
         name: string;
     }[];
     readonly selectedVoice: number;
+    _getState(): {
+        sampleRate: number;
+        internalSampleRate: number;
+        voices: {
+            index: number;
+            name: string;
+        }[];
+        selectedVoice: number;
+        stateRevision: number;
+    };
+    _adoptState(state: any): false | undefined;
+    _onStateChange(listener: any): () => boolean;
+    _stopVoices(): Promise<any>;
     getState(): Promise<any>;
     loadSysex(input: any): Promise<any>;
     /** Replace the selected slot from INIT defaults; retain the other bank voices.
@@ -40,9 +54,12 @@ export declare function createDx7Client(port: MessagePort, initial?: {
     /** A fresh complete object after preceding commands have been applied.
      * @returns {Promise<import('./msfa_dx7/src/preset.js').DX7PresetState>} */
     getPreset(): Promise<import('./msfa_dx7/src/preset.js').DX7PresetState>;
-    selectVoice(index: any): void;
-    noteOn(note: any, velocity?: number): void;
-    noteOff(note: any): void;
+    /** @param {number} index */
+    selectVoice(index: number): void;
+    /** @param {number} note @param {number} [velocity] */
+    noteOn(note: number, velocity?: number): void;
+    /** @param {number} note */
+    noteOff(note: number): void;
     allNotesOff(): void;
     panic(): void;
     dispose(): void;

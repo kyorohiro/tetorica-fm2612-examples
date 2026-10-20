@@ -26,6 +26,7 @@ export declare function createRf5c164Client(port: MessagePort, decode: (source: 
 } & {
     readonly clock: number;
     setClock(hz: number): Promise<void>;
+    _requestControl(method: string, args?: any[]): Promise<any>;
 };
 /** Compatibility facade. New offline code can construct Synth + DirectTransport. */
 /** @param {import('./rf5c164.js').Rf5c164} chip Native chip owned by the facade.

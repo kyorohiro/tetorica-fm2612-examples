@@ -2,6 +2,7 @@
 export declare function borrowNativeApi(raw: any, id: any, changed?: () => void, before?: () => boolean): any;
 export declare function createNativePrimaryClient(name: any, port: any, options?: {}): {
     _getState(): import("./snessynth.js").SnesState;
+    _stopVoices(): Promise<any>;
     _adoptState(state: any): void;
     sampleRate: number;
     nativeSampleRate: number;
@@ -27,18 +28,65 @@ export declare function createNativePrimaryClient(name: any, port: any, options?
     getPreset(ch: number): Promise<import('./snessynth.js').SnesVoiceState>;
     snapshot(): Promise<ReturnType<import("./snessynth.js").SnesSynth['snapshot']>>;
     dispose(): void;
-} | (import("./nesapusynth.js").NesApuSynth & {
-    _stopVoices: () => void;
+} | {
+    sampleRate: number;
+    internalSampleRate: number;
+    readonly voices: {
+        index: number;
+        name: string;
+    }[];
+    readonly selectedVoice: number;
+    _getState(): {
+        sampleRate: number;
+        internalSampleRate: number;
+        voices: {
+            index: number;
+            name: string;
+        }[];
+        selectedVoice: number;
+        stateRevision: number;
+    };
+    _adoptState(state: any): false | undefined;
+    _onStateChange(listener: any): () => boolean;
+    _stopVoices(): Promise<any>;
+    getState(): Promise<any>;
+    loadSysex(input: any): Promise<any>;
+    setPreset(preset: import('./msfa_dx7/src/preset.js').DX7Preset): Promise<void>;
+    setOperator(operator: 1 | 2 | 3 | 4 | 5 | 6, params: import('./msfa_dx7/src/preset.js').DX7OperatorParams): Promise<void>;
+    setOperators(entries: ReadonlyArray<readonly [1 | 2 | 3 | 4 | 5 | 6, import('./msfa_dx7/src/preset.js').DX7OperatorParams]>): Promise<void>;
+    setFeedback(feedback: number): Promise<void>;
+    getPreset(): Promise<import('./msfa_dx7/src/preset.js').DX7PresetState>;
+    selectVoice(index: number): void;
+    noteOn(note: number, velocity?: number): void;
+    noteOff(note: number): void;
+    allNotesOff(): void;
+    panic(): void;
+    dispose(): void;
+} | (import("./ay8910synth.js").AY8910Synth & {
+    readonly clock: number;
+    setClock(hz: number): Promise<void>;
+    _requestControl(method: string, args?: any[]): Promise<any>;
+}) | (import("./nesapusynth.js").NesApuSynth & {
+    _stopVoices: () => Promise<void>;
+}) | (import("./opl_synth.js").OPLSynth & {
+    readonly clock: number;
+    setClock(hz: number): Promise<void>;
+    _requestControl(method: string, args?: any[]): Promise<any>;
+}) | (import("./ym2413synth.js").YM2413Synth & {
+    readonly clock: number;
+    setClock(hz: number): Promise<void>;
+    _requestControl(method: string, args?: any[]): Promise<any>;
 }) | ({
     dispose(): void;
 } & {
     readonly clock: number;
     setClock(hz: number): Promise<void>;
+    _requestControl(method: string, args?: any[]): Promise<any>;
 });
 /** Each endpoint keeps a direct Worker -> Worklet performance port. */
 export declare function createNativeWorkerApis(connections: any, performance: any, observe: any): {
     apis: {};
     raw: Map<any, any>;
-    stop(): void;
+    stop(): Promise<any[]>;
     adopt(name: any, state: any): void;
 };

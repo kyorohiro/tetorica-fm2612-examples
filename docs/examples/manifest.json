@@ -87,6 +87,66 @@
     "description": "processor の読み込み・WASM 転送・ready 待機から、音声スレッドでの発音と停止まで。"
   },
   {
+    "id": "opl/fm/01-models",
+    "title": "OPL系：4モデルで音名から演奏",
+    "description": "YM3526・YM3812・Y8950 FM・YMF262を切り替え、共通のOPLSynthと音名で演奏。WebはAudioWorklet、NodeはWAV出力。",
+    "environments": ["web", "node"]
+  },
+  {
+    "id": "opl2/fm/01-operators",
+    "title": "OPL2：2オペレーターの音作り",
+    "description": "YM3812のFM／加算、オペレーターの倍率と音量、波形、AM／Vibratoを聴き比べる。",
+    "environments": ["web", "node"]
+  },
+  {
+    "id": "opl2/rhythm/01-drums",
+    "title": "OPL2：5種類のリズム音",
+    "description": "物理CH6〜8を使い、Bass drum・Snare・Tom・Cymbal・Hi-hatをコードで設定して鳴らす。",
+    "environments": ["web", "node"]
+  },
+  {
+    "id": "opl3/fm/01-four-operators",
+    "title": "OPL3：4オペレーターとステレオ",
+    "description": "YMF262の4-opペア、4アルゴリズム、2つのバンクと左右の出力を比較する。",
+    "environments": ["web", "node"]
+  },
+  {
+    "id": "master-system/opll/01-instruments",
+    "title": "Master System：OPLLの音色とPSG伴奏",
+    "description": "YM2413の内蔵音色と共有User patchを比較し、Sega PSGを重ねる。WebはAudioWorklet、NodeはWAV出力。",
+    "environments": ["web", "node"]
+  },
+  {
+    "id": "master-system/opll/02-rhythm",
+    "title": "Master System：OPLLの5種類のリズム",
+    "description": "YM2413の物理CH6〜8を使うRhythmモードで、5種類の打楽器とメロディーを鳴らす。",
+    "environments": ["web", "node"]
+  },
+  {
+    "id": "msx/ay/01-tone-noise",
+    "title": "MSX：AYのトーンと共有ノイズ",
+    "description": "AY-3-8910の3CHでトーン・ノイズ・両方の音を比較し、共有ノイズ周期を変更する。",
+    "environments": ["web", "node"]
+  },
+  {
+    "id": "msx/ay/02-envelope",
+    "title": "MSX：AYの共有エンベロープ",
+    "description": "複数CHで1つのハードウェアエンベロープを使い、周期・波形・再トリガーを聴き比べる。",
+    "environments": ["web", "node"]
+  },
+  {
+    "id": "msx/music/01-duet",
+    "title": "MSX：AYとOPLLの合奏",
+    "description": "MSXモードのAY-3-8910とYM2413を合奏。WebはMain / Worker、Nodeは音源ごとのPCMを変換して混ぜる。",
+    "environments": ["web", "node"]
+  },
+  {
+    "id": "msx-audio/fm/01-three-chips",
+    "title": "MSX Audio：3つの音源で合奏",
+    "description": "AY-3-8910・YM2413・Y8950 FMを重ねる。WebはMain / Worker、Nodeは44.1kHzのWAVを生成。",
+    "environments": ["web", "node"]
+  },
+  {
     "id": "pc98/fm/01-note",
     "title": "PC-98 YM2608 の FM 発音",
     "description": "YM2608Synth と DirectTransport で FM のサイン波を鳴らす。外部 ROM は不要。",

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ja"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OPL family：4モデルの基本発音 — tetorica-fm2612 examples</title>
+  <link rel="stylesheet" href="../../../../../style.css">
+  <script type="importmap">{"imports":{"tetorica-fm2612":"../../../../../vendor/tetorica-fm2612/soundchip.js","tetorica-fm2612/":"../../../../../vendor/tetorica-fm2612/"}}</script>
+  <style>#code { width: 100%; box-sizing: border-box; font-family: monospace; } .actions { flex-wrap: wrap; } .chip-control { display: inline-flex; align-items: center; gap: 8px; }</style>
+</head><body><main>
+  <nav><a href="../../../../../index.html">← Examples</a><a href="./main.js">Source ↗</a></nav>
+  <header><p class="eyebrow">opl/fm/01-models · WEB / NODE</p><h1>OPL family：4モデルの基本発音</h1><p>YM3526、YM3812、Y8950のFM部分、YMF262を同じ高級APIで鳴らします。A4のあと、ベルとオルガンの短いメロディーを演奏します。</p></header>
+  <section class="sample-panel">
+    <label for="code">実行する OPLSynth コード</label>
+    <textarea id="code" rows="28" spellcheck="false" aria-describedby="code-help"></textarea>
+    <div class="actions">
+      <label for="chip" class="chip-control">Chip <select id="chip"><option value="ym3526">YM3526 · OPL</option><option value="ym3812" selected>YM3812 · OPL2</option><option value="y8950">Y8950 · FM</option><option value="ymf262">YMF262 · OPL3</option></select></label>
+      <button id="play" type="button">Play</button><button id="stop" type="button" disabled>Stop</button>
+    </div>
+    <p id="status" role="status" aria-live="polite">Ready.</p>
+    <pre><code id="detail"></code></pre>
+    <p id="code-help">編集とチップ選択は次のPlayに反映されます。sleep()の単位は秒です。初期化中もStopが使え、終了時には音声リソースを解放します。</p>
+    <p>WebはMainで音符を操作し、AudioWorkletで連続的にPCMを生成します。OPL／OPL2／Y8950のFM出力はモノラルで、左右の両方に送られます。YMF262は18物理CHとステレオを持ちます。この例は共通の2オペレーター音色を使います。</p>
+    <h2>Web — 全コード</h2><pre class="source"><code data-source="./main.js">Loading…</code></pre>
+    <h2>Node — WAV 保存</h2>
+    <pre><code>node examples/opl/fm/01-models/node/main.mjs ./opl-models.wav ym3812</code></pre>
+    <pre class="source"><code data-source="../node/main.mjs">Loading…</code></pre>
+    <p><a href="../README.md">README</a>。NodeはDirectTransportでWAVを生成します。音声デバイスやaudifyは不要です。</p>
+  </section>
+</main><script type="module" src="./main.js"></script><script type="module">
+for (const code of document.querySelectorAll('[data-source]')) {
+  try { const response = await fetch(code.dataset.source); if (!response.ok) throw new Error(`HTTP ${response.status}`); code.textContent = await response.text(); }
+  catch (error) { code.textContent = error.message; }
+}
+</script></body></html>
