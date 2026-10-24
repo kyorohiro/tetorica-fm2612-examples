@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calibrated Mixer：音源間の音量を比較 — tetorica-fm2612 examples</title>
+  <link rel="stylesheet" href="../../../../style.css">
+  <script type="importmap">{"imports":{
+    "tetorica-fm2612":"../../../../vendor/tetorica-fm2612/soundchip.js",
+    "tetorica-fm2612/":"../../../../vendor/tetorica-fm2612/"
+  }}</script>
+  <style>
+    select {font:inherit; padding:8px; border:1px solid var(--line); border-radius:8px; background:#fffdf8;}
+    table {border-collapse:collapse; width:100%; margin:20px 0; text-align:left;}
+    th,td {padding:10px; border-bottom:1px solid var(--line);}
+    tr[data-state="playing"] {background:#f3dfbd;}
+    [data-volume] {font-variant-numeric:tabular-nums;}
+  </style>
+</head>
+<body><main>
+  <nav><a href="../../../../index.html">← Examples</a><a href="./main.js">Source ↗</a></nav>
+  <header><p class="eyebrow">embedding/12-calibrated-mixer · WEB · 0.2.27</p>
+    <h1>Calibrated Mixer：音源間の音量を比較</h1>
+    <p>YM2612 FM・Sega PSG・AY-3-8910・NES pulse を、同じ440 Hzで順番に鳴らします。</p>
+  </header>
+  <section class="sample-panel">
+    <div class="actions">
+      <label for="balance">初期音量 </label>
+      <select id="balance"><option value="calibrated">Calibrated preset</option><option value="legacy">Legacy defaults</option></select>
+      <button id="play">Play</button><button id="stop" disabled>Stop</button>
+    </div>
+    <p id="status" role="status" aria-live="polite">Ready.</p>
+    <p>約6秒で1周します。止めてから初期音量を切り替え、同じ音を聴き比べてください。共有Masterは30%です。</p>
+    <table id="strips">
+      <thead><tr><th scope="col">音源</th><th scope="col">Mixer volume (×)</th><th scope="col">状態</th></tr></thead>
+      <tbody>
+        <tr data-chip="ym2612" data-kind="ym2612" data-state="idle"><th scope="row">YM2612 FM / sine</th><td data-volume></td><td data-status>待機</td></tr>
+        <tr data-chip="segapsg" data-kind="segapsg" data-state="idle"><th scope="row">Sega PSG / square</th><td data-volume></td><td data-status>待機</td></tr>
+        <tr data-chip="ay8910" data-kind="ay8910" data-state="idle"><th scope="row">AY-3-8910 / square</th><td data-volume></td><td data-status>待機</td></tr>
+        <tr data-chip="nes" data-kind="nes" data-state="idle"><th scope="row">NES / 50% pulse</th><td data-volume></td><td data-status>待機</td></tr>
+      </tbody>
+    </table>
+    <p class="muted">固定の実測初期値を適用する例です。自動音量補正ではなく、音色や同時発音数によって聴こえる音量は変わります。OPN内部のFM・SSGの比率は変更しません。</p>
+    <h2>コード</h2><pre class="source"><code id="source">Loading…</code></pre>
+    <p><a href="../README.md">この例の README</a></p>
+  </section>
+</main><script type="module" src="./main.js"></script><script type="module">
+const response = await fetch('./main.js');
+document.getElementById('source').textContent = await response.text();
+</script></body>
+</html>

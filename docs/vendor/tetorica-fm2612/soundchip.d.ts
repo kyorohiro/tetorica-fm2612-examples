@@ -1,4 +1,5 @@
 export { SoundChipMixer, soundChipMixDefaults } from './soundchip_mixer.js';
+export { SOUNDCHIP_MIXER_PRESETS } from './soundchip_mixer_presets.js';
 export { encodeWav } from './wav.js';
 export type WasmLoaderOptions = {
     /**
@@ -108,6 +109,10 @@ export type SoundChipOptions = {
      */
     outputMode?: 'dac' | 'duty';
     /**
+     * PWM core; JS is an explicit reference fallback.
+     */
+    implementation?: 'wasm' | 'js';
+    /**
      * Browser output destination.
      */
     outputNode?: AudioNode;
@@ -119,8 +124,8 @@ export type SoundChipOptions = {
 export type SoundChipMap = {
     gameboy: import('./gameboyapu.js').GameboyApu;
     segapsg: import('./segapsg.js').SegaPSG;
-    pwm: import('./pwm32x.js').PWM32X;
-    nes: import('./nesapu.js').NesApu;
+    pwm: import('./pwm32x.js').PWM32X | import('./pwm32x_wasm.js').PWM32XWasm;
+    nes: import('./nesapu_wasm.js').NesApuWasm;
     ay8910: import('./ay8910.js').Ay8910;
     y8950: import('./y8950.js').Y8950;
     ym2610b: import('./ym2610b.js').Ym2610B;

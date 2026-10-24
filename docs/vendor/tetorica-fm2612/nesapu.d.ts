@@ -1,12 +1,14 @@
 import { NesApuAudioEngine, validateNesApuClock } from './nesapuaudioengine.js';
 export { validateNesApuClock };
 export declare const NES_APU_CLOCK = 1789773;
-/** NES APU with optional FDS. JavaScript cores; no CPU, cartridge or ROM required. */
+/** NES APU with optional FDS. `new` retains the synchronous JavaScript reference
+ * core; asynchronous create() uses the shared Native/WASM core by default. */
 export declare class NesApu {
     clock: number;
     fdsEnabled: boolean;
     disposed: boolean;
     enableMask: number;
+    backend: string;
     engine: NesApuAudioEngine;
     previousLeft: number | undefined;
     previousRight: number | undefined;
@@ -19,12 +21,9 @@ export declare class NesApu {
         sampleRate?: number;
         fds?: boolean;
     });
-    /** @param {{clock?: number, sampleRate?: number, fds?: boolean}} [options] */
-    static create(options?: {
-        clock?: number;
-        sampleRate?: number;
-        fds?: boolean;
-    }): Promise<NesApu>;
+    /** @param {import('./soundchip.js').SoundChipOptions} [options]
+     * @returns {Promise<import('./nesapu_wasm.js').NesApuWasm>} */
+    static create(options?: import('./soundchip.js').SoundChipOptions): Promise<import('./nesapu_wasm.js').NesApuWasm>;
     clearHistory(): void;
     check(): void;
     /** Native CPU addresses, including FDS $4023 and $4040–$408A.

@@ -7,14 +7,17 @@ export type PlaygroundKeyboardChannel = {
  * @typedef {{id:string,label:string}} PlaygroundKeyboardChannel
  */
 /** @param {string} kind
- * @param {{fds?:boolean,fdsEnabled?:boolean,model?:string,registers?:ArrayLike<number>,rhythmEnabled?:boolean}} [options]
+ * @param {{fds?:boolean,fdsEnabled?:boolean,model?:string,registers?:ArrayLike<number>,rhythmEnabled?:boolean,rhythmVoices?:boolean,effectiveFourOpMask?:number,newMode?:boolean}} [options]
  * @returns {PlaygroundKeyboardChannel[]} */
-export declare function keyboardChannels(kind: string, { fds, fdsEnabled, model, registers, rhythmEnabled }?: {
+export declare function keyboardChannels(kind: string, { fds, fdsEnabled, model, registers, rhythmEnabled, rhythmVoices, effectiveFourOpMask, newMode }?: {
     fds?: boolean;
     fdsEnabled?: boolean;
     model?: string;
     registers?: ArrayLike<number>;
     rhythmEnabled?: boolean;
+    rhythmVoices?: boolean;
+    effectiveFourOpMask?: number;
+    newMode?: boolean;
 }): PlaygroundKeyboardChannel[];
 /** Playback constraints belong beside the selector, instead of inventing a
  * pitched voice for noise generators or streaming sample FIFOs.

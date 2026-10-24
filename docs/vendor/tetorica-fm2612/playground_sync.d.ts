@@ -80,7 +80,7 @@ export declare function createFmProxy(targetSynth: import('./ym2612synth.js').YM
     writeData(value: any): void;
     read(offset: any): number;
     readStatus(): number;
-    getIrq(): boolean;
+    getIrq(): any;
     rawWrite(port: any, register: any, value: any): void;
     readonly transport: import("./ym2612synth.js").YM2612Transport;
 };

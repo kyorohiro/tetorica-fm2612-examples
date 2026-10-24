@@ -1,9 +1,12 @@
-export declare function createSpcClient(port: any, initial?: {}, { getOwner, captureContext, restoreContext, invokeEvent, }?: {
+export declare function createSpcClient(port: any, initial?: {}, { getOwner, captureContext, restoreContext, invokeEvent, isStopped, }?: {
     captureContext?: (() => null) | undefined;
     getOwner?: (() => null) | undefined;
     invokeEvent?: ((fn: any, event: any) => any) | undefined;
+    isStopped?: (() => false) | undefined;
     restoreContext?: (() => void) | undefined;
 }): {
+    _cancelContext: (context: any) => void;
+    _cancelPerformanceOwner: (owner: any) => void;
     sampleRate: any;
     nativeSampleRate: number;
     loadSPC(input: any): Promise<any>;

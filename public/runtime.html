@@ -9,7 +9,7 @@
     <p>公開済み npm package のどの API を使うか、アプリ・ゲームへの組み込み方に合わせて選びます。</p>
     <pre><code>npm install tetorica-fm2612</code></pre>
   </header>
-  <section><h2>チップ別の基本例（npm 0.2.23）</h2>
+  <section><h2>チップ別の基本例（npm 0.2.27）</h2>
 <pre><code>Web: createSoundChip(name, {execution: 'worklet'})
      → WorkletTransport → Synth（Main）→ WASM（Worklet）
 Node: createSoundChip(name)
@@ -19,6 +19,12 @@ Node: createSoundChip(name)
 MegaSynth はゲームへの埋め込み用の統合 API として別枠に残しています。</p>
 <p><a href="./examples/genesis/fm/01-single-note/web/index.html">FM 発音</a> ·
 <a href="./examples/transport/direct/01-single-note/web/index.html">DirectTransport の PCM / WAV</a></p></section>
+  <section class="sample-panel"><h2>Mixer の音量プリセット</h2>
+    <p><code>new SoundChipMixer(SOUNDCHIP_MIXER_PRESETS.calibrated)</code> を選ぶと、チップの種類ごとに測定した音量倍率を使えます。
+      <code>createSoundChip(name, {execution: 'worklet', mixer, audioContext})</code> へ渡して接続します。プリセットの指定は任意です。</p>
+    <p><a href="./examples/embedding/11-chip-mixer/web/index.html">個別の Volume / Pan / Mute</a> ·
+      <a href="./examples/embedding/12-calibrated-mixer/web/index.html">従来値と calibrated の比較</a></p>
+  </section>
 <section class="sample-panel"><h2>音源を直接操作する</h2>
     <pre><code>generated/*.js + *.wasm  チップのエミュレーター
           ↓

@@ -3,11 +3,17 @@ export type PWM32XOptions = {
     sampleRate?: number;
     gain?: number;
     outputMode?: 'dac' | 'duty';
+    implementation?: 'wasm' | 'js';
+    moduleFactory?: import('./soundchip.js').WasmModuleFactory;
+    moduleOptions?: import('./soundchip.js').WasmModuleOptions;
+    assetBaseUrl?: string | URL;
+    signal?: AbortSignal;
 };
-/** @typedef {{clock?: number, sampleRate?: number, gain?: number, outputMode?: 'dac'|'duty'}} PWM32XOptions */
+/** @typedef {{clock?: number, sampleRate?: number, gain?: number, outputMode?: 'dac'|'duty', implementation?: 'wasm'|'js', moduleFactory?: import('./soundchip.js').WasmModuleFactory, moduleOptions?: import('./soundchip.js').WasmModuleOptions, assetBaseUrl?: string|URL, signal?: AbortSignal}} PWM32XOptions */
 export declare const PWM32X_CLOCK = 23011361;
 export declare class PWM32X {
     #private;
+    backend: string;
     clock: number;
     rate: number;
     gain: number;
@@ -24,6 +30,10 @@ export declare class PWM32X {
     timerTick: number | undefined;
     interruptCount: number | undefined;
     untilTick: number | undefined;
+    /** Shared C++ core by default. `new PWM32X()` remains the synchronous JS reference.
+     * A WASM load failure is reported; JS must be selected explicitly.
+     * @param {PWM32XOptions} [options] */
+    static create(options?: PWM32XOptions): Promise<PWM32X | import("./pwm32x_wasm.js").PWM32XWasm>;
     /** @param {PWM32XOptions} [options] */
     constructor({ clock, sampleRate, gain, outputMode }?: PWM32XOptions);
     sampleRate(): number;

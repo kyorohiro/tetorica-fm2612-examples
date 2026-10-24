@@ -56,5 +56,7 @@ export declare function createPlaygroundLive(options: {
     commitLiveLoops: (loopDefinitions: any) => void;
     commitLiveCleanups: (cleanupDefinitions: any, cleanupScope: any) => void;
     flushLiveCleanups: (activeNames?: Set<any>) => void;
+    settled: () => Promise<void>;
+    hasPendingCleanups: () => boolean;
     getActiveLoopNames: () => any[];
 };

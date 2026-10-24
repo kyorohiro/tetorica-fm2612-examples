@@ -5,10 +5,17 @@ import { SnesSynth } from './snessynth.js';
 export declare function createSnesClient(port: MessagePort, initial?: {
     sampleRate?: number;
     nativeSampleRate?: number;
-}): {
-    _getState(): import("./snessynth.js").SnesState;
+}, lifecycle?: {}): {
+    _getState(): {
+        sampleRate: number;
+        samples: import("./snessynth.js").SnesSample[];
+        channels: import("./snessynth.js").SnesVoiceState[];
+        nextAddress: number;
+        stateRevision?: number | undefined;
+    };
     _stopVoices(): Promise<any>;
-    _adoptState(state: any): void;
+    _adoptState(state: any): false | undefined;
+    _applyAuthorEdit(edit: any): void;
     sampleRate: number;
     nativeSampleRate: number;
     /** @param {ArrayBuffer|ArrayBufferView} input @param {import('./snessynth.js').SnesBRROptions} options

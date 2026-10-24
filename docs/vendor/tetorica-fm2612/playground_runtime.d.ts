@@ -111,16 +111,7 @@ export declare function createPlaygroundRuntime(options?: {
     }>) | null;
 }): {
     mixer: any;
-    chipInspector: {
-        list: () => any;
-        notify: () => void;
-        getConnectionToken: (id: any) => any;
-        subscribe(listener: any): () => void;
-        read(id: any): Promise<any>;
-        invoke(id: any, method: any, args?: any[]): Promise<any>;
-        loadSample(id: any, source: any, options?: {}): Promise<any>;
-        dispose(): void;
-    };
+    chipInspector: any;
     logicWorkerUrl: string;
     initialize: () => Promise<void>;
     ensureReady: ({ resumeOutput }?: {
@@ -421,11 +412,49 @@ export declare function createPlaygroundRuntime(options?: {
     readonly sample: any;
     readonly stream: any;
     readonly noise: {
+        create(options?: {}): {
+            type: any;
+            gain: {
+                get: () => any;
+                set(value: any): any;
+                rampTo(value: any, seconds: any): any;
+            };
+            pan: {
+                get: () => any;
+                set(value: any): any;
+                rampTo(value: any, seconds: any): any;
+            };
+            attack: {
+                get: () => any;
+                set(value: any): any;
+                rampTo(value: any, seconds: any): any;
+            };
+            release: {
+                get: () => any;
+                set(value: any): any;
+                rampTo(value: any, seconds: any): any;
+            };
+            filter: {
+                cutoff: {
+                    get: () => any;
+                    set(value: any): any;
+                    rampTo(value: any, seconds: any): any;
+                };
+                q: {
+                    get: () => any;
+                    set(value: any): any;
+                    rampTo(value: any, seconds: any): any;
+                };
+                set(...args: any[]): any;
+            };
+            start(): void;
+            stop(): void;
+            dispose(): void;
+        };
+        stopAll(): void;
+    } | {
         create: (...args: unknown[]) => unknown;
         stopAll: () => void;
-    } | {
-        create(): never;
-        stopAll(): void;
     };
     readonly context: {};
 };

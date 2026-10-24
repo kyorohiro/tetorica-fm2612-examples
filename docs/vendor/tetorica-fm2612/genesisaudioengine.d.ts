@@ -7,7 +7,6 @@
 import { Ym2612 } from "./ym2612.js";
 import { SegaPSG } from "./segapsg.js";
 import { Rf5c164 } from "./rf5c164.js";
-import { PWM32X } from './pwm32x.js';
 /**
  * GenesisAudioEngine adapter for synchronous stereo rendering and VGM register dispatch.
  * Output timing uses sampleRate() frames per second. No browser audio device is opened.
@@ -18,7 +17,7 @@ export declare class GenesisAudioEngine {
     ym2612: Ym2612;
     psg: SegaPSG;
     pcm: Rf5c164 | null;
-    pwm: PWM32X | SimplePwm;
+    pwm: any;
     _pcmMuted: boolean;
     _psgMuted: boolean;
     _sampleRate: number;

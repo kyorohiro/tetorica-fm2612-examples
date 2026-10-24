@@ -57,7 +57,8 @@ export class LiveFX {
           if(!(this.input[ch] instanceof Float32Array)||this.input[ch].length!==n)throw new Error('Invalid input channel');
           const channel=this.output[ch];
           if(!(channel instanceof Float32Array)||channel.length!==n)throw new Error('Invalid output channel');
-          for(const value of channel)if(!Number.isFinite(value))throw new Error('Non-finite output');
+          // Validate the numeric samples mixed below without creating a sample iterator.
+          for(let i=0;i<n;i++)if(!Number.isFinite(channel[i]))throw new Error('Non-finite output');
         }
         const fadeFrames=Math.max(1,Math.round(this.rate*.005));
         for(let i=0;i<n;i++){
@@ -74,7 +75,15 @@ export class LiveFX {
           }
           if(e.fadeRemaining>0)e.fadeRemaining--;
         }
-      }catch(error){e.bypass=true;report('[liveFx:'+name+'] '+(error?.stack??String(error))+'\nEffect bypassed. Fix the code and Apply to retry.');}
+      }catch(error){
+        e.bypass=true;
+        const stack=error?.stack,message=error?.message;
+        // Some engines expose stack frames without the Error's message.
+        const detail=typeof stack==='string'&&stack.length
+          ? typeof message==='string'&&message.length&&!stack.includes(message)?`${error.name??'Error'}: ${message}\n${stack}`:stack
+          : String(error);
+        report('[liveFx:'+name+'] '+detail+'\nEffect bypassed. Fix the code and Apply to retry.');
+      }
       finally{
         try{
           this.input.length=this.output.length=channels.length;

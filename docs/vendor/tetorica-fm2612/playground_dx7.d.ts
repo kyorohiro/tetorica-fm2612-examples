@@ -14,7 +14,7 @@ export declare function createDx7Client(port: MessagePort, initial?: {
     }>;
     selectedVoice?: number;
     stateRevision?: number;
-}): {
+}, lifecycle?: {}): {
     sampleRate: number;
     internalSampleRate: number;
     readonly voices: {

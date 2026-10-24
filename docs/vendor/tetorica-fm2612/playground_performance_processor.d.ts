@@ -15,7 +15,7 @@ export declare function identifyPerformanceNote(chip: any, { method, type, args,
     hucChannel?: number | undefined;
     opllRhythm?: number | undefined;
     psgLatch?: number | undefined;
-}): {
+}): number | "adpcm" | {
     allOff: boolean;
     key?: undefined;
     on?: undefined;
@@ -58,11 +58,12 @@ export declare function nativeVoiceChannel(chip: any, { method, type, args, chan
     psgLatch?: number | undefined;
     rfChannel?: number | undefined;
 }): any;
-export declare function createProcessorPerformance({ apply, prepare, validate, onDiscard, onBlocked, chip, releaseNote, getPsgLatch, getPsgMode, getHucChannel, getRfChannel, getRfMask, getOpllRhythm, getAyRegisters, trackImmediateNotes, immediate, nowFrame, rate }: {
+export declare function createProcessorPerformance({ apply, prepare, validate, onDiscard, onBlocked, chip, releaseNote, getPsgLatch, getPsgMode, getHucChannel, getRfChannel, getRfMask, getOpllRhythm, getAyRegisters, getOplRegisters, trackImmediateNotes, immediate, nowFrame, rate }: {
     apply: any;
     chip: any;
     getAyRegisters: any;
     getHucChannel: any;
+    getOplRegisters: any;
     getOpllRhythm: any;
     getPsgLatch: any;
     getPsgMode: any;

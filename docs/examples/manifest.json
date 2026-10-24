@@ -380,5 +380,13 @@
     "environments": [
       "web"
     ]
+  },
+  {
+    "id": "embedding/12-calibrated-mixer",
+    "title": "Chip Mixer：音量プリセットの比較",
+    "description": "FM・Sega PSG・AY・NESを順に鳴らし、従来値とcalibratedの音量を聴き比べる。",
+    "environments": [
+      "web"
+    ]
   }
 ]

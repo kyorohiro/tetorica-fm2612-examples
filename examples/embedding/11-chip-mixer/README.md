@@ -20,3 +20,5 @@ Volume は線形倍率（0〜2）、Pan はステレオバランス（-1〜1）�
 この例では同じ AudioContext を共有し、最後の GainNode で全体を40%にしています。
 Stop・終了・エラー時には Transport、各 Chip、共有 AudioContext を解放します。
 共有 `SoundChipMixer` はブラウザー出力用です。Direct の生 PCM と Node の音声デバイス出力は別の経路です。
+
+音源種類ごとの音量プリセットを使う例は、[従来値と calibrated の比較](../12-calibrated-mixer/README.md) を参照してください。この例は従来の初期値を使用します。

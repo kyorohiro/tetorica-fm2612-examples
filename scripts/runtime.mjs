@@ -8,6 +8,13 @@ export async function copyRuntime(destination) {
   const source = join(root, 'node_modules/tetorica-fm2612');
   const manifest = JSON.parse(await readFile(join(source, 'package.json'), 'utf8'));
   const {version} = manifest;
+  try {
+    const entry = await readFile(join(source, manifest.exports?.['.']?.import ?? 'soundchip.js'), 'utf8');
+    if (!entry.includes('SOUNDCHIP_MIXER_PRESETS')) throw new Error('Missing preset export');
+    await readFile(join(source, 'soundchip_mixer_presets.js'));
+  } catch {
+    throw new Error('The calibrated Mixer example requires tetorica-fm2612 >= 0.2.27 with SOUNDCHIP_MIXER_PRESETS. Run npm install to install the declared version.');
+  }
   if (!manifest.exports?.['./node/transports']) {
     throw new Error('These basic examples require tetorica-fm2612 >= 0.2.6 with WorkletTransport / AudifyTransport. Run npm install to install the declared version.');
   }

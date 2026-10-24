@@ -3,6 +3,7 @@ export type NesApuTransport = {
     writeRegister(address: number, value: number): void;
     reset?: () => void;
     setChannelEnabled?: (channel: number, enabled: boolean) => void;
+    configureFds?: (gain: number, master: number) => void;
     loadMemory?: (bytes: Uint8Array, address: number) => void | Promise<unknown>;
     clock?: number;
     fdsEnabled?: boolean;
@@ -23,11 +24,11 @@ export type NesPulseVoice = {
 };
 /** Owns no chip or audio device. */
 export declare class NesApuDirectTransport {
-    chip: import("./nesapu.js").NesApu;
-    clock: number;
-    fdsEnabled: boolean;
-    /** @param {import('./nesapu.js').NesApu} chip */
-    constructor(chip: import('./nesapu.js').NesApu);
+    chip: import("./nesapu.js").NesApu | import("./nesapu_wasm.js").NesApuWasm;
+    clock: any;
+    fdsEnabled: any;
+    /** @param {import('./nesapu.js').NesApu | import('./nesapu_wasm.js').NesApuWasm} chip */
+    constructor(chip: import('./nesapu.js').NesApu | import('./nesapu_wasm.js').NesApuWasm);
     /** @param {number} address @param {number} value */
     writeRegister(address: number, value: number): void;
     /** @param {Uint8Array} bytes @param {number} address */
@@ -35,11 +36,11 @@ export declare class NesApuDirectTransport {
     /** @param {number} channel @param {boolean} enabled */
     setChannelEnabled(channel: number, enabled: boolean): void;
     reset(): void;
-    sampleRate(): number;
+    sampleRate(): any;
     /** @param {number} frames */
     generateStereo(frames: number): {
-        left: Float32Array<any>;
-        right: Float32Array<any>;
+        left: any;
+        right: any;
     };
 }
 export declare class NesApuWorkletTransport extends ChipWorkletTransport {

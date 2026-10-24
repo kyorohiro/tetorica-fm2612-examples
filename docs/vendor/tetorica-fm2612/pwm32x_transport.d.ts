@@ -1,4 +1,5 @@
 import { PWM32X } from './pwm32x.js';
+import { PWM32XWasm } from './pwm32x_wasm.js';
 import { PWM32XPlayback } from './pwm32x_playback.js';
 /** Main-side command API; chip rendering and the schedule live in AudioWorklet. */
 export declare class PWM32XWorkletTransport {
@@ -27,8 +28,8 @@ export declare class PWM32XWorkletTransport {
 /** Explicit PCM rendering for WAV export or a consumer-owned output. */
 export declare class PWM32XDirectTransport {
     chip: PWM32XPlayback;
-    /** @param {PWM32X | PWM32XPlayback} chip */
-    constructor(chip: PWM32X | PWM32XPlayback);
+    /** @param {PWM32X | PWM32XWasm | PWM32XPlayback} chip */
+    constructor(chip: PWM32X | PWM32XWasm | PWM32XPlayback);
     /** @param {number} register @param {number} value */
     write(register: number, value: number): void;
     /** @param {number} register @param {number} value */
@@ -41,6 +42,7 @@ export declare class PWM32XDirectTransport {
     clearSchedule(): void;
     getState(): {
         model: 'mame';
+        backend: string;
         outputMode: "dac" | "duty";
         clock: number;
         sampleRate: number;

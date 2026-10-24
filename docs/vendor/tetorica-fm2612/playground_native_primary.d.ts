@@ -1,9 +1,16 @@
 /** Primary controls borrow devices owned by the runtime. */
-export declare function borrowNativeApi(raw: any, id: any, changed?: () => void, before?: () => boolean): any;
-export declare function createNativePrimaryClient(name: any, port: any, options?: {}): {
-    _getState(): import("./snessynth.js").SnesState;
+export declare function borrowNativeApi(raw: any, id: any, changed?: () => void, before?: () => boolean, settle?: (result: any) => any): any;
+export declare function createNativePrimaryClient(name: any, port: any, options?: {}, lifecycle?: {}): {
+    _getState(): {
+        sampleRate: number;
+        samples: import("./snessynth.js").SnesSample[];
+        channels: import("./snessynth.js").SnesVoiceState[];
+        nextAddress: number;
+        stateRevision?: number | undefined;
+    };
     _stopVoices(): Promise<any>;
-    _adoptState(state: any): void;
+    _adoptState(state: any): false | undefined;
+    _applyAuthorEdit(edit: any): void;
     sampleRate: number;
     nativeSampleRate: number;
     loadBRR(input: ArrayBuffer | ArrayBufferView, options: import('./snessynth.js').SnesBRROptions): Promise<import('./snessynth.js').SnesSample>;
@@ -66,6 +73,9 @@ export declare function createNativePrimaryClient(name: any, port: any, options?
     readonly clock: number;
     setClock(hz: number): Promise<void>;
     _requestControl(method: string, args?: any[]): Promise<any>;
+}) | (import("./pwm32x_playback.js").AsyncPWMAPI & {
+    dispose(): void;
+    stopVoices?: () => Promise<void>;
 }) | (import("./nesapusynth.js").NesApuSynth & {
     _stopVoices: () => Promise<void>;
 }) | (import("./opl_synth.js").OPLSynth & {
@@ -84,9 +94,10 @@ export declare function createNativePrimaryClient(name: any, port: any, options?
     _requestControl(method: string, args?: any[]): Promise<any>;
 });
 /** Each endpoint keeps a direct Worker -> Worklet performance port. */
-export declare function createNativeWorkerApis(connections: any, performance: any, observe: any): {
+export declare function createNativeWorkerApis(connections: any, performance: any, observe: any, lifecycle?: {}): {
     apis: {};
     raw: Map<any, any>;
+    cancelAdpcmLoads(): void;
     stop(): Promise<any[]>;
     adopt(name: any, state: any): void;
 };

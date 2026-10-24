@@ -4,8 +4,9 @@
 /** Default script lead; UI audition bypasses this transport. In seconds. */
 export declare const DEFAULT_WORKER_LOOKAHEAD_SECONDS = 0.5;
 export declare function validateWorkerLookahead(seconds: any): any;
-export declare function createPerformanceSender({ getLoop, restoreLoop, onCancelOwner, now }?: {
+export declare function createPerformanceSender({ getLoop, restoreLoop, onCancelOwner, leaseUntimed, now }?: {
     getLoop?: (() => null) | undefined;
+    leaseUntimed?: boolean | undefined;
     now?: (() => number) | undefined;
     onCancelOwner?: (() => void) | undefined;
     restoreLoop?: (() => void) | undefined;

@@ -1,7 +1,7 @@
 import { GameboySynth } from './gameboysynth.js';
 /** Same immediate, ordered port writes for both raw and high-level APIs. */
 /** @param {MessagePort} port */
-export declare function createGameboyClient(port: MessagePort): GameboySynth & {
+export declare function createGameboyClient(port: MessagePort, options?: {}, lifecycle?: {}): GameboySynth & {
     readonly clock: number;
     setClock(hz: number): Promise<void>;
     _requestControl(method: string, args?: any[]): Promise<any>;

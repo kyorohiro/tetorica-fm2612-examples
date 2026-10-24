@@ -84,7 +84,7 @@ export declare const YM2151AudifyTransport: new (chip: import("../ym2151.js").Ym
         output: Record<string, unknown> | null;
     };
 };
-export declare const PWM32XAudifyTransport: new (chip: import("../pwm32x.js").PWM32X | import("../pwm32x_playback.js").PWM32XPlayback, options?: AudifyTransportOptions) => Omit<PWM32XDirectTransport, "getState"> & {
+export declare const PWM32XAudifyTransport: new (chip: import("../pwm32x.js").PWM32X | import("../pwm32x_playback.js").PWM32XPlayback | import("../pwm32x_wasm.js").PWM32XWasm, options?: AudifyTransportOptions) => Omit<PWM32XDirectTransport, "getState"> & {
     start(): Promise<void>;
     stop(): Promise<void>;
     close(): Promise<void>;
@@ -94,7 +94,7 @@ export declare const PWM32XAudifyTransport: new (chip: import("../pwm32x.js").PW
         output: Record<string, unknown> | null;
     };
 };
-export declare const NesApuAudifyTransport: new (chip: import("../nesapu.js").NesApu, options?: AudifyTransportOptions) => Omit<NesApuDirectTransport, "getState"> & {
+export declare const NesApuAudifyTransport: new (chip: import("../nesapu.js").NesApu | import("../nesapu_wasm.js").NesApuWasm, options?: AudifyTransportOptions) => Omit<NesApuDirectTransport, "getState"> & {
     start(): Promise<void>;
     stop(): Promise<void>;
     close(): Promise<void>;

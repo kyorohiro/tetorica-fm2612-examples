@@ -1,4 +1,5 @@
 import { PWM32X } from './pwm32x.js';
+import { PWM32XWasm } from './pwm32x_wasm.js';
 export type PWMWrite = {
     frame: number;
     register: 0 | 1 | 2 | 3 | 4;
@@ -13,12 +14,20 @@ export type AsyncPWMAPI = {
 /** @typedef {{[K in keyof PWMAPI]: (...args: Parameters<PWMAPI[K]>) => Promise<ReturnType<PWMAPI[K]>>}} AsyncPWMAPI */
 /** MAME-derived PWM plus output-frame scheduling; no timers or audio device. */
 export declare class PWM32XPlayback {
-    chip: PWM32X;
+    chip: PWM32X | PWM32XWasm;
     frame: number;
     queue: any[];
     order: number;
-    /** @param {import("./pwm32x.js").PWM32XOptions} [options] @param {PWM32X} [chip] */
-    constructor(options?: import("./pwm32x.js").PWM32XOptions, chip?: PWM32X);
+    capacity: number;
+    views: Map<any, any>;
+    scratchLeft: Float32Array<ArrayBuffer> | null | undefined;
+    scratchRight: Float32Array<ArrayBuffer> | null | undefined;
+    /** @param {import('./pwm32x.js').PWM32XOptions} [options] */
+    static create(options?: import('./pwm32x.js').PWM32XOptions): Promise<PWM32XPlayback>;
+    /** The synchronous constructor retains the JS reference unless a chip is supplied.
+     * @param {import("./pwm32x.js").PWM32XOptions} [options] @param {PWM32X|import('./pwm32x_wasm.js').PWM32XWasm} [chip] */
+    constructor(options?: import("./pwm32x.js").PWM32XOptions, chip?: PWM32X | import('./pwm32x_wasm.js').PWM32XWasm);
+    get backend(): string;
     /** Change master Hz without resetting FIFO, phase or output-frame reservations. @param {number} hz */
     setClock(hz: number): void;
     sampleRate(): number;
@@ -35,6 +44,7 @@ export declare class PWM32XPlayback {
     clearSchedule(): void;
     getState(): {
         model: 'mame';
+        backend: string;
         outputMode: "dac" | "duty";
         clock: number;
         sampleRate: number;
@@ -47,11 +57,20 @@ export declare class PWM32XPlayback {
         right: Float32Array<ArrayBuffer>;
         sampleRate: number;
     };
+    reserveStereoFrames(frames: any): void;
+    pcmView(frames: any): any;
+    /** Scratch views are reused across render calls. */
+    generateStereoView(frames: any): any;
+    /** Render a scheduled span without allocating PCM arrays in the AudioWorklet. */
+    renderInto(left: any, right: any, outputOffset?: number, frames?: number): void;
     dispose(): void;
 }
 export declare const PWM_METHODS: Set<string>;
 /** Main or logic Worker client; PCM and scheduling stay in the AudioWorklet. */
-/** @param {MessagePort} port @returns {AsyncPWMAPI & {dispose(): void}} */
-export declare function createPWM32XClient(port: MessagePort): AsyncPWMAPI & {
+/** @param {MessagePort} port @param {{native?:boolean}} [options] @returns {AsyncPWMAPI & {dispose(): void,stopVoices?:()=>Promise<void>}} */
+export declare function createPWM32XClient(port: MessagePort, options?: {
+    native?: boolean;
+}, lifecycle?: {}): AsyncPWMAPI & {
     dispose(): void;
+    stopVoices?: () => Promise<void>;
 };

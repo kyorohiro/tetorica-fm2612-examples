@@ -55,8 +55,8 @@ declare class MegaSynthOffline {
         getChain(): any[];
         syncTempo(): void;
     };
-    /** @param {import("./ym2612.js").Ym2612} chip @param {NativeFXEngine} dsp @param {number} sampleRate @param {number} masterVolume @param {MegaSynthOfflineOptions} options */
-    constructor(chip: import("./ym2612.js").Ym2612, dsp: NativeFXEngine, sampleRate: number, masterVolume: number, options: MegaSynthOfflineOptions);
+    /** @param {import("./ym2612.js").Ym2612} chip @param {NativeFXEngine} dsp @param {number} sampleRate @param {number} masterVolume @param {MegaSynthOfflineOptions} options @param {PWM32XPlayback|null} pwm */
+    constructor(chip: import("./ym2612.js").Ym2612, dsp: NativeFXEngine, sampleRate: number, masterVolume: number, options: MegaSynthOfflineOptions, pwm: PWM32XPlayback | null);
     get currentFrame(): number;
     get sampleRate(): number;
     get masterVolume(): number;

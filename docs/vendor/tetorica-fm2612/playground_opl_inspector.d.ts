@@ -9,13 +9,21 @@ export declare class OplVoiceInspector {
     beginAudition: (channel: number, owner: string) => void;
     endAudition: (channel: number, owner: string) => void;
     auditions: Map<any, any>;
+    sampleEpoch: any;
     registers: Uint8Array<ArrayBuffer> | undefined;
+    adpcmMemory: any;
     /** @param {import('./playground_native_voice_inspector.js').NativeVoiceInspectorOptions & {chip?:import('./opl_synth.js').OPLChip}} [options] */
     constructor({ chip, clock, sampleRate, dispatch, beginAudition, endAudition }?: import('./playground_native_voice_inspector.js').NativeVoiceInspectorOptions & {
         chip?: import('./opl_synth.js').OPLChip;
     });
     resetAuditions(): void;
     reset(): void;
+    /** @param {{memoryBytes:number,revision:number,preview?:import('./y8950_adpcm.js').Y8950AdpcmPreview|null}} [options] */
+    setAdpcmMemoryInfo({ memoryBytes, revision, preview }?: {
+        memoryBytes: number;
+        revision: number;
+        preview?: import('./y8950_adpcm.js').Y8950AdpcmPreview | null;
+    }): void;
     observeWrite(register: any, value: any, bank?: number): void;
     stage(callback: any, owner: any): any;
     paired(ch: any): any;
@@ -75,5 +83,23 @@ export declare class OplVoiceInspector {
         };
         keyboardChannels: import("./playground_keyboard_channels.js").PlaygroundKeyboardChannel[];
         held: any[];
+        adpcm?: {
+            start: number;
+            end: number;
+            deltaN: number;
+            playbackRate: number;
+            volume: any;
+            repeat: boolean;
+            playing: boolean;
+            activeSource: string;
+            addressUnit: number;
+            memorySize: number;
+            memoryRevision: number;
+            validRange: boolean;
+            waveformKnown: boolean;
+            waveform: any;
+            sampleName: any;
+            sampleEpoch: any;
+        } | undefined;
     };
 }

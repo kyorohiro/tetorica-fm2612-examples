@@ -2,9 +2,9 @@ import { Huc6280Synth } from './huc6280synth.js';
 /** Immediate, ordered register commands shared by Main and Worker runtimes.
  * @param {MessagePort} port
  * @param {{clock?:number}} [options] */
-export declare function createHuc6280Client(port: MessagePort, { clock }?: {
+export declare function createHuc6280Client(port: MessagePort, options?: {
     clock?: number;
-}): Huc6280Synth & {
+}, lifecycle?: {}): Huc6280Synth & {
     readonly clock: number;
     setClock(hz: number): Promise<void>;
     _requestControl(method: string, args?: any[]): Promise<any>;

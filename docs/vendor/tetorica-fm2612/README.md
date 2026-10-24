@@ -24,7 +24,7 @@ entry points, rather than every internal Worker or Worklet module.
 
 | Task | Import from | Main APIs |
 | --- | --- | --- |
-| Create a chip / mix browser outputs / encode WAV | `tetorica-fm2612` | `createSoundChip`, `SoundChipMixer`, `encodeWav` |
+| Create a chip / mix browser outputs / encode WAV | `tetorica-fm2612` | `createSoundChip`, `SoundChipMixer`, `SOUNDCHIP_MIXER_PRESETS`, `encodeWav` |
 | Convert Hz or MIDI to YM2612 BLOCK/FNUM | `tetorica-fm2612/pitch.js` | `hzToBlockFnum`, `createPitchFromMidi` |
 | FM preset sounds | `tetorica-fm2612/megasynth-fm-presets.js` | `FM_PRESETS`, `FM_PRESET_ORDER` |
 | YM2612 FM and DAC | `tetorica-fm2612/ym2612synth.js` | `YM2612Synth`, `YM2612DirectTransport`, `YM2612WorkletTransport` |
@@ -143,6 +143,55 @@ start with the task table above when choosing an application API. See the
 [runnable examples](https://github.com/kyorohiro/tetorica-fm2612-examples) for
 complete setup, playback and cleanup.
 
+### NES + FDS WASM
+
+Available in `tetorica-fm2612@0.2.24` and later.
+
+`await createSoundChip('nes', {fds:true})` creates the default WASM NES APU and
+FDS renderer. It uses the same C++ core as Native NES, including pulse,
+triangle, noise, DMC RAM and FDS wave/modulation memory. The Synth API and
+register addresses are unchanged. Direct rendering opens no audio device;
+`execution:'worklet'` renders through browser Web Audio.
+
+```js
+import {createSoundChip} from 'tetorica-fm2612';
+import {NesApuSynth, NesApuDirectTransport} from 'tetorica-fm2612/nesapusynth.js';
+
+const chip = await createSoundChip('nes', {fds:true, sampleRate:48000});
+try {
+  const nes = new NesApuSynth({transport:new NesApuDirectTransport(chip)});
+  nes.fds.noteOn('A4');
+  const pcm = chip.generateStereo(4096);
+  nes.fds.keyOff();
+} finally { chip.dispose(); }
+```
+
+Ship both `generated/nesapu_wasm.js` and `generated/nesapu_wasm.wasm` when
+copying a smaller deployment. `runtimeAssetUrl()` resolves these assets from
+the installed package. The original JavaScript renderer remains available for
+compatibility and PCM comparison; the Analyzer's existing JavaScript path is
+preserved. `sources/NES-FDS.md` describes rebuilding the shared C++ core and
+WASM wrapper. Apache-2.0 and MIT notices and the original authors ship under
+`licenses/`.
+
+### 32X PWM WASM
+
+Available in `tetorica-fm2612@0.2.25` and later.
+
+`await createSoundChip('pwm')` and `await PWM32X.create()` use the shared C++
+PWM core through WASM. Browser AudioWorklets, MegaSynth, MegaSynthNode and
+asynchronous Genesis/VGM rendering use this core too. Register writes, FIFO
+behavior, frame-based scheduling and DAC/duty output retain the previous JS
+semantics. The standalone default is DAC output with gain 0.4; integrated
+playback keeps duty output with gain 1.
+
+Ship both `generated/pwm32x_wasm.js` and `generated/pwm32x_wasm.wasm` when
+copying a smaller deployment. The synchronous `new PWM32X()` constructor and
+explicit `implementation:'js'` remain available for compatibility and PCM
+comparisons. WASM loading errors are reported. The C++ source, wrapper and
+rebuild script ship in `sources/`; see `sources/PWM32X.md` and the BSD notices
+in `licenses/mame-32x-pwm/`. Tauri Native 32X builds the same C++ core directly.
+
 ### Master System: Sega PSG and YM2413 OPLL
 
 Available in `tetorica-fm2612@0.2.23` and later.
@@ -183,8 +232,9 @@ Available in `tetorica-fm2612@0.2.23` and later.
 The MSX Playground mode combines `ay` (AY-3-8910 PSG) and `opll` (YM2413
 MSX-MUSIC). MSX Audio adds `opl` (Y8950 MSX-AUDIO FM). Each instrument has
 its own mixer strip, chip tab and Keyboard channel selector in the same audio
-context. These are authoring sound sets. The Y8950 uses the existing OPL FM API; its ADPCM sample player has
-no high-level adapter in this mode.
+context. These are authoring sound sets. The Y8950 uses the existing OPL FM API.
+Since 0.2.26, the MSX Audio Playground client also exposes `opl.adpcm` for
+ADPCM-B sample preparation, playback controls and voice audition.
 
 ```js
 // Playground script in MSX Audio mode. AY volume: 0 silent .. 15 loudest.
@@ -216,7 +266,8 @@ retriggers the shared envelope. AY uses a twelve-bit tone period and
 Browser outputs share `SoundChipMixer`: `volume` is a linear multiplier (0–2),
 `pan` is stereo balance (-1 left, 0 center, 1 right), and `muted` silences the
 output while the chip keeps running. Game Boy starts at 28%; other chips start
-at 100%. Multiple strips can be `solo: true`; other connected strips are
+at 100% unless an application explicitly selects a preset or supplies defaults.
+Multiple strips can be `solo: true`; other connected strips are
 suppressed without overwriting their manual `muted` settings. `list()` exposes
 `effectiveMuted` separately. `reset(id)` restores that chip's balance; `reset()` restores all strips.
 
@@ -239,6 +290,77 @@ without an explicit mixer. Each endpoint retains its existing `gain` trim (defau
 balance multiplies that trim. Direct chips continue to generate raw PCM and
 accept no output mixer. `PCMChipMixer` is available from `soundchip_mixer.js`
 for synchronous rendering, as used by the Analyzer.
+
+### Optional calibrated preset
+
+`SOUNDCHIP_MIXER_PRESETS.calibrated` provides fixed, measured output-level
+defaults for the 22 calibrated chip kinds. Select it when constructing the
+mixer, then pass that mixer to a browser Worklet endpoint:
+
+```js
+import {
+  createSoundChip, SoundChipMixer, SOUNDCHIP_MIXER_PRESETS,
+} from 'tetorica-fm2612';
+import {
+  YM2612Synth, YM2612WorkletTransport,
+} from 'tetorica-fm2612/ym2612synth.js';
+import {FM_PRESETS} from 'tetorica-fm2612/megasynth-fm-presets.js';
+
+// Call from a button click or another browser user gesture.
+async function playCalibratedTone() {
+  const mixer = new SoundChipMixer(SOUNDCHIP_MIXER_PRESETS.calibrated);
+  const audioContext = new AudioContext();
+  let chip, transport;
+  try {
+    chip = await createSoundChip('ym2612', {
+      execution: 'worklet', audioContext, mixer,
+    });
+    transport = new YM2612WorkletTransport(chip);
+    const fm = new YM2612Synth({transport});
+    fm.setPreset(0, FM_PRESETS['one-op-basic']);
+    await chip.start();
+    fm.noteOn(0, 'A4');
+    await new Promise(resolve => setTimeout(resolve, 500));
+    fm.noteOff(0);
+    await transport.flush();
+  } finally {
+    transport?.dispose();
+    await chip?.dispose(); // Also removes its mixer strip.
+    await audioContext.close(); // The caller owns this context.
+  }
+}
+```
+
+The preset is also exported from
+`tetorica-fm2612/soundchip_mixer_presets.js`. Creating `new SoundChipMixer()`
+without a preset, or omitting `mixer` from `createSoundChip()`, keeps the legacy
+defaults described above. Importing or selecting the preset opens no audio
+device. It does not change direct `generateStereo()` output.
+
+Since 0.2.27, the standalone Sega PSG, AY-3-8910 and NES pulse references use
+AC RMS relative to the retained FM reference, reducing the earlier square-wave
+boost. Their fallback volumes are `0.455420`, `1.100331` and `1.514209`.
+The NES value is measured on this package's WASM core; the Analyzer's JavaScript
+NES renderer has a separate measured value. OPN chips retain their existing
+internal FM/SSG/rhythm/ADPCM balance, and the other preset levels are unchanged.
+
+Calibration supplies fallback `volume` values, including an engine-specific
+YM2612/Nuked value when a connected endpoint reports that engine. Explicit
+common defaults and per-ID settings replace those fallback values; they do
+not multiply them. The Worklet endpoint's separate `gain` trim still applies.
+The preset does not alter saved settings or add storage.
+It adds no Worklet implementations or engine selection; the existing chip
+support and endpoint options still apply.
+
+These constants compare a fixed single voice at known levels. They do not
+analyze playing audio or perform automatic normalization, compression, or
+limiting. Timbre and polyphony still affect loudness and headroom. Chip kinds
+outside the 22 measured kinds keep their legacy defaults. The preset is
+intended initially for standalone chip / `createSoundChip` output routes;
+MegaSynth's built-in sources have different trims, so it does not reproduce
+the balance of a complete Playground machine mode.
+
+### Synth routing and settings
 
 For browser MegaSynth, use `synth.mixer.set('ym2612', {volume: 0.5})`.
 Built-in strip IDs are `ym2612`, `segapsg` when enabled, `rf5c164` in Mega CD
@@ -816,10 +938,10 @@ FM/PSG/PCM mixing, stop/reset and close/restart. Playwright is a development
 dependency; it is not required by users of the sound-chip runtime.
 
 The build is staged in `dist/fm2612/`; packing produces
-`tetorica-fm2612-0.2.23.tgz`. To install a local build in another project:
+`tetorica-fm2612-0.2.27.tgz`. To install a local build in another project:
 
 ```sh
-npm install /absolute/path/to/tetorica-fm2612-0.2.23.tgz
+npm install /absolute/path/to/tetorica-fm2612-0.2.27.tgz
 ```
 
 The existing `tetorica-vgm` CLI package is built separately. This first package
@@ -836,6 +958,38 @@ Tetorica-generated and includes its license and generator. External
 instrument/sample ROMs are not included.
 
 ## Release notes
+
+`0.2.27` refines the **opt-in calibrated Mixer preset** with measured AC-RMS
+defaults for Sega PSG, AY-3-8910 and the WASM NES core. The existing OPN internal
+balance, other chip factors, explicit saved settings and legacy no-preset
+defaults are preserved. Shared synchronous `PCMChipMixer` handling also respects
+the generated frame count of borrowed PCM views, leaving unused capacity and
+gain-ramp timing intact.
+
+`0.2.26` adds **opt-in calibrated Mixer presets** through
+`SOUNDCHIP_MIXER_PRESETS.calibrated`. Fixed output-level defaults for 22 measured
+chip kinds can be selected when constructing a `SoundChipMixer`; existing
+no-mixer and unconfigured-Mixer defaults, explicit volume settings and raw PCM
+are preserved. The shared Playground runtime also updates independently owned
+additional Native chips, Main/Worker routing, Mixer settings and lifecycle
+cleanup, and Y8950 ADPCM sample preparation and audition. Native playback
+requires a compatible Tauri host; it is not a standalone Native backend for npm.
+The package includes the MSM5205 reference renderer's libvgm notices.
+
+`0.2.25` moves **32X PWM asynchronous playback to a shared C++/WASM core**.
+Direct creation, browser AudioWorklets, MegaSynth/MegaSynthNode and asynchronous
+Genesis/VGM engines use WASM, with the previous JS PCM and register/scheduling
+semantics preserved. The synchronous JS constructor remains available for
+compatibility and comparison. Generated WASM assets, typed wrappers, shared
+source, rebuild instructions and BSD notices are included. The shared Playground
+runtime also connects Native 32X FM/PSG/RF5C164/PWM through Main and Worker
+execution, mixer controls and cancellation when used with its Tauri host.
+
+`0.2.24` makes **NES + FDS asynchronous creation use the shared C++/WASM core**,
+including pulse, triangle, noise, DMC RAM and FDS wave/modulation memory. Synth
+and register APIs remain compatible, and the synchronous JS renderer remains
+available. Rebuild sources, Apache-2.0/MIT notices and author information ship
+with the package.
 
 `0.2.23` adds **AY-3-8910 and YM2413 high-level Synth APIs**, direct and Worklet
 transports, native voice inspectors and Keyboard channel adapters. AY exposes
@@ -1009,9 +1163,12 @@ installation check also runs the consumer type tests against the installed packa
 
 ## NES APU + FDS Synth
 
-Version 0.2.12 adds `createSoundChip('nes')` and `NesApuSynth`. Enable FDS
-with `{fds: true}`. It reuses the Analyzer's JSNES APU and fixNES-derived FDS
-engines; no WASM, CPU program, cartridge or instrument ROM is needed.
+Version 0.2.12 introduced `createSoundChip('nes')` and `NesApuSynth`. Enable FDS
+with `{fds: true}`. Since 0.2.24, asynchronous creation uses the shared C++
+JSNES/fixNES port through WASM. No CPU program, cartridge or instrument ROM is
+needed. The synchronous `new NesApu()` constructor keeps the original JavaScript
+implementation for compatibility and reference comparisons; the Analyzer's
+existing JavaScript renderer is unchanged.
 
 ```javascript
 import {createSoundChip} from 'tetorica-fm2612';
