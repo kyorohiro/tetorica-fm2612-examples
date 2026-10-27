@@ -10,5 +10,5 @@ export declare function createAy8910RegisterClient(send: (method: string, args: 
 export declare function createAy8910Client(port: any, options?: {}, lifecycle?: {}): AY8910Synth & {
     readonly clock: number;
     setClock(hz: number): Promise<void>;
-    _requestControl(method: string, args?: any[]): Promise<any>;
+    _requestControl(method: string, args?: any[], transfer?: Transferable[]): Promise<any>;
 };

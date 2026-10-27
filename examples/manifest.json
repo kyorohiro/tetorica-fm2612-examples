@@ -186,6 +186,60 @@
     ]
   },
   {
+    "id": "wonderswan/wave/01-four-channels",
+    "title": "WonderSwan：4CHの波形とメロディ",
+    "description": "32点・4-bit波形を4種類作り、左右Panを分けた4CHの短いフレーズを鳴らします。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
+    "id": "wonderswan/noise/01-noise-sweep",
+    "title": "WonderSwan：NoiseとSweep",
+    "description": "物理CH3の4種類のNoiseと、CH2の上昇・下降Sweepを順に比較します。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
+    "id": "wonderswan/voice/01-timed-pcm",
+    "title": "WonderSwan：時刻付きVoice PCM",
+    "description": "自作の1秒・12kHz PCMを先にまとめて予約し、CH1のVoiceモードで再生します。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
+    "id": "pokey/tone/01-four-channels",
+    "title": "POKEY：4CHのメロディ",
+    "description": "4つの物理CHを音名で鳴らし、音量とトーンを設定。WebはAudioWorklet、NodeはWAV出力。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
+    "id": "pokey/noise/01-distortion-joined",
+    "title": "POKEY：ノイズと結合タイマー",
+    "description": "Distortion・9/17-bit polynomialを比較し、2CHを結合した16-bitタイマーで音程を設定。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
+    "id": "pokey/dual/01-eight-channels",
+    "title": "Dual POKEY：2台・8CHの演奏",
+    "description": "独立したPOKEYを2台生成し、4+4CHを合奏。片方の停止・設定変更がもう片方へ影響しないことを試す。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
     "id": "gameboy/pulse/01-duty",
     "title": "Game Boy pulse のデューティ比",
     "description": "pulse チャンネルで 12.5%・25%・50%・75% の矩形波を比較する。",

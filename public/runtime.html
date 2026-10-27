@@ -9,7 +9,7 @@
     <p>公開済み npm package のどの API を使うか、アプリ・ゲームへの組み込み方に合わせて選びます。</p>
     <pre><code>npm install tetorica-fm2612</code></pre>
   </header>
-  <section><h2>チップ別の基本例（npm 0.2.27）</h2>
+  <section><h2>チップ別の基本例（npm 0.2.31）</h2>
 <pre><code>Web: createSoundChip(name, {execution: 'worklet'})
      → WorkletTransport → Synth（Main）→ WASM（Worklet）
 Node: createSoundChip(name)
@@ -97,6 +97,26 @@ Web Audio / encodeWav()  ブラウザ再生 / Web・Node の WAV 保存</code></
     <p><a href="./examples/pc-engine/wave/01-waveform/web/index.html">波形とメロディ</a> ·
       <a href="./examples/pc-engine/noise/01-noise/web/index.html">NoiseとPan</a> ·
       <a href="./examples/pc-engine/lfo/01-modulation/web/index.html">ハードウェアLFO</a></p>
+  </section>
+  <section class="sample-panel"><h2>WonderSwan</h2>
+    <p><code>createSoundChip('wonderswan', {execution:'worklet'})</code> → <code>WonderSwanWorkletTransport</code> → <code>WonderSwanSynth</code>。
+      物理4CH、32点・4-bit波形、左右Volumeを使い、VoiceはCH1、SweepはCH2、NoiseはCH3を使用します。</p>
+    <p>Voice PCMはunsigned 8-bitのデータを事前に作り、<code>transport.scheduleWrites()</code> へ絶対AudioContext秒・絶対レジスターアドレスでまとめて予約します。
+      音声スレッドが時刻どおりにレジスターを書き、JavaScriptタイマーで各バイトを送る必要はありません。</p>
+    <p>NodeはDirect factoryと<code>WonderSwanDirectTransport</code>でPCMを生成してWAVに保存します。Webの中心値補正と異なり、Node例はraw DACのDC成分を残します。</p>
+    <p><a href="./examples/wonderswan/wave/01-four-channels/web/index.html">4CHの波形とメロディ</a> ·
+      <a href="./examples/wonderswan/noise/01-noise-sweep/web/index.html">NoiseとSweep</a> ·
+      <a href="./examples/wonderswan/voice/01-timed-pcm/web/index.html">時刻付きVoice PCM</a></p>
+  </section>
+  <section class="sample-panel"><h2>POKEY / Dual POKEY</h2>
+    <p><code>createSoundChip('pokey', {execution:'worklet'})</code> → <code>PokeyWorkletTransport</code> → <code>PokeySynth</code>。
+      物理4CHの矩形波・Noise、共有polynomial・clock・結合タイマーを操作します。結合時は下側がtimer helper、上側のCHが発音します。</p>
+    <p>Dual例は独立したPOKEYを2台生成します。それぞれ4物理CHとmono出力を持ち、4+4CHの音声をホストで加算します。</p>
+    <p>NodeはDirect factoryのコアを <code>PokeyAudioEngine</code> へ渡し、Synthの書き込みもengineを経由させて <code>processFrames()</code> でWAVを生成します。
+      Webと同じ10 Hz DC blocker、明示的な出力gain 0.25を使い、音声デバイスや実時間待機は不要です。</p>
+    <p><a href="./examples/pokey/tone/01-four-channels/web/index.html">4CHのメロディ</a> ·
+      <a href="./examples/pokey/noise/01-distortion-joined/web/index.html">Noiseと結合タイマー</a> ·
+      <a href="./examples/pokey/dual/01-eight-channels/web/index.html">2台・8CHの演奏</a></p>
   </section>
   <section class="sample-panel"><h2>SNES / SPC（実験的実装）</h2>
     <p>楽器として使う <code>useSoundChip('snes')</code> は、SPC700 CPU を実行しない独立した S-DSP です。

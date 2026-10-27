@@ -1,3 +1,4 @@
+import { createPokeyClient } from './playground_pokey.js';
 import { createAy8910Client } from './playground_ay8910.js';
 import { TetoricaAudioRuntime } from './tetorica_audio_runtime.js';
 import { createNesClient } from './playground_nes.js';
@@ -10,11 +11,15 @@ import { createYm2413Client } from './playground_ym2413.js';
 import { createOplClient } from './playground_opl.js';
 import { createDx7Client } from './playground_dx7.js';
 export type NativeRuntimeSynthOptions = Pick<import('./megasynth.js').MegaSynthOptions, 'audioContext' | 'outputNode' | 'sampleOutputNode' | 'masterVolume' | 'mixer'> & {
-    chip?: 'nes' | 'snes' | 'x68000' | 'huc6280' | 'segapsg' | 'dx7' | 'ym3526' | 'ym3812' | 'y8950' | 'ymf262' | 'ym2413' | 'ay8910' | 'msx' | 'msx-audio';
+    chip?: 'nes' | 'snes' | 'x68000' | 'huc6280' | 'pokey' | 'wonderswan' | 'segapsg' | 'dx7' | 'ym3526' | 'ym3812' | 'y8950' | 'ymf262' | 'ym2413' | 'ay8910' | 'msx' | 'msx-audio';
     ym2413?: boolean;
     clock?: number;
     stereoEnabled?: boolean;
     fds?: boolean;
+    type?: 0 | 16;
+    flags?: number;
+    dualPokey?: boolean;
+    mixerId?: string;
     wasmUrl?: string | URL;
     workletUrl?: string | URL;
     fetch?: typeof globalThis.fetch;
@@ -40,7 +45,8 @@ export type NativeRuntimeSynthOptions = Pick<import('./megasynth.js').MegaSynthO
     };
 };
 /** @typedef {Pick<import('./megasynth.js').MegaSynthOptions,'audioContext'|'outputNode'|'sampleOutputNode'|'masterVolume'|'mixer'> & {
- * chip?:'nes'|'snes'|'x68000'|'huc6280'|'segapsg'|'dx7'|'ym3526'|'ym3812'|'y8950'|'ymf262'|'ym2413'|'ay8910'|'msx'|'msx-audio', ym2413?:boolean, clock?:number, stereoEnabled?:boolean, fds?:boolean,
+ * chip?:'nes'|'snes'|'x68000'|'huc6280'|'pokey'|'wonderswan'|'segapsg'|'dx7'|'ym3526'|'ym3812'|'y8950'|'ymf262'|'ym2413'|'ay8910'|'msx'|'msx-audio', ym2413?:boolean, clock?:number, stereoEnabled?:boolean, fds?:boolean,
+ * type?:0|16, flags?:number, dualPokey?:boolean, mixerId?:string,
  * wasmUrl?:string|URL, workletUrl?:string|URL, fetch?:typeof globalThis.fetch,
  * ayOptions?:{fetch?:typeof globalThis.fetch,wasmUrl?:string|URL,workletUrl?:string|URL},
  * oplOptions?:{fetch?:typeof globalThis.fetch,wasmUrl?:string|URL,workletUrl?:string|URL},
@@ -67,7 +73,7 @@ export declare class NativeRuntimeSynth {
     node: any;
     fm: any;
     psg: any;
-    /** @type {{nes?:ReturnType<typeof createNesClient>,snes?:ReturnType<typeof createSnesClient>,opm?:ReturnType<typeof createYm2151Client>,adpcm?:ReturnType<typeof createOki6258Client>,pce?:ReturnType<typeof createHuc6280Client>,psg?:ReturnType<typeof createSegaPsgClient>,dx7?:ReturnType<typeof createDx7Client>,opl?:ReturnType<typeof createOplClient>,opll?:ReturnType<typeof createYm2413Client>,ay?:ReturnType<typeof createAy8910Client>}} */
+    /** @type {{nes?:ReturnType<typeof createNesClient>,snes?:ReturnType<typeof createSnesClient>,opm?:ReturnType<typeof createYm2151Client>,adpcm?:ReturnType<typeof createOki6258Client>,pce?:ReturnType<typeof createHuc6280Client>,psg?:ReturnType<typeof createSegaPsgClient>,dx7?:ReturnType<typeof createDx7Client>,opl?:ReturnType<typeof createOplClient>,opll?:ReturnType<typeof createYm2413Client>,ay?:ReturnType<typeof createAy8910Client>,pokey?:ReturnType<typeof createPokeyClient>,pokey2?:ReturnType<typeof createPokeyClient>}} */
     primaryApis: {
         nes?: ReturnType<typeof createNesClient>;
         snes?: ReturnType<typeof createSnesClient>;
@@ -79,12 +85,17 @@ export declare class NativeRuntimeSynth {
         opl?: ReturnType<typeof createOplClient>;
         opll?: ReturnType<typeof createYm2413Client>;
         ay?: ReturnType<typeof createAy8910Client>;
+        pokey?: ReturnType<typeof createPokeyClient>;
+        pokey2?: ReturnType<typeof createPokeyClient>;
     };
     /** @type {ReturnType<typeof createNesClient>|null} */ nes: ReturnType<typeof createNesClient> | null;
     /** @type {ReturnType<typeof createSnesClient>|null} */ snes: ReturnType<typeof createSnesClient> | null;
     /** @type {ReturnType<typeof createYm2151Client>|null} */ opm: ReturnType<typeof createYm2151Client> | null;
     /** @type {ReturnType<typeof createOki6258Client>|null} */ adpcm: ReturnType<typeof createOki6258Client> | null;
     /** @type {ReturnType<typeof createHuc6280Client>|null} */ pce: ReturnType<typeof createHuc6280Client> | null;
+    ws: any;
+    pokey: any;
+    pokey2: any;
     /** @type {ReturnType<typeof createDx7Client>|null} */ dx7: ReturnType<typeof createDx7Client> | null;
     /** @type {ReturnType<typeof createOplClient>|null} */ opl: ReturnType<typeof createOplClient> | null;
     /** @type {ReturnType<typeof createYm2413Client>|null} */ opll: ReturnType<typeof createYm2413Client> | null;

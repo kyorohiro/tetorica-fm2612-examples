@@ -7,7 +7,7 @@ export declare function createHuc6280Client(port: MessagePort, options?: {
 }, lifecycle?: {}): Huc6280Synth & {
     readonly clock: number;
     setClock(hz: number): Promise<void>;
-    _requestControl(method: string, args?: any[]): Promise<any>;
+    _requestControl(method: string, args?: any[], transfer?: Transferable[]): Promise<any>;
 };
 /** Builtin controls borrow the primary device; the runtime owns its lifetime. */
 export declare function createPrimaryHuc6280Api(raw: any): {

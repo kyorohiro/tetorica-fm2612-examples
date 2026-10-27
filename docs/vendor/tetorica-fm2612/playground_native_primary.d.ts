@@ -72,7 +72,7 @@ export declare function createNativePrimaryClient(name: any, port: any, options?
 } | (import("./ay8910synth.js").AY8910Synth & {
     readonly clock: number;
     setClock(hz: number): Promise<void>;
-    _requestControl(method: string, args?: any[]): Promise<any>;
+    _requestControl(method: string, args?: any[], transfer?: Transferable[]): Promise<any>;
 }) | (import("./pwm32x_playback.js").AsyncPWMAPI & {
     dispose(): void;
     stopVoices?: () => Promise<void>;
@@ -81,17 +81,21 @@ export declare function createNativePrimaryClient(name: any, port: any, options?
 }) | (import("./opl_synth.js").OPLSynth & {
     readonly clock: number;
     setClock(hz: number): Promise<void>;
-    _requestControl(method: string, args?: any[]): Promise<any>;
+    _requestControl(method: string, args?: any[], transfer?: Transferable[]): Promise<any>;
+}) | (import("./pokeysynth.js").PokeySynth & {
+    readonly clock: number;
+    setClock(hz: number): Promise<void>;
+    _requestControl(method: string, args?: any[], transfer?: Transferable[]): Promise<any>;
 }) | (import("./ym2413synth.js").YM2413Synth & {
     readonly clock: number;
     setClock(hz: number): Promise<void>;
-    _requestControl(method: string, args?: any[]): Promise<any>;
+    _requestControl(method: string, args?: any[], transfer?: Transferable[]): Promise<any>;
 }) | ({
     dispose(): void;
 } & {
     readonly clock: number;
     setClock(hz: number): Promise<void>;
-    _requestControl(method: string, args?: any[]): Promise<any>;
+    _requestControl(method: string, args?: any[], transfer?: Transferable[]): Promise<any>;
 });
 /** Each endpoint keeps a direct Worker -> Worklet performance port. */
 export declare function createNativeWorkerApis(connections: any, performance: any, observe: any, lifecycle?: {}): {
@@ -99,5 +103,5 @@ export declare function createNativeWorkerApis(connections: any, performance: an
     raw: Map<any, any>;
     cancelAdpcmLoads(): void;
     stop(): Promise<any[]>;
-    adopt(name: any, state: any): void;
+    adopt(name: any, state: any, authorEdit: any): void;
 };

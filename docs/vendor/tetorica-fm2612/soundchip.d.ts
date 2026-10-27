@@ -122,6 +122,8 @@ export type SoundChipOptions = {
     gain?: number;
 };
 export type SoundChipMap = {
+    pokey: import('./pokey.js').Pokey;
+    wonderswan: import('./wonderswan.js').WonderSwan;
     gameboy: import('./gameboyapu.js').GameboyApu;
     segapsg: import('./segapsg.js').SegaPSG;
     pwm: import('./pwm32x.js').PWM32X | import('./pwm32x_wasm.js').PWM32XWasm;
@@ -142,7 +144,7 @@ export type SoundChipMap = {
     ymf278b: import('./ymf278b.js').Ymf278b;
     ymf288: import('./ymf288.js').Ymf288;
 };
-export type WorkletChipName = 'ym2612' | 'ym2608' | 'ym2151' | 'gameboy' | 'segapsg' | 'pwm' | 'nes' | 'ym3526' | 'ym3812' | 'y8950' | 'ymf262' | 'ym2413' | 'ay8910';
+export type WorkletChipName = 'ym2612' | 'ym2608' | 'ym2151' | 'gameboy' | 'segapsg' | 'pwm' | 'nes' | 'ym3526' | 'ym3812' | 'y8950' | 'ymf262' | 'ym2413' | 'ay8910' | 'wonderswan' | 'pokey';
 export declare function createSoundChip<Name extends WorkletChipName>(name: Name, options: SoundChipOptions & {
     execution: 'worklet';
 }): Promise<import('./soundchip_worklet.js').WorkletSoundChip & {

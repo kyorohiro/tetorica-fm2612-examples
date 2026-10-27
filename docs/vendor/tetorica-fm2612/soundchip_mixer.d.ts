@@ -42,6 +42,7 @@ export declare function chipMixGains({ volume, pan, muted, effectiveMuted }: {
     effectiveMuted?: boolean;
 }): number[];
 export type SoundChipMixerOptions = {
+    gainUnits?: 'legacy' | 'source';
     factoryDefaults?: {
         version: number;
         kinds: Array<{
@@ -72,10 +73,11 @@ export type SoundChipMixerOptions = {
     };
 };
 /** Settings can be prepared before start(). Importing this module opens no audio device. */
-/** @typedef {{factoryDefaults?:{version:number,kinds:Array<{name:string,volume?:number,pan?:number}>},
+/** @typedef {{gainUnits?:'legacy'|'source',factoryDefaults?:{version:number,kinds:Array<{name:string,volume?:number,pan?:number}>},
  * factoryEntries?:{version:number,entries:Array<{id:string,name:string,settings:{volume?:number,pan?:number}}>},
  * factoryEngines?:{version:number,engines:Array<{name:string,engine:string,volume?:number,pan?:number}>}}} SoundChipMixerOptions */
 export declare class SoundChipMixer {
+    #private;
     entries: Map<any, any>;
     retained: Map<any, any>;
     reservedIds: Set<any>;
@@ -87,9 +89,13 @@ export declare class SoundChipMixer {
     factoryEngines: Map<any, any>;
     listeners: Set<any>;
     meterListeners: Set<any>;
+    /** Source units replace a composite endpoint's legacy chip balance.
+     * Legacy units preserve existing endpoint behavior for generic consumers.
+     * @returns {'legacy'|'source'} */
+    get gainUnits(): 'legacy' | 'source';
     /** Application factory policy is optional and never part of authored exports.
      * @param {SoundChipMixerOptions} [options] */
-    constructor({ factoryDefaults, factoryEntries, factoryEngines }?: SoundChipMixerOptions);
+    constructor({ gainUnits, factoryDefaults, factoryEntries, factoryEngines }?: SoundChipMixerOptions);
     /** @param {string} [name] @param {string} [id] @param {string} [engine] */
     defaults(name?: string, id?: string, engine?: string): any;
     settingsFor(entry: any): any;

@@ -1,7 +1,7 @@
 # tetorica-fm2612 examples
 
 `tetorica-fm2612` を import して使う、機能別の小さなサンプル集。
-公開済み npm `tetorica-fm2612@0.2.27` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES・PC Engine・MSX 合奏の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
+公開済み npm `tetorica-fm2612@0.2.31` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES・PC Engine・MSX 合奏の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
 PCM 生成・WAV 保存は専用例に置き、Web Audio を使う埋め込み例と、Node の nativeFX / 音声デバイス出力の例も掲載しています。本体リポジトリには依存しません。
 
 [公開 examples](https://kyorohiro.github.io/tetorica-fm2612-examples/) と
@@ -73,6 +73,12 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 | PC Engine | [01-waveform](examples/pc-engine/wave/01-waveform/README.md) | 32点・5-bit波形、メロディ、左右Pan |
 | PC Engine | [01-noise](examples/pc-engine/noise/01-noise/README.md) | CH4・5のNoise、周波数コード、左右Pan |
 | PC Engine | [01-modulation](examples/pc-engine/lfo/01-modulation/README.md) | CH1からCH0へのハードウェアLFO |
+| WonderSwan | [01-four-channels](examples/wonderswan/wave/01-four-channels/README.md) | 32点・4-bit波形、4CHのメロディ、左右Volume |
+| WonderSwan | [01-noise-sweep](examples/wonderswan/noise/01-noise-sweep/README.md) | CH3のNoise・LFSRの種類、CH2のSweep |
+| WonderSwan | [01-timed-pcm](examples/wonderswan/voice/01-timed-pcm/README.md) | 自作12kHz Voice PCM、音声スレッドでの時刻付き予約 |
+| POKEY | [01-four-channels](examples/pokey/tone/01-four-channels/README.md) | 4物理CHのトーン、音名・音量・メロディ |
+| POKEY | [01-distortion-joined](examples/pokey/noise/01-distortion-joined/README.md) | Distortion・poly9とpoly17、結合タイマー・high clock |
+| Dual POKEY | [01-eight-channels](examples/pokey/dual/01-eight-channels/README.md) | 2つの独立した音源、4+4CHの合奏・片側の停止 |
 | Game Boy | [01-duty](examples/gameboy/pulse/01-duty/README.md) | Game Boy pulse のデューティ比 |
 | Game Boy | [01-waveform](examples/gameboy/wave/01-waveform/README.md) | Game Boy wave の波形メモリー |
 | Game Boy | [01-width](examples/gameboy/noise/01-width/README.md) | Game Boy noise の幅 |
@@ -176,7 +182,7 @@ Node 専用の場合は `environments: ["node"]`、ブラウザ専用の場合�
 
 ## MegaSynth Node examples
 
-`embedding/06`〜`10` は `tetorica-fm2612@0.2.27` の実験用 MegaSynth API を使います。
+`embedding/06`〜`10` は `tetorica-fm2612@0.2.31` の実験用 MegaSynth API を使います。
 通常の `npm ci` で公開 package を導入できます。
 
 ```sh
@@ -199,7 +205,7 @@ WAV の RIFF ヘッダー・非ゼロ PCM とイベント JSON を確認しま�
 ## Transport の例
 
 Genesis / PC-98 / Game Boy / X68000 FM の基本例は、WorkletTransport / AudifyTransport を使用します。
-公開済み npm 0.2.27 を使用します。Node のリアルタイム再生には audify を追加してください。
+公開済み npm 0.2.31 を使用します。Node のリアルタイム再生には audify を追加してください。
 
 ```sh
 npm install
@@ -243,7 +249,7 @@ npm run check:mixer
 
 ## OPL / OPL2 / Y8950 FM / OPL3
 
-`tetorica-fm2612@0.2.27` の `OPLSynth` とオリジナル音色 `OPL_PRESETS` を使います。
+`tetorica-fm2612@0.2.31` の `OPLSynth` とオリジナル音色 `OPL_PRESETS` を使います。
 Webは `createSoundChip(name, {execution:'worklet'})` → `OPLWorkletTransport` → `OPLSynth` でリアルタイム再生。
 Nodeは `OPLDirectTransport` と `generateStereo()` でPCMを生成し、WAVへ保存します。音声デバイスや `audify` は不要です。
 Webのコード欄を編集して再実行でき、Stopは読み込み中にも使えます。
@@ -267,7 +273,7 @@ npm run check:opl
 
 ## AY / OPLL / MSX
 
-6例は `tetorica-fm2612@0.2.27` の AY / OPLL API を使います。
+6例は `tetorica-fm2612@0.2.31` の AY / OPLL API を使います。
 MSX は AY-3-8910＋YM2413、MSX Audio はさらに Y8950 の FM 部分を加えた構成です。
 Master System の2例は YM2413 を使い、音色比較では Sega PSG も伴奏します。
 
@@ -295,7 +301,7 @@ npm run check:msx
 
 ## PC Engine / HuC6280
 
-`pc-engine/` の3例は公開済み `tetorica-fm2612@0.2.27` を使います。
+`pc-engine/` の3例は公開済み `tetorica-fm2612@0.2.31` を使います。
 Web は `Playground({chip:'huc6280'})` の主音源 `pce` を Main / Worker から操作します。
 Node は `Huc6280AudioEngine` → `Huc6280DirectTransport` → `Huc6280Synth` でPCMを生成し、WAVへ保存します。音声ドライバーは不要です。
 package root の `createSoundChip('huc6280')` や専用 AudifyTransport は使いません。
@@ -363,3 +369,58 @@ npm run check:snes
 `check:snes` は上の DX7 と同じ Playwright の Chromium / WebKit を使い、
 サブパス配置での BRR 演奏・Main / Worker・初期化中の Stop・SPC の
 Pause / Resume・音量・不正ファイル後の再実行を確認します。
+
+## WonderSwan
+
+3例は `tetorica-fm2612@0.2.31` の共通factoryを使います。
+Webは `createSoundChip('wonderswan', {execution:'worklet'})` → `WonderSwanWorkletTransport` → `WonderSwanSynth`。
+NodeはDirect生成したチップを `WonderSwanDirectTransport` → `WonderSwanSynth` へ渡し、WAVに保存します。
+物理4CH、32点・4-bit波形、左右Volumeは各0〜15。VoiceはCH1、SweepはCH2、NoiseはCH3を使います。
+
+Voice例は自作の1秒・12kHz PCMをまとめて `scheduleWrites()` へ送り、ACK後に開始します。
+PCMの各バイトへJavaScriptのタイマーを使わず、Stopで予約も消します。
+Webは既存の音声エンジンの中心値補正を使い、Nodeはunipolar DAC/DC成分を残したraw WAVです。
+音量校正や正規化は行わず、HyperVoice・音声DMA・内蔵スピーカーは扱いません。
+ゲームROM・BIOS・ゲーム音楽は同梱しません。
+
+```sh
+node examples/wonderswan/wave/01-four-channels/node/main.mjs
+node examples/wonderswan/noise/01-noise-sweep/node/main.mjs
+node examples/wonderswan/voice/01-timed-pcm/node/main.mjs
+npm run build
+npm run check:wonderswan
+```
+
+`check:wonderswan` はChromium / WebKitの実際の音声出力を測定します。
+4CH・Noise・Sweep・Voiceの非ゼロで有限のPCM、A4・左右出力、初期化中／演奏中のStop、
+予約されたVoice PCMの取消し、編集後の再実行、終了後の音声リソース解放を確認します。
+
+## POKEY / Dual POKEY
+
+3例は公開済み `tetorica-fm2612@0.2.31` の共通factoryと `PokeySynth` を使います。
+Webは `createSoundChip('pokey', {execution:'worklet'})` → `PokeyWorkletTransport` → `PokeySynth`。
+コードを編集して再実行でき、Stop・終了・ページ移動で音源とAudioContextを解放します。読み込み中のStopにも対応します。
+
+物理CHは0〜3、Volumeは0〜15、distortion 5が基本の矩形波です。
+ノイズのpoly9/poly17・base clock・join等は共通の設定なので、変更前に発音を止めます。
+結合ペアは下側がtimer helper、上側（CH1/CH3）が発音します。音名から設定した音程はタイマーの分解能に合わせて量子化されます。
+
+Dual例は独立した4CH音源を2台作り、4+4CHを合奏します。両方ともmonoで、ホストで加算します。
+単体のclockは1,789,790 Hz、Dual例はそれぞれ1,789,773 Hzです。
+いずれも自作の短いフレーズを使い、ゲームデータを必要としません。
+
+Nodeは `PokeyAudioEngine` の10 Hz DC blockerを通したPCMを44,100 Hz stereo PCM16 WAVへ保存します。
+Synthからのレジスター書き込みもengineを経由させます。Webも汎用Worklet内で同じ出力処理を使います。
+出力gainはWeb / Nodeとも明示的に0.25を1回だけ掛け、正規化や音源別の音量校正は行いません。
+
+```sh
+node examples/pokey/tone/01-four-channels/node/main.mjs
+node examples/pokey/noise/01-distortion-joined/node/main.mjs
+node examples/pokey/dual/01-eight-channels/node/main.mjs
+npm run build
+npm run check:pokey
+npm run check:node
+```
+
+`check:pokey` はChromium / WebKitで、実際の出力PCM・4CH/2台の命令・音程・ノイズ/結合設定・Stop・編集後の再実行を検査します。
+`npm run build:docs` でGitHub Pages用の `docs/` にも、コード・WASM・ライセンス・対応ソースを含めて生成します。

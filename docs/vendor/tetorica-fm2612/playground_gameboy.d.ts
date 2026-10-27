@@ -4,7 +4,7 @@ import { GameboySynth } from './gameboysynth.js';
 export declare function createGameboyClient(port: MessagePort, options?: {}, lifecycle?: {}): GameboySynth & {
     readonly clock: number;
     setClock(hz: number): Promise<void>;
-    _requestControl(method: string, args?: any[]): Promise<any>;
+    _requestControl(method: string, args?: any[], transfer?: Transferable[]): Promise<any>;
 };
 /** Safe builtin controls borrow the primary device, whose lifetime belongs to the runtime. */
 export declare function createPrimaryGameboyApi(raw: any): {

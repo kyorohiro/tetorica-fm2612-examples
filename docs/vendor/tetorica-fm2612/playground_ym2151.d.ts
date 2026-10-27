@@ -58,5 +58,5 @@ export declare function createYm2151Client(port: any, options?: {}, lifecycle?: 
 } & {
     readonly clock: number;
     setClock(hz: number): Promise<void>;
-    _requestControl(method: string, args?: any[]): Promise<any>;
+    _requestControl(method: string, args?: any[], transfer?: Transferable[]): Promise<any>;
 };

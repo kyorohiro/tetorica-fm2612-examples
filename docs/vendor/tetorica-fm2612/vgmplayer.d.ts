@@ -20,6 +20,9 @@ export type VgmPlaybackEngine = {
     writeK051649?(port: number, register: number, value: number): void;
     writeSegaPcm?(offset: number, value: number): void;
     writeGameboyApu?(register: number, value: number): void;
+    writeWonderSwan?(register: number, value: number): void;
+    writePokey?(register: number, value: number): void;
+    writeWonderSwanMemory?(offset: number, value: number): void;
     writeY8950?(register: number, value: number): void;
     writeYmf278b?(port: number, register: number, value: number): void;
     loadSampleMemory?(data: Uint8Array, offset: number, memorySize: number): void;
@@ -64,6 +67,9 @@ export type VgmPlaybackEngine = {
  *   writeK051649?(port: number, register: number, value: number): void,
  *   writeSegaPcm?(offset: number, value: number): void,
  *   writeGameboyApu?(register: number, value: number): void,
+ *   writeWonderSwan?(register: number, value: number): void,
+ *   writePokey?(register: number, value: number): void,
+ *   writeWonderSwanMemory?(offset: number, value: number): void,
  *   writeY8950?(register: number, value: number): void,
  *   writeYmf278b?(port: number, register: number, value: number): void,
  *   loadSampleMemory?(data: Uint8Array, offset: number, memorySize: number): void,
@@ -268,6 +274,14 @@ export declare class VgmPlayer {
  */
 export declare function createVgmTargets(engine: VgmPlaybackEngine): {
     resolveChip: any;
+    pokey: {
+        writeRegister: (register: any, value: any) => void;
+    } | undefined;
+    wonderswan: {
+        writeRegister: (register: any, value: any) => void;
+        writeMemory: (offset: any, value: any) => void;
+        loadMemory: (data: any, offset: any) => any;
+    } | undefined;
     msm5205: {
         writeRegister: (register: any, value: any) => any;
     } | undefined;

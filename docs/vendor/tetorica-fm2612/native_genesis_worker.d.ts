@@ -7,6 +7,7 @@ export declare function createNativeGenesisWorkerBridge({ synth, MessageChannelC
     onError?: (() => void) | undefined;
     synth: any;
 }): {
+    primaryPorts: any;
     port: MessagePort;
     chipPort: MessagePort;
     fxPort: MessagePort;
@@ -14,6 +15,7 @@ export declare function createNativeGenesisWorkerBridge({ synth, MessageChannelC
     pcmPort: MessagePort | null;
     dx7Port: MessagePort | null;
     nesPort: MessagePort | null;
+    wonderswanPort: MessagePort | null;
     gameboyPort: MessagePort | null;
     snesPort: MessagePort | null;
     huc6280Port: MessagePort | null;

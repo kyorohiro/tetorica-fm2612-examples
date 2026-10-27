@@ -1,8 +1,11 @@
 ymfm: BSD-3-Clause; see LICENSE.
+POKEY: BSD-3-Clause; see licenses/libvgm-pokey/ and sources/POKEY.md for the standalone adaptation, exact licensed upstream source, pinned provenance and rebuild recipe.
+Sega PSG: original Tetorica implementation, BSD-3-Clause; see licenses/tetorica_sega_psg/ and sources/SegaPSG.md. Hardware reference: SMS Power! SN76489 documentation by Maxim and contributors.
 nuked-opn2: see licenses/nuked-opn2/LICENSE and README.md.
 mame-ay8910: see licenses/mame-ay8910/LICENSE and README.md.
 mame-gameboy: see licenses/mame-gameboy/LICENSE and README.md.
 mame-huc6280: see licenses/mame-huc6280/LICENSE and README.md.
+mame-wonderswan: see licenses/mame-wonderswan/LICENSE and README.md.
 mame-k051649: see licenses/mame-k051649/LICENSE and README.md.
 mame-okim6258: see licenses/mame-okim6258/LICENSE and README.md.
 mame-okim6295: see licenses/mame-okim6295/LICENSE and README.md.
@@ -10,7 +13,7 @@ libvgm-msm5205: see licenses/libvgm-msm5205/LICENSE and README.md.
 mame-rf5c164: see licenses/mame-rf5c164/LICENSE and README.md.
 mame-segapcm: see licenses/mame-segapcm/LICENSE and README.md.
 mame-32x-pwm: see licenses/mame-32x-pwm/LICENSE and README.md.
-Nuked-OPN2 is LGPL-2.1-or-later; the MAME adaptations listed above are BSD-3-Clause.
+Nuked-OPN2 is LGPL-2.1-or-later; corresponding source and standalone recipe: sources/Nuked-OPN2.md. The MAME adaptations listed above are BSD-3-Clause.
 NES APU: JSNES (Apache-2.0), FDS: fixNES (MIT); see licenses/jsnes, licenses/fixnes-fds and licenses/tetorica-nes. The default WASM port and reproducible source are described in sources/NES-FDS.md.
 DX7: tetorica-msfa-dx7-wasm 0.3.1 / Google MSFA (Apache-2.0); see msfa_dx7/LICENSE, THIRD_PARTY_NOTICES.md and README.vendor.md.
 SPC700 / S-DSP: snes_spc (LGPL-2.1-or-later); see licenses/snes-spc and sources/SNES-SPC.md for corresponding source and rebuilding.

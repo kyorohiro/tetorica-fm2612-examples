@@ -12,6 +12,8 @@ export declare const CHIP_CLOCKS: Readonly<{
     snes: 1024000;
     x68000: 4000000;
     huc6280: 3579545;
+    wonderswan: 3072000;
+    pokey: 1789790;
     okim6258: 8000000;
     ay8910: 1789773;
     msx: 1789773;
@@ -44,7 +46,7 @@ export declare class ChipClockResampler {
  * @template T
  * @param {T} client @param {MessagePort} port @param {number} initialClock
  * @param {{primary?:boolean, batch?:boolean, onApplied?:(hz:number)=>void}} [options]
- * @returns {T & {readonly clock:number, setClock(hz:number):Promise<void>, _requestControl(method:string,args?:any[]):Promise<any>}}
+ * @returns {T & {readonly clock:number, setClock(hz:number):Promise<void>, _requestControl(method:string,args?:any[],transfer?:Transferable[]):Promise<any>}}
  */
 export declare function attachChipClock<T>(client: T, port: MessagePort, initialClock: number, { primary, batch, onApplied }?: {
     primary?: boolean;
@@ -53,5 +55,5 @@ export declare function attachChipClock<T>(client: T, port: MessagePort, initial
 }): T & {
     readonly clock: number;
     setClock(hz: number): Promise<void>;
-    _requestControl(method: string, args?: any[]): Promise<any>;
+    _requestControl(method: string, args?: any[], transfer?: Transferable[]): Promise<any>;
 };

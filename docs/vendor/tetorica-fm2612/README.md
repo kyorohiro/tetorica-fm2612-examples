@@ -39,6 +39,8 @@ entry points, rather than every internal Worker or Worklet module.
 | NES APU and FDS | `tetorica-fm2612/nesapusynth.js` | `NesApuSynth`, `NesApuDirectTransport`, `NesApuWorkletTransport` |
 | Sega PSG tone and noise | `tetorica-fm2612/segapsgsynth.js` | `SegaPSGSynth`, `SegaPSGDirectTransport`, `psgPeriodFromFrequency`, `psgPeriodFromNote` |
 | PC Engine wavetable, noise and DDA | `tetorica-fm2612/huc6280synth.js` | `Huc6280Synth`, `Huc6280DirectTransport` |
+| WonderSwan wavetable, Voice PCM, noise and sweep | `tetorica-fm2612/wonderswansynth.js` | `WonderSwanSynth`, `WonderSwanDirectTransport`, `WonderSwanWorkletTransport` |
+| Atari POKEY, four voices per chip | `tetorica-fm2612/pokeysynth.js` | `PokeySynth`, `PokeyDirectTransport`, `PokeyWorkletTransport` |
 | OKIM6258 ADPCM samples | `tetorica-fm2612/okim6258synth.js` | `Oki6258Synth`, `encodeOki6258` |
 | RF5C164 PCM | `tetorica-fm2612/rf5c164synth.js` | `RF5C164Synth`, `RF5C164DirectTransport` |
 | 32X PWM | `tetorica-fm2612/pwm32x_transport.js` | `PWM32XDirectTransport`, `PWM32XWorkletTransport` |
@@ -142,6 +144,84 @@ module and asset. It is a distribution inventory, including internal modules;
 start with the task table above when choosing an application API. See the
 [runnable examples](https://github.com/kyorohiro/tetorica-fm2612-examples) for
 complete setup, playback and cleanup.
+
+### WonderSwan direct rendering
+
+Version 0.2.30 supports `createSoundChip('wonderswan')` for
+synchronous register, 16 KiB wave RAM and stereo PCM access in Browser,
+Worker and Node.js. The default clock is 3,072,000 Hz and the default output
+sample rate is 44,100 Hz; both can be specified when creating the chip.
+Each call creates an independent instance with its own `id` and `dispose()`.
+
+```js
+import {createSoundChip, encodeWav} from 'tetorica-fm2612';
+import {WonderSwanSynth, WonderSwanDirectTransport} from 'tetorica-fm2612/wonderswansynth.js';
+
+const chip = await createSoundChip('wonderswan', {sampleRate:48000});
+try {
+  const ws = new WonderSwanSynth({transport:new WonderSwanDirectTransport(chip)});
+  ws.initialize();
+  ws.setWaveform(0, Array.from({length:32}, (_, i) => i < 16 ? i : 31 - i));
+  ws.setVolume(0, 9, 9);
+  ws.noteOn(0, 'A4');
+  const pcm = chip.generateStereo(Math.round(chip.sampleRate() * 0.5));
+  ws.keyOff(0);
+  const wav = encodeWav({...pcm, sampleRate:chip.sampleRate()});
+  // Save wav to a file, or send pcm to your own output.
+} finally { chip.dispose(); }
+```
+
+The direct factory opens no audio device and returns raw PCM without Mixer
+gain or a DC filter. It supports the shared `assetBaseUrl`, `moduleFactory`,
+`moduleOptions` and `signal` loader settings. Ship
+`generated/wonderswan_wasm.js` and `generated/wonderswan_wasm.wasm` when copying
+a smaller deployment.
+
+### WonderSwan browser audio
+
+Use `execution:'worklet'` to render on the browser audio thread, with the same
+shared output Mixer as the other generic chip endpoints. The endpoint exposes
+the actual output `sampleRate()` and the fixed input `clock`; a supplied
+AudioContext controls the output sample rate.
+
+```js
+import {createSoundChip, SoundChipMixer} from 'tetorica-fm2612';
+import {WonderSwanSynth, WonderSwanWorkletTransport} from 'tetorica-fm2612/wonderswansynth.js';
+
+// Run from a user gesture, such as a Play button.
+const mixer = new SoundChipMixer();
+const chip = await createSoundChip('wonderswan', {execution:'worklet', mixer});
+const transport = new WonderSwanWorkletTransport(chip);
+const ws = new WonderSwanSynth({transport, clock:chip.clock});
+ws.initialize();
+ws.noteOn(0, 'A4');
+await transport.flush();
+await transport.start();
+// When finished: ws.allNotesOff(); await transport.flush();
+// ws.dispose(); await chip.dispose();
+```
+
+`mixer.set(chip.id, {volume:0.5, pan:-0.5})` adjusts the output independently
+from hardware channel volumes. The WonderSwan source default remains `1.0`;
+the endpoint's separate output `gain` defaults to `0.25`, as for other chips.
+The speaker path uses the existing tick-aligned waveform/Voice midpoint
+correction from Playground and Analyzer. Direct raw PCM is unchanged.
+
+The transport accepts a chip endpoint or a port returned by
+`chip.createTransportPort()` for use in an application Worker. `loadMemory()`
+copies up to 16 KiB and acknowledges the upload; `readRegister()`, `readMemory()`
+and `setChannelMuted()` are asynchronous. `flush()` waits for earlier messages
+on that port. Disposing a transport releases its listeners and pending requests;
+dispose the owned chip endpoint separately when finished.
+
+For synthetic Voice PCM, `scheduleWrites([{time, register, value}])` accepts
+absolute AudioContext seconds and absolute registers `0x80..0x9f`, resolving
+after the batch is queued. At most 65,536 writes may be pending. Queue the
+samples before playback rather than driving individual bytes with timers.
+`clearScheduledWrites()`, Stop, reset and disposal cancel pending writes.
+This bounded register scheduler is separate from Playground's packed VGM
+timeline API. The examples repository includes waveform, noise/sweep and
+timed Voice PCM examples for Browser and Node.
 
 ### NES + FDS WASM
 
@@ -293,8 +373,8 @@ for synchronous rendering, as used by the Analyzer.
 
 ### Optional calibrated preset
 
-`SOUNDCHIP_MIXER_PRESETS.calibrated` provides fixed, measured output-level
-defaults for the 22 calibrated chip kinds. Select it when constructing the
+`SOUNDCHIP_MIXER_PRESETS.calibrated` combines measured output levels with a
+fixed listening balance for the 22 calibrated chip kinds. Select it when constructing the
 mixer, then pass that mixer to a browser Worklet endpoint:
 
 ```js
@@ -337,12 +417,25 @@ without a preset, or omitting `mixer` from `createSoundChip()`, keeps the legacy
 defaults described above. Importing or selecting the preset opens no audio
 device. It does not change direct `generateStereo()` output.
 
-Since 0.2.27, the standalone Sega PSG, AY-3-8910 and NES pulse references use
-AC RMS relative to the retained FM reference, reducing the earlier square-wave
-boost. Their fallback volumes are `0.455420`, `1.100331` and `1.514209`.
-The NES value is measured on this package's WASM core; the Analyzer's JavaScript
-NES renderer has a separate measured value. OPN chips retain their existing
-internal FM/SSG/rhythm/ADPCM balance, and the other preset levels are unchanged.
+The shared listening policy uses these standalone fallback volumes:
+
+| Sound chip | Volume |
+| --- | ---: |
+| Sega PSG | `0.35` |
+| AY-3-8910 | `0.85` |
+| NES | `1.16` |
+| Game Boy | `0.36` |
+| HuC6280 | `0.44` |
+
+This preset selects `gainUnits: 'source'`: `volume` is the actual source
+multiplier. Sega PSG volume `0.35` therefore means the same in a standalone
+chip, Playground, and the Analyzer. Genesis outputs replace their legacy
+FM/PSG trims in this mode instead of multiplying them again. A Mixer created
+without this option retains the legacy trims. These listening levels do not
+change raw PCM or the internal FM/SSG/rhythm/ADPCM balance of an OPN chip.
+Other calibrated chip levels retain their measured values. HuC6280 loudness
+depends on the selected waveform; `0.44` is a fixed listening balance, not
+waveform normalization.
 
 Calibration supplies fallback `volume` values, including an engine-specific
 YM2612/Nuked value when a connected endpoint reports that engine. Explicit
@@ -355,10 +448,10 @@ support and endpoint options still apply.
 These constants compare a fixed single voice at known levels. They do not
 analyze playing audio or perform automatic normalization, compression, or
 limiting. Timbre and polyphony still affect loudness and headroom. Chip kinds
-outside the 22 measured kinds keep their legacy defaults. The preset is
-intended initially for standalone chip / `createSoundChip` output routes;
-MegaSynth's built-in sources have different trims, so it does not reproduce
-the balance of a complete Playground machine mode.
+outside the 22 measured kinds keep their legacy defaults. The preset supplies
+standalone chip defaults rather than every machine-specific route or mode
+preset. MegaSynth's built-in Genesis FM/PSG sources also support its source
+units; separate endpoint and master gains still apply.
 
 ### Synth routing and settings
 
@@ -399,6 +492,72 @@ For a stable application name, `{id: 'gb1'}` remains available. `useSoundChip` r
 per-name cache and returns the same object/ID until disposed or stopped; its `{id}` option is not supported. Disposing a client or
 stopping the runtime removes its output route.
 
+### POKEY and dual POKEY
+
+Version `0.2.31` adds POKEY. Each instance owns one four-channel mono chip;
+dual POKEY uses two ordinary independent instances, rather than eight channels
+on one object.
+
+```js
+import {createSoundChip} from 'tetorica-fm2612';
+import {PokeySynth, PokeyDirectTransport} from 'tetorica-fm2612/pokeysynth.js';
+
+const chips = await Promise.all(['pokey:1', 'pokey:2'].map(id =>
+  createSoundChip('pokey', {id, sampleRate:48000, clock:1789773})));
+try {
+  const voices = chips.map(chip => new PokeySynth({
+    transport:new PokeyDirectTransport(chip), clock:chip.clock,
+  }));
+  for (const [index, voice] of voices.entries()) {
+    voice.initialize();
+    voice.setVolume(0, 6);
+    voice.noteOn(0, index ? 'C3' : 'C5');
+  }
+  const [first, second] = chips.map(chip => chip.generateStereo(1024));
+  // Both are mono. The host chooses mono summing or stereo placement/headroom.
+} finally {
+  for (const chip of chips) chip.dispose();
+}
+```
+
+The raw `Pokey` wrapper in `pokey.js` exposes synchronous `readRegister()`,
+`writeRegister()`, monitor mute and owned/borrowed/into PCM rendering. The
+hardware read-side register map differs from the write-side audio bank:
+`readRegister(0)` reads POT0, rather than the authored AUDF1 value. A Synth's
+`getRegisterSnapshot()` returns its local write-side shadow instead.
+
+For browser audio, create each chip with `{execution:'worklet', mixer}`, borrow
+it through `new PokeyWorkletTransport(chip)`, initialize a `PokeySynth`, and
+`await chip.start()`. Shared `SoundChipMixer` IDs independently control each
+chip's volume, Pan, Mute and Solo. `readRegister()` and `flush()` on the Worklet
+transport return promises; a transferred `createTransportPort()` also supports
+Worker-side Synth control. `scheduleWrites()` accepts absolute AudioContext
+seconds and local register offsets `0..15`, with at most 65,536 pending writes.
+Stop, reset and disposal cancel pending scheduled writes.
+
+POKEY physical channels are `0..3`. Distortion `5` is a pure square tone;
+the other modes use its polynomial/noise circuitry. AUDCTL clock, join and
+filter settings are shared by all four voices. Joined pairs `(0,1)` and `(2,3)`
+sound through their upper channel; their lower channel supplies a timer.
+`setFrequency()` returns the quantized pure-tone frequency and rejects pitches
+outside the selected timer range. Two chips retain independent clocks, noise
+phase, register state and lifetimes.
+
+Raw PCM retains the positive mono DAC output at `/32768`, duplicated into left
+and right, without Mixer gain or DC correction. The generic Worklet uses the
+`PokeyAudioEngine` speaker adapter, including its documented 10 Hz DC blocker;
+raw PCM remains unchanged. Source Mixer defaults stay at `1.0` until calibrated.
+The generic endpoint's separate output gain defaults to `0.25`, as with the
+other generic endpoints. No automatic half gain or invented hardware stereo is
+applied to dual POKEY.
+
+The package includes the adaptation, exact BSD-labeled upstream `pokey.c`,
+notices and standalone recipe in `sources/POKEY.md` and
+`licenses/libvgm-pokey/`. These inputs come from the fixed SDK 0.1.5 local
+candidate; `sources/POKEY-SDK.json` retains its archive hash and base-commit
+provenance without claiming an already published SDK tag. No Atari CPU, ROM,
+full machine emulation or external sample is included.
+
 ## Included sound chips
 
 | Family | Chips |
@@ -406,12 +565,13 @@ stopping the runtime removes its output route.
 | Yamaha OPN | YM2203, YM2608, YM2610/YM2610B, YM2612, YM3438, YMF276, YMF288 |
 | Yamaha OPM | YM2151 |
 | Yamaha OPL | YM2413, YM3526, YM3812, Y8950, YMF262, YMF278B |
-| PSG and console audio | AY8910, Sega PSG, Game Boy APU, NES APU + FDS, HuC6280, K051649 |
+| PSG and console audio | AY8910, Sega PSG, Game Boy APU, NES APU + FDS, HuC6280, K051649, WonderSwan, POKEY |
 | PCM and ADPCM | RF5C164, Sega PCM, OKIM6258, OKIM6295 |
 
 YM2612 includes ymfm and Nuked-OPN2 backends. YM2610 uses the YM2610B core
 with `variant: false`; OKIM6295 is implemented in JavaScript. The distribution
-includes 23 generated JS/WASM pairs. Chip and high-level Synth API coverage differ.
+includes 28 generated JS/WASM pairs plus the standalone DX7
+WASM. Chip and high-level Synth API coverage differ.
 
 ## Node.js: generate PCM
 
@@ -938,10 +1098,10 @@ FM/PSG/PCM mixing, stop/reset and close/restart. Playwright is a development
 dependency; it is not required by users of the sound-chip runtime.
 
 The build is staged in `dist/fm2612/`; packing produces
-`tetorica-fm2612-0.2.27.tgz`. To install a local build in another project:
+`tetorica-fm2612-0.2.31.tgz`. To install a local build in another project:
 
 ```sh
-npm install /absolute/path/to/tetorica-fm2612-0.2.27.tgz
+npm install /absolute/path/to/tetorica-fm2612-0.2.31.tgz
 ```
 
 The existing `tetorica-vgm` CLI package is built separately. This first package
@@ -958,6 +1118,44 @@ Tetorica-generated and includes its license and generator. External
 instrument/sample ROMs are not included.
 
 ## Release notes
+
+`0.2.31` adds the POKEY Direct/AudioWorklet factory,
+four-channel Synth, Mixer/Worker transport, independently owned dual-POKEY
+instances and a self-contained BSD source bundle. The bundled Playground
+timeline client transfers small owned chunks and validates them across audio
+quanta, with atomic commit and cancellation on Stop, owner/session replacement
+and disposal. The SDK 0.1.5 source candidate remains hash pinned, with its local
+archive/base-commit provenance retained; this npm release does not publish an
+SDK GitHub Release.
+
+`0.2.30` connects **WonderSwan to the public Direct and AudioWorklet factory**,
+with the shared Mixer, typed raw API and `WonderSwanWorkletTransport` for Synth
+and application Workers. RAM uploads/readback and bounded timed register
+writes acknowledge their audio-thread application or acceptance. Voice PCM
+uses queued audio-frame scheduling, with cancellation on Stop/reset/dispose.
+The output reuses the existing speaker midpoint correction; raw core PCM and
+Mixer calibration values are unchanged. Short borrowed PCM spans are cached
+before rendering to avoid creating views for every Voice PCM write.
+
+`0.2.29` adds the **WonderSwan WASM core and four-channel Synth API**, including
+wavetable editing, Voice PCM, noise and sweep. The shared Playground runtime
+provides its AudioWorklet playback and timed register/RAM/Voice PCM timelines,
+preserving the original 44,100 Hz event positions. Prebuilt cores are now built
+from the fixed sound-chip SDK 0.1.4; included standalone source bundles and
+component notices follow their fixed SDK sources. The calibrated Mixer values
+are unchanged.
+
+`0.2.28` updates the **opt-in calibrated Mixer preset** to the shared listening
+levels: Sega PSG `0.35`, AY-3-8910 `0.85`, NES `1.16`, Game Boy `0.36`, and
+HuC6280 `0.44`. It selects `gainUnits: 'source'`, so integrated Genesis
+FM/PSG Mixer values replace the existing machine balance instead of multiplying
+it. A source-unit PSG volume of `0.35` has the same meaning for Genesis and
+standalone playback. Plain `new SoundChipMixer()`, no-mixer playback, direct
+chip PCM, and internal OPN section balance retain their previous behavior.
+When updating an application that saves calibrated Mixer settings, convert
+old Genesis-relative primary FM/PSG volumes by `0.9`/`0.35` once; standalone
+settings need no conversion. The shared Native runtime requires an updated
+Tauri host for source-unit Genesis mix commands.
 
 `0.2.27` refines the **opt-in calibrated Mixer preset** with measured AC-RMS
 defaults for Sega PSG, AY-3-8910 and the WASM NES core. The existing OPN internal

@@ -62,6 +62,48 @@ export async function copyRuntime(destination) {
   } catch {
     throw new Error('The AY / OPLL / MSX examples require tetorica-fm2612 >= 0.2.23, including Synths, composite modes, Worklets, WASM and licenses. Run npm install.');
   }
+  try {
+    for (const file of ['wonderswan.js', 'wonderswansynth.js', 'wonderswanaudioengine.js',
+      'generated/wonderswan_wasm.js', 'generated/wonderswan_wasm.wasm', 'licenses/mame-wonderswan/LICENSE']) {
+      await readFile(join(source, file));
+    }
+    const transports = await readFile(join(source, 'chip_worklet_transport.js'), 'utf8');
+    if (!transports.includes('WonderSwanWorkletTransport')) throw new Error('Missing WonderSwan Worklet transport');
+  } catch {
+    throw new Error('The WonderSwan examples require tetorica-fm2612 >= 0.2.30, including generic Worklet / Direct factories, Synth, WASM and license. Run npm install.');
+  }
+  try {
+    // Check the published capabilities and rebuild inputs, rather than trusting
+    // a version string or a core-only package with no speaker/Worklet payload.
+    for (const file of ['pokey.js', 'pokey.d.ts', 'pokeysynth.js', 'pokeysynth.d.ts',
+      'pokeyaudioengine.js', 'pokeyaudioengine.d.ts', 'generated/pokey_wasm.js',
+      'generated/pokey_wasm.d.ts', 'licenses/libvgm-pokey/LICENSE', 'licenses/libvgm-pokey/README.md',
+      'sources/POKEY.md', 'sources/POKEY-SDK.json', 'sources/wasm/pokey_wasm.cpp',
+      'sources/scripts/build_pokey_wasm.sh', 'sources/third_party/libvgm-pokey/pokey.cpp',
+      'sources/third_party/libvgm-pokey/pokey.h', 'sources/third_party/libvgm-pokey/LICENSE',
+      'sources/third_party/libvgm-pokey/README.md', 'sources/third_party/libvgm-pokey/upstream/pokey.c',
+      'sources/third_party/libvgm-pokey/upstream/snapshot-manifest.json']) {
+      await readFile(join(source, file));
+    }
+    const [entry, worklet, processor, wasm, api, synth, speaker, transports] = await Promise.all([
+      readFile(join(source, 'soundchip.js'), 'utf8'),
+      readFile(join(source, 'soundchip_worklet.js'), 'utf8'),
+      readFile(join(source, 'soundchip-output-worklet.js'), 'utf8'),
+      readFile(join(source, 'generated/pokey_wasm.wasm')),
+      import('tetorica-fm2612'), import('tetorica-fm2612/pokeysynth.js'),
+      import('tetorica-fm2612/pokeyaudioengine.js'), import('tetorica-fm2612/chip_worklet_transport.js'),
+    ]);
+    if (typeof api.createSoundChip !== 'function' || !/pokey:\s*async/.test(entry) ||
+        !worklet.includes("'pokey'") || !/pokey:\s*\[\s*Pokey\s*,\s*pokeyFactory\s*\]/.test(processor) ||
+        !processor.includes('PokeyAudioEngine') ||
+        typeof synth.PokeySynth !== 'function' || typeof synth.PokeyDirectTransport !== 'function' ||
+        typeof speaker.PokeyAudioEngine !== 'function' || typeof transports.PokeyWorkletTransport !== 'function' ||
+        wasm.subarray(0, 8).toString('hex') !== '0061736d01000000') {
+      throw new Error('Missing POKEY factory, transport, speaker engine or WASM capability');
+    }
+  } catch {
+    throw new Error('The POKEY examples require tetorica-fm2612 >= 0.2.31, including exported speaker engine, Direct / Worklet factories and transports, Synth, WASM, BSD licenses and corresponding source. Run npm install.');
+  }
   const target = join(destination, 'vendor/tetorica-fm2612');
   await mkdir(join(destination, 'vendor'), {recursive: true});
   await rm(target, {recursive: true, force: true});

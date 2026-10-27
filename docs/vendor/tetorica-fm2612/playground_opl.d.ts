@@ -22,5 +22,5 @@ export declare function stageOplAuthorEdit(state: any, method: any, args: any, e
 export declare function createOplClient(port: any, options?: {}, lifecycle?: {}): OPLSynth & {
     readonly clock: number;
     setClock(hz: number): Promise<void>;
-    _requestControl(method: string, args?: any[]): Promise<any>;
+    _requestControl(method: string, args?: any[], transfer?: Transferable[]): Promise<any>;
 };

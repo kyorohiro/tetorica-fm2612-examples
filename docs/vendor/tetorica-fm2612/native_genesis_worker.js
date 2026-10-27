@@ -13,8 +13,10 @@ export function createNativeGenesisWorkerBridge({synth, MessageChannelClass = Me
   const pcm=synth.pcm?new MessageChannelClass():null;
   const dx7=synth.dx7?new MessageChannelClass():null;
   const nes=synth.nes?new MessageChannelClass():null;
-  const consoles = new Map(['gameboy','snes','huc6280','ym2151','okim6258','segapsg','ym2413','ay8910','ym3526','ym3812','ymf262','y8950'].filter(name => synth[name]).map(name => [name,new MessageChannelClass()]));
+  const consoles = new Map(['wonderswan','gameboy','snes','huc6280','ym2151','okim6258','segapsg','ym2413','ay8910','ym3526','ym3812','ymf262','y8950'].filter(name => synth[name]).map(name => [name,new MessageChannelClass()]));
   const ports = [admin.port1, chip.port1, fx.port1,...(pwm?[pwm.port1]:[]),...(pcm?[pcm.port1]:[]),...(dx7?[dx7.port1]:[]),...(nes?[nes.port1]:[]),...Array.from(consoles.values(),channel=>channel.port1)];
+  const primaryPokey=new Map((synth.primaryPokey??[]).map(endpoint=>[endpoint.globalName,{endpoint,channel:new MessageChannelClass()}]));
+  ports.push(...[...primaryPokey.values()].map(item=>item.channel.port1));
   const extraEndpoints = new Set();
   let serial = Promise.resolve(), active = null, epoch = 0, pending = 0, pendingMessages = 0, pendingBytes = 0, disposed = false;
   const owners = new Map(), cancelled = new Set();
@@ -61,6 +63,7 @@ export function createNativeGenesisWorkerBridge({synth, MessageChannelClass = Me
         }, 1, error => port.postMessage({type:'performance-result',id:message.id,error:String(error.message ?? error)}));
         return;
       }
+      if(active!==null)for(const {endpoint}of primaryPokey.values())endpoint.cancelPerformance?.(active);
       const version = ++epoch; active = performance; owners.clear(); cancelled.clear();
       enqueue(async () => {
         if (disposed || version !== epoch) throw abort();
@@ -72,10 +75,12 @@ export function createNativeGenesisWorkerBridge({synth, MessageChannelClass = Me
       if (joinedEndpoint) return;
       if (active !== performance) return;
       active = null; ++epoch;
+      for(const {endpoint}of primaryPokey.values())endpoint.cancelPerformance?.(performance);
       enqueue(async () => {await synth.setNativePerformance({op:'stop',performance});for(const endpoint of extraEndpoints)endpoint.stop(performance);}, 0, error => { if (!disposed && error.name !== 'AbortError') onError(error); });
     } else if (message.type === 'performance-cancel-owner') {
       if (active !== performance || cancelled.has(message.owner)) return;
       const owner = ownerId(message.owner); cancelled.add(message.owner);
+      for(const {endpoint}of primaryPokey.values())endpoint.cancelOwner?.(performance,owner);
       enqueue(async () => {await synth.setNativePerformance({op:'cancel-owner',performance,owner});for(const endpoint of extraEndpoints)endpoint.cancelOwner(performance,owner);}, 0, error => { if (!disposed && error.name !== 'AbortError') onError(error); });
     }
   }
@@ -129,7 +134,7 @@ export function createNativeGenesisWorkerBridge({synth, MessageChannelClass = Me
         (m.method==='memory'?bytesOf(m.args?.[typeof m.args?.[0]==='number'?1:0]):0) +
         (m.method==='rom'?bytesOf(m.args?.[0]):0) +
         (m.method==='loadBRR'?bytesOf(m.args?.[0]):0) +
-        (m.method==='prepareTimeline'?Array.isArray(m.args?.[0])?m.args[0].length*32+(m.args?.[1]?.reduce((total,b)=>total+bytesOf(b),0)??0):bytesOf(m.args?.[0]?.events)+bytesOf(m.args?.[0]?.initialState?.ram)+bytesOf(m.args?.[0]?.initialState?.dsp):0) +
+        (m.method==='prepareTimeline'?Array.isArray(m.args?.[0])?m.args[0].length*32+(m.args?.[1]?.reduce((total,b)=>total+bytesOf(b),0)??0):bytesOf(m.args?.[0]?.events)+bytesOf(m.args?.[0]?.data)+bytesOf(m.args?.[0]?.initialState?.ram)+bytesOf(m.args?.[0]?.initialState?.dsp):0) +
         (m.method==='loadSysex'?bytesOf(m.args?.[0]):0) +
         (m.pcm?.channels?.reduce((total,channel) => total + bytesOf(channel),0) ?? 0),0);
       enqueue(async () => {
@@ -160,9 +165,11 @@ export function createNativeGenesisWorkerBridge({synth, MessageChannelClass = Me
   for (const [port,kind] of [[admin.port1,'admin'],[chip.port1,'chip'],[fx.port1,'fx'],...(pwm?[[pwm.port1,'pwm']]:[]),...(pcm?[[pcm.port1,'pcm']]:[]),...(dx7?[[dx7.port1,'dx7']]:[]),...(nes?[[nes.port1,'nes']]:[]),...Array.from(consoles,([name,channel])=>[channel.port1,name])]) {
     port.onmessage = ({data}) => receive(port,kind,data); port.start?.();
   }
+  for(const {endpoint,channel}of primaryPokey.values()){channel.port1.onmessage=({data})=>receive(channel.port1,(message,timing)=>endpoint.dispatch(message,timing),data);channel.port1.start?.();}
   return {
+    primaryPorts:Object.fromEntries([...primaryPokey].map(([name,{channel}])=>[name,channel.port2])),
     port:admin.port2, chipPort:chip.port2, fxPort:fx.port2,pwmPort:pwm?.port2??null,pcmPort:pcm?.port2??null,dx7Port:dx7?.port2??null,nesPort:nes?.port2??null,
-    gameboyPort:consoles.get('gameboy')?.port2??null,snesPort:consoles.get('snes')?.port2??null,huc6280Port:consoles.get('huc6280')?.port2??null,ym2151Port:consoles.get('ym2151')?.port2??null,okim6258Port:consoles.get('okim6258')?.port2??null,segapsgPort:consoles.get('segapsg')?.port2??null,ym2413Port:consoles.get('ym2413')?.port2??null,ay8910Port:consoles.get('ay8910')?.port2??null,y8950Port:consoles.get('y8950')?.port2??null,ym3526Port:consoles.get('ym3526')?.port2??null,ym3812Port:consoles.get('ym3812')?.port2??null,ymf262Port:consoles.get('ymf262')?.port2??null,
+    wonderswanPort:consoles.get('wonderswan')?.port2??null,gameboyPort:consoles.get('gameboy')?.port2??null,snesPort:consoles.get('snes')?.port2??null,huc6280Port:consoles.get('huc6280')?.port2??null,ym2151Port:consoles.get('ym2151')?.port2??null,okim6258Port:consoles.get('okim6258')?.port2??null,segapsgPort:consoles.get('segapsg')?.port2??null,ym2413Port:consoles.get('ym2413')?.port2??null,ay8910Port:consoles.get('ay8910')?.port2??null,y8950Port:consoles.get('y8950')?.port2??null,ym3526Port:consoles.get('ym3526')?.port2??null,ym3812Port:consoles.get('ym3812')?.port2??null,ymf262Port:consoles.get('ymf262')?.port2??null,
     attachEndpoint(dispatch,{cancelOwner=()=>{},stop=()=>{}}={}) {
       if (disposed) throw abort();
       if (typeof dispatch !== 'function') throw new TypeError('Native endpoint dispatch must be a function');
@@ -189,8 +196,9 @@ export function createNativeGenesisWorkerBridge({synth, MessageChannelClass = Me
     dispose() {
       if (disposed) return serial;
       disposed = true; const performance = active; active = null; ++epoch;
+      if(performance!==null)for(const {endpoint}of primaryPokey.values())endpoint.cancelPerformance?.(performance);
       for (const endpoint of [...extraEndpoints]) endpoint.dispose();
-      for (const port of [...ports,admin.port2,chip.port2,fx.port2,...(pwm?[pwm.port2]:[]),...(pcm?[pcm.port2]:[]),...(dx7?[dx7.port2]:[]),...(nes?[nes.port2]:[]),...Array.from(consoles.values(),channel=>channel.port2)]) port.close();
+      for (const port of [...ports,admin.port2,chip.port2,fx.port2,...(pwm?[pwm.port2]:[]),...(pcm?[pcm.port2]:[]),...(dx7?[dx7.port2]:[]),...(nes?[nes.port2]:[]),...Array.from(consoles.values(),channel=>channel.port2),...[...primaryPokey.values()].map(item=>item.channel.port2)]) port.close();
       const result = serial.then(() => performance === null ? undefined : synth.setNativePerformance({op:'stop',performance}));
       serial = result.catch(() => {});
       return result;

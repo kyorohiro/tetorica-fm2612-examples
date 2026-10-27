@@ -1,9 +1,11 @@
+import {createPokeyClient} from './playground_pokey.js';
 import {createAy8910Client} from './playground_ay8910.js';
 import {createPWM32XClient} from './pwm32x_playback.js';
 import {createNesClient} from './playground_nes.js';
 import {createSnesClient} from './playground_snes.js';
 import {createYm2151Client} from './playground_ym2151.js';
 import {createHuc6280Client} from './playground_huc6280.js';
+import {createWonderSwanClient} from './playground_wonderswan.js';
 import {createSegaPsgClient} from './playground_segapsg.js';
 import {createOki6258Client} from './playground_okim6258.js';
 import {createYm2413Client} from './playground_ym2413.js';
@@ -56,12 +58,13 @@ export function borrowNativeApi(raw, id, changed = () => {}, before = () => true
 }
 
 export function createNativePrimaryClient(name, port, options = {}, lifecycle = {}) {
-  const client = name==='pwm'?createPWM32XClient(port,{native:true},lifecycle):name==='ay8910'?createAy8910Client(port,options,lifecycle):name==='ym2413'?createYm2413Client(port,options,lifecycle):OPL_CHIPS.includes(name) ? createOplClient(port, {...options,chip:name},lifecycle)
+  const client = name==='pokey'?createPokeyClient(port,options,lifecycle):name==='pwm'?createPWM32XClient(port,{native:true},lifecycle):name==='ay8910'?createAy8910Client(port,options,lifecycle):name==='ym2413'?createYm2413Client(port,options,lifecycle):OPL_CHIPS.includes(name) ? createOplClient(port, {...options,chip:name},lifecycle)
     : name === 'nes' ? createNesClient(port, options,lifecycle)
     : name === 'gameboy' ? createGameboyClient(port,options,lifecycle)
     : name === 'snes' ? createSnesClient(port, options,lifecycle)
     : name === 'ym2151' ? createYm2151Client(port)
     : name === 'segapsg' ? createSegaPsgClient(port, options)
+    : name === 'wonderswan' ? createWonderSwanClient(port, options,lifecycle)
     : name === 'huc6280' ? createHuc6280Client(port, options,lifecycle)
     : name === 'okim6258' ? createOki6258Client(port, options,lifecycle)
     : name === 'dx7' ? createDx7Client(port, {...options,...options.state},lifecycle)
@@ -69,7 +72,7 @@ export function createNativePrimaryClient(name, port, options = {}, lifecycle = 
   if(name==='pwm'){client._stopVoices=()=>client.stopVoices();if(options.clock!==undefined)client._adoptClock(options.clock);}
   if (!client) throw new Error(`Unsupported native primary: ${name}`);
   if (options.state && name!=='nes') client._adoptState?.(options.state);
-  else if (name === 'huc6280' || name==='ay8910' || name==='ym2413' || OPL_CHIPS.includes(name)) client.initialize();
+  else if (name === 'wonderswan' || name === 'huc6280' || name==='pokey' || name==='ay8910' || name==='ym2413' || OPL_CHIPS.includes(name)) client.initialize();
   return client;
 }
 
@@ -78,7 +81,7 @@ export function createNativeWorkerApis(connections, performance, observe, lifecy
   const raw = new Map(), apis = {};
   for (const connection of connections) {
     const port = performance.port(connection.port, 'independent');
-    const client = createNativePrimaryClient(connection.name, port, connection, connection.name==='y8950'?lifecycle:{});
+    const client = createNativePrimaryClient(connection.name, port, connection, ['wonderswan','pokey','y8950'].includes(connection.name)?lifecycle:{});
     raw.set(connection.globalName, client);
     let queued = false;
     const changed = () => {
@@ -87,7 +90,7 @@ export function createNativeWorkerApis(connections, performance, observe, lifecy
       queueMicrotask(() => {queued = false; observe(connection.globalName, client._getState());});
     };
     client._onStateChange?.(changed);
-    apis[connection.globalName] = borrowNativeApi(client, connection.name, changed);
+    apis[connection.globalName] = borrowNativeApi(client, connection.id??connection.name, changed);
   }
   return {apis, raw,
     cancelAdpcmLoads(){for(const client of raw.values())client._cancelAdpcmLoads?.();},
@@ -107,6 +110,6 @@ export function createNativeWorkerApis(connections, performance, observe, lifecy
       }
       return Promise.all(pending);
     },
-    adopt(name, state) {raw.get(name)?._adoptState?.(state);},
+    adopt(name, state, authorEdit) {const client=raw.get(name);if(authorEdit&&client?._applyAuthorEdit)client._applyAuthorEdit(authorEdit);else client?._adoptState?.(state);},
   };
 }

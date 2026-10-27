@@ -13,5 +13,5 @@ import { YM2610BSynth, NeoGeoFMSynth } from './ym2610bsynth.js';
 export declare function createOpnClient(name: 'ym2612' | 'ym2203' | 'ym2610' | 'ym2610b', port: MessagePort, options?: {}, lifecycle?: {}): (NeoGeoFMSynth | YM2203Synth | YM2610BSynth | YM2612Synth) & {
     readonly clock: number;
     setClock(hz: number): Promise<void>;
-    _requestControl(method: string, args?: any[]): Promise<any>;
+    _requestControl(method: string, args?: any[], transfer?: Transferable[]): Promise<any>;
 };

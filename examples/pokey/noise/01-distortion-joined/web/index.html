@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ja"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>POKEY：ノイズと16-bit連結タイマー — tetorica-fm2612 examples</title>
+  <link rel="stylesheet" href="../../../../../style.css">
+  <script type="importmap">{"imports":{"tetorica-fm2612":"../../../../../vendor/tetorica-fm2612/soundchip.js","tetorica-fm2612/":"../../../../../vendor/tetorica-fm2612/"}}</script>
+  <style>#code {width:100%;box-sizing:border-box;font-family:monospace} .actions {flex-wrap:wrap}</style>
+</head><body><main>
+  <nav><a href="../../../../../index.html">← Examples</a><a href="./main.js">Source ↗</a></nav>
+  <header><p class="eyebrow">pokey/noise/01-distortion-joined · WEB / NODE</p><h1>POKEY：ノイズと16-bit連結タイマー</h1><p>同じタイマー値でdistortionとpoly9を比較し、CH0＋CH1の連結タイマーで低音を鳴らします。</p></header>
+  <section class="sample-panel">
+    <label for="code">実行する PokeySynth コード</label>
+    <textarea id="code" rows="32" spellcheck="false" aria-describedby="code-help"></textarea>
+    <div class="actions"><button id="play" type="button">Play</button><button id="stop" type="button" disabled>Stop</button></div>
+    <p id="status" role="status" aria-live="polite">Ready.</p>
+    <pre><code id="detail"></code></pre>
+    <p id="code-help">編集は次のPlayに反映されます。startAudio()でpokey・transport・contextを取得し、sleep(秒)・consoleを使えます。初期化中もStopでき、終了・エラー・ページ移動時に音声リソースを解放します。</p>
+    <p>物理CHは0〜3、Volumeは0〜15。distortion 5は純粋な矩形波です。AUDCTLのclock・poly9・join・filter設定は全CHで共有します。 連結pair 0はCH0＋CH1、pair 1はCH2＋CH3。低位CH0/2はタイマー補助になり、発音・周波数設定は上位CH1/3だけで行います。</p>
+    <p>出力gainは0.25を1回だけ適用。POKEYはmonoで、左右に同じPCMを出します。WebとNodeは同じ10 Hz DC除去を使い、正規化はしません。</p>
+    <h2>Web — 全コード</h2><pre class="source"><code data-source="./main.js">Loading…</code></pre>
+    <h2>Node — WAV 保存</h2><pre><code>node examples/pokey/noise/01-distortion-joined/node/main.mjs ./pokey-noise-01-distortion-joined.wav</code></pre>
+    <pre class="source"><code data-source="../node/main.mjs">Loading…</code></pre>
+    <p><a href="../README.md">README</a>。Nodeは44,100 Hz stereo PCM16 WAVへ保存します。AudioContextや音声デバイスは不要です。</p>
+  </section>
+</main><script type="module" src="./main.js"></script><script type="module">
+for (const code of document.querySelectorAll('[data-source]')) {
+  try {const response = await fetch(code.dataset.source); if (!response.ok) throw new Error(`HTTP ${response.status}`); code.textContent = await response.text();}
+  catch (error) {code.textContent = error.message;}
+}
+</script></body></html>

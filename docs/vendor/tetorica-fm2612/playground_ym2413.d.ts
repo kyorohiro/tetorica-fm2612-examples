@@ -12,5 +12,5 @@ export declare function createYm2413RegisterClient(send: (method: string, args: 
 export declare function createYm2413Client(port: any, options?: {}, lifecycle?: {}): YM2413Synth & {
     readonly clock: number;
     setClock(hz: number): Promise<void>;
-    _requestControl(method: string, args?: any[]): Promise<any>;
+    _requestControl(method: string, args?: any[], transfer?: Transferable[]): Promise<any>;
 };

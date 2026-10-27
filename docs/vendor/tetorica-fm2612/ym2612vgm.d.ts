@@ -15,6 +15,11 @@ export type Ym2612VgmHeader = {
     ym2203Clock: number;
     ym2608Clock: number;
     rf5c164Clock: number;
+    wonderswanClock: number;
+    /**
+     * Raw POKEY clock; bit 30 selects two instances.
+     */
+    pokeyClock: number;
     psgClock: number;
     ym2610Clock: number;
     totalSamples: number;
@@ -78,6 +83,12 @@ export type Ym2608AdpcmBDataEvent = {
     memorySize: number;
     chipIndex: number;
 };
+export type PokeyWriteEvent = {
+    type: "pokey-write";
+    register: number;
+    value: number;
+    chipIndex: number;
+};
 export type SegaPsgWriteEvent = {
     type: "psg-write";
     value: number;
@@ -108,7 +119,7 @@ export type Ym2612VgmEvent = {
     register: number;
     value: number;
     port: number;
-} | Ym2151WriteEvent | Ym2413WriteEvent | Rf5c164Event | Ym2612WriteEvent | Ym2203WriteEvent | Ym2608WriteEvent | Ym2608AdpcmBDataEvent | Ym2610WriteEvent | SegaPsgWriteEvent | Ym2612WaitEvent | Ym2612EndEvent;
+} | Ym2151WriteEvent | Ym2413WriteEvent | Rf5c164Event | PokeyWriteEvent | Ym2612WriteEvent | Ym2203WriteEvent | Ym2608WriteEvent | Ym2608AdpcmBDataEvent | Ym2610WriteEvent | SegaPsgWriteEvent | Ym2612WaitEvent | Ym2612EndEvent;
 export type Ym2612PcmRamWriteInfo = {
     type: number;
     readOffset: number;
@@ -253,6 +264,7 @@ export declare class Ym2612VGM {
    *   ym2413?: { writeRegister(register: number, value: number): void },
    *   ym2203?: { writeRegister(register: number, value: number): void },
      *   ym2608?: { writeRegister(register: number, value: number, port?: number): void, loadAdpcmBMemory?(data: Uint8Array, offset: number, memorySize: number): void },
+     *   pokey?: { writeRegister(register: number, value: number): void },
      *   psg?: { write(data: number): void },
      *   writeRegister?: (register: number, value: number, port?: number) => void
      * }} targets
@@ -299,6 +311,9 @@ export declare class Ym2612VGM {
             writeRegister(register: number, value: number, port?: number): void;
             loadAdpcmBMemory?(data: Uint8Array, offset: number, memorySize: number): void;
         };
+        pokey?: {
+            writeRegister(register: number, value: number): void;
+        };
         psg?: {
             write(data: number): void;
         };
@@ -308,6 +323,7 @@ export declare class Ym2612VGM {
      * @param {{
      *   resolveChip?: (type: string, index: number) => { writeRegister(register: number, value: number, port?: number): void, loadSampleMemory?(data: Uint8Array, offset: number, memorySize: number): void },
      *   ym2612?: { writeRegister(register: number, value: number, port?: number): void },
+     *   pokey?: { writeRegister(register: number, value: number): void },
      *   psg?: { write(data: number): void },
      *   writeRegister?: (register: number, value: number, port?: number) => void
      * }} targets
@@ -322,6 +338,9 @@ export declare class Ym2612VGM {
         };
         ym2612?: {
             writeRegister(register: number, value: number, port?: number): void;
+        };
+        pokey?: {
+            writeRegister(register: number, value: number): void;
         };
         psg?: {
             write(data: number): void;

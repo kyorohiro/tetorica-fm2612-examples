@@ -18,10 +18,12 @@
     "check:snes": "node scripts/check-snes-browser.mjs",
     "check:pcengine": "node scripts/check-pcengine-browser.mjs",
     "check:opl": "node scripts/check-opl-browser.mjs",
-    "check:msx": "node scripts/check-msx-browser.mjs"
+    "check:msx": "node scripts/check-msx-browser.mjs",
+    "check:wonderswan": "node scripts/check-wonderswan-browser.mjs",
+    "check:pokey": "node scripts/check-pokey-browser.mjs"
   },
   "dependencies": {
-    "tetorica-fm2612": "0.2.27"
+    "tetorica-fm2612": "0.2.31"
   },
   "devDependencies": {
     "playwright": "1.63.0"

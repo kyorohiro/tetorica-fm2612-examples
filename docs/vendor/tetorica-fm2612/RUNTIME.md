@@ -1,8 +1,8 @@
 # Full web runtime
 
-Includes all 283 top-level web runtime modules and 26 generated chip/engine pairs.
+Includes all 305 top-level web runtime modules and 28 generated chip/engine pairs.
 
-ay8910, gameboy_apu, huc6280, k051649, nesapu, pwm32x, nuked_opn2, okim6258, rf5c164, segapcm, segapsg, spc, y8950, ym2151, ym2203, ym2413, ym2608, ym2610b, ym2612, ym3438, ym3526, ym3812, ymf262, ymf276, ymf278b, ymf288
+ay8910, gameboy_apu, huc6280, wonderswan, pokey, k051649, nesapu, pwm32x, nuked_opn2, okim6258, rf5c164, segapcm, segapsg, spc, y8950, ym2151, ym2203, ym2413, ym2608, ym2610b, ym2612, ym3438, ym3526, ym3812, ymf262, ymf276, ymf278b, ymf288
 
 NES/FDS asynchronous creation uses the shared C++ core through nesapu_wasm. Its synchronous NesApu constructor retains the JavaScript compatibility/reference renderer. See sources/NES-FDS.md for rebuilding and licenses/tetorica-nes for provenance.
 
@@ -15,7 +15,7 @@ No external sample/instrument ROMs are bundled. In particular, ym2608_adpcm_rom.
 Import only the chip you need. Files in the archive do not initialize engines automatically.
 For a smaller application deployment, retain your entry point's dependencies, its WASM pair, and applicable licenses.
 
-Yamaha convenience factory:
+Name-based direct chip factory:
 
 ```javascript
 import {createSoundChip} from './soundchip.js';
@@ -23,4 +23,4 @@ const chip = await createSoundChip('ym2610b');
 try { const pcm = chip.generateStereo(128); } finally { chip.dispose(); }
 ```
 
-Other chips use their individual wrappers/audio engines. See runtime-manifest.json for the exact contents.
+The name-based factory also supports WonderSwan and POKEY direct PCM generation. Chip-specific wrappers and audio engines provide additional entry points. See runtime-manifest.json for the exact contents.

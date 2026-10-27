@@ -25,6 +25,10 @@ export declare class NativeGenesisSynth {
     invoke: (command: string, args?: object) => Promise<any>;
     now: () => number;
     onError: (error: Error) => void;
+    pokeyMode: boolean;
+    dualPokey: boolean;
+    wonderswanMode: boolean;
+    wonderswanClock: number;
     backend: string;
     consoleKind: string | null;
     snesMode: boolean;
@@ -100,6 +104,8 @@ export declare class NativeGenesisSynth {
     mixer: SoundChipMixer;
     mixerReleases: any[];
     extraDevices: Map<any, any>;
+    extraPokeyDevices: Map<any, any>;
+    extraWonderSwanDevices: Map<any, any>;
     extraSpcDevices: Map<any, any>;
     extraSnesDevices: Map<any, any>;
     extraPwmDevices: Map<any, any>;
@@ -152,6 +158,7 @@ export declare class NativeGenesisSynth {
         psgLeft: number;
         psgRight: number;
         master: number;
+        gainUnits?: string | undefined;
     };
     media: {
         sample: {
@@ -174,10 +181,10 @@ export declare class NativeGenesisSynth {
             value: number | undefined;
             error?: undefined;
         } | {
-            value?: undefined;
             op: string;
             id: any;
             error: string;
+            value?: undefined;
         }>;
         loadDacBank(name: any, bytes: any): Promise<any>;
         playDacBank(name: any, time: any, timing?: {}): Promise<void>;
@@ -755,6 +762,48 @@ export declare class NativeGenesisSynth {
         reset(): void;
     } | null;
     nes: import("./nesapusynth.js").NesApuSynth | null;
+    nativeWonderSwan: {
+        client: import("./wonderswansynth.js").WonderSwanSynth;
+        dispatch: (message: any, timing?: {}) => any;
+        read: (args?: {}) => Promise<any>;
+        invoke: (method: any, args?: any[]) => Promise<any>;
+        cancelOwner: (performance: any, owner: any) => void;
+        cancelPerformance: (performance: any) => void;
+        initialize(): Promise<void>;
+        mix(volume?: number, pan?: number): Promise<void>;
+        stopped(): void;
+        adoptStopped(data: any): void;
+        reset(): void;
+    } | null;
+    ws: import("./wonderswansynth.js").WonderSwanSynth | null;
+    wonderswan: import("./wonderswansynth.js").WonderSwanSynth | null;
+    primaryPokey: {
+        client: import("./pokeysynth.js").PokeySynth;
+        dispatch: (message: any, timing?: {}) => Promise<{
+            id: any;
+            value: any;
+        } | undefined> | {
+            deferred: Promise<{
+                id: any;
+                value: any;
+            } | undefined>;
+        };
+        read: (args?: {}) => Promise<any>;
+        invoke: (method: any, args?: any[]) => Promise<any>;
+        cancelOwner: (performance: any, owner: any) => void;
+        cancelPerformance: (performance: any) => void;
+        stopped(): void;
+        adoptStopped(): void;
+        initialized: boolean;
+        id: string;
+        globalName: string;
+        mix(volume?: number, pan?: number): Promise<void>;
+        initialize(): Promise<void>;
+        restoreAfterStop(session: any): Promise<void>;
+        reset(): void;
+    }[];
+    pokey: import("./pokeysynth.js").PokeySynth;
+    pokey2: import("./pokeysynth.js").PokeySynth;
     nativeConsole: {
         client: import("./gameboysynth.js").GameboySynth | import("./huc6280synth.js").Huc6280Synth;
         dispatch: (message: any, timing?: {}) => Promise<{
@@ -1268,6 +1317,11 @@ export declare class NativeGenesisSynth {
     y8950: any;
     nativeVoiceChips: {} | null;
     primaryEndpoints: {
+        id: string;
+        name: string;
+        globalName: string;
+        client: import("./pokeysynth.js").PokeySynth;
+    }[] | {
         name: string | undefined;
         globalName: string;
         client: any;
@@ -1322,8 +1376,8 @@ export declare class NativeGenesisSynth {
     /** @param {{invoke:(command:string,args?:object)=>Promise<any>,now?:()=>number,
      * onError?:(error:Error)=>void,mixer?:SoundChipMixer,masterVolume?:number,
      * decodeAudio?:(bytes:ArrayBuffer)=>Promise<any>,fetcher?:typeof globalThis.fetch,megaCD?:boolean,dx7?:boolean,
-     * mode?:'genesis'|'mega-cd'|'dx7'|'nes'|'gameboy'|'snes'|'pc-engine'|'pc98'|'pc98-26'|'ym2203'|'ym2608'|'neogeo'|'neogeo-b'|'ym2610'|'ym2610b'|'x68000'|'master-system'|'game-gear'|'msx'|'msx-audio'|'ym3526'|'ym3812'|'ymf262'|'genesis-full'|'32x'|'genesis-full-nuked'|'genesis-nuked'}} [options] */
-    constructor({ invoke, now, onError, mixer, masterVolume, decodeAudio, fetcher, megaCD, dx7, mode }?: {
+     * clock?:number,wonderswanClock?:number, mode?:'genesis'|'mega-cd'|'dx7'|'nes'|'gameboy'|'snes'|'wonderswan'|'pc-engine'|'pc98'|'pc98-26'|'ym2203'|'ym2608'|'neogeo'|'neogeo-b'|'ym2610'|'ym2610b'|'x68000'|'master-system'|'game-gear'|'msx'|'msx-audio'|'ym3526'|'ym3812'|'ymf262'|'genesis-full'|'32x'|'genesis-full-nuked'|'genesis-nuked'}} [options] */
+    constructor({ invoke, now, onError, mixer, masterVolume, decodeAudio, fetcher, megaCD, dx7, mode, clock, wonderswanClock }?: {
         invoke: (command: string, args?: object) => Promise<any>;
         now?: () => number;
         onError?: (error: Error) => void;
@@ -1333,7 +1387,9 @@ export declare class NativeGenesisSynth {
         fetcher?: typeof globalThis.fetch;
         megaCD?: boolean;
         dx7?: boolean;
-        mode?: 'genesis' | 'mega-cd' | 'dx7' | 'nes' | 'gameboy' | 'snes' | 'pc-engine' | 'pc98' | 'pc98-26' | 'ym2203' | 'ym2608' | 'neogeo' | 'neogeo-b' | 'ym2610' | 'ym2610b' | 'x68000' | 'master-system' | 'game-gear' | 'msx' | 'msx-audio' | 'ym3526' | 'ym3812' | 'ymf262' | 'genesis-full' | '32x' | 'genesis-full-nuked' | 'genesis-nuked';
+        clock?: number;
+        wonderswanClock?: number;
+        mode?: 'genesis' | 'mega-cd' | 'dx7' | 'nes' | 'gameboy' | 'snes' | 'wonderswan' | 'pc-engine' | 'pc98' | 'pc98-26' | 'ym2203' | 'ym2608' | 'neogeo' | 'neogeo-b' | 'ym2610' | 'ym2610b' | 'x68000' | 'master-system' | 'game-gear' | 'msx' | 'msx-audio' | 'ym3526' | 'ym3812' | 'ymf262' | 'genesis-full' | '32x' | 'genesis-full-nuked' | 'genesis-nuked';
     });
     unavailableMedia(feature: any): {
         load: () => never;
@@ -1409,6 +1465,36 @@ export declare class NativeGenesisSynth {
         mix(settings: any): void;
     }>;
     createExtraDx7(options: any): Promise<{
+        native: boolean;
+        ready: boolean;
+        nativeInstance: number;
+        kind: any;
+        label: any;
+        client: any;
+        endpoint: any;
+        clock: any;
+        stereoEnabled: any;
+        engine?: any;
+        layout: {};
+        dispose(): void;
+        mix(settings: any): void;
+    }>;
+    createExtraPokey(options: any): Promise<{
+        native: boolean;
+        ready: boolean;
+        nativeInstance: number;
+        kind: any;
+        label: any;
+        client: any;
+        endpoint: any;
+        clock: any;
+        stereoEnabled: any;
+        engine?: any;
+        layout: {};
+        dispose(): void;
+        mix(settings: any): void;
+    }>;
+    createExtraWonderSwan(options: any): Promise<{
         native: boolean;
         ready: boolean;
         nativeInstance: number;

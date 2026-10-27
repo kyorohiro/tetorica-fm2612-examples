@@ -2,19 +2,13 @@
  * Untagged standalone commands stay immediate. RPC setters acknowledge acceptance
  * while their sound changes wait for the reserved audio frame.
  */
-export declare function identifyPerformanceNote(chip: any, { method, type, args, register, value, channel, psgRegister, port: registerPort }: {
-    args?: never[] | undefined;
-    channel: any;
-    method: any;
-    port?: number | undefined;
-    psgRegister: any;
-    register: any;
-    type: any;
-    value: any;
-}, { psgLatch, hucChannel, opllRhythm }?: {
-    hucChannel?: number | undefined;
-    opllRhythm?: number | undefined;
-    psgLatch?: number | undefined;
+/** @param {string} chip @param {any} command
+ * @param {{psgLatch?:number,hucChannel?:number,opllRhythm?:number,wonderswanRegisters?:ArrayLike<number>}} [state] */
+export declare function identifyPerformanceNote(chip: string, { method, type, args, register, value, channel, controlMask, psgRegister, port: registerPort }: any, { psgLatch, hucChannel, opllRhythm, wonderswanRegisters }?: {
+    psgLatch?: number;
+    hucChannel?: number;
+    opllRhythm?: number;
+    wonderswanRegisters?: ArrayLike<number>;
 }): number | "adpcm" | {
     allOff: boolean;
     key?: undefined;
@@ -46,29 +40,29 @@ export declare function performanceNoteRelease(chip: any, key: any): {
     method: string;
     args: any[];
 };
-/** Channel touched by native register commands, used only while an editor holds a key. */
-export declare function nativeVoiceChannel(chip: any, { method, type, args, channel, psgRegister }: {
-    args?: never[] | undefined;
-    channel: any;
-    method: any;
-    psgRegister: any;
-    type: any;
-}, { hucChannel, psgLatch, rfChannel }?: {
-    hucChannel?: number | undefined;
-    psgLatch?: number | undefined;
-    rfChannel?: number | undefined;
+/** Channel touched by native register commands, used only while an editor holds a key.
+ * @param {string} chip @param {any} command
+ * @param {{hucChannel?:number,psgLatch?:number,rfChannel?:number,wonderswanRegisters?:ArrayLike<number>,pokeyRegisters?:ArrayLike<number>}} [state] */
+export declare function nativeVoiceChannel(chip: string, { method, type, args, channel, psgRegister }: any, { hucChannel, psgLatch, rfChannel, wonderswanRegisters, pokeyRegisters }?: {
+    hucChannel?: number;
+    psgLatch?: number;
+    rfChannel?: number;
+    wonderswanRegisters?: ArrayLike<number>;
+    pokeyRegisters?: ArrayLike<number>;
 }): any;
-export declare function createProcessorPerformance({ apply, prepare, validate, onDiscard, onBlocked, chip, releaseNote, getPsgLatch, getPsgMode, getHucChannel, getRfChannel, getRfMask, getOpllRhythm, getAyRegisters, getOplRegisters, trackImmediateNotes, immediate, nowFrame, rate }: {
+export declare function createProcessorPerformance({ apply, prepare, validate, onDiscard, onBlocked, chip, releaseNote, getPsgLatch, getPsgMode, getHucChannel, getRfChannel, getRfMask, getOpllRhythm, getAyRegisters, getOplRegisters, getWonderSwanRegisters, getPokeyRegisters, trackImmediateNotes, immediate, nowFrame, rate }: {
     apply: any;
     chip: any;
     getAyRegisters: any;
     getHucChannel: any;
     getOplRegisters: any;
     getOpllRhythm: any;
+    getPokeyRegisters: any;
     getPsgLatch: any;
     getPsgMode: any;
     getRfChannel: any;
     getRfMask: any;
+    getWonderSwanRegisters: any;
     immediate?: never[] | undefined;
     nowFrame?: (() => any) | undefined;
     onBlocked: any;
