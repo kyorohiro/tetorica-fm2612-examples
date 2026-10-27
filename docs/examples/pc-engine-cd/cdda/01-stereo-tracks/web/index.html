@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ja"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CD-DA：ステレオとトラック操作 — tetorica-fm2612 examples</title>
+  <link rel="stylesheet" href="../../../../../style.css">
+  <script type="importmap">{"imports":{"tetorica-fm2612":"../../../../../vendor/tetorica-fm2612/soundchip.js","tetorica-fm2612/":"../../../../../vendor/tetorica-fm2612/"}}</script>
+  <style>
+    #code { width: 100%; box-sizing: border-box; font-family: monospace; }
+    .execution-control { display: inline-flex; align-items: center; gap: 8px; }
+    .actions { flex-wrap: wrap; }
+  </style>
+</head><body><main>
+  <nav><a href="../../../../../index.html">← Examples</a><a href="./main.js">Source ↗</a></nav>
+  <header><p class="eyebrow">pc-engine-cd/cdda/01-stereo-tracks · WEB / NODE · npm 0.2.32</p><h1>CD-DA：ステレオとトラック操作</h1><p>自作の44.1 kHz stereo PCM16 WAVを2トラックに分け、Pause／Resume／Seek、曲の切り替えと再演奏を試します。</p></header>
+  <section class="sample-panel">
+    <label for="code">実行する Playground コード</label>
+    <textarea id="code" rows="25" spellcheck="false" aria-describedby="code-help"></textarea>
+    <div class="actions">
+      <label for="execution" class="execution-control">実行先
+        <select id="execution"><option value="worker" selected>Worker</option><option value="main">Main</option></select>
+      </label>
+      <button id="play" type="button">Play</button><button id="stop" type="button" disabled>Stop</button>
+    </div>
+    <p id="status" role="status" aria-live="polite">Ready.</p>
+    <pre><code id="detail"></code></pre>
+    <p id="code-help">編集は次のPlayに反映されます。外部ファイルなしで演奏でき、終了時に音声リソースを解放します。読み込み中もStopできます。</p>
+    <p>CD-DAの入力は44,100 Hz・stereo・PCM16 RIFF WAVです。トラック範囲は元WAVのフレーム単位、Seekとoffsetは選択トラック内の秒です。</p>
+    <h2>Web — 全コード</h2><pre class="source"><code data-source="./main.js">Loading…</code></pre>
+    <h2>Node — WAV 保存</h2>
+    <pre><code>node examples/pc-engine-cd/cdda/01-stereo-tracks/node/main.mjs ./pc-engine-cd-cdda-01-stereo-tracks.wav</code></pre>
+    <pre class="source"><code data-source="../node/main.mjs">Loading…</code></pre>
+    <p><a href="../README.md">README</a>。Node版は48,000 Hzのstereo PCM16 WAVを生成します。音声デバイスやaudifyは不要です。</p>
+  </section>
+</main><script type="module" src="./main.js"></script><script type="module">
+for (const code of document.querySelectorAll('[data-source]')) {
+  try {
+    const response = await fetch(code.dataset.source);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    code.textContent = await response.text();
+  } catch (error) { code.textContent = error.message; }
+}
+</script></body></html>

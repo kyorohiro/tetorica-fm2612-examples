@@ -52,6 +52,8 @@ export type PlaygroundKeyboardTarget = {
  *   onAuditionReset?: (() => void) | null,
  *   onKeyboardTargetChange?: ((target:PlaygroundKeyboardTarget|null) => void) | null,
  *   inputAudio?: ((options: {title?:string,asset?:string,edit?:boolean}, context: {signal:AbortSignal}) => Promise<null|{name:string,source:'file'|'microphone',sampleRate:number,channels:Float32Array[]}>) | null,
+ *   pcEngineCd?: boolean,
+ *   readCddaFile?: (path:string)=>Promise<Uint8Array|ArrayBuffer>,
  * }} [options]
  * @returns Runtime controls and accessors; initialize audio before using the synth.
  */
@@ -115,6 +117,8 @@ export declare function createPlaygroundRuntime(options?: {
         sampleRate: number;
         channels: Float32Array[];
     }>) | null;
+    pcEngineCd?: boolean;
+    readCddaFile?: (path: string) => Promise<Uint8Array | ArrayBuffer>;
 }): {
     mixer: any;
     chipInspector: any;
@@ -150,6 +154,7 @@ export declare function createPlaygroundRuntime(options?: {
         currentSourceName: any;
         loadedSourceNames: any[];
     };
+    getSystemAudioState: (kind: 'msm5205' | 'cdda') => Promise<any>;
     setMasterVolume: (volume: any) => any;
     getMasterVolume: () => any;
     setTiming: (options: {

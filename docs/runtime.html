@@ -9,7 +9,7 @@
     <p>公開済み npm package のどの API を使うか、アプリ・ゲームへの組み込み方に合わせて選びます。</p>
     <pre><code>npm install tetorica-fm2612</code></pre>
   </header>
-  <section><h2>チップ別の基本例（npm 0.2.31）</h2>
+  <section><h2>チップ別の基本例（npm 0.2.32）</h2>
 <pre><code>Web: createSoundChip(name, {execution: 'worklet'})
      → WorkletTransport → Synth（Main）→ WASM（Worklet）
 Node: createSoundChip(name)
@@ -97,6 +97,19 @@ Web Audio / encodeWav()  ブラウザ再生 / Web・Node の WAV 保存</code></
     <p><a href="./examples/pc-engine/wave/01-waveform/web/index.html">波形とメロディ</a> ·
       <a href="./examples/pc-engine/noise/01-noise/web/index.html">NoiseとPan</a> ·
       <a href="./examples/pc-engine/lfo/01-modulation/web/index.html">ハードウェアLFO</a></p>
+  </section>
+  <section class="sample-panel"><h2>PC Engine CD-ROM² / CD-DA / MSM5205</h2>
+    <p>Webは <code>Playground({chip:'huc6280', pcEngineCd:true})</code> の
+      <code>pce</code>・<code>adpcm</code>・<code>cdda</code> をMain／Workerで操作します。
+      HuC6280、MSM5205、CD-DAには独立したMixer入力があり、同じAudioContextの時計で再生します。</p>
+    <p>CD-DAは44.1 kHz stereo PCM16 WAVとtrack manifestを受け付けます。
+      MSM5205はPCM／WAVを4-bit ADPCMへ変換し、64 KiB RAMから再生します。範囲はnibble単位、rateは0〜15です。</p>
+    <p>Nodeは <code>createCddaOffline({sources})</code> と同期PCMエンジンを組み合わせ、
+      共通の48 kHzフレーム時計でWAVへ保存します。音声デバイスは不要です。
+      これらは <code>createSoundChip()</code> とは別の音声APIです。</p>
+    <p><a href="./examples/pc-engine-cd/cdda/01-stereo-tracks/web/index.html">CD-DAのトラック操作</a> ·
+      <a href="./examples/pc-engine-cd/adpcm/01-sample/web/index.html">ADPCMのサンプル変換</a> ·
+      <a href="./examples/pc-engine-cd/mix/01-three-sources/web/index.html">3系統の合奏</a></p>
   </section>
   <section class="sample-panel"><h2>WonderSwan</h2>
     <p><code>createSoundChip('wonderswan', {execution:'worklet'})</code> → <code>WonderSwanWorkletTransport</code> → <code>WonderSwanSynth</code>。

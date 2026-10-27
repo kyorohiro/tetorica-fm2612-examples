@@ -186,6 +186,33 @@
     ]
   },
   {
+    "id": "pc-engine-cd/cdda/01-stereo-tracks",
+    "title": "CD-DA：ステレオとトラック操作",
+    "description": "自作のstereo PCM16 WAVを2トラックに分け、Pause／Resume／Seekと切り替え・再演奏を試します。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
+    "id": "pc-engine-cd/adpcm/01-sample",
+    "title": "MSM5205：サンプルの変換とループ",
+    "description": "PCMを4-bit ADPCMへ変換し、64 KiB RAM・nibble範囲・ループ・停止と再演奏を試します。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
+    "id": "pc-engine-cd/mix/01-three-sources",
+    "title": "PC Engine CD-ROM²：3系統の合奏",
+    "description": "HuC6280・MSM5205・CD-DAを個別に聴いたあと合奏。独立Mixer、WebのMain／Worker、Nodeの共通時計でのWAV出力。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
     "id": "wonderswan/wave/01-four-channels",
     "title": "WonderSwan：4CHの波形とメロディ",
     "description": "32点・4-bit波形を4種類作り、左右Panを分けた4CHの短いフレーズを鳴らします。",

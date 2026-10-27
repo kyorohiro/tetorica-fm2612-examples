@@ -1,7 +1,7 @@
 # tetorica-fm2612 examples
 
 `tetorica-fm2612` を import して使う、機能別の小さなサンプル集。
-公開済み npm `tetorica-fm2612@0.2.31` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES・PC Engine・MSX 合奏の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
+公開済み npm `tetorica-fm2612@0.2.32` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES・PC Engine・MSX 合奏の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
 PCM 生成・WAV 保存は専用例に置き、Web Audio を使う埋め込み例と、Node の nativeFX / 音声デバイス出力の例も掲載しています。本体リポジトリには依存しません。
 
 [公開 examples](https://kyorohiro.github.io/tetorica-fm2612-examples/) と
@@ -182,7 +182,7 @@ Node 専用の場合は `environments: ["node"]`、ブラウザ専用の場合�
 
 ## MegaSynth Node examples
 
-`embedding/06`〜`10` は `tetorica-fm2612@0.2.31` の実験用 MegaSynth API を使います。
+`embedding/06`〜`10` は `tetorica-fm2612@0.2.32` の実験用 MegaSynth API を使います。
 通常の `npm ci` で公開 package を導入できます。
 
 ```sh
@@ -205,7 +205,7 @@ WAV の RIFF ヘッダー・非ゼロ PCM とイベント JSON を確認しま�
 ## Transport の例
 
 Genesis / PC-98 / Game Boy / X68000 FM の基本例は、WorkletTransport / AudifyTransport を使用します。
-公開済み npm 0.2.31 を使用します。Node のリアルタイム再生には audify を追加してください。
+公開済み npm 0.2.32 を使用します。Node のリアルタイム再生には audify を追加してください。
 
 ```sh
 npm install
@@ -249,7 +249,7 @@ npm run check:mixer
 
 ## OPL / OPL2 / Y8950 FM / OPL3
 
-`tetorica-fm2612@0.2.31` の `OPLSynth` とオリジナル音色 `OPL_PRESETS` を使います。
+`tetorica-fm2612@0.2.32` の `OPLSynth` とオリジナル音色 `OPL_PRESETS` を使います。
 Webは `createSoundChip(name, {execution:'worklet'})` → `OPLWorkletTransport` → `OPLSynth` でリアルタイム再生。
 Nodeは `OPLDirectTransport` と `generateStereo()` でPCMを生成し、WAVへ保存します。音声デバイスや `audify` は不要です。
 Webのコード欄を編集して再実行でき、Stopは読み込み中にも使えます。
@@ -273,7 +273,7 @@ npm run check:opl
 
 ## AY / OPLL / MSX
 
-6例は `tetorica-fm2612@0.2.31` の AY / OPLL API を使います。
+6例は `tetorica-fm2612@0.2.32` の AY / OPLL API を使います。
 MSX は AY-3-8910＋YM2413、MSX Audio はさらに Y8950 の FM 部分を加えた構成です。
 Master System の2例は YM2413 を使い、音色比較では Sega PSG も伴奏します。
 
@@ -301,7 +301,7 @@ npm run check:msx
 
 ## PC Engine / HuC6280
 
-`pc-engine/` の3例は公開済み `tetorica-fm2612@0.2.31` を使います。
+`pc-engine/` の3例は公開済み `tetorica-fm2612@0.2.32` を使います。
 Web は `Playground({chip:'huc6280'})` の主音源 `pce` を Main / Worker から操作します。
 Node は `Huc6280AudioEngine` → `Huc6280DirectTransport` → `Huc6280Synth` でPCMを生成し、WAVへ保存します。音声ドライバーは不要です。
 package root の `createSoundChip('huc6280')` や専用 AudifyTransport は使いません。
@@ -321,6 +321,44 @@ npm run check:pcengine
 
 `check:pcengine` はChromium / WebKitのMain / Workerで実際の出音、
 初期化中・演奏中のStop、コード編集後の再実行、音声リソース解放を確認します。
+
+## PC Engine CD-ROM² / CD-DA / MSM5205
+
+公開済み `tetorica-fm2612@0.2.32` の音声APIを使う3例です。
+音声はすべてコード内で生成します。ゲームのディスク・BIOS・外部サンプルは不要です。
+
+| Example | 内容 |
+| --- | --- |
+| `pc-engine-cd/cdda/01-stereo-tracks` | 44.1 kHz stereo PCM16 WAVから2トラックを作り、Pause／Resume／Seek・終了・再演奏を試す。 |
+| `pc-engine-cd/adpcm/01-sample` | PCMを4-bit ADPCMに変換し、nibble範囲・ループ・停止・RAMを保持した再演奏を試す。 |
+| `pc-engine-cd/mix/01-three-sources` | HuC6280・MSM5205・CD-DAを個別に聴いたあと重ね、独立したMixer入力で制御する。 |
+
+Webは `Playground({chip:'huc6280', pcEngineCd:true})` のスクリプト内で
+`pce`・`adpcm`・`cdda` を操作します。Main／Workerを選択でき、コードを編集して再実行できます。
+CD-DAのデモ用パスはホストの `readCddaFile` で解決します。WorkletへPCMを毎回UIから補給する構成ではありません。
+有限の演奏が終わると `finalize()` で解放し、初期化中・演奏中のStopにも対応します。
+
+Nodeは `createCddaOffline` と実WASMコアを使い、48 kHzのstereo PCM16 WAVを生成します。
+合奏ではHuC6280とMSM5205を同じ出力フレーム時計で進め、`schedule()` で音源操作を予約します。
+音声デバイス・AudioContext・audifyは不要です。MSM5205のWASMはpackageのasset URLから読みます。
+
+CD-DAの入力は**44,100 Hz・stereo・PCM16 RIFF WAV**です。トラック範囲はsource frame、Seek／offsetは秒です。
+MSM5205は**64 KiB**の符号化RAM、high nibble first。再生のoffset／lengthは**nibble数**です。
+`rate` は0〜15の値で、既定クロックではrate12が8 kHzです。
+ループ時は予測器を継続するため、例の音声には25 msのフェードを付けています。
+CD-DA／MSM5205は専用の音声APIで、汎用 `createSoundChip()` の新しい名前ではありません。
+
+```sh
+node examples/pc-engine-cd/cdda/01-stereo-tracks/node/main.mjs
+node examples/pc-engine-cd/adpcm/01-sample/node/main.mjs
+node examples/pc-engine-cd/mix/01-three-sources/node/main.mjs
+npm run build
+npm run check:pcengine-cd
+```
+
+`check:pcengine-cd` はChromium／WebKitのMain／Workerで、実際のPCM出力、各音源の寄与、
+編集後の再実行、初期化中／演奏中の停止とリソース解放を確認します。試験中の物理出力はミュートします。
+CUE／BIN・圧縮disc音声・BIOSやCDコントローラーの実行は、この例の対象外です。
 
 ## DX7
 
@@ -372,7 +410,7 @@ Pause / Resume・音量・不正ファイル後の再実行を確認します。
 
 ## WonderSwan
 
-3例は `tetorica-fm2612@0.2.31` の共通factoryを使います。
+3例は `tetorica-fm2612@0.2.32` の共通factoryを使います。
 Webは `createSoundChip('wonderswan', {execution:'worklet'})` → `WonderSwanWorkletTransport` → `WonderSwanSynth`。
 NodeはDirect生成したチップを `WonderSwanDirectTransport` → `WonderSwanSynth` へ渡し、WAVに保存します。
 物理4CH、32点・4-bit波形、左右Volumeは各0〜15。VoiceはCH1、SweepはCH2、NoiseはCH3を使います。
@@ -397,7 +435,7 @@ npm run check:wonderswan
 
 ## POKEY / Dual POKEY
 
-3例は公開済み `tetorica-fm2612@0.2.31` の共通factoryと `PokeySynth` を使います。
+3例は公開済み `tetorica-fm2612@0.2.32` の共通factoryと `PokeySynth` を使います。
 Webは `createSoundChip('pokey', {execution:'worklet'})` → `PokeyWorkletTransport` → `PokeySynth`。
 コードを編集して再実行でき、Stop・終了・ページ移動で音源とAudioContextを解放します。読み込み中のStopにも対応します。
 

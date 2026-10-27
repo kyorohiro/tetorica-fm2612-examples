@@ -181,10 +181,10 @@ export declare class NativeGenesisSynth {
             value: number | undefined;
             error?: undefined;
         } | {
+            value?: undefined;
             op: string;
             id: any;
             error: string;
-            value?: undefined;
         }>;
         loadDacBank(name: any, bytes: any): Promise<any>;
         playDacBank(name: any, time: any, timing?: {}): Promise<void>;
@@ -1376,7 +1376,7 @@ export declare class NativeGenesisSynth {
     /** @param {{invoke:(command:string,args?:object)=>Promise<any>,now?:()=>number,
      * onError?:(error:Error)=>void,mixer?:SoundChipMixer,masterVolume?:number,
      * decodeAudio?:(bytes:ArrayBuffer)=>Promise<any>,fetcher?:typeof globalThis.fetch,megaCD?:boolean,dx7?:boolean,
-     * clock?:number,wonderswanClock?:number, mode?:'genesis'|'mega-cd'|'dx7'|'nes'|'gameboy'|'snes'|'wonderswan'|'pc-engine'|'pc98'|'pc98-26'|'ym2203'|'ym2608'|'neogeo'|'neogeo-b'|'ym2610'|'ym2610b'|'x68000'|'master-system'|'game-gear'|'msx'|'msx-audio'|'ym3526'|'ym3812'|'ymf262'|'genesis-full'|'32x'|'genesis-full-nuked'|'genesis-nuked'}} [options] */
+     * clock?:number,wonderswanClock?:number, mode?:'genesis'|'mega-cd'|'dx7'|'nes'|'gameboy'|'snes'|'wonderswan'|'pc-engine'|'pc-engine-cd'|'pc98'|'pc98-26'|'ym2203'|'ym2608'|'neogeo'|'neogeo-b'|'ym2610'|'ym2610b'|'x68000'|'master-system'|'game-gear'|'msx'|'msx-audio'|'ym3526'|'ym3812'|'ymf262'|'genesis-full'|'32x'|'genesis-full-nuked'|'genesis-nuked'}} [options] */
     constructor({ invoke, now, onError, mixer, masterVolume, decodeAudio, fetcher, megaCD, dx7, mode, clock, wonderswanClock }?: {
         invoke: (command: string, args?: object) => Promise<any>;
         now?: () => number;
@@ -1389,7 +1389,7 @@ export declare class NativeGenesisSynth {
         dx7?: boolean;
         clock?: number;
         wonderswanClock?: number;
-        mode?: 'genesis' | 'mega-cd' | 'dx7' | 'nes' | 'gameboy' | 'snes' | 'wonderswan' | 'pc-engine' | 'pc98' | 'pc98-26' | 'ym2203' | 'ym2608' | 'neogeo' | 'neogeo-b' | 'ym2610' | 'ym2610b' | 'x68000' | 'master-system' | 'game-gear' | 'msx' | 'msx-audio' | 'ym3526' | 'ym3812' | 'ymf262' | 'genesis-full' | '32x' | 'genesis-full-nuked' | 'genesis-nuked';
+        mode?: 'genesis' | 'mega-cd' | 'dx7' | 'nes' | 'gameboy' | 'snes' | 'wonderswan' | 'pc-engine' | 'pc-engine-cd' | 'pc98' | 'pc98-26' | 'ym2203' | 'ym2608' | 'neogeo' | 'neogeo-b' | 'ym2610' | 'ym2610b' | 'x68000' | 'master-system' | 'game-gear' | 'msx' | 'msx-audio' | 'ym3526' | 'ym3812' | 'ymf262' | 'genesis-full' | '32x' | 'genesis-full-nuked' | 'genesis-nuked';
     });
     unavailableMedia(feature: any): {
         load: () => never;

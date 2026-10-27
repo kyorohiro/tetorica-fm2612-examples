@@ -20,10 +20,11 @@
     "check:opl": "node scripts/check-opl-browser.mjs",
     "check:msx": "node scripts/check-msx-browser.mjs",
     "check:wonderswan": "node scripts/check-wonderswan-browser.mjs",
-    "check:pokey": "node scripts/check-pokey-browser.mjs"
+    "check:pokey": "node scripts/check-pokey-browser.mjs",
+    "check:pcengine-cd": "node scripts/check-pcengine-cd-browser.mjs"
   },
   "dependencies": {
-    "tetorica-fm2612": "0.2.31"
+    "tetorica-fm2612": "0.2.32"
   },
   "devDependencies": {
     "playwright": "1.63.0"

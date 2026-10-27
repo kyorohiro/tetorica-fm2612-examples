@@ -6,4 +6,6 @@ See [Nuked-OPN2.md](Nuked-OPN2.md) for the fixed SDK sources, provenance and lic
 
 [POKEY.md](POKEY.md) describes the BSD POKEY adaptation and original upstream source, with a standalone Emscripten recipe and fixed SDK provenance.
 
+[native/cdda/README.md](native/cdda/README.md) and [MSM5205.md](MSM5205.md) describe the application-audio C/WASM sources, attribution and standalone rebuild recipes. These modules are separate from the fixed sound-chip SDK.
+
 [NES-FDS.md](NES-FDS.md), [PWM32X.md](PWM32X.md) and [SNES-SPC.md](SNES-SPC.md) describe the other included source bundles and their respective licenses.

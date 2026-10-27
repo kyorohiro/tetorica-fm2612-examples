@@ -1,5 +1,6 @@
 ymfm: BSD-3-Clause; see LICENSE.
 POKEY: BSD-3-Clause; see licenses/libvgm-pokey/ and sources/POKEY.md for the standalone adaptation, exact licensed upstream source, pinned provenance and rebuild recipe.
+MSM5205 PCM and PC Engine ADPCM RAM helper: BSD-3-Clause; see licenses/tetorica-msm5205/ and sources/MSM5205.md for complete application-module sources, attribution and rebuilding.
 Sega PSG: original Tetorica implementation, BSD-3-Clause; see licenses/tetorica_sega_psg/ and sources/SegaPSG.md. Hardware reference: SMS Power! SN76489 documentation by Maxim and contributors.
 nuked-opn2: see licenses/nuked-opn2/LICENSE and README.md.
 mame-ay8910: see licenses/mame-ay8910/LICENSE and README.md.

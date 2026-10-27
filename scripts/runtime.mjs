@@ -104,6 +104,23 @@ export async function copyRuntime(destination) {
   } catch {
     throw new Error('The POKEY examples require tetorica-fm2612 >= 0.2.31, including exported speaker engine, Direct / Worklet factories and transports, Synth, WASM, BSD licenses and corresponding source. Run npm install.');
   }
+  try {
+    for (const file of ['cdda_audio.js', 'cdda_player.js', 'cdda_offline.js', 'cdda_offline.d.ts',
+      'cdda_worklet.js', 'generated/cdda_wasm.js', 'generated/cdda_wasm.wasm',
+      'msm5205_audio.js', 'msm5205_player.js', 'msm5205_sample.js', 'msm5205_pcm.js',
+      'msm5205_worklet.js', 'generated/msm5205_wasm.js', 'generated/msm5205_wasm.wasm',
+      'sources/native/cdda/LICENSE', 'sources/native/cdda/cdda_pcm.c',
+      'sources/native/msm5205/LICENSE', 'sources/native/msm5205/NOTICE.md',
+      'sources/native/msm5205/msm5205_pcm.c']) await readFile(join(source, file));
+    const [cdda, msm5205, sample] = await Promise.all([
+      import('tetorica-fm2612/cdda_offline.js'), import('tetorica-fm2612/msm5205_pcm.js'),
+      import('tetorica-fm2612/msm5205_sample.js'),
+    ]);
+    if (typeof cdda.createCddaOffline !== 'function' || typeof msm5205.createMSM5205PCM !== 'function' ||
+        typeof sample.prepareMSM5205Sample !== 'function') throw new Error('Missing CD audio APIs');
+  } catch {
+    throw new Error('The CD-ROM² examples require tetorica-fm2612 >= 0.2.32 with CD-DA / MSM5205 APIs, Worklets, WASM, sources and notices. Run npm install.');
+  }
   const target = join(destination, 'vendor/tetorica-fm2612');
   await mkdir(join(destination, 'vendor'), {recursive: true});
   await rm(target, {recursive: true, force: true});
