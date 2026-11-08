@@ -43,7 +43,7 @@ export declare function performanceNoteRelease(chip: any, key: any): {
 /** Channel touched by native register commands, used only while an editor holds a key.
  * @param {string} chip @param {any} command
  * @param {{hucChannel?:number,psgLatch?:number,rfChannel?:number,wonderswanRegisters?:ArrayLike<number>,pokeyRegisters?:ArrayLike<number>}} [state] */
-export declare function nativeVoiceChannel(chip: string, { method, type, args, channel, psgRegister }: any, { hucChannel, psgLatch, rfChannel, wonderswanRegisters, pokeyRegisters }?: {
+export declare function nativeVoiceChannel(chip: string, { method, type, args, channel, psgRegister, register: rawRegister }: any, { hucChannel, psgLatch, rfChannel, wonderswanRegisters, pokeyRegisters }?: {
     hucChannel?: number;
     psgLatch?: number;
     rfChannel?: number;

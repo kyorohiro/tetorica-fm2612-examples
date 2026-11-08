@@ -237,7 +237,7 @@ async function checkStoppedPlayback(page) {
 try {
   await stat(join(dist, 'examples', examplePath, 'web/index.html'));
   const packageInfo = JSON.parse(await readFile(join(dist,'vendor/tetorica-fm2612/package.json'),'utf8'));
-  assert.equal(packageInfo.version, '0.2.27', 'Build against the declared published calibrated-preset package');
+  assert.equal(packageInfo.version, JSON.parse(await readFile(new URL('../package.json',import.meta.url),'utf8')).dependencies['tetorica-fm2612'],'Build against the declared published package');
   await new Promise((resolve, reject) => {server.once('error', reject); server.listen(0, '127.0.0.1', resolve);});
   const base = `http://127.0.0.1:${server.address().port}${prefix}`;
   const engines = process.argv.includes('--chromium') ? {chromium} : process.argv.includes('--webkit') ? {webkit} : {chromium,webkit};

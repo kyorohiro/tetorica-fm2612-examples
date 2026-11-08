@@ -32,6 +32,8 @@ export declare class NativeGenesisSynth {
     backend: string;
     consoleKind: string | null;
     snesMode: boolean;
+    ps1Mode: boolean;
+    scspMode: boolean;
     gameGearMode: boolean;
     oplMode: boolean;
     msxMode: boolean;
@@ -103,6 +105,8 @@ export declare class NativeGenesisSynth {
     listeners: Set<any>;
     mixer: SoundChipMixer;
     mixerReleases: any[];
+    extraScspDevices: Map<any, any>;
+    extraPs1Devices: Map<any, any>;
     extraDevices: Map<any, any>;
     extraPokeyDevices: Map<any, any>;
     extraWonderSwanDevices: Map<any, any>;
@@ -181,10 +185,10 @@ export declare class NativeGenesisSynth {
             value: number | undefined;
             error?: undefined;
         } | {
-            value?: undefined;
             op: string;
             id: any;
             error: string;
+            value?: undefined;
         }>;
         loadDacBank(name: any, bytes: any): Promise<any>;
         playDacBank(name: any, time: any, timing?: {}): Promise<void>;
@@ -901,6 +905,1337 @@ export declare class NativeGenesisSynth {
     gameboy: import("./gameboysynth.js").GameboySynth | import("./huc6280synth.js").Huc6280Synth | null;
     huc6280: import("./gameboysynth.js").GameboySynth | import("./huc6280synth.js").Huc6280Synth | null;
     pce: import("./gameboysynth.js").GameboySynth | import("./huc6280synth.js").Huc6280Synth | null;
+    nativeScsp: {
+        client: {
+            id: string;
+            sampleRate: any;
+            nativeSampleRate: number;
+            channelCount: number;
+            _getState: () => {
+                sampleRate: number;
+                bankId: string;
+                nextSampleId: number;
+                ramUsedBytes: number;
+                ramFreeBytes: number;
+                playingFrequencies: any[];
+                playingLfos: any[];
+                playingModulations: any[];
+                playingSampleIds: any[];
+                samples: any[];
+                slots: {
+                    sample: null;
+                    frequencyHz: number;
+                    totalLevel: number;
+                    directLevel: number;
+                    pan: number;
+                    envelope: {
+                        attackRate: number;
+                        decay1Rate: number;
+                        decay2Rate: number;
+                        decayLevel: number;
+                        releaseRate: number;
+                        keyRateScaling: number;
+                    };
+                    lfo: {
+                        frequencyCode: number;
+                        pitchWave: number;
+                        pitchDepth: number;
+                        amplitudeWave: number;
+                        amplitudeDepth: number;
+                        reset: boolean;
+                    };
+                    modulation: {
+                        depth: number;
+                        xOffset: number;
+                        yOffset: number;
+                        writeInhibit: boolean;
+                    };
+                    gate: any;
+                }[];
+                stateRevision: number;
+            };
+            _adoptState(): void;
+            _allocateMainOwner: () => number;
+            _withMainOwner(scope: any, callback: any): any;
+            _cancelMainOwner(scope: any): void;
+            _stopVoices: () => Promise<any>;
+            loadPCM: (input: any, options: any, timing?: {}) => Promise<any>;
+            getState: () => Promise<any>;
+            dispose(): void;
+        };
+        invoke: (method: any, args?: any[]) => Promise<any>;
+        read(): Promise<any>;
+        dispatch(message: any, timing?: {}): {
+            deferred: Promise<{
+                id: any;
+                value: any;
+                state?: {
+                    sampleRate: number;
+                    bankId: string;
+                    nextSampleId: number;
+                    ramUsedBytes: number;
+                    ramFreeBytes: number;
+                    playingFrequencies: any[];
+                    playingLfos: any[];
+                    playingModulations: any[];
+                    playingSampleIds: any[];
+                    samples: any[];
+                    slots: {
+                        sample: null;
+                        frequencyHz: number;
+                        totalLevel: number;
+                        directLevel: number;
+                        pan: number;
+                        envelope: {
+                            attackRate: number;
+                            decay1Rate: number;
+                            decay2Rate: number;
+                            decayLevel: number;
+                            releaseRate: number;
+                            keyRateScaling: number;
+                        };
+                        lfo: {
+                            frequencyCode: number;
+                            pitchWave: number;
+                            pitchDepth: number;
+                            amplitudeWave: number;
+                            amplitudeDepth: number;
+                            reset: boolean;
+                        };
+                        modulation: {
+                            depth: number;
+                            xOffset: number;
+                            yOffset: number;
+                            writeInhibit: boolean;
+                        };
+                        gate: any;
+                    }[];
+                    stateRevision: number;
+                } | undefined;
+            } | undefined>;
+        };
+        initialize(): Promise<void>;
+        mix(volume?: number, pan?: number): Promise<void>;
+        cancelOwner: (performance: any, owner: any) => void;
+        cancelPerformance: (performance: any) => void;
+        stopped: () => void;
+        adoptStopped(data: any): any;
+        reset(): void;
+    } | null;
+    scsp: {
+        id: string;
+        sampleRate: any;
+        nativeSampleRate: number;
+        channelCount: number;
+        _getState: () => {
+            sampleRate: number;
+            bankId: string;
+            nextSampleId: number;
+            ramUsedBytes: number;
+            ramFreeBytes: number;
+            playingFrequencies: any[];
+            playingLfos: any[];
+            playingModulations: any[];
+            playingSampleIds: any[];
+            samples: any[];
+            slots: {
+                sample: null;
+                frequencyHz: number;
+                totalLevel: number;
+                directLevel: number;
+                pan: number;
+                envelope: {
+                    attackRate: number;
+                    decay1Rate: number;
+                    decay2Rate: number;
+                    decayLevel: number;
+                    releaseRate: number;
+                    keyRateScaling: number;
+                };
+                lfo: {
+                    frequencyCode: number;
+                    pitchWave: number;
+                    pitchDepth: number;
+                    amplitudeWave: number;
+                    amplitudeDepth: number;
+                    reset: boolean;
+                };
+                modulation: {
+                    depth: number;
+                    xOffset: number;
+                    yOffset: number;
+                    writeInhibit: boolean;
+                };
+                gate: any;
+            }[];
+            stateRevision: number;
+        };
+        _adoptState(): void;
+        _allocateMainOwner: () => number;
+        _withMainOwner(scope: any, callback: any): any;
+        _cancelMainOwner(scope: any): void;
+        _stopVoices: () => Promise<any>;
+        loadPCM: (input: any, options: any, timing?: {}) => Promise<any>;
+        getState: () => Promise<any>;
+        dispose(): void;
+    } | null;
+    nativePs1: {
+        client: {
+            id: string;
+            sampleRate: any;
+            nativeSampleRate: number;
+            channelCount: number;
+            _getState: () => {
+                sampleRate: number;
+                channelCount: number;
+                nextAddress: number;
+                nativeFrames: number;
+                samples: {
+                    id: number;
+                    startAddress: number;
+                    repeatAddress: number;
+                    byteLength: number;
+                    decodedFrames: number;
+                    rootNote: string | number | null;
+                    rootFrequencyHz: number;
+                    basePitch: number;
+                    loop: boolean;
+                    loopStartSamples: number | null;
+                    editorChannel?: number;
+                }[];
+                reverb: {
+                    preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                    volumeLeft: number;
+                    volumeRight: number;
+                };
+                channels: {
+                    sample: number | null;
+                    volumeLeft: number;
+                    volumeRight: number;
+                    adsr1: number;
+                    adsr2: number;
+                    pitch: number;
+                    reverb: boolean;
+                    waveform: {
+                        sample: number;
+                        pcm: number[];
+                    } | null;
+                    envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                    gate: boolean;
+                    envelope: number;
+                    ended: boolean;
+                }[];
+                stateRevision: number;
+            };
+            _adoptState(): boolean;
+            _allocateMainOwner: () => number;
+            _withMainOwner(group: any, callback: any): any;
+            _cancelMainOwner(group: any): void;
+            _stopVoices(): Promise<void>;
+            loadADPCM: (input: any, options: any, timing?: {}) => Promise<{
+                id?: number | undefined;
+                startAddress?: number | undefined;
+                repeatAddress?: number | undefined;
+                byteLength?: number | undefined;
+                decodedFrames?: number | undefined;
+                rootNote?: string | number | null | undefined;
+                rootFrequencyHz?: number | undefined;
+                basePitch?: number | undefined;
+                loop?: boolean | undefined;
+                loopStartSamples?: number | null | undefined;
+                editorChannel?: number;
+            }>;
+            getState: () => Promise<import("./ps1synth.js").Ps1VoiceState | {
+                sampleRate: number;
+                channelCount: number;
+                nextAddress: number;
+                nativeFrames: number;
+                samples: {
+                    id: number;
+                    startAddress: number;
+                    repeatAddress: number;
+                    byteLength: number;
+                    decodedFrames: number;
+                    rootNote: string | number | null;
+                    rootFrequencyHz: number;
+                    basePitch: number;
+                    loop: boolean;
+                    loopStartSamples: number | null;
+                    editorChannel?: number;
+                }[];
+                reverb: {
+                    preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                    volumeLeft: number;
+                    volumeRight: number;
+                };
+                channels: {
+                    sample: number | null;
+                    volumeLeft: number;
+                    volumeRight: number;
+                    adsr1: number;
+                    adsr2: number;
+                    pitch: number;
+                    reverb: boolean;
+                    waveform: {
+                        sample: number;
+                        pcm: number[];
+                    } | null;
+                    envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                    gate: boolean;
+                    envelope: number;
+                    ended: boolean;
+                }[];
+            } | {
+                sampleRate: number;
+                channelCount: number;
+                nextAddress: number;
+                nativeFrames: number;
+                samples: {
+                    id: number;
+                    startAddress: number;
+                    repeatAddress: number;
+                    byteLength: number;
+                    decodedFrames: number;
+                    rootNote: string | number | null;
+                    rootFrequencyHz: number;
+                    basePitch: number;
+                    loop: boolean;
+                    loopStartSamples: number | null;
+                    editorChannel?: number;
+                }[];
+                reverb: {
+                    preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                    volumeLeft: number;
+                    volumeRight: number;
+                };
+                channels: {
+                    sample: number | null;
+                    volumeLeft: number;
+                    volumeRight: number;
+                    adsr1: number;
+                    adsr2: number;
+                    pitch: number;
+                    reverb: boolean;
+                    waveform: {
+                        sample: number;
+                        pcm: number[];
+                    } | null;
+                    envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                    gate: boolean;
+                    envelope: number;
+                    ended: boolean;
+                }[];
+                ram: Uint8Array<ArrayBuffer>;
+                registers: Uint16Array<ArrayBuffer>;
+            }>;
+            getPreset: (ch: any) => Promise<import("./ps1synth.js").Ps1VoiceState | {
+                sampleRate: number;
+                channelCount: number;
+                nextAddress: number;
+                nativeFrames: number;
+                samples: {
+                    id: number;
+                    startAddress: number;
+                    repeatAddress: number;
+                    byteLength: number;
+                    decodedFrames: number;
+                    rootNote: string | number | null;
+                    rootFrequencyHz: number;
+                    basePitch: number;
+                    loop: boolean;
+                    loopStartSamples: number | null;
+                    editorChannel?: number;
+                }[];
+                reverb: {
+                    preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                    volumeLeft: number;
+                    volumeRight: number;
+                };
+                channels: {
+                    sample: number | null;
+                    volumeLeft: number;
+                    volumeRight: number;
+                    adsr1: number;
+                    adsr2: number;
+                    pitch: number;
+                    reverb: boolean;
+                    waveform: {
+                        sample: number;
+                        pcm: number[];
+                    } | null;
+                    envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                    gate: boolean;
+                    envelope: number;
+                    ended: boolean;
+                }[];
+            } | {
+                sampleRate: number;
+                channelCount: number;
+                nextAddress: number;
+                nativeFrames: number;
+                samples: {
+                    id: number;
+                    startAddress: number;
+                    repeatAddress: number;
+                    byteLength: number;
+                    decodedFrames: number;
+                    rootNote: string | number | null;
+                    rootFrequencyHz: number;
+                    basePitch: number;
+                    loop: boolean;
+                    loopStartSamples: number | null;
+                    editorChannel?: number;
+                }[];
+                reverb: {
+                    preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                    volumeLeft: number;
+                    volumeRight: number;
+                };
+                channels: {
+                    sample: number | null;
+                    volumeLeft: number;
+                    volumeRight: number;
+                    adsr1: number;
+                    adsr2: number;
+                    pitch: number;
+                    reverb: boolean;
+                    waveform: {
+                        sample: number;
+                        pcm: number[];
+                    } | null;
+                    envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                    gate: boolean;
+                    envelope: number;
+                    ended: boolean;
+                }[];
+                ram: Uint8Array<ArrayBuffer>;
+                registers: Uint16Array<ArrayBuffer>;
+            }>;
+            snapshot: () => Promise<import("./ps1synth.js").Ps1VoiceState | {
+                sampleRate: number;
+                channelCount: number;
+                nextAddress: number;
+                nativeFrames: number;
+                samples: {
+                    id: number;
+                    startAddress: number;
+                    repeatAddress: number;
+                    byteLength: number;
+                    decodedFrames: number;
+                    rootNote: string | number | null;
+                    rootFrequencyHz: number;
+                    basePitch: number;
+                    loop: boolean;
+                    loopStartSamples: number | null;
+                    editorChannel?: number;
+                }[];
+                reverb: {
+                    preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                    volumeLeft: number;
+                    volumeRight: number;
+                };
+                channels: {
+                    sample: number | null;
+                    volumeLeft: number;
+                    volumeRight: number;
+                    adsr1: number;
+                    adsr2: number;
+                    pitch: number;
+                    reverb: boolean;
+                    waveform: {
+                        sample: number;
+                        pcm: number[];
+                    } | null;
+                    envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                    gate: boolean;
+                    envelope: number;
+                    ended: boolean;
+                }[];
+            } | {
+                sampleRate: number;
+                channelCount: number;
+                nextAddress: number;
+                nativeFrames: number;
+                samples: {
+                    id: number;
+                    startAddress: number;
+                    repeatAddress: number;
+                    byteLength: number;
+                    decodedFrames: number;
+                    rootNote: string | number | null;
+                    rootFrequencyHz: number;
+                    basePitch: number;
+                    loop: boolean;
+                    loopStartSamples: number | null;
+                    editorChannel?: number;
+                }[];
+                reverb: {
+                    preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                    volumeLeft: number;
+                    volumeRight: number;
+                };
+                channels: {
+                    sample: number | null;
+                    volumeLeft: number;
+                    volumeRight: number;
+                    adsr1: number;
+                    adsr2: number;
+                    pitch: number;
+                    reverb: boolean;
+                    waveform: {
+                        sample: number;
+                        pcm: number[];
+                    } | null;
+                    envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                    gate: boolean;
+                    envelope: number;
+                    ended: boolean;
+                }[];
+                ram: Uint8Array<ArrayBuffer>;
+                registers: Uint16Array<ArrayBuffer>;
+            }>;
+            dispose(): void;
+        };
+        dispatch: (message: any, timing?: {}) => {
+            deferred: Promise<{
+                id: any;
+                value: void | boolean | import("./ps1synth.js").Ps1VoiceState | {
+                    sampleRate: number;
+                    channelCount: number;
+                    nextAddress: number;
+                    nativeFrames: number;
+                    samples: {
+                        id: number;
+                        startAddress: number;
+                        repeatAddress: number;
+                        byteLength: number;
+                        decodedFrames: number;
+                        rootNote: string | number | null;
+                        rootFrequencyHz: number;
+                        basePitch: number;
+                        loop: boolean;
+                        loopStartSamples: number | null;
+                        editorChannel?: number;
+                    }[];
+                    reverb: {
+                        preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                        volumeLeft: number;
+                        volumeRight: number;
+                    };
+                    channels: {
+                        sample: number | null;
+                        volumeLeft: number;
+                        volumeRight: number;
+                        adsr1: number;
+                        adsr2: number;
+                        pitch: number;
+                        reverb: boolean;
+                        waveform: {
+                            sample: number;
+                            pcm: number[];
+                        } | null;
+                        envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                        gate: boolean;
+                        envelope: number;
+                        ended: boolean;
+                    }[];
+                } | {
+                    id?: number | undefined;
+                    startAddress?: number | undefined;
+                    repeatAddress?: number | undefined;
+                    byteLength?: number | undefined;
+                    decodedFrames?: number | undefined;
+                    rootNote?: string | number | null | undefined;
+                    rootFrequencyHz?: number | undefined;
+                    basePitch?: number | undefined;
+                    loop?: boolean | undefined;
+                    loopStartSamples?: number | null | undefined;
+                    editorChannel?: number;
+                } | {
+                    sampleRate: number;
+                    channelCount: number;
+                    nextAddress: number;
+                    nativeFrames: number;
+                    samples: {
+                        id: number;
+                        startAddress: number;
+                        repeatAddress: number;
+                        byteLength: number;
+                        decodedFrames: number;
+                        rootNote: string | number | null;
+                        rootFrequencyHz: number;
+                        basePitch: number;
+                        loop: boolean;
+                        loopStartSamples: number | null;
+                        editorChannel?: number;
+                    }[];
+                    reverb: {
+                        preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                        volumeLeft: number;
+                        volumeRight: number;
+                    };
+                    channels: {
+                        sample: number | null;
+                        volumeLeft: number;
+                        volumeRight: number;
+                        adsr1: number;
+                        adsr2: number;
+                        pitch: number;
+                        reverb: boolean;
+                        waveform: {
+                            sample: number;
+                            pcm: number[];
+                        } | null;
+                        envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                        gate: boolean;
+                        envelope: number;
+                        ended: boolean;
+                    }[];
+                    ram: Uint8Array<ArrayBuffer>;
+                    registers: Uint16Array<ArrayBuffer>;
+                };
+            } | undefined>;
+        };
+        invoke: (method: any, args?: any[]) => Promise<boolean | import("./ps1synth.js").Ps1Sample | {
+            channelCount: number;
+            nextAddress: number;
+            nativeFrames: number;
+            samples: {
+                id: number;
+                startAddress: number;
+                repeatAddress: number;
+                byteLength: number;
+                decodedFrames: number;
+                rootNote: string | number | null;
+                rootFrequencyHz: number;
+                basePitch: number;
+                loop: boolean;
+                loopStartSamples: number | null;
+                editorChannel?: number;
+            }[];
+            reverb: {
+                preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                volumeLeft: number;
+                volumeRight: number;
+            };
+            channels: {
+                sample: number | null;
+                volumeLeft: number;
+                volumeRight: number;
+                adsr1: number;
+                adsr2: number;
+                pitch: number;
+                reverb: boolean;
+                waveform: {
+                    sample: number;
+                    pcm: number[];
+                } | null;
+                envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                gate: boolean;
+                envelope: number;
+                ended: boolean;
+                channel: number;
+                active: boolean;
+                type: string;
+            }[];
+            kind: string;
+            sampleRate: number;
+            nativeSampleRate: number;
+            auditions: {
+                channel: any;
+                id: any;
+            }[];
+        }>;
+        read(): Promise<{
+            channelCount: number;
+            nextAddress: number;
+            nativeFrames: number;
+            samples: {
+                id: number;
+                startAddress: number;
+                repeatAddress: number;
+                byteLength: number;
+                decodedFrames: number;
+                rootNote: string | number | null;
+                rootFrequencyHz: number;
+                basePitch: number;
+                loop: boolean;
+                loopStartSamples: number | null;
+                editorChannel?: number;
+            }[];
+            reverb: {
+                preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                volumeLeft: number;
+                volumeRight: number;
+            };
+            channels: {
+                sample: number | null;
+                volumeLeft: number;
+                volumeRight: number;
+                adsr1: number;
+                adsr2: number;
+                pitch: number;
+                reverb: boolean;
+                waveform: {
+                    sample: number;
+                    pcm: number[];
+                } | null;
+                envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                gate: boolean;
+                envelope: number;
+                ended: boolean;
+                channel: number;
+                active: boolean;
+                type: string;
+            }[];
+            kind: string;
+            sampleRate: number;
+            nativeSampleRate: number;
+            auditions: {
+                channel: any;
+                id: any;
+            }[];
+        }>;
+        cancelOwner: (performance: any, owner: any) => void;
+        cancelPerformance: (performance: any) => void;
+        initialize(): Promise<void>;
+        mix(volume?: number, pan?: number): Promise<void>;
+        stopped: () => void;
+        adoptStopped(data: any): any;
+        reset(): void;
+    } | null;
+    ps1: {
+        id: string;
+        sampleRate: any;
+        nativeSampleRate: number;
+        channelCount: number;
+        _getState: () => {
+            sampleRate: number;
+            channelCount: number;
+            nextAddress: number;
+            nativeFrames: number;
+            samples: {
+                id: number;
+                startAddress: number;
+                repeatAddress: number;
+                byteLength: number;
+                decodedFrames: number;
+                rootNote: string | number | null;
+                rootFrequencyHz: number;
+                basePitch: number;
+                loop: boolean;
+                loopStartSamples: number | null;
+                editorChannel?: number;
+            }[];
+            reverb: {
+                preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                volumeLeft: number;
+                volumeRight: number;
+            };
+            channels: {
+                sample: number | null;
+                volumeLeft: number;
+                volumeRight: number;
+                adsr1: number;
+                adsr2: number;
+                pitch: number;
+                reverb: boolean;
+                waveform: {
+                    sample: number;
+                    pcm: number[];
+                } | null;
+                envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                gate: boolean;
+                envelope: number;
+                ended: boolean;
+            }[];
+            stateRevision: number;
+        };
+        _adoptState(): boolean;
+        _allocateMainOwner: () => number;
+        _withMainOwner(group: any, callback: any): any;
+        _cancelMainOwner(group: any): void;
+        _stopVoices(): Promise<void>;
+        loadADPCM: (input: any, options: any, timing?: {}) => Promise<{
+            id?: number | undefined;
+            startAddress?: number | undefined;
+            repeatAddress?: number | undefined;
+            byteLength?: number | undefined;
+            decodedFrames?: number | undefined;
+            rootNote?: string | number | null | undefined;
+            rootFrequencyHz?: number | undefined;
+            basePitch?: number | undefined;
+            loop?: boolean | undefined;
+            loopStartSamples?: number | null | undefined;
+            editorChannel?: number;
+        }>;
+        getState: () => Promise<import("./ps1synth.js").Ps1VoiceState | {
+            sampleRate: number;
+            channelCount: number;
+            nextAddress: number;
+            nativeFrames: number;
+            samples: {
+                id: number;
+                startAddress: number;
+                repeatAddress: number;
+                byteLength: number;
+                decodedFrames: number;
+                rootNote: string | number | null;
+                rootFrequencyHz: number;
+                basePitch: number;
+                loop: boolean;
+                loopStartSamples: number | null;
+                editorChannel?: number;
+            }[];
+            reverb: {
+                preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                volumeLeft: number;
+                volumeRight: number;
+            };
+            channels: {
+                sample: number | null;
+                volumeLeft: number;
+                volumeRight: number;
+                adsr1: number;
+                adsr2: number;
+                pitch: number;
+                reverb: boolean;
+                waveform: {
+                    sample: number;
+                    pcm: number[];
+                } | null;
+                envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                gate: boolean;
+                envelope: number;
+                ended: boolean;
+            }[];
+        } | {
+            sampleRate: number;
+            channelCount: number;
+            nextAddress: number;
+            nativeFrames: number;
+            samples: {
+                id: number;
+                startAddress: number;
+                repeatAddress: number;
+                byteLength: number;
+                decodedFrames: number;
+                rootNote: string | number | null;
+                rootFrequencyHz: number;
+                basePitch: number;
+                loop: boolean;
+                loopStartSamples: number | null;
+                editorChannel?: number;
+            }[];
+            reverb: {
+                preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                volumeLeft: number;
+                volumeRight: number;
+            };
+            channels: {
+                sample: number | null;
+                volumeLeft: number;
+                volumeRight: number;
+                adsr1: number;
+                adsr2: number;
+                pitch: number;
+                reverb: boolean;
+                waveform: {
+                    sample: number;
+                    pcm: number[];
+                } | null;
+                envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                gate: boolean;
+                envelope: number;
+                ended: boolean;
+            }[];
+            ram: Uint8Array<ArrayBuffer>;
+            registers: Uint16Array<ArrayBuffer>;
+        }>;
+        getPreset: (ch: any) => Promise<import("./ps1synth.js").Ps1VoiceState | {
+            sampleRate: number;
+            channelCount: number;
+            nextAddress: number;
+            nativeFrames: number;
+            samples: {
+                id: number;
+                startAddress: number;
+                repeatAddress: number;
+                byteLength: number;
+                decodedFrames: number;
+                rootNote: string | number | null;
+                rootFrequencyHz: number;
+                basePitch: number;
+                loop: boolean;
+                loopStartSamples: number | null;
+                editorChannel?: number;
+            }[];
+            reverb: {
+                preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                volumeLeft: number;
+                volumeRight: number;
+            };
+            channels: {
+                sample: number | null;
+                volumeLeft: number;
+                volumeRight: number;
+                adsr1: number;
+                adsr2: number;
+                pitch: number;
+                reverb: boolean;
+                waveform: {
+                    sample: number;
+                    pcm: number[];
+                } | null;
+                envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                gate: boolean;
+                envelope: number;
+                ended: boolean;
+            }[];
+        } | {
+            sampleRate: number;
+            channelCount: number;
+            nextAddress: number;
+            nativeFrames: number;
+            samples: {
+                id: number;
+                startAddress: number;
+                repeatAddress: number;
+                byteLength: number;
+                decodedFrames: number;
+                rootNote: string | number | null;
+                rootFrequencyHz: number;
+                basePitch: number;
+                loop: boolean;
+                loopStartSamples: number | null;
+                editorChannel?: number;
+            }[];
+            reverb: {
+                preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                volumeLeft: number;
+                volumeRight: number;
+            };
+            channels: {
+                sample: number | null;
+                volumeLeft: number;
+                volumeRight: number;
+                adsr1: number;
+                adsr2: number;
+                pitch: number;
+                reverb: boolean;
+                waveform: {
+                    sample: number;
+                    pcm: number[];
+                } | null;
+                envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                gate: boolean;
+                envelope: number;
+                ended: boolean;
+            }[];
+            ram: Uint8Array<ArrayBuffer>;
+            registers: Uint16Array<ArrayBuffer>;
+        }>;
+        snapshot: () => Promise<import("./ps1synth.js").Ps1VoiceState | {
+            sampleRate: number;
+            channelCount: number;
+            nextAddress: number;
+            nativeFrames: number;
+            samples: {
+                id: number;
+                startAddress: number;
+                repeatAddress: number;
+                byteLength: number;
+                decodedFrames: number;
+                rootNote: string | number | null;
+                rootFrequencyHz: number;
+                basePitch: number;
+                loop: boolean;
+                loopStartSamples: number | null;
+                editorChannel?: number;
+            }[];
+            reverb: {
+                preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                volumeLeft: number;
+                volumeRight: number;
+            };
+            channels: {
+                sample: number | null;
+                volumeLeft: number;
+                volumeRight: number;
+                adsr1: number;
+                adsr2: number;
+                pitch: number;
+                reverb: boolean;
+                waveform: {
+                    sample: number;
+                    pcm: number[];
+                } | null;
+                envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                gate: boolean;
+                envelope: number;
+                ended: boolean;
+            }[];
+        } | {
+            sampleRate: number;
+            channelCount: number;
+            nextAddress: number;
+            nativeFrames: number;
+            samples: {
+                id: number;
+                startAddress: number;
+                repeatAddress: number;
+                byteLength: number;
+                decodedFrames: number;
+                rootNote: string | number | null;
+                rootFrequencyHz: number;
+                basePitch: number;
+                loop: boolean;
+                loopStartSamples: number | null;
+                editorChannel?: number;
+            }[];
+            reverb: {
+                preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                volumeLeft: number;
+                volumeRight: number;
+            };
+            channels: {
+                sample: number | null;
+                volumeLeft: number;
+                volumeRight: number;
+                adsr1: number;
+                adsr2: number;
+                pitch: number;
+                reverb: boolean;
+                waveform: {
+                    sample: number;
+                    pcm: number[];
+                } | null;
+                envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                gate: boolean;
+                envelope: number;
+                ended: boolean;
+            }[];
+            ram: Uint8Array<ArrayBuffer>;
+            registers: Uint16Array<ArrayBuffer>;
+        }>;
+        dispose(): void;
+    } | null;
+    spu: {
+        id: string;
+        sampleRate: any;
+        nativeSampleRate: number;
+        channelCount: number;
+        _getState: () => {
+            sampleRate: number;
+            channelCount: number;
+            nextAddress: number;
+            nativeFrames: number;
+            samples: {
+                id: number;
+                startAddress: number;
+                repeatAddress: number;
+                byteLength: number;
+                decodedFrames: number;
+                rootNote: string | number | null;
+                rootFrequencyHz: number;
+                basePitch: number;
+                loop: boolean;
+                loopStartSamples: number | null;
+                editorChannel?: number;
+            }[];
+            reverb: {
+                preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                volumeLeft: number;
+                volumeRight: number;
+            };
+            channels: {
+                sample: number | null;
+                volumeLeft: number;
+                volumeRight: number;
+                adsr1: number;
+                adsr2: number;
+                pitch: number;
+                reverb: boolean;
+                waveform: {
+                    sample: number;
+                    pcm: number[];
+                } | null;
+                envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                gate: boolean;
+                envelope: number;
+                ended: boolean;
+            }[];
+            stateRevision: number;
+        };
+        _adoptState(): boolean;
+        _allocateMainOwner: () => number;
+        _withMainOwner(group: any, callback: any): any;
+        _cancelMainOwner(group: any): void;
+        _stopVoices(): Promise<void>;
+        loadADPCM: (input: any, options: any, timing?: {}) => Promise<{
+            id?: number | undefined;
+            startAddress?: number | undefined;
+            repeatAddress?: number | undefined;
+            byteLength?: number | undefined;
+            decodedFrames?: number | undefined;
+            rootNote?: string | number | null | undefined;
+            rootFrequencyHz?: number | undefined;
+            basePitch?: number | undefined;
+            loop?: boolean | undefined;
+            loopStartSamples?: number | null | undefined;
+            editorChannel?: number;
+        }>;
+        getState: () => Promise<import("./ps1synth.js").Ps1VoiceState | {
+            sampleRate: number;
+            channelCount: number;
+            nextAddress: number;
+            nativeFrames: number;
+            samples: {
+                id: number;
+                startAddress: number;
+                repeatAddress: number;
+                byteLength: number;
+                decodedFrames: number;
+                rootNote: string | number | null;
+                rootFrequencyHz: number;
+                basePitch: number;
+                loop: boolean;
+                loopStartSamples: number | null;
+                editorChannel?: number;
+            }[];
+            reverb: {
+                preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                volumeLeft: number;
+                volumeRight: number;
+            };
+            channels: {
+                sample: number | null;
+                volumeLeft: number;
+                volumeRight: number;
+                adsr1: number;
+                adsr2: number;
+                pitch: number;
+                reverb: boolean;
+                waveform: {
+                    sample: number;
+                    pcm: number[];
+                } | null;
+                envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                gate: boolean;
+                envelope: number;
+                ended: boolean;
+            }[];
+        } | {
+            sampleRate: number;
+            channelCount: number;
+            nextAddress: number;
+            nativeFrames: number;
+            samples: {
+                id: number;
+                startAddress: number;
+                repeatAddress: number;
+                byteLength: number;
+                decodedFrames: number;
+                rootNote: string | number | null;
+                rootFrequencyHz: number;
+                basePitch: number;
+                loop: boolean;
+                loopStartSamples: number | null;
+                editorChannel?: number;
+            }[];
+            reverb: {
+                preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                volumeLeft: number;
+                volumeRight: number;
+            };
+            channels: {
+                sample: number | null;
+                volumeLeft: number;
+                volumeRight: number;
+                adsr1: number;
+                adsr2: number;
+                pitch: number;
+                reverb: boolean;
+                waveform: {
+                    sample: number;
+                    pcm: number[];
+                } | null;
+                envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                gate: boolean;
+                envelope: number;
+                ended: boolean;
+            }[];
+            ram: Uint8Array<ArrayBuffer>;
+            registers: Uint16Array<ArrayBuffer>;
+        }>;
+        getPreset: (ch: any) => Promise<import("./ps1synth.js").Ps1VoiceState | {
+            sampleRate: number;
+            channelCount: number;
+            nextAddress: number;
+            nativeFrames: number;
+            samples: {
+                id: number;
+                startAddress: number;
+                repeatAddress: number;
+                byteLength: number;
+                decodedFrames: number;
+                rootNote: string | number | null;
+                rootFrequencyHz: number;
+                basePitch: number;
+                loop: boolean;
+                loopStartSamples: number | null;
+                editorChannel?: number;
+            }[];
+            reverb: {
+                preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                volumeLeft: number;
+                volumeRight: number;
+            };
+            channels: {
+                sample: number | null;
+                volumeLeft: number;
+                volumeRight: number;
+                adsr1: number;
+                adsr2: number;
+                pitch: number;
+                reverb: boolean;
+                waveform: {
+                    sample: number;
+                    pcm: number[];
+                } | null;
+                envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                gate: boolean;
+                envelope: number;
+                ended: boolean;
+            }[];
+        } | {
+            sampleRate: number;
+            channelCount: number;
+            nextAddress: number;
+            nativeFrames: number;
+            samples: {
+                id: number;
+                startAddress: number;
+                repeatAddress: number;
+                byteLength: number;
+                decodedFrames: number;
+                rootNote: string | number | null;
+                rootFrequencyHz: number;
+                basePitch: number;
+                loop: boolean;
+                loopStartSamples: number | null;
+                editorChannel?: number;
+            }[];
+            reverb: {
+                preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                volumeLeft: number;
+                volumeRight: number;
+            };
+            channels: {
+                sample: number | null;
+                volumeLeft: number;
+                volumeRight: number;
+                adsr1: number;
+                adsr2: number;
+                pitch: number;
+                reverb: boolean;
+                waveform: {
+                    sample: number;
+                    pcm: number[];
+                } | null;
+                envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                gate: boolean;
+                envelope: number;
+                ended: boolean;
+            }[];
+            ram: Uint8Array<ArrayBuffer>;
+            registers: Uint16Array<ArrayBuffer>;
+        }>;
+        snapshot: () => Promise<import("./ps1synth.js").Ps1VoiceState | {
+            sampleRate: number;
+            channelCount: number;
+            nextAddress: number;
+            nativeFrames: number;
+            samples: {
+                id: number;
+                startAddress: number;
+                repeatAddress: number;
+                byteLength: number;
+                decodedFrames: number;
+                rootNote: string | number | null;
+                rootFrequencyHz: number;
+                basePitch: number;
+                loop: boolean;
+                loopStartSamples: number | null;
+                editorChannel?: number;
+            }[];
+            reverb: {
+                preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                volumeLeft: number;
+                volumeRight: number;
+            };
+            channels: {
+                sample: number | null;
+                volumeLeft: number;
+                volumeRight: number;
+                adsr1: number;
+                adsr2: number;
+                pitch: number;
+                reverb: boolean;
+                waveform: {
+                    sample: number;
+                    pcm: number[];
+                } | null;
+                envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                gate: boolean;
+                envelope: number;
+                ended: boolean;
+            }[];
+        } | {
+            sampleRate: number;
+            channelCount: number;
+            nextAddress: number;
+            nativeFrames: number;
+            samples: {
+                id: number;
+                startAddress: number;
+                repeatAddress: number;
+                byteLength: number;
+                decodedFrames: number;
+                rootNote: string | number | null;
+                rootFrequencyHz: number;
+                basePitch: number;
+                loop: boolean;
+                loopStartSamples: number | null;
+                editorChannel?: number;
+            }[];
+            reverb: {
+                preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                volumeLeft: number;
+                volumeRight: number;
+            };
+            channels: {
+                sample: number | null;
+                volumeLeft: number;
+                volumeRight: number;
+                adsr1: number;
+                adsr2: number;
+                pitch: number;
+                reverb: boolean;
+                waveform: {
+                    sample: number;
+                    pcm: number[];
+                } | null;
+                envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                gate: boolean;
+                envelope: number;
+                ended: boolean;
+            }[];
+            ram: Uint8Array<ArrayBuffer>;
+            registers: Uint16Array<ArrayBuffer>;
+        }>;
+        dispose(): void;
+    } | null;
     nativeSnes: {
         client: {
             id: string;
@@ -911,6 +2246,8 @@ export declare class NativeGenesisSynth {
             _stopVoices: () => any;
             dispose(): void;
             loadBRR(input: any, options: any): Promise<any>;
+            setEcho(options?: {}): Promise<import("./snessynth.js").SnesEchoState>;
+            getEcho(): Promise<import("./snessynth.js").SnesEchoState>;
             readDsp(register: any): Promise<any>;
             getState(): Promise<import("./snessynth.js").SnesState>;
             getPreset(channel: any): Promise<import("./snessynth.js").SnesVoiceState>;
@@ -1002,6 +2339,8 @@ export declare class NativeGenesisSynth {
         _stopVoices: () => any;
         dispose(): void;
         loadBRR(input: any, options: any): Promise<any>;
+        setEcho(options?: {}): Promise<import("./snessynth.js").SnesEchoState>;
+        getEcho(): Promise<import("./snessynth.js").SnesEchoState>;
         readDsp(register: any): Promise<any>;
         getState(): Promise<import("./snessynth.js").SnesState>;
         getPreset(channel: any): Promise<import("./snessynth.js").SnesVoiceState>;
@@ -1373,10 +2712,11 @@ export declare class NativeGenesisSynth {
         dispose(): void;
     };
     diagnosticsReading: any;
+    activePerformance: any;
     /** @param {{invoke:(command:string,args?:object)=>Promise<any>,now?:()=>number,
      * onError?:(error:Error)=>void,mixer?:SoundChipMixer,masterVolume?:number,
      * decodeAudio?:(bytes:ArrayBuffer)=>Promise<any>,fetcher?:typeof globalThis.fetch,megaCD?:boolean,dx7?:boolean,
-     * clock?:number,wonderswanClock?:number, mode?:'genesis'|'mega-cd'|'dx7'|'nes'|'gameboy'|'snes'|'wonderswan'|'pc-engine'|'pc-engine-cd'|'pc98'|'pc98-26'|'ym2203'|'ym2608'|'neogeo'|'neogeo-b'|'ym2610'|'ym2610b'|'x68000'|'master-system'|'game-gear'|'msx'|'msx-audio'|'ym3526'|'ym3812'|'ymf262'|'genesis-full'|'32x'|'genesis-full-nuked'|'genesis-nuked'}} [options] */
+     * clock?:number,wonderswanClock?:number, mode?:'scsp'|'ps1'|'genesis'|'mega-cd'|'dx7'|'nes'|'gameboy'|'snes'|'wonderswan'|'pc-engine'|'pc-engine-cd'|'pc98'|'pc98-26'|'ym2203'|'ym2608'|'neogeo'|'neogeo-b'|'ym2610'|'ym2610b'|'x68000'|'master-system'|'game-gear'|'msx'|'msx-audio'|'ym3526'|'ym3812'|'ymf262'|'genesis-full'|'32x'|'genesis-full-nuked'|'genesis-nuked'}} [options] */
     constructor({ invoke, now, onError, mixer, masterVolume, decodeAudio, fetcher, megaCD, dx7, mode, clock, wonderswanClock }?: {
         invoke: (command: string, args?: object) => Promise<any>;
         now?: () => number;
@@ -1389,7 +2729,7 @@ export declare class NativeGenesisSynth {
         dx7?: boolean;
         clock?: number;
         wonderswanClock?: number;
-        mode?: 'genesis' | 'mega-cd' | 'dx7' | 'nes' | 'gameboy' | 'snes' | 'wonderswan' | 'pc-engine' | 'pc-engine-cd' | 'pc98' | 'pc98-26' | 'ym2203' | 'ym2608' | 'neogeo' | 'neogeo-b' | 'ym2610' | 'ym2610b' | 'x68000' | 'master-system' | 'game-gear' | 'msx' | 'msx-audio' | 'ym3526' | 'ym3812' | 'ymf262' | 'genesis-full' | '32x' | 'genesis-full-nuked' | 'genesis-nuked';
+        mode?: 'scsp' | 'ps1' | 'genesis' | 'mega-cd' | 'dx7' | 'nes' | 'gameboy' | 'snes' | 'wonderswan' | 'pc-engine' | 'pc-engine-cd' | 'pc98' | 'pc98-26' | 'ym2203' | 'ym2608' | 'neogeo' | 'neogeo-b' | 'ym2610' | 'ym2610b' | 'x68000' | 'master-system' | 'game-gear' | 'msx' | 'msx-audio' | 'ym3526' | 'ym3812' | 'ymf262' | 'genesis-full' | '32x' | 'genesis-full-nuked' | 'genesis-nuked';
     });
     unavailableMedia(feature: any): {
         load: () => never;
@@ -1420,6 +2760,36 @@ export declare class NativeGenesisSynth {
         mix(settings: any): void;
     }>;
     createExtraSpc(options: any): Promise<{
+        native: boolean;
+        ready: boolean;
+        nativeInstance: number;
+        kind: any;
+        label: any;
+        client: any;
+        endpoint: any;
+        clock: any;
+        stereoEnabled: any;
+        engine?: any;
+        layout: {};
+        dispose(): void;
+        mix(settings: any): void;
+    }>;
+    createExtraScsp(options: any): Promise<{
+        native: boolean;
+        ready: boolean;
+        nativeInstance: number;
+        kind: any;
+        label: any;
+        client: any;
+        endpoint: any;
+        clock: any;
+        stereoEnabled: any;
+        engine?: any;
+        layout: {};
+        dispose(): void;
+        mix(settings: any): void;
+    }>;
+    createExtraPs1(options: any): Promise<{
         native: boolean;
         ready: boolean;
         nativeInstance: number;
@@ -1802,6 +3172,155 @@ export declare class NativeGenesisSynth {
         value: any;
     } | undefined>;
     dispatchNativeConsoleCommand(kind: any, message: any, timing?: {}): Promise<any>;
+    dispatchNativeScspCommand(message: any, timing?: {}): Promise<{
+        deferred: Promise<{
+            id: any;
+            value: any;
+            state?: {
+                sampleRate: number;
+                bankId: string;
+                nextSampleId: number;
+                ramUsedBytes: number;
+                ramFreeBytes: number;
+                playingFrequencies: any[];
+                playingLfos: any[];
+                playingModulations: any[];
+                playingSampleIds: any[];
+                samples: any[];
+                slots: {
+                    sample: null;
+                    frequencyHz: number;
+                    totalLevel: number;
+                    directLevel: number;
+                    pan: number;
+                    envelope: {
+                        attackRate: number;
+                        decay1Rate: number;
+                        decay2Rate: number;
+                        decayLevel: number;
+                        releaseRate: number;
+                        keyRateScaling: number;
+                    };
+                    lfo: {
+                        frequencyCode: number;
+                        pitchWave: number;
+                        pitchDepth: number;
+                        amplitudeWave: number;
+                        amplitudeDepth: number;
+                        reset: boolean;
+                    };
+                    modulation: {
+                        depth: number;
+                        xOffset: number;
+                        yOffset: number;
+                        writeInhibit: boolean;
+                    };
+                    gate: any;
+                }[];
+                stateRevision: number;
+            } | undefined;
+        } | undefined>;
+    }>;
+    dispatchNativePs1Command(message: any, timing?: {}): Promise<{
+        deferred: Promise<{
+            id: any;
+            value: void | boolean | import("./ps1synth.js").Ps1VoiceState | {
+                sampleRate: number;
+                channelCount: number;
+                nextAddress: number;
+                nativeFrames: number;
+                samples: {
+                    id: number;
+                    startAddress: number;
+                    repeatAddress: number;
+                    byteLength: number;
+                    decodedFrames: number;
+                    rootNote: string | number | null;
+                    rootFrequencyHz: number;
+                    basePitch: number;
+                    loop: boolean;
+                    loopStartSamples: number | null;
+                    editorChannel?: number;
+                }[];
+                reverb: {
+                    preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                    volumeLeft: number;
+                    volumeRight: number;
+                };
+                channels: {
+                    sample: number | null;
+                    volumeLeft: number;
+                    volumeRight: number;
+                    adsr1: number;
+                    adsr2: number;
+                    pitch: number;
+                    reverb: boolean;
+                    waveform: {
+                        sample: number;
+                        pcm: number[];
+                    } | null;
+                    envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                    gate: boolean;
+                    envelope: number;
+                    ended: boolean;
+                }[];
+            } | {
+                id?: number | undefined;
+                startAddress?: number | undefined;
+                repeatAddress?: number | undefined;
+                byteLength?: number | undefined;
+                decodedFrames?: number | undefined;
+                rootNote?: string | number | null | undefined;
+                rootFrequencyHz?: number | undefined;
+                basePitch?: number | undefined;
+                loop?: boolean | undefined;
+                loopStartSamples?: number | null | undefined;
+                editorChannel?: number;
+            } | {
+                sampleRate: number;
+                channelCount: number;
+                nextAddress: number;
+                nativeFrames: number;
+                samples: {
+                    id: number;
+                    startAddress: number;
+                    repeatAddress: number;
+                    byteLength: number;
+                    decodedFrames: number;
+                    rootNote: string | number | null;
+                    rootFrequencyHz: number;
+                    basePitch: number;
+                    loop: boolean;
+                    loopStartSamples: number | null;
+                    editorChannel?: number;
+                }[];
+                reverb: {
+                    preset: import("./ps1_parameters.js").Ps1ReverbPreset;
+                    volumeLeft: number;
+                    volumeRight: number;
+                };
+                channels: {
+                    sample: number | null;
+                    volumeLeft: number;
+                    volumeRight: number;
+                    adsr1: number;
+                    adsr2: number;
+                    pitch: number;
+                    reverb: boolean;
+                    waveform: {
+                        sample: number;
+                        pcm: number[];
+                    } | null;
+                    envelopeParameters: import("./ps1_parameters.js").Ps1Envelope;
+                    gate: boolean;
+                    envelope: number;
+                    ended: boolean;
+                }[];
+                ram: Uint8Array<ArrayBuffer>;
+                registers: Uint16Array<ArrayBuffer>;
+            };
+        } | undefined>;
+    }>;
     dispatchNativeSnesCommand(message: any, timing?: {}): Promise<any>;
     fail(error: any): void;
     silencePsg(): void;

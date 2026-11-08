@@ -1,8 +1,108 @@
 import {cp, mkdir, readFile, rm} from 'node:fs/promises';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {join} from 'node:path';
 
 export const root = fileURLToPath(new URL('../', import.meta.url));
+
+// Validate only the installed npm payload. Keep its authored modules, types,
+// source receipts and npm-safe source metadata aliases unchanged when copying.
+// In particular, do not restore/repack .gitignore or Cargo.toml.orig here:
+// npmStorage describes their original bytes and the explicit rebuild recipe.
+export async function verifySidRuntime(source=join(root,'node_modules/tetorica-fm2612')) {
+  const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+  const safe=name=>{
+    assert(typeof name==='string'&&name&&!/[\\:\x00-\x1f\x7f]/.test(name)
+      &&name.split('/').every(part=>part&&part!=='.'&&part!=='..'),'Unsafe SID source receipt path');
+    return name;
+  };
+  const record=async(name,expected)=>{
+    safe(name);assert(expected&&Number.isSafeInteger(expected.bytes)&&expected.bytes>=0
+      &&typeof expected.sha256==='string'&&/^[a-f0-9]{64}$/.test(expected.sha256),'Invalid SID source receipt');
+    const bytes=await readFile(join(source,name));
+    assert.equal(bytes.length,expected.bytes,'SID source bytes differ: '+name);
+    assert.equal(sha(bytes),expected.sha256,'SID source hash differs: '+name);return bytes;
+  };
+  for(const name of ['sid.js','sid.d.ts','sid8580.js','sid8580.d.ts','sidsynth.js','sidsynth.d.ts',
+    'sid_waveforms.js','sid_waveforms.d.ts','playground_sid.js','playground_sid.d.ts',
+    'playground_sid_audio.js','playground_sid_audio.d.ts','playground_sid_worklet.js',
+    'playground_sid_worklet.d.ts','playground_sid_inspector.js','playground_sid_inspector.d.ts',
+    'playground_runtime.js','playground_logic_worker.js','sources/SID.md','sources/SID8580.md',
+    'sources/sid/README.md','sources/sid/tetorica_src/runtime/sid.d.ts',
+    'licenses/chips-m6581/LICENSE','licenses/chips-m6581/README.md','licenses/chips-m6581/PATCHES.md'])
+    await readFile(join(source,name));
+  const [core,preview,synth,waves]=await Promise.all([
+    import('tetorica-fm2612/sid.js'),import('tetorica-fm2612/sid8580.js'),
+    import('tetorica-fm2612/sidsynth.js'),import('tetorica-fm2612/sid_waveforms.js'),
+  ]);
+  assert.equal(typeof core.SidCore?.create,'function');assert.equal(typeof preview.Sid8580Core?.create,'function');
+  assert.equal(typeof synth.SidSynth,'function');assert.equal(typeof synth.SidDirectTransport,'function');
+  for(let mask=0;mask<16;mask++)assert.equal(waves.sidWaveformBits(waves.sidWaveformFromBits(mask)),mask);
+
+  const receipt6581=JSON.parse(await readFile(join(source,'generated/sid/sid-build.json'),'utf8'));
+  assert.equal(receipt6581.component,'sid-lab');assert.equal(receipt6581.model,'6581');
+  assert.equal(receipt6581.fixedSdkArtifact,false);assert.equal(Object.keys(receipt6581.inputs).length,13);
+  for(const[name,expected]of Object.entries(receipt6581.inputs))await record('sources/sid/'+safe(name),expected);
+  const wasm6581=await record('generated/sid/sid.wasm',receipt6581.output);
+  assert.equal(wasm6581.subarray(0,8).toString('hex'),'0061736d01000000');
+  for(const name of ['LICENSE','README.md','PATCHES.md'])assert.deepEqual(
+    await readFile(join(source,'licenses/chips-m6581',name)),
+    await readFile(join(source,'sources/sid/third_party/chips-m6581',name)),
+    'SID license notice differs from native source: '+name);
+
+  const kitRoot='sources/sid8580-machine';
+  const kit=JSON.parse(await readFile(join(source,kitRoot,'source-kit.json'),'utf8'));
+  assert.equal(kit.format,'tetorica-sid-player-8580-source-kit');assert.equal(kit.model,'8580');
+  assert.equal(kit.preview,true);assert.equal(kit.compiledInputCount,99);
+  assert.equal(Object.keys(kit.compiledInputs).length,99);assert.equal(kit.compilerInvocationPerformed,false);
+  assert(kit.sources&&typeof kit.sources==='object'&&!Array.isArray(kit.sources));
+  const storage=kit.npmStorage;assert.equal(storage?.version,1);
+  assert(storage.aliases&&typeof storage.aliases==='object'&&!Array.isArray(storage.aliases));
+  const aliases=new Map(Object.entries(storage.aliases)),destinations=new Set();
+  for(const[name,stored]of aliases){
+    safe(name);safe(stored);assert(Object.hasOwn(kit.sources,name),'SID alias must retain an original source record');
+    assert(!destinations.has(stored)&&!Object.hasOwn(kit.sources,stored),'SID source aliases must not collide');
+    destinations.add(stored);
+  }
+  for(const name of ['third_party/sidera/upstream/.gitignore','third_party/sidera/upstream/Cargo.toml.orig'])
+    assert(aliases.has(name),'Missing npm-safe SID source alias: '+name);
+  for(const[name,expected]of Object.entries(kit.sources)){
+    safe(name);await record(kitRoot+'/'+(aliases.get(name)??name),expected);
+    // If a user explicitly restored a canonical name, it must still match.
+    if(aliases.has(name)){
+      let canonical;
+      try{canonical=await readFile(join(source,kitRoot,name));}catch(error){if(error.code!=='ENOENT')throw error;}
+      if(canonical){assert.equal(canonical.length,expected.bytes);assert.equal(sha(canonical),expected.sha256);}
+    }
+  }
+  for(const[name,expected]of Object.entries(kit.compiledInputs))assert.deepEqual(kit.sources[name],expected,
+    'SID compiled input missing from readable source kit: '+name);
+  assert.equal(storage.restore?.path,'restore-npm-sources.mjs');
+  await record(kitRoot+'/'+storage.restore.path,storage.restore);
+  const receiptBytes=await record(kitRoot+'/'+safe(kit.buildReceipt.path),kit.buildReceipt);
+  assert.deepEqual(receiptBytes,await readFile(join(source,'generated/sid8580-machine/sid8580-machine-build.json')));
+  const receipt8580=JSON.parse(receiptBytes);
+  assert.equal(receipt8580.fixedSdkArtifact,false);assert.deepEqual(receipt8580.inputs,kit.compiledInputs);
+  const outputs=new Set();
+  for(const artifact of kit.artifacts){safe(artifact.path);await record(artifact.path,artifact);outputs.add(artifact.path);}
+  for(const name of ['sid8580-endpoint.wasm','sid8580-machine.wasm']){
+    const output='generated/sid8580-machine/'+name;assert(outputs.has(output),'Missing 8580 artifact '+name);
+    const bytes=await record(output,receipt8580.outputs[name]);assert.equal(bytes.subarray(0,8).toString('hex'),'0061736d01000000');
+  }
+  for(const name of ['third_party/sidera/toolchain-notices','third_party/sid8580-machine-toolchain-notices']){
+    assert(kit.noticeRoots.includes(name),'Missing SID toolchain notice root');
+    assert(kit.sources[name+'/README.md']&&kit.sources[name+'/SOURCES.json'],'Missing SID toolchain notice manifest');
+    const notices=JSON.parse(await record(kitRoot+'/'+name+'/SOURCES.json',kit.sources[name+'/SOURCES.json']));
+    assert(notices.files&&Object.keys(notices.files).length,'Empty SID toolchain notice manifest');
+    for(const[file,expected]of Object.entries(notices.files)){
+      const sourceName=name+'/'+safe(file),retained=kit.sources[sourceName];
+      assert(retained,'Missing SID toolchain license: '+sourceName);
+      assert.equal(retained.bytes,expected.bytes);assert.equal(retained.sha256,expected.sha256);
+    }
+  }
+  return {models:['6581','8580'],nativeInputs6581:13,compiledInputs8580:99,readableSources8580:Object.keys(kit.sources).length,metadataAliases:aliases.size};
+}
 
 export async function copyRuntime(destination) {
   const source = join(root, 'node_modules/tetorica-fm2612');
@@ -120,6 +220,11 @@ export async function copyRuntime(destination) {
         typeof sample.prepareMSM5205Sample !== 'function') throw new Error('Missing CD audio APIs');
   } catch {
     throw new Error('The CD-ROM² examples require tetorica-fm2612 >= 0.2.32 with CD-DA / MSM5205 APIs, Worklets, WASM, sources and notices. Run npm install.');
+  }
+  try {
+    await verifySidRuntime(source);
+  } catch(error) {
+    throw new Error('The SID examples require the complete tetorica-fm2612 >= 0.2.37 payload: both cores, Synth, typed clients, Worklets, WASM, matching sources, npm-safe metadata aliases and notices. Run npm install.',{cause:error});
   }
   const target = join(destination, 'vendor/tetorica-fm2612');
   await mkdir(join(destination, 'vendor'), {recursive: true});

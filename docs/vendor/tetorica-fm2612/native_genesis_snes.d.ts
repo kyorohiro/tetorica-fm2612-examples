@@ -19,6 +19,8 @@ export declare function createNativeGenesisSnes(owner: any): {
         _stopVoices: () => any;
         dispose(): void;
         loadBRR(input: any, options: any): Promise<any>;
+        setEcho(options?: {}): Promise<import("./snessynth.js").SnesEchoState>;
+        getEcho(): Promise<import("./snessynth.js").SnesEchoState>;
         readDsp(register: any): Promise<any>;
         getState(): Promise<import("./snessynth.js").SnesState>;
         getPreset(channel: any): Promise<import("./snessynth.js").SnesVoiceState>;

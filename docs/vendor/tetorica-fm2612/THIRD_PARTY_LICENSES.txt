@@ -1,6 +1,10 @@
 ymfm: BSD-3-Clause; see LICENSE.
+Saturn SCSP: experimental standalone BSD-3-Clause MAME port by ElSemi and R. Belmont; see licenses/mame-scsp/LICENSE and sources/SCSP.md.
+PlayStation SPU: experimental standalone BSD-3-Clause MAME port by pSXAuthor and R. Belmont; see licenses/mame-ps1-spu/LICENSE and sources/PS1-SPU.md for complete source and rebuilding. The source and build recipe come from the fixed SDK, where PS1 SPU is cataloged as a separate instrument.
+C64 SID: chips/m6581 6581 approximation (zlib) and optional MIT sidera 8580 Preview with BSD-3-Clause Tetorica hosts. See licenses/chips-m6581/, sources/SID.md and sources/SID8580.md for matching source kits and rebuild recipes. The 8580 kit retains Rust/MIT, C64/zlib and Tetorica/BSD notices, including third_party/sidera/toolchain-notices/ and third_party/sid8580-machine-toolchain-notices/ inside sources/sid8580-machine/.
 POKEY: BSD-3-Clause; see licenses/libvgm-pokey/ and sources/POKEY.md for the standalone adaptation, exact licensed upstream source, pinned provenance and rebuild recipe.
-MSM5205 PCM and PC Engine ADPCM RAM helper: BSD-3-Clause; see licenses/tetorica-msm5205/ and sources/MSM5205.md for complete application-module sources, attribution and rebuilding.
+CD-DA PCM: BSD-3-Clause; see licenses/tetorica-cdda/ and sources/CDDA.md for fixed SDK sources, provenance and standalone rebuilding.
+MSM5205 PCM and PC Engine ADPCM RAM helper: BSD-3-Clause; see licenses/tetorica-msm5205/ and sources/MSM5205.md for complete fixed SDK application-audio sources, attribution and standalone rebuilding.
 Sega PSG: original Tetorica implementation, BSD-3-Clause; see licenses/tetorica_sega_psg/ and sources/SegaPSG.md. Hardware reference: SMS Power! SN76489 documentation by Maxim and contributors.
 nuked-opn2: see licenses/nuked-opn2/LICENSE and README.md.
 mame-ay8910: see licenses/mame-ay8910/LICENSE and README.md.

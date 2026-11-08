@@ -1,4 +1,4 @@
-export type PlaygroundChip = 'ym2612' | 'ym2203' | 'ym2608' | 'ym2610' | 'ym2610b' | 'gameboy' | 'nes' | 'snes' | 'x68000' | 'huc6280' | 'pokey' | 'wonderswan' | 'segapsg' | 'dx7' | 'ym3526' | 'ym3812' | 'y8950' | 'ymf262' | 'ym2413' | 'ay8910' | 'msx' | 'msx-audio';
+export type PlaygroundChip = 'ym2612' | 'ym2203' | 'ym2608' | 'ym2610' | 'ym2610b' | 'gameboy' | 'nes' | 'snes' | 'ps1' | 'scsp' | 'x68000' | 'huc6280' | 'pokey' | 'sid' | 'wonderswan' | 'segapsg' | 'dx7' | 'ym3526' | 'ym3812' | 'y8950' | 'ymf262' | 'ym2413' | 'ay8910' | 'msx' | 'msx-audio';
 export type PlaygroundKeyboardEvent = {
     id: string;
     midi: number;
@@ -11,7 +11,7 @@ export type PlaygroundKeyboardTarget = {
     allNotesOff: () => unknown;
 };
 /**
- * @typedef {'ym2612'|'ym2203'|'ym2608'|'ym2610'|'ym2610b'|'gameboy'|'nes'|'snes'|'x68000'|'huc6280'|'pokey'|'wonderswan'|'segapsg'|'dx7'|'ym3526'|'ym3812'|'y8950'|'ymf262'|'ym2413'|'ay8910'|'msx'|'msx-audio'} PlaygroundChip
+ * @typedef {'ym2612'|'ym2203'|'ym2608'|'ym2610'|'ym2610b'|'gameboy'|'nes'|'snes'|'ps1'|'scsp'|'x68000'|'huc6280'|'pokey'|'sid'|'wonderswan'|'segapsg'|'dx7'|'ym3526'|'ym3812'|'y8950'|'ymf262'|'ym2413'|'ay8910'|'msx'|'msx-audio'} PlaygroundChip
  * @typedef {{id:string,midi:number,velocity?:number}} PlaygroundKeyboardEvent
  * @typedef {{name:string,noteOn:(event:PlaygroundKeyboardEvent)=>unknown,
  * noteOff:(event:PlaygroundKeyboardEvent)=>unknown,allNotesOff:()=>unknown}} PlaygroundKeyboardTarget
@@ -23,6 +23,7 @@ export type PlaygroundKeyboardTarget = {
  *   megaDrive?: object | null,
  *   chip?: PlaygroundChip,
  *   clock?: number,
+ *   model?: '6581'|'8580',
  *   type?: number,
  *   flags?: number,
  *   stereoEnabled?: boolean,
@@ -51,7 +52,7 @@ export type PlaygroundKeyboardTarget = {
  *   onMegaDriveEvent?: ((event: object) => void) | null,
  *   onAuditionReset?: (() => void) | null,
  *   onKeyboardTargetChange?: ((target:PlaygroundKeyboardTarget|null) => void) | null,
- *   inputAudio?: ((options: {title?:string,asset?:string,edit?:boolean}, context: {signal:AbortSignal}) => Promise<null|{name:string,source:'file'|'microphone',sampleRate:number,channels:Float32Array[]}>) | null,
+ *   inputAudio?: ((options: {title?:string,asset?:string,edit?:boolean,target?:'rf5c164'|'adpcm-b'|'gameboy-wave'|'ps1'}, context: {signal:AbortSignal}) => Promise<null|{name:string,source:'file'|'microphone',sampleRate:number,channels:Float32Array[]}>) | null,
  *   pcEngineCd?: boolean,
  *   readCddaFile?: (path:string)=>Promise<Uint8Array|ArrayBuffer>,
  * }} [options]
@@ -62,6 +63,7 @@ export declare function createPlaygroundRuntime(options?: {
     megaDrive?: object | null;
     chip?: PlaygroundChip;
     clock?: number;
+    model?: '6581' | '8580';
     type?: number;
     flags?: number;
     stereoEnabled?: boolean;
@@ -109,6 +111,7 @@ export declare function createPlaygroundRuntime(options?: {
         title?: string;
         asset?: string;
         edit?: boolean;
+        target?: 'rf5c164' | 'adpcm-b' | 'gameboy-wave' | 'ps1';
     }, context: {
         signal: AbortSignal;
     }) => Promise<null | {

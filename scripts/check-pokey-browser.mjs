@@ -384,7 +384,7 @@ try {
   for(const [key,path]of Object.entries(cases))if(!selected||key===selected)await stat(join(site,'examples',path,'web/index.html'));
   const runtimePackage=await readFile(join(site,'vendor/tetorica-fm2612/package.json'));
   const metadata=JSON.parse(runtimePackage);
-  assert.equal(metadata.version,'0.2.31','Static site did not contain published 0.2.31');
+  assert.equal(metadata.version,JSON.parse(await readFile(new URL('../package.json',import.meta.url),'utf8')).dependencies['tetorica-fm2612'],'Static site must contain the declared published package');
   receipt.runtime={name:metadata.name,version:metadata.version,packageSha256:sha256(runtimePackage)};
   const lockBytes=await readFile(join(repository,'package-lock.json'));
   const lock=JSON.parse(lockBytes),installed=lock.packages['node_modules/tetorica-fm2612'];

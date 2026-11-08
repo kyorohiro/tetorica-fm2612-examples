@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SID：1つの共有フィルター — tetorica-fm2612 examples</title>
+  <link rel="stylesheet" href="../../../../../style.css">
+  <script type="importmap">{"imports":{"tetorica-fm2612":"../../../../../vendor/tetorica-fm2612/soundchip.js","tetorica-fm2612/":"../../../../../vendor/tetorica-fm2612/"}}</script>
+  <style>
+    #code {width:100%;box-sizing:border-box;font-family:monospace}
+    .actions {flex-wrap:wrap} .model-control {display:inline-flex;align-items:center;gap:8px}
+    .filter-controls {display:grid;gap:12px;margin-block:20px}
+    .filter-controls input[type="range"] {display:block;width:min(100%,520px)}
+    .filter-outputs {display:flex;gap:20px} output {font-variant-numeric:tabular-nums}
+  </style>
+</head><body><main>
+  <nav><a href="../../../../../index.html">← Examples</a><a href="./main.js">Source ↗</a></nav>
+  <header><p class="eyebrow">c64/sid/02-filter · WEB / NODE</p><h1>SID：1つの共有フィルター</h1><p>3つのSawボイスを1つのフィルターへ送り、LP／BP／HPと共有Cutoff・Resonanceを演奏中に変更します。</p></header>
+  <section class="sample-panel">
+    <label for="code">実行するSIDコード</label>
+    <textarea id="code" rows="18" spellcheck="false" aria-describedby="code-help"></textarea>
+    <div class="actions">
+      <label for="model" class="model-control">Model <select id="model"><option value="6581" selected>6581</option><option value="8580">8580 Preview</option></select></label>
+      <button id="play" type="button">Play</button><button id="stop" type="button" disabled>Stop</button>
+    </div>
+    <fieldset class="filter-controls"><legend>1つの共有SIDフィルター · CH1 + CH2 + CH3</legend>
+      <div class="filter-outputs"><label><input id="lowpass" type="checkbox" checked>LP</label><label><input id="bandpass" type="checkbox">BP</label><label><input id="highpass" type="checkbox">HP</label></div>
+      <label for="cutoff">Cutoff · hardware code <output id="cutoff-value" for="cutoff">700</output><input id="cutoff" type="range" min="0" max="2047" step="1" value="700"></label>
+      <label for="resonance">Resonance <output id="resonance-value" for="resonance">5</output><input id="resonance" type="range" min="0" max="15" step="1" value="5"></label>
+      <p>選んだ出力を加算します。LP + HP はNotch。すべてOffなら、この例はdry routingへ切り替えます。CutoffはHzではありません。</p>
+    </fieldset>
+    <p id="status" role="status" aria-live="polite">Ready.</p>
+    <pre><code id="detail"></code></pre>
+    <p id="code-help">編集は次のPlayに反映されます。startAudio()でsidを取得し、sid.initialize()後のapplyFilter()で現在のUI設定を送ります。フィルター操作は演奏中も即時反映します。 Stopは読み込み中も使え、終了・エラー・ページ移動時に解放します。</p>
+    <p>音源にフィルターは1つです。CHごとのルーティングと、LP／BP／HPの出力選択・Cutoff・Resonanceを持ちます。Node版はdry、各出力、Cutoff／Resonanceの違いを順に保存します。</p>
+    <p>モデル変更はStop後に行います。どちらもPAL 985,248 Hz・monoです。6581は近似モデル、8580はPreview。12 Hzの出力DC除去はホスト処理です。音量は同じgain 0.35で、モデル間の正規化はしません。</p>
+    <h2>Web — 全コード</h2><pre class="source"><code data-source="./main.js">Loading…</code></pre>
+    <h2>Node — WAV 保存</h2>
+    <pre><code>node examples/c64/sid/02-filter/node/main.mjs ./sid-02-filter.wav
+node examples/c64/sid/02-filter/node/main.mjs ./sid-02-filter-8580.wav --model=8580</code></pre>
+    <pre class="source"><code data-source="../node/main.mjs">Loading…</code></pre>
+    <p><a href="../README.md">README</a>。Nodeの既定値は6581→8580の順に両モデルを収録します。48,000 Hz stereo PCM16 WAV（monoの複製）で、音声デバイスやaudifyは不要です。</p>
+  </section>
+</main><script type="module" src="./main.js"></script><script type="module">
+// Display the actual independent files, rather than duplicating source in HTML.
+for (const code of document.querySelectorAll('[data-source]')) {
+  try {
+    const response = await fetch(code.dataset.source);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    code.textContent = await response.text();
+  } catch (error) { code.textContent = error.message; }
+}
+</script></body></html>

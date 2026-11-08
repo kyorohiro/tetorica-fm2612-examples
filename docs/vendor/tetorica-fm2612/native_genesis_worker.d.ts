@@ -15,6 +15,8 @@ export declare function createNativeGenesisWorkerBridge({ synth, MessageChannelC
     pcmPort: MessagePort | null;
     dx7Port: MessagePort | null;
     nesPort: MessagePort | null;
+    scspPort: MessagePort | null;
+    ps1Port: MessagePort | null;
     wonderswanPort: MessagePort | null;
     gameboyPort: MessagePort | null;
     snesPort: MessagePort | null;

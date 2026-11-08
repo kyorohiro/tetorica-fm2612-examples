@@ -11,6 +11,9 @@ export declare function createSnesClient(port: MessagePort, initial?: {
         samples: import("./snessynth.js").SnesSample[];
         channels: import("./snessynth.js").SnesVoiceState[];
         nextAddress: number;
+        directoryAddress: number;
+        maxSampleBytes: number;
+        echo: import("./snessynth.js").SnesEchoState;
         stateRevision?: number | undefined;
     };
     _stopVoices(): Promise<any>;
@@ -21,6 +24,13 @@ export declare function createSnesClient(port: MessagePort, initial?: {
     /** @param {ArrayBuffer|ArrayBufferView} input @param {import('./snessynth.js').SnesBRROptions} options
      * @returns {Promise<import('./snessynth.js').SnesSample>} */
     loadBRR(input: ArrayBuffer | ArrayBufferView, options: import('./snessynth.js').SnesBRROptions): Promise<import('./snessynth.js').SnesSample>;
+    /** Real shared Echo/FIR. First enable relocates sample RAM and releases voices.
+     * @param {Partial<import('./snessynth.js').SnesEchoOptions>} [options]
+     * @returns {Promise<import('./snessynth.js').SnesEchoState>} */
+    setEcho(options?: Partial<import('./snessynth.js').SnesEchoOptions>): Promise<import('./snessynth.js').SnesEchoState>;
+    /** Authored settings and RAM reservation, not raw timeline registers.
+     * @returns {Promise<import('./snessynth.js').SnesEchoState>} */
+    getEcho(): Promise<import('./snessynth.js').SnesEchoState>;
     /** Resource upload; clocks are 1,024,000 Hz, not native PCM frames.
      * @param {import('./spc.js').SpcTimeline} trace */
     prepareTimeline(trace: import('./spc.js').SpcTimeline): Promise<any>;

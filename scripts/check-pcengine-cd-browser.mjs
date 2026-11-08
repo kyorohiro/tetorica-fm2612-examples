@@ -236,7 +236,7 @@ async function checkExample(browser,base,browserName,key,path,execution){
 }
 
 try{
-  const pkg=JSON.parse(await readFile(join(site,'vendor/tetorica-fm2612/package.json'),'utf8'));assert.equal(pkg.version,'0.2.32','Use the published npm package');
+  const pkg=JSON.parse(await readFile(join(site,'vendor/tetorica-fm2612/package.json'),'utf8'));assert.equal(pkg.version,JSON.parse(await readFile(new URL('../package.json',import.meta.url),'utf8')).dependencies['tetorica-fm2612'],'Use the declared published npm package');
   for(const path of Object.values(cases))await stat(join(site,'examples',path,'web/index.html'));
   await mkdir(images,{recursive:true});await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});
   const base=`http://127.0.0.1:${server.address().port}${prefix}`,results=[];

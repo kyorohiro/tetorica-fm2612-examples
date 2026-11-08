@@ -1,7 +1,8 @@
 # tetorica-fm2612 examples
 
 `tetorica-fm2612` を import して使う、機能別の小さなサンプル集。
-公開済み npm `tetorica-fm2612@0.2.32` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES・PC Engine・MSX 合奏の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
+公開済み npm `tetorica-fm2612@0.2.37` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES・PC Engine・MSX 合奏の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
+SIDは専用APIのAudioWorklet接続と、直接PCMを生成するNode例を用意しています。
 PCM 生成・WAV 保存は専用例に置き、Web Audio を使う埋め込み例と、Node の nativeFX / 音声デバイス出力の例も掲載しています。本体リポジトリには依存しません。
 
 [公開 examples](https://kyorohiro.github.io/tetorica-fm2612-examples/) と
@@ -53,6 +54,8 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 | DX7（Web） | [02-sysex](examples/dx7/02-sysex/README.md) | 1音色 / 32音色の SysEx 読込み、音色選択、試聴 |
 | SNES（実験用・Web / Node） | [01-brr-notes](examples/snes/01-brr-notes/README.md) | 自作 BRR、基準音程、8ボイス、Main / Worker、Node WAV |
 | SPC（実験用・Web / Node） | [02-spc-player](examples/snes/02-spc-player/README.md) | SPC700＋S-DSP の再生・停止、32kHz PCM / WAV |
+| C64 SID（Web / Node） | [01-voices](examples/c64/sid/01-voices/README.md) | 3ボイス・ADSR・6581／8580 Previewの比較 |
+| C64 SID（Web / Node） | [02-filter](examples/c64/sid/02-filter/README.md) | 共有LP／BP／HP、Cutoff・Resonanceの音作り |
 | Chip raw | [01-register-note](examples/chip-raw/01-register-note/README.md) | YM2612 レジスタ直接操作 |
 | PSG | [01-tone](examples/genesis/psg/01-tone/README.md) | Sega PSG のトーン |
 | PSG | [02-noise](examples/genesis/psg/02-noise/README.md) | 周期 / ホワイトノイズ |
@@ -105,6 +108,24 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 | DirectTransport | [01-single-note](examples/transport/direct/01-single-note/README.md) | PCM 生成・Web 再生・Node WAV 保存 |
 | Chip Mixer（Web） | [11-chip-mixer](examples/embedding/11-chip-mixer/README.md) | 自動 ID・チップ別 Volume / Pan / Mute / Reset |
 | Mixer プリセット比較（Web） | [12-calibrated-mixer](examples/embedding/12-calibrated-mixer/README.md) | FM・Sega PSG・AY・NESの従来値 / calibrated を聴き比べる |
+
+## C64 SIDの入口
+
+SIDは専用APIを使います。Nodeでは`SidCore`（6581）または`Sid8580Core`（PALの8580 Preview）を作り、
+`SidSynth`で操作してmono PCMを生成します。WAVでは左右へ同じPCMを複製します。
+Webでは`createSidAudio()`と`createSidClient()`でAudioWorkletへ接続し、同じ音色・発音APIを使います。
+例ごとに初期化・発音・Stop・解放のコードをすべて載せています。音声デバイスを開かずにNodeでWAVを生成できます。
+
+```sh
+node examples/c64/sid/01-voices/node/main.mjs --model=both
+node examples/c64/sid/02-filter/node/main.mjs --model=both
+npm run check:sid
+```
+
+両モデルは近似／Previewで、物理SIDの個体差を保証しません。元の12 Hz host DC blockerを保ち、
+正規化は行いません。ゲーム曲・C64 CPU・ROMを使わず、自作の音符から音を作ります。
+npmに同梱された可読ソースとライセンスは静的サイトの`vendor/tetorica-fm2612/`にも含めます。
+8580の元ソースから再ビルドするときは、source kit READMEの`restore-npm-sources.mjs`によるmetadata復元を先に行ってください。
 
 ## 各フォルダーの構成
 
@@ -182,7 +203,7 @@ Node 専用の場合は `environments: ["node"]`、ブラウザ専用の場合�
 
 ## MegaSynth Node examples
 
-`embedding/06`〜`10` は `tetorica-fm2612@0.2.32` の実験用 MegaSynth API を使います。
+`embedding/06`〜`10` は `tetorica-fm2612@0.2.37` の実験用 MegaSynth API を使います。
 通常の `npm ci` で公開 package を導入できます。
 
 ```sh
@@ -205,7 +226,7 @@ WAV の RIFF ヘッダー・非ゼロ PCM とイベント JSON を確認しま�
 ## Transport の例
 
 Genesis / PC-98 / Game Boy / X68000 FM の基本例は、WorkletTransport / AudifyTransport を使用します。
-公開済み npm 0.2.32 を使用します。Node のリアルタイム再生には audify を追加してください。
+公開済み npm 0.2.37 を使用します。Node のリアルタイム再生には audify を追加してください。
 
 ```sh
 npm install
@@ -249,7 +270,7 @@ npm run check:mixer
 
 ## OPL / OPL2 / Y8950 FM / OPL3
 
-`tetorica-fm2612@0.2.32` の `OPLSynth` とオリジナル音色 `OPL_PRESETS` を使います。
+`tetorica-fm2612@0.2.37` の `OPLSynth` とオリジナル音色 `OPL_PRESETS` を使います。
 Webは `createSoundChip(name, {execution:'worklet'})` → `OPLWorkletTransport` → `OPLSynth` でリアルタイム再生。
 Nodeは `OPLDirectTransport` と `generateStereo()` でPCMを生成し、WAVへ保存します。音声デバイスや `audify` は不要です。
 Webのコード欄を編集して再実行でき、Stopは読み込み中にも使えます。
@@ -273,7 +294,7 @@ npm run check:opl
 
 ## AY / OPLL / MSX
 
-6例は `tetorica-fm2612@0.2.32` の AY / OPLL API を使います。
+6例は `tetorica-fm2612@0.2.37` の AY / OPLL API を使います。
 MSX は AY-3-8910＋YM2413、MSX Audio はさらに Y8950 の FM 部分を加えた構成です。
 Master System の2例は YM2413 を使い、音色比較では Sega PSG も伴奏します。
 
@@ -301,7 +322,7 @@ npm run check:msx
 
 ## PC Engine / HuC6280
 
-`pc-engine/` の3例は公開済み `tetorica-fm2612@0.2.32` を使います。
+`pc-engine/` の3例は公開済み `tetorica-fm2612@0.2.37` を使います。
 Web は `Playground({chip:'huc6280'})` の主音源 `pce` を Main / Worker から操作します。
 Node は `Huc6280AudioEngine` → `Huc6280DirectTransport` → `Huc6280Synth` でPCMを生成し、WAVへ保存します。音声ドライバーは不要です。
 package root の `createSoundChip('huc6280')` や専用 AudifyTransport は使いません。
@@ -324,7 +345,7 @@ npm run check:pcengine
 
 ## PC Engine CD-ROM² / CD-DA / MSM5205
 
-公開済み `tetorica-fm2612@0.2.32` の音声APIを使う3例です。
+公開済み `tetorica-fm2612@0.2.37` の音声APIを使う3例です。
 音声はすべてコード内で生成します。ゲームのディスク・BIOS・外部サンプルは不要です。
 
 | Example | 内容 |
@@ -410,7 +431,7 @@ Pause / Resume・音量・不正ファイル後の再実行を確認します。
 
 ## WonderSwan
 
-3例は `tetorica-fm2612@0.2.32` の共通factoryを使います。
+3例は `tetorica-fm2612@0.2.37` の共通factoryを使います。
 Webは `createSoundChip('wonderswan', {execution:'worklet'})` → `WonderSwanWorkletTransport` → `WonderSwanSynth`。
 NodeはDirect生成したチップを `WonderSwanDirectTransport` → `WonderSwanSynth` へ渡し、WAVに保存します。
 物理4CH、32点・4-bit波形、左右Volumeは各0〜15。VoiceはCH1、SweepはCH2、NoiseはCH3を使います。
@@ -435,7 +456,7 @@ npm run check:wonderswan
 
 ## POKEY / Dual POKEY
 
-3例は公開済み `tetorica-fm2612@0.2.32` の共通factoryと `PokeySynth` を使います。
+3例は公開済み `tetorica-fm2612@0.2.37` の共通factoryと `PokeySynth` を使います。
 Webは `createSoundChip('pokey', {execution:'worklet'})` → `PokeyWorkletTransport` → `PokeySynth`。
 コードを編集して再実行でき、Stop・終了・ページ移動で音源とAudioContextを解放します。読み込み中のStopにも対応します。
 

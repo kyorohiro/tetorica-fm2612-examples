@@ -10,6 +10,12 @@ its default entry point provides chip creation without starting browser audio.
 For browser and Node.js projects, see the
 [runnable examples](https://github.com/kyorohiro/tetorica-fm2612-examples).
 
+The C/C++ sound-chip cores and WASM build recipes used by this package are
+maintained in **[tetorica-soundchip-native](https://github.com/kyorohiro/tetorica-soundchip-native)**.
+This npm package adds JavaScript/TypeScript APIs and browser/Node integration.
+The included upstream cores retain their individual credits and licenses;
+`sources/` and `licenses/` contain the pinned sources, provenance and notices.
+
 ## Install
 
 ```sh
@@ -55,11 +61,26 @@ entry points, rather than every internal Worker or Worklet module.
 | Select a primary runtime synth | `tetorica-fm2612/tetorica_synth.js` | `createTetoricaSynth`, `TETORICA_CHIPS` |
 | DX7 inside browser Playground scripts | `tetorica-fm2612/playground_runtime.js` | Script globals `useSoundChip('dx7')`, `createSoundChip('dx7')` |
 | SNES S-DSP / SPC700 | `tetorica-fm2612/snessynth.js`, `tetorica-fm2612/spc.js` | CPU-free BRR instrument / SPC file PCM core |
+| C64 SID 6581 / PAL 8580 Preview PCM cores | `tetorica-fm2612/sid.js`, `tetorica-fm2612/sid8580.js` | `SidCore`, `Sid8580Core`: explicit creation, register access and owned mono PCM |
+| C64 SID voice and shared filter controls | `tetorica-fm2612/sidsynth.js` | `SidSynth`, `SidDirectTransport`, combined waveform helpers; either core model |
+| Pure SID waveform flags | `tetorica-fm2612/sid_waveforms.js` | `SID_WAVEFORMS`, `sidWaveformBits`, `sidWaveformFromBits`; no WASM or audio imports |
+| Experimental Saturn SCSP, low level | `tetorica-fm2612/scsp.js` | `Scsp`: register/RAM access and 44.1 kHz stereo PCM |
+| SCSP tuned PCM instruments / host rate | `tetorica-fm2612/scspsynth.js`, `tetorica-fm2612/pcm_44100_resampler.js` | `ScspSynth`, `createScspInitSample`, `Pcm44100Resampler` |
+| Audio selection to SCSP PCM | `tetorica-fm2612/scsp_sample.js` | `readScspAudio`, `prepareScspPCM` |
+| Experimental PlayStation SPU, low level | `tetorica-fm2612/ps1_spu.js` | `Ps1Spu`: explicit factory initialization, register/RAM access and 44.1 kHz stereo PCM |
+| PS1 tuned sample instruments / host PCM rate | `tetorica-fm2612/ps1synth.js`, `tetorica-fm2612/ps1_resampler.js` | `Ps1Synth`, `createPs1InitSample`, `Ps1Resampler` |
+| PS1 named ADSR / reverb parameters | `tetorica-fm2612/ps1_parameters.js` | `decodePs1Envelope`, `encodePs1Envelope`, `patchPs1Envelope`, `PS1_REVERB_PRESETS` |
+| PCM to PS1 SPU ADPCM | `tetorica-fm2612/ps1_adpcm_encoder.js` | `encodePs1Adpcm`, `encodePs1AdpcmCycle` |
+| PS1 Sample Editor conversion / waveform comparison | `tetorica-fm2612/playground_sample_ps1.js` | `renderPs1Sample`, `renderPs1SampleComparison` |
+| Isolated offline PS1 sample audition | `tetorica-fm2612/playground_sample_ps1_preview.js` | `renderPs1SamplePreview` with an injected PS1 WASM factory |
+| Game Boy sample comparison / isolated audition | `tetorica-fm2612/playground_sample_gameboy_preview.js` | `renderGameboySampleComparison`, `renderGameboySamplePreview` with an injected Game Boy WASM factory |
 | Offline FM + native FX rendering | `tetorica-fm2612/megasynth_offline.js` | `createMegaSynthOffline` (experimental) |
 | Offline recording and looping | `tetorica-fm2612/megasynth_session.js` | `createMegaSynthSession` (experimental) |
 | Node synth with Worker audio output | `tetorica-fm2612/node` | `MegaSynthNode` (experimental) |
 | PCM to WAV | `tetorica-fm2612/wav.js` | `encodeWav` |
+| PCM to Neo Geo ADPCM-A | `tetorica-fm2612/adpcm_a_sample.js` | `encodeAdpcmA` |
 | PCM to YM2608 ADPCM-B | `tetorica-fm2612/adpcm_b_sample.js` | `readSamplePCM`, `encodeAdpcmB` |
+| PCM to SNES BRR | `tetorica-fm2612/snes_brr_encoder.js` | `encodeBrr` |
 | PCM to RF5C164 sample RAM | `tetorica-fm2612/rf5c164_pcm.js` | `encodeRf5c164` |
 | TFI voice files | `tetorica-fm2612/tfi.js` | `parseTfi`, `applyTfiToSynth`, `createTfiFromPreset` |
 | VGI voice files | `tetorica-fm2612/vgi.js` | `parseVgi`, `createVgiFromPreset` |
@@ -87,6 +108,223 @@ new note. The optional second argument to `hzToBlockFnum(hz, clock)` is the
 chip's input clock in Hz (default `7670454`), not the audio sample rate.
 `createPitchFromMidi(midi, {referenceMidi, referenceBlock, referenceFnum})`
 converts relative to a caller-selected MIDI/BLOCK/FNUM reference.
+
+### C64 SID 6581 and 8580 Preview
+
+Version **0.2.37** adds the existing CPU-free SID instruments as public package
+subpaths. `SidCore` is the 6581 approximation; `Sid8580Core` is the PAL-only
+8580 Preview. Both work with `SidSynth` for three voices, hardware waveform
+flags (including combinations), ADSR, oscillator Sync/Ring and one shared
+LP/BP/HP filter. Cutoff and resonance are chip codes; neither model promises
+physical-chip accuracy or analogue unit variation.
+
+| Core | Creation | Clock | Output |
+| --- | --- | --- | --- |
+| `SidCore` | `await SidCore.create(options)` | Creation-fixed 900,000–1,100,000 Hz; default PAL 985,248 | Owned mono `Float32Array` |
+| `Sid8580Core` | `await Sid8580Core.create(options)` | PAL **985,248 Hz** only | Owned mono `Float32Array`; Preview profiles Off |
+
+Both support integer sample rates from 8,000 to 96,000 Hz. Their PCM retains
+the existing 12 Hz host DC blocker and samples generated by register accesses.
+Each public read/write clocks once; `getState()` observes without clocking.
+The 8580 model returns `null` for unavailable per-voice envelope/phase values.
+These imports open no audio device or `AudioContext`. Calling `create()` loads
+WASM; `render()` / `renderInto()` produce PCM for the host to route or export.
+
+This Node example explicitly supplies the shipped WASM bytes. Change `model`
+to `'6581'` to use the other core with the same voice settings:
+
+```js
+import {readFile, writeFile} from 'node:fs/promises';
+import {encodeWav} from 'tetorica-fm2612';
+import {runtimeAssetUrl} from 'tetorica-fm2612/assets';
+import {SidCore} from 'tetorica-fm2612/sid.js';
+import {Sid8580Core} from 'tetorica-fm2612/sid8580.js';
+import {SidSynth} from 'tetorica-fm2612/sidsynth.js';
+
+const model = '8580', sampleRate = 48000;
+const asset = model === '8580'
+  ? 'generated/sid8580-machine/sid8580-endpoint.wasm'
+  : 'generated/sid/sid.wasm';
+const wasmBinary = await readFile(runtimeAssetUrl(asset));
+const core = model === '8580'
+  ? await Sid8580Core.create({sampleRate, wasmBinary})
+  : await SidCore.create({sampleRate, wasmBinary});
+const sid = new SidSynth({core}); // Borrows the core; the caller owns it.
+try {
+  sid.initialize();
+  sid.setVoice(0, {
+    waveform: 'triangle+saw', attack: 2, decay: 6, sustain: 12, release: 5,
+  });
+  sid.setFilter({mode:'lowpass', cutoff:1200, resonance:7, routing:1, volume:8});
+  sid.noteOn(0, 'C4');
+  const held = core.render(sampleRate / 2);
+  sid.noteOff(0);
+  const tail = core.render(sampleRate / 2);
+  const pcm = new Float32Array(held.length + tail.length);
+  pcm.set(held); pcm.set(tail, held.length);
+  await writeFile('sid.wav', encodeWav({left:pcm, sampleRate}));
+} finally {
+  sid.dispose();
+  core.dispose();
+}
+```
+
+In a directly served browser package, the core defaults fetch its packaged
+WASM relative to the module. A bundler must preserve/copy the assets or supply
+`wasmBinary` / `wasmUrl`; `runtimeAssetUrl(path, publicPackageBaseUrl)` resolves
+a deployed location. Node callers supply `wasmBinary` as above because these
+dedicated core loaders use `fetch` for their default URLs. Both extensionless
+and `.js` subpaths have TypeScript contracts. The plain waveform helper module
+can be imported independently without loading a core or WASM.
+
+Inside a running **browser Playground script**, its Web Audio Main/Worker
+runtime additionally provides an asynchronous SID client:
+
+```js
+const voice = await createSoundChip('sid', {id:'sid-preview', model:'8580'});
+voice.initialize();
+voice.setVoice(0, {waveform:'pulse', pulseWidth:2048});
+voice.noteOn(0, 'C4');
+// voice.noteOff(0) when the key/duration ends.
+const applied = await voice.getState();
+```
+
+That `createSoundChip` is a **Playground script global** from
+`playground_runtime.js`. The generic package-root
+`import {createSoundChip} from 'tetorica-fm2612'` remains a separate factory
+and does **not** accept `'sid'`. Importing `playground_sid.js` directly supplies
+client/transport helpers, not a complete standalone audio session.
+Keep the runtime's primary SID at its default 6581 model. The 8580 script
+example creates an **independent** SID instance; selecting 8580 as the primary
+runtime is not supported across Main/Worker in this release.
+
+These npm instruments do not execute C64 programs or play `.sid` / PSID / RSID
+songs. Song playback and capturing a tune's current voice remain features of
+the separate [SID Player](https://kyorohiro.github.io/hello_ymfm_wasm/sid-player/index.html)
+and [SID Synth](https://kyorohiro.github.io/hello_ymfm_wasm/synth-sid/index.html)
+applications. Register controls do not recover a tune's software envelopes.
+The included readable SID source kits retain their own WASM/source receipts,
+MIT/zlib/BSD notices and Rust toolchain notices. This addition does not change
+the package's pinned Native SDK snapshot.
+
+### Experimental standalone Saturn SCSP
+
+Import `Scsp` from `tetorica-fm2612/scsp.js`, `ScspSynth` from
+`tetorica-fm2612/scspsynth.js`, and the generated factory from
+`tetorica-fm2612/generated/scsp_wasm.js`. In Node, supply the corresponding
+WASM bytes through `moduleOptions: {wasmBinary}`; `runtimeAssetUrl()` resolves
+the packaged WASM. Browser hosts can serve the generated pair together.
+
+`ScspSynth` provides signed PCM8/PCM16, manual root tuning, 32 physical slots,
+forward loops, envelope codes, live pitch and mix, and explicit note/Stop/reset
+operations. Output is 44,100 Hz; `Pcm44100Resampler` converts it to the host rate.
+`readScspAudio` and `prepareScspPCM` decode and prepare a mono selection of
+2–65,535 samples without starting a live audio device. Compressed audio requires
+an injected decoder; longer recordings stay in host memory while a selection is
+prepared for the 512 KiB SCSP RAM. These are software preparation helpers.
+
+The shared Playground runtime supports `useSoundChip('scsp')` and independent
+`createSoundChip('scsp')` instances in Main/Worker. Compatible, updated Tauri hosts
+also support Native transport; the npm package does not install a Tauri binary.
+The package-root chip factory is separate. DSP controls and SSF/68000 execution
+are not included.
+Version 0.2.36 adds `setLfo(slot, patch)` and `preset.lfo` for live
+per-slot hardware LFO: `frequencyCode` 0..31, `pitchWave` / `amplitudeWave` 0..3
+(saw, square, triangle, noise), `pitchDepth` / `amplitudeDepth` 0..7, and boolean
+`reset` (hold both phases at zero until cleared). `setPreset(slot, {lfo})` applies at
+the next keyOn. Display tables are exported as `SCSP_LFO_FREQUENCIES_HZ`,
+`SCSP_LFO_PITCH_CENTS`, `SCSP_LFO_AMPLITUDE_DB` and `SCSP_LFO_WAVEFORMS`.
+LFO requires 0.2.36 or later.
+See the [SCSP API and limitations](https://github.com/kyorohiro/hello_ymfm_wasm/blob/main/docs/scsp.md).
+
+Version 0.2.37 also adds `setModulation(slot, patch)` and
+`preset.modulation` for SCSP sound-stack address modulation. `depth` is 0..15
+(0 disconnects), X/Y stack `xOffset` / `yOffset` are 0..63, and `writeInhibit`
+controls STWINH. Offsets are not slot IDs. PCM must be loaded with a full loop
+and `modulationDepth` guard allocation at least as large as the requested depth.
+This preserves adjacent sample isolation. The fixed core has zero slot-write
+delay; no physical SCSP timing/address-clipping fidelity is claimed. Main/Worker
+and updated Native hosts accept these controls. A multi-slot Synth voice allocator
+and patch serialization remain later work. These additions are not in published
+0.2.36. See the SCSP guide for a two-slot example and scheduling limitations.
+
+### Experimental standalone PlayStation SPU
+
+`Ps1Spu` is a CPU-free MAME-derived instrument core with 24 voices and 512 KiB
+of private RAM. Import it from `tetorica-fm2612/ps1_spu.js` and pass the factory
+from `tetorica-fm2612/generated/ps1_spu_wasm.js` to `Ps1Spu.create()`. In Node,
+read the accompanying WASM through `runtimeAssetUrl('generated/ps1_spu_wasm.wasm')`
+and supply it as `moduleOptions: {wasmBinary}`. Browser hosts can serve the
+generated pair together and use the factory's default asset URL.
+
+The synchronous API provides `write()`, `read()`, `loadRam()`, `readRam()`,
+`renderInto()`, `generateStereo()`, `reset()` and `dispose()`. Output is always
+44,100 Hz; samples must already be encoded as PSX ADPCM. No audio device starts
+automatically. `Ps1Synth` (`ps1synth.js`) adds tuned ADPCM instruments and 24 physical voices.
+`Ps1Resampler` (`ps1_resampler.js`) converts fixed-rate PCM to the host rate.
+`Ps1Synth.setEnvelope(channel, partial)` edits named ADSR rates, sustain level
+and exponential/direction modes. Rates are raw core table indexes, not
+millisecond durations. Changed ADSR words update the active envelope stage by
+default, preserving its current level and sample position. Attack edits while
+sustaining do not restart Attack; Sustain Level remains the Decay target.
+`setEnvelope(channel, partial, {live:false})` defers updating the running
+envelope. The same optional third argument is supported by `setPreset()` and
+`setChannel()`. Raw `Ps1Spu.write()` retains the original core's key-on-latched
+ADSR behavior. Unrelated volume, pitch and sample edits do not refresh pending
+ADSR settings. `setPreset(channel,
+{reverb:true})` enables a voice's send and `setReverb({preset:'room',
+volumeLeft:0.3, volumeRight:0.3})` selects the shared approximate effect and its
+independent `0..1` return levels. The seven working presets are Room, Studio
+Small/Medium/Large, Hall, Space Echo and Half Echo, plus Off. Effects and return
+levels can change held notes. Stop clears tails while retaining samples and
+programmed settings; reset restores Off and disables sends. No Mixer gain is
+changed. `ps1_parameters.js` exports the read-only preset list and typed ADSR
+encoding/decoding/partial-patching helpers.
+The Browser Playground offers PS1 mode, the `spu` primary API, Keyboard and an
+SPU voice editor with sustained audition, named ADSR controls, shared reverb
+and per-voice sends; its script API also supports `createSoundChip('ps1')`.
+The SPU tab also draws a 112-sample looping PCM waveform per voice, converts
+it to ADPCM on the preparation side and reuses one dedicated 64-byte slot on
+later edits. The tab's copied code recreates the PCM, upload and tuning; scripts
+continue to use the explicit encoder/upload API described below.
+`encodePs1Adpcm` converts normalized mono Float32 PCM into SPU packets with
+explicit loop positions and JSON-safe reconstruction metrics. It does not
+resample or normalize; declare tuning when uploading the encoded sample.
+`encodePs1AdpcmCycle(pcm)` prepares exactly 112 samples as a four-packet loop.
+It compares cyclic prediction with independent-start encoding and adopts it
+only when the actual repeated-cycle error improves without int16 overflow.
+The initial Sine and waveform editor use it to remove the former coarse
+first-quarter staircase. Ordinary recordings keep `encodePs1Adpcm` behavior.
+See the [PCM conversion guide](https://github.com/kyorohiro/hello_ymfm_wasm/blob/main/docs/ps1_adpcm_encoder.md).
+Since `0.2.33`, the package includes `playground_sample_ps1.js` for
+non-destructive 44.1 kHz mono conversion and bounded raw-decoded comparisons,
+and `playground_sample_ps1_preview.js` for an isolated actual-SPU root-note
+preview. The preview requires an injected generated factory, opens no audio
+device and releases its private core after rendering. See the
+[Sample Editor workflow and RAM limits](https://github.com/kyorohiro/hello_ymfm_wasm/blob/main/docs/ps1_sample_editor.md).
+The package-root chip factory remains separate. In a compatible Tauri host,
+Playground supports PS1 Native playback through the same fixed SDK C++ core,
+including Main/Worker, 24-voice audition, PCM/ADSR/reverb editing and additional
+independent SPUs. Web Audio remains the default. This release pins an
+unpublished SDK 0.1.7 candidate with source archive and manifest hashes plus
+explicit local-candidate provenance. PS1 four-point Gaussian voice interpolation
+uses the documented hardware coefficients; approximate ADSR and preset reverb remain;
+hardware-exact sound or game soundtrack compatibility is not claimed.
+
+The optional `SOUNDCHIP_MIXER_PRESETS.calibrated` supplies a measured `ps1`
+source-volume fallback. Playground's System preset uses this calibration for
+primary and additional SPUs. Standalone hosts can register their instrument
+as kind `ps1` with a `SoundChipMixer` using that preset and apply the callback's
+settings to their output stage or `PCMChipMixer`. The host still owns its audio
+connection and output gain;
+`Ps1Spu.generateStereo()` remains raw PCM. This Mixer policy does not add PS1
+to the package-root `createSoundChip()` factory or change saved Mixer values.
+
+See the [standalone guide and original-sample Example](https://github.com/kyorohiro/hello_ymfm_wasm/blob/main/docs/ps1_spu.md).
+The package includes complete BSD-3-Clause source, pristine upstream snapshots,
+attribution, build hashes and a standalone recipe in `sources/native/ps1/` and
+`sources/PS1-SPU.md`. Rebuilding needs Emscripten and Python 3, with no SDK or
+MAME checkout.
 
 ### Find signatures and options
 
@@ -176,7 +414,12 @@ execution and independent Mixer inputs; experimental Native playback requires
 a compatible Tauri host. This package implements audio playback, not a console,
 BIOS or disc-image reader. External sample/disc ROMs are not included. Complete
 BSD sources and build recipes are in `sources/native/cdda/` and
-`sources/native/msm5205/`, with the MSM5205 upstream attribution preserved.
+`sources/native/msm5205/`, with BSD notices and the MSM5205 upstream attribution
+preserved. These original core/bridge bytes come from the fixed sound-chip SDK;
+`sources/CDDA.json` and `sources/MSM5205.json` record the SDK pin and source
+hashes. See `sources/CDDA.md` and `sources/MSM5205.md` for standalone Emscripten
+recipes that require no SDK checkout or importer. Application-audio modules
+remain separate from generic sound-chip factory IDs.
 
 ### OPL family instruments
 
@@ -287,8 +530,12 @@ await transport.start();
 ```
 
 `mixer.set(chip.id, {volume:0.5, pan:-0.5})` adjusts the output independently
-from hardware channel volumes. The WonderSwan source default remains `1.0`;
-the endpoint's separate output `gain` defaults to `0.25`, as for other chips.
+from hardware channel volumes. The generic WonderSwan source default is `1.0`;
+the optional `SOUNDCHIP_MIXER_PRESETS.calibrated` instead uses a measured
+single-voice fallback, also used by Playground System. Explicit common and
+per-ID settings replace this fallback absolutely. The endpoint's separate
+output `gain` defaults to `0.25`, as for other chips, and is not absorbed into
+the calibrated source value.
 The speaker path uses the existing tick-aligned waveform/Voice midpoint
 correction from Playground and Analyzer. Direct raw PCM is unchanged.
 
@@ -459,7 +706,8 @@ for synchronous rendering, as used by the Analyzer.
 ### Optional calibrated preset
 
 `SOUNDCHIP_MIXER_PRESETS.calibrated` combines measured output levels with a
-fixed listening balance for the 22 calibrated chip kinds. Select it when constructing the
+fixed listening balance for 25 calibrated sources, including POKEY, WonderSwan and the standalone
+PS1 instrument. Select it when constructing the
 mixer, then pass that mixer to a browser Worklet endpoint:
 
 ```js
@@ -532,8 +780,8 @@ support and endpoint options still apply.
 
 These constants compare a fixed single voice at known levels. They do not
 analyze playing audio or perform automatic normalization, compression, or
-limiting. Timbre and polyphony still affect loudness and headroom. Chip kinds
-outside the 22 measured kinds keep their legacy defaults. The preset supplies
+limiting. Timbre and polyphony still affect loudness and headroom. Sources
+outside the 25 calibrated kinds keep their legacy defaults. The preset supplies
 standalone chip defaults rather than every machine-specific route or mode
 preset. MegaSynth's built-in Genesis FM/PSG sources also support its source
 units; separate endpoint and master gains still apply.
@@ -631,16 +879,20 @@ phase, register state and lifetimes.
 Raw PCM retains the positive mono DAC output at `/32768`, duplicated into left
 and right, without Mixer gain or DC correction. The generic Worklet uses the
 `PokeyAudioEngine` speaker adapter, including its documented 10 Hz DC blocker;
-raw PCM remains unchanged. Source Mixer defaults stay at `1.0` until calibrated.
+raw PCM remains unchanged. Generic source Mixer defaults remain `1.0`.
+The optional `SOUNDCHIP_MIXER_PRESETS.calibrated` matches a held pure-square
+voice's AC RMS to the current Sega PSG listening balance. Playground System
+uses separately measured single-chip, additional-chip and two-chip routes.
+Saved common and per-ID settings replace those fallbacks absolutely.
 The generic endpoint's separate output gain defaults to `0.25`, as with the
 other generic endpoints. No automatic half gain or invented hardware stereo is
 applied to dual POKEY.
 
 The package includes the adaptation, exact BSD-labeled upstream `pokey.c`,
 notices and standalone recipe in `sources/POKEY.md` and
-`licenses/libvgm-pokey/`. These inputs come from the fixed SDK 0.1.5 local
-candidate; `sources/POKEY-SDK.json` retains its archive hash and base-commit
-provenance without claiming an already published SDK tag. No Atari CPU, ROM,
+`licenses/libvgm-pokey/`. These inputs come from the pinned sound-chip SDK;
+`sources/POKEY-SDK.json` retains its source archive hash and commit provenance.
+No Atari CPU, ROM,
 full machine emulation or external sample is included.
 
 ## Included sound chips
@@ -884,6 +1136,33 @@ Await `loadBRR()` before using its returned sample descriptor or numeric id.
 ADSR1/ADSR2/GAIN and signed left/right volume are raw DSP values.
 Abrupt changes may click; no automatic smoothing is applied.
 
+Generate BRR from mono PCM with the pure JavaScript
+`tetorica-fm2612/snes_brr_encoder.js` subpath. In Playground Main and Worker
+scripts, the helper is also available as `encodeBrr()` and `pg.encodeBrr()`:
+
+```javascript
+// Module consumers: import {encodeBrr} from 'tetorica-fm2612/snes_brr_encoder.js';
+const pcm = Float32Array.from({length:128}, (_, i) =>
+  0.75 * Math.sin(2 * Math.PI * i / 128));
+const encoded = encodeBrr(pcm, {loopStartSamples:0});
+const options = {baseFrequencyHz:32000 / pcm.length}; // 250 Hz at PITCH=4096.
+if (encoded.loopStartSamples !== null) options.loopStartSamples = encoded.loopStartSamples;
+const generatedSample = await snes.loadBRR(encoded.brr, options);
+```
+
+The input must be a nonempty `Float32Array` with finite values in `[-1,1]`.
+Conversion is lossy and performs no resampling, normalization or tuning
+inference. One-shots add zero padding to complete 16-frame blocks; loops require
+an aligned length and loop marker. Filter 0 at the first and loop-start blocks
+keeps raw loop playback independent of predictor history. The default output
+limit is 64,512 bytes, fitting an empty synth; account for existing allocations
+when choosing `maxBytes`. Returned JSON-safe metrics describe raw BRR error
+before S-DSP Gaussian interpolation and envelopes; `snrDb` is `null` for exact
+reconstruction or zero signal, and `exact` reports exact reconstruction.
+See the [conversion guide and browser/Worker/Node examples](https://github.com/kyorohiro/hello_ymfm_wasm/blob/main/docs/snes_brr_encoder.md).
+The encoder is new BSD-3-Clause project code and does not change the licensed
+DSP binary described below.
+
 `reset()` releases voices and reloads uploaded samples with the same ids.
 Samples occupy the instance's fixed 64 KiB RAM (directory at 0..1023); there is
 no automatic voice stealing, sample unloading or compaction. Echo writes are
@@ -1054,6 +1333,34 @@ otherwise they are siblings of the YM2612 assets. The FM command recorder
 continues to record FM/DAC actions; PCM commands are not recorded. This adds
 the Mega CD PCM chip, not CD disc-image emulation or 32X PWM.
 
+## Neo Geo PCM to ADPCM-A
+
+`encodeAdpcmA()` prepares mono normalized `Float32Array` PCM for YM2610/B's
+six ADPCM-A voices. It is a pure Browser/Worker/Node helper; in Playground it
+is also exposed as `encodeAdpcmA()` and `pg.encodeAdpcmA()`.
+
+```js
+import {encodeAdpcmA} from 'tetorica-fm2612/adpcm_a_sample.js';
+const encoded = encodeAdpcmA(pcm); // PCM must already use the intended clock/432 rate.
+await synth.adpcmA.loadMemory(encoded.bytes, 0);
+synth.adpcmA.setSample(0, {start:0, end:encoded.bytes.length});
+synth.adpcmA.setVolume(56);
+synth.adpcmA.setVoice(0, {volume:27, left:true, right:true});
+synth.adpcmA.keyOn(0);
+```
+
+Conversion is lossy and performs no resampling, gain normalization or tuning
+inference. Zero PCM padding is encoded to the next 256-byte range; zero-filled
+compressed bytes are not silence. The returned lengths and JSON-safe metrics
+make padding and raw reconstruction error explicit. `maxBytes` defaults to
+`0xfff00`, strictly below the current per-voice 1-MiB limit. Callers allocate
+aligned ranges within the separate 16-MiB A memory. This codec differs from
+ADPCM-B and does not add pitch or hardware looping to A voices.
+
+See the [ADPCM-A guide and six-voice Examples](https://github.com/kyorohiro/hello_ymfm_wasm/blob/main/docs/adpcm_a_sample.md).
+The helper uses the project's BSD-3-Clause licensing with ymfm attribution;
+existing DSP binaries and sample playback APIs are unchanged.
+
 ## YM2608 ADPCM-B sample loading
 
 Since `0.2.2`, `YM2608Synth` provides `synth.adpcm.loadSample()`.
@@ -1183,11 +1490,19 @@ FM/PSG/PCM mixing, stop/reset and close/restart. Playwright is a development
 dependency; it is not required by users of the sound-chip runtime.
 
 The build is staged in `dist/fm2612/`; packing produces
-`tetorica-fm2612-0.2.32.tgz`. To install a local build in another project:
+`tetorica-fm2612-0.2.37.tgz`. To install a local build in another project:
 
 ```sh
-npm install /absolute/path/to/tetorica-fm2612-0.2.32.tgz
+npm install /absolute/path/to/tetorica-fm2612-0.2.37.tgz
 ```
+
+The build pins an unpublished `tetorica-soundchip-native` SDK **0.1.7** source
+candidate, including the PS1 SPU and SCSP instruments. The pin records its base commit,
+changed paths, source archive hash and manifest hash; it does not claim that
+this candidate is a separately published SDK release.
+The SDK provides 29 chip WASM recipes, 2 separate application-audio recipes
+(CD-DA and MSM5205), and 2 standalone instrument recipes (PS1 SPU and Saturn SCSP). Bundled source receipts preserve its source commit, archive
+and manifest hashes; standalone recipes rebuild without checking out the SDK.
 
 The existing `tetorica-vgm` CLI package is built separately. This first package
 keeps the browser payload together with the shared core; separate browser/Node
@@ -1201,8 +1516,71 @@ included; Nuked-OPN2 and snes_spc are LGPL-2.1-or-later, with their source and b
 and third-party notices are in `msfa_dx7/`. The OPNA rhythm data is
 Tetorica-generated and includes its license and generator. External
 instrument/sample ROMs are not included.
+The standalone SID additions retain the chips/m6581 zlib core and the sidera
+MIT adaptation, BSD host code, readable rebuild sources and Rust toolchain
+notices. They are packaged alongside the unchanged fixed SDK snapshot.
 
 ## Release notes
+
+`0.2.37` publishes the CPU-free C64 SID 6581 and PAL 8580 Preview cores,
+`SidSynth`, waveform-flag helpers and Main/Worker Playground runtime modules.
+The package includes explicit core/client TypeScript contracts, standalone
+WASM assets and readable source kits with licenses and build receipts. Direct
+imports produce PCM without starting audio; the generic root chip factory and
+the pinned Native SDK snapshot remain unchanged. This adds no `.sid` song
+player to the npm instrument API.
+The current SCSP runtime also includes slot sound-stack address modulation
+through `setModulation` and `preset.modulation`, as documented above; the
+published 0.2.36 package contained LFO but not those helpers.
+
+`0.2.36` adds per-slot SCSP hardware LFO with live `setLfo`, preset/state
+serialization, TypeScript declarations and Main/Worker/compatible Native transport.
+Pitch and amplitude modulation each offer four waveforms and eight depth codes,
+with 32 shared speed codes. The core fixes stalled low-speed LFO and implements
+reset/hold/resume. Forward-loop validation includes maximum pitch modulation.
+The bundled fixed SDK sources, WASM and optional Mixer calibration are updated.
+Slot FM, DSP controls and SSF playback remain outside the high-level API.
+
+
+`0.2.35` adds the experimental Saturn SCSP raw/Synth APIs, PCM selection helpers,
+32-slot Main/Worker Web Audio playback and compatible Tauri Native transport
+integration. It includes the accumulated PS1/SCSP shared runtime, inspector,
+PCM editing and measured optional Mixer policy updates since 0.2.34. Existing
+raw chip output and neutral default Mixer settings remain unchanged. SCSP LFO,
+slot FM, DSP controls and SSF playback remain outside this release's high-level
+API. Standalone Synth pages and Tauri binaries are distributed separately.
+The README now links the C/C++ source and build-recipe repository,
+[tetorica-soundchip-native](https://github.com/kyorohiro/tetorica-soundchip-native).
+The fixed SDK 0.1.7 source remains a hash-pinned unpublished candidate.
+
+
+`0.2.34` fixes the coarse staircase in the PS1 initial/editor Sine by using
+loop-aware ADPCM prediction. The source cycle stays at 112 samples / 64 bytes;
+new `encodePs1AdpcmCycle` metrics describe the repeated-cycle decode. General
+recording encoding is unchanged. This release also includes the accumulated
+PS1 four-point Gaussian interpolation and explicit live ADSR/audition fixes
+since 0.2.33, with complete source and updated declarations. Optional native
+software mixer/headroom and host-PCM bank exports are included in the WASM;
+ordinary register/RAM playback remains the default. SDK 0.1.7 is bundled as a
+hash-pinned, unpublished source candidate, rather than a separate SDK release.
+
+
+`0.2.33` adds the experimental **PS1 SPU instrument**: a standalone 24-voice
+44.1 kHz core, tuned sample Synth, host-rate resampler, named ADSR/reverb
+parameters, PCM-to-ADPCM encoding and isolated sample conversion/preview.
+The bundled Playground runtime supports primary and independent SPUs,
+Main/Worker control, sample instruments and compatible Tauri Native hosts.
+Complete BSD source, upstream notices and standalone rebuild recipes follow
+the published fixed SDK 0.1.6 release. The package-root `createSoundChip()`
+factory remains separate from the Playground PS1 API.
+
+This release also adds pure PCM-to-SNES-BRR and Neo Geo ADPCM-A encoders,
+Game Boy sample comparison and isolated actual-core preview, and extends the
+optional calibrated Mixer preset from 22 to 25 sources with PS1, WonderSwan
+and POKEY. Explicit saved Mixer values keep their precedence; raw core PCM
+and endpoint gains retain their existing behavior. PS1 interpolation, ADSR and
+reverb remain approximate, and no hardware-accuracy or audio-thread allocation
+guarantee is claimed.
 
 `0.2.32` adds **CD-DA and PC Engine MSM5205 ADPCM** application-audio APIs,
 shared C/WASM renderers, sample encoding, browser AudioWorklet endpoints and
@@ -1219,9 +1597,9 @@ four-channel Synth, Mixer/Worker transport, independently owned dual-POKEY
 instances and a self-contained BSD source bundle. The bundled Playground
 timeline client transfers small owned chunks and validates them across audio
 quanta, with atomic commit and cancellation on Stop, owner/session replacement
-and disposal. The SDK 0.1.5 source candidate remains hash pinned, with its local
-archive/base-commit provenance retained; this npm release does not publish an
-SDK GitHub Release.
+and disposal. That npm release used a hash-pinned SDK 0.1.5 source candidate
+with local archive/base-commit provenance. The current source tree uses the
+published SDK 0.1.6 release described above.
 
 `0.2.30` connects **WonderSwan to the public Direct and AudioWorklet factory**,
 with the shared Mixer, typed raw API and `WonderSwanWorkletTransport` for Synth

@@ -1,5 +1,7 @@
 export declare const SNES_CHANNEL_COUNT = 8;
 export declare const SNES_SAMPLE_RATE = 32000;
+export declare const SNES_ECHO_RESERVED_BYTES = 30720;
+export declare const SNES_ECHO_MAX_SAMPLE_BYTES = 33786;
 export type SnesBRROptions = ({
     rootNote: string | number;
     baseFrequencyHz?: never;
@@ -54,11 +56,28 @@ export type SnesVoiceState = {
     volumeRight: number;
     pitch: number;
 };
+export type SnesEchoOptions = {
+    enabled: boolean;
+    delay: number;
+    feedback: number;
+    volumeLeft: number;
+    volumeRight: number;
+    sendMask: number;
+    fir: number[];
+};
+export type SnesEchoState = SnesEchoOptions & {
+    reserved: boolean;
+    startAddress: number;
+    byteLength: number;
+};
 export type SnesState = {
     sampleRate: number;
     samples: SnesSample[];
     channels: SnesVoiceState[];
     nextAddress: number;
+    directoryAddress: number;
+    maxSampleBytes: number;
+    echo: SnesEchoState;
 };
 /** @typedef {{id:number,startAddress:number,loopAddress:number,byteLength:number,frames:number,
  * rootNote:string|number|null,rootFrequencyHz:number,basePitch:number,loop:boolean,loopStartSamples:number|null}} SnesSample
@@ -67,10 +86,17 @@ export type SnesState = {
  * volumeLeft?:number,volumeRight?:number,pitch?:number}} SnesPreset
  */
 /** @typedef {{sample:number|null,adsr1:number,adsr2:number,gain:number,volumeLeft:number,volumeRight:number,pitch:number}} SnesVoiceState */
-/** @typedef {{sampleRate:number,samples:SnesSample[],channels:SnesVoiceState[],nextAddress:number}} SnesState */
+/** @typedef {{enabled:boolean,delay:number,feedback:number,volumeLeft:number,volumeRight:number,sendMask:number,fir:number[]}} SnesEchoOptions */
+/** @typedef {SnesEchoOptions & {reserved:boolean,startAddress:number,byteLength:number}} SnesEchoState */
+/** @typedef {{sampleRate:number,samples:SnesSample[],channels:SnesVoiceState[],nextAddress:number,directoryAddress:number,maxSampleBytes:number,echo:SnesEchoState}} SnesState */
 /** Authored instruments over SnesDspCore. RAM $0000..$03ff is the 256-entry
  * sample directory; BRR uploads grow from $0400. No compaction/voice allocator.
- * Echo writes are disabled. Raw DSP edits may overwrite directory/echo settings
+ * Echo is off initially. Enabling it reserves $0000..$77ff, moves the directory
+ * to $7800 and BRR to $7c00. This first enable resets voices after validating
+ * capacity. The reservation survives disabling/reset; create a fresh instance
+ * to reclaim it. Sample IDs remain valid; refresh addresses from getState()
+ * after first enable. Live Echo edits never relocate RAM. Raw DSP edits may overwrite
+ * directory/echo settings
  * and must respect these RAM reservations. reset retains/reuploads samples.
  */
 export declare class SnesSynth {
@@ -82,6 +108,18 @@ export declare class SnesSynth {
     nextAddress: number;
     pendingKon: number;
     koff: number;
+    echo: {
+        enabled: boolean;
+        delay: number;
+        feedback: number;
+        volumeLeft: number;
+        volumeRight: number;
+        sendMask: number;
+        fir: number[];
+    };
+    echoReserved: boolean;
+    echoConfigured: boolean;
+    directoryAddress: number;
     timeline: {
         playing: boolean;
         totalFrames: number;
@@ -96,6 +134,17 @@ export declare class SnesSynth {
     /** DSP reset keeps sample uploads and their IDs; active voices are released. */
     reset(): void;
     _directory(sample: any): void;
+    _writeEcho(): void;
+    /** Configure the real shared S-DSP Echo/FIR path. Delay codes are 16ms;
+     * code 0 uses the hardware four-byte ring. Signed coefficients/volumes are
+     * register values. FIR affects Echo only. First enable relocates the bank and
+     * stops voices; all validation, including capacity, precedes native writes.
+     * Await the async Main/Worker/Native client version before uploading BRR.
+     * @param {Partial<SnesEchoOptions>} [options] @returns {SnesEchoState} */
+    setEcho(options?: Partial<SnesEchoOptions>): SnesEchoState;
+    /** Authored Echo settings and safe RAM reservation, not a raw timeline dump.
+     * @returns {SnesEchoState} */
+    getEcho(): SnesEchoState;
     /** Upload complete raw BRR. Looped samples require explicit loopStartSamples;
      * tune with exactly one rootNote (note name/MIDI) or baseFrequencyHz.
      * basePitch is the raw DSP PITCH that plays this declared root (default4096).

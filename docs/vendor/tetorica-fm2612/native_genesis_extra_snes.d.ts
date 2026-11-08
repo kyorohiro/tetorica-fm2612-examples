@@ -10,6 +10,9 @@ export declare function createNativeGenesisExtraSnesEndpoint(synth: any): {
             samples: import("./snessynth.js").SnesSample[];
             channels: import("./snessynth.js").SnesVoiceState[];
             nextAddress: number;
+            directoryAddress: number;
+            maxSampleBytes: number;
+            echo: import("./snessynth.js").SnesEchoState;
             stateRevision: number;
             timeline?: any;
         };
@@ -19,6 +22,8 @@ export declare function createNativeGenesisExtraSnesEndpoint(synth: any): {
         _cancelMainOwner(group: any): void;
         _stopVoices(): Promise<void>;
         loadBRR: (input: any, options: any, timing?: {}) => Promise<any>;
+        setEcho: (options?: {}, timing?: {}) => Promise<import("./snessynth.js").SnesEchoState>;
+        getEcho: () => Promise<any>;
         prepareTimeline: (trace: any, timing?: {}) => Promise<any>;
         playTimeline: (timing?: {}) => Promise<any>;
         stopTimeline: (timing?: {}) => Promise<any>;

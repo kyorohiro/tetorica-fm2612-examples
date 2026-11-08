@@ -7,9 +7,10 @@ import {createPerformanceQueue} from './playground_performance_queue.js';
 /** @param {string} chip @param {any} command
  * @param {{psgLatch?:number,hucChannel?:number,opllRhythm?:number,wonderswanRegisters?:ArrayLike<number>}} [state] */
 export function identifyPerformanceNote(chip,{method,type,args=[] ,register,value,channel,controlMask,psgRegister,port:registerPort=0},{psgLatch=0,hucChannel=0,opllRhythm=0,wonderswanRegisters}={}) {
-  if(['reset','allNotesOff','panic'].includes(method))return {allOff:true};
+  if(['reset','allNotesOff','stopVoices','panic'].includes(method))return {allOff:true};
   if(chip==='snes'&&['playTimeline','stopTimeline'].includes(method))return {key:'timeline',on:method==='playTimeline'};
-  if(chip==='snes'&&['noteOn','keyOn','noteOff','keyOff'].includes(method))return {key:args[0],on:method==='noteOn'||method==='keyOn'};
+  if(chip==='ps1'&&['_auditionKeyOn','_auditionKeyOff'].includes(method))return {key:args[0],on:method==='_auditionKeyOn'};
+  if(['snes','ps1','scsp'].includes(chip)&&['noteOn','keyOn','noteOff','keyOff'].includes(method))return {key:args[0],on:method==='noteOn'||method==='keyOn'};
   if(chip==='snes'&&method==='writeDsp'&&[0x4c,0x5c].includes(args[0]))return {events:Array.from({length:8},(_,key)=>key).filter(key=>args[1]&(1<<key)).map(key=>({key,on:args[0]===0x4c}))};
   if(chip==='dx7'&&(method==='noteOn'||method==='noteOff'))return {key:args[0],on:method==='noteOn'&&(args[1]??100)>0};
   if(chip==='rf5c164'&&(method==='keyOn'||method==='keyOff'))return {key:args[0],on:method==='keyOn'};
@@ -29,6 +30,11 @@ export function identifyPerformanceNote(chip,{method,type,args=[] ,register,valu
     if(method==='forceKeyOff'||method==='keyOff')return {key:args[0],on:false};
     const reg=type==='write'?register:method==='writeRegister'?args[0]:null,v=type==='write'?value:args[1];
     if(Number.isInteger(reg)&&reg>=0&&reg<8&&(reg&1))return {key:reg>>1,on:!!(v&15)};
+  }
+  if(chip==='sid'){
+    if(['forceKeyOff','keyOff','noteOff'].includes(method))return {key:args[0],on:false};
+    const reg=type==='write'?register:method==='writeRegister'?args[0]:null,v=type==='write'?value:args[1];
+    if([4,11,18].includes(reg))return {key:(reg-4)/7,on:!!(v&1)};
   }
   if(chip==='ay8910'){
     if(method==='forceKeyOff')return {key:args[0],on:false};
@@ -88,12 +94,12 @@ export function performanceNoteRelease(chip,key) {
   }
   if(chip==='dx7')return {method:'noteOff',args:[key]};
   if(chip==='snes')return key==='timeline'?{method:'stopTimeline',args:[]}:{method:'keyOff',args:[key]};
-  if(chip==='rf5c164')return {method:'keyOff',args:[key]};
+  if(chip==='rf5c164'||chip==='ps1'||chip==='scsp')return {method:'keyOff',args:[key]};
   if(chip==='nes')return key===5?{method:'writeRegister',args:[0x4083,128]}:{method:'setChannelEnabled',args:[key,false]};
   if(chip==='gameboy')return {method:'writeRegister',args:[[2,7,10,17][key],0]};
   if(chip==='segapsg')return {method:'write',args:[0x9f|(key<<5)]};
   if(chip==='ym2151')return {method:'forceKeyOff',args:[key]};
-  if(chip==='ay8910'||chip==='pokey')return {method:'forceKeyOff',args:[key]};
+  if(chip==='ay8910'||chip==='pokey'||chip==='sid')return {method:'forceKeyOff',args:[key]};
   if(chip==='ym2413')return typeof key==='string'?{method:'forceRhythmOff',args:[Number(key.split(':')[1])]}:{method:'forceKeyOff',args:[key]};
   if(chip==='y8950'&&key==='adpcm')return {method:'writeRegister',args:[7,1,0]};
   if(['ym3526','ym3812','y8950','ymf262'].includes(chip))return typeof key==='string'?{method:'forceRhythmOff',args:[Number(key.split(':')[1])]}:{method:'forceKeyOff',args:[key]};
@@ -106,7 +112,7 @@ export function performanceNoteRelease(chip,key) {
 /** Channel touched by native register commands, used only while an editor holds a key.
  * @param {string} chip @param {any} command
  * @param {{hucChannel?:number,psgLatch?:number,rfChannel?:number,wonderswanRegisters?:ArrayLike<number>,pokeyRegisters?:ArrayLike<number>}} [state] */
-export function nativeVoiceChannel(chip,{method,type,args=[],channel,psgRegister},{hucChannel=0,psgLatch=0,rfChannel=0,wonderswanRegisters,pokeyRegisters}={}) {
+export function nativeVoiceChannel(chip,{method,type,args=[],channel,psgRegister,register:rawRegister},{hucChannel=0,psgLatch=0,rfChannel=0,wonderswanRegisters,pokeyRegisters}={}) {
   if(chip==='rf5c164'){
     if(['setChannel','setPitch','keyOn','keyOff'].includes(method))return args[0];
     if(['clock','loadMemory'].includes(method)||type==='chip-clock')return 'all';
@@ -122,8 +128,13 @@ export function nativeVoiceChannel(chip,{method,type,args=[],channel,psgRegister
     if(method==='write'){const byte=args[0],latch=byte&128?byte>>4&7:Number.isInteger(psgRegister)?psgRegister:psgLatch;return latch>>1;}
     if(['allNotesOff','setStereo','clock'].includes(method)||type==='chip-clock')return 'all';
   }
+  if(chip==='scsp'&&['setLfo','setModulation'].includes(method))return args[0];
+  if(chip==='ps1'||chip==='scsp'){
+    if(['setPreset','setChannel','setEnvelope','setPitch','setFrequency','setMix','setNote','keyOn','keyOff','noteOn','noteOff','_auditionKeyOn','_auditionKeyOff','_refreshEnvelope'].includes(method))return args[0];
+    if(['allNotesOff','stopVoices','reset','setReverb'].includes(method))return 'all';
+  }
   if(chip==='snes'){
-    if(['setPreset','setChannel','setPitch','setFrequency','setNote','keyOn','keyOff','noteOn','noteOff'].includes(method))return args[0];
+    if(['setPreset','setChannel','setPitch','setFrequency','setMix','setNote','keyOn','keyOff','noteOn','noteOff'].includes(method))return args[0];
     if(['allNotesOff','prepareTimeline','playTimeline','stopTimeline'].includes(method))return 'all';
     if(method==='writeDsp'){const register=args[0];if([0x4c,0x5c].includes(register))return null;return (register&15)<8?register>>4:'all';}
   }
@@ -169,6 +180,14 @@ export function nativeVoiceChannel(chip,{method,type,args=[],channel,psgRegister
       if(control&(lower===0?16:8))return lower+1;
       if((register===4&&(control&4))||(register===6&&(control&2)))return 'all';
       return physical;
+    }
+  }
+  if(chip==='sid'){
+    if(['forceKeyOff','keyOff','noteOff','keyOn','noteOn','setVoice','setFrequency','setNote'].includes(method))return args[0];
+    if(['allNotesOff','stopVoices','clock','setFilter'].includes(method)||type==='chip-clock')return 'all';
+    if(method==='writeRegister'||type==='write'){
+      const register=type==='write'?rawRegister:args[0];
+      return Number.isInteger(register)&&register>=0&&register<=20?Math.floor(register/7):'all';
     }
   }
   if(chip==='ay8910'){
@@ -242,8 +261,8 @@ export function createProcessorPerformance({apply,prepare,validate,onDiscard,onB
     else if(command.method==='write'&&(command.args?.[0]&128))psgLatch=(command.args[0]>>4)&7;
   }
   function applyTracked(command,port,frame,metadata) {
-    if(auditions.size&&['segapsg','snes','wonderswan','pokey'].includes(chipName())&&command.method==='allNotesOff'){
-      for(let channel=0;channel<(chipName()==='snes'?8:4);channel++)if(!auditions.has(channel))applyTracked(performanceNoteRelease(chipName(),channel),port,frame);
+    if(auditions.size&&['segapsg','snes','ps1','scsp','wonderswan','pokey','sid'].includes(chipName())&&command.method==='allNotesOff'){
+      for(let channel=0;channel<(chipName()==='scsp'?32:chipName()==='ps1'?24:chipName()==='snes'?8:chipName()==='sid'?3:4);channel++)if(!auditions.has(channel))applyTracked(performanceNoteRelease(chipName(),channel),port,frame);
       return true;
     }
     if(auditions.size&&chipName()==='dx7'&&['allNotesOff','panic'].includes(command.method)){
@@ -395,7 +414,7 @@ export function createProcessorPerformance({apply,prepare,validate,onDiscard,onB
     receive(data,port) {
       // Editor audition writes use applyImmediate, so ordinary Main commands and
       // previously reserved Worker commands cannot replace a held manual note.
-      if(!data?.performance&&auditions.size&&((['ym2151','segapsg','snes','wonderswan','pokey'].includes(chipName())&&data?.method==='allNotesOff')||
+      if(!data?.performance&&auditions.size&&((['ym2151','segapsg','snes','ps1','scsp','wonderswan','pokey','sid'].includes(chipName())&&data?.method==='allNotesOff')||
           (chipName()==='dx7'&&['allNotesOff','panic'].includes(data?.method)))){
         applyTracked(data,port,nowFrame());if(data.id!==undefined)port.postMessage({id:data.id,value:true});return true;
       }

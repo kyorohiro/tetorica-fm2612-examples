@@ -14,6 +14,7 @@ export declare const CHIP_CLOCKS: Readonly<{
     huc6280: 3579545;
     wonderswan: 3072000;
     pokey: 1789790;
+    sid: 985248;
     okim6258: 8000000;
     ay8910: 1789773;
     msx: 1789773;
