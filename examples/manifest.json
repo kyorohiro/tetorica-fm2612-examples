@@ -527,5 +527,77 @@
     "environments": [
       "web"
     ]
+  },
+  {
+    "id": "ps1/spu/01-sample-adsr",
+    "title": "PS1 SPU：PCMから音色とADSR",
+    "description": "112点の自作PCMをcyclic ADPCMへ変換し、実SPUで音程とlive ADSRを試す。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
+    "id": "ps1/spu/02-reverb",
+    "title": "PS1 SPU：共有Reverb",
+    "description": "voice別send、共有preset、左右returnと残響の消去。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
+    "id": "saturn/scsp/01-pcm",
+    "title": "Saturn SCSP：PCM8 / PCM16",
+    "description": "32物理slot、符号付きPCM、forward loop、音程・envelope・mix。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
+    "id": "saturn/scsp/02-lfo",
+    "title": "Saturn SCSP：hardware LFO",
+    "description": "演奏中のpitch / amplitude LFO、32 speed codes、reset / holdを試す。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
+    "id": "saturn/scsp/03-modulation",
+    "title": "Saturn SCSP：2slot変調",
+    "description": "guard付きPCMとsound stackで、2slotのaddress modulationを組む。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
+    "id": "snes/03-pcm-to-brr",
+    "title": "SNES：PCM → BRR",
+    "description": "ソフトウェアでPCMをBRRへ変換し、実S-DSPで再生・WAV保存する。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
+    "id": "neo-geo/adpcm-a/01-pcm-encode",
+    "title": "Neo Geo：PCM → ADPCM-A",
+    "description": "YM2610/B用ADPCM-Aへソフトウェア変換し、実チップの固定rateで再生する。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
+    "id": "gameboy/pcm/01-wave-preview",
+    "title": "Game Boy：Wave音色のPCM比較",
+    "description": "元PCMと4-bit Waveへの変換、独立した実APU previewを比較する。",
+    "environments": [
+      "web",
+      "node"
+    ]
   }
 ]

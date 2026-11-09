@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SPU：送信と共有リバーブ — tetorica-fm2612 examples</title>
+<link rel="stylesheet" href="../../../../../style.css">
+<script type="importmap">{"imports":{"tetorica-fm2612":"../../../../../vendor/tetorica-fm2612/soundchip.js","tetorica-fm2612/":"../../../../../vendor/tetorica-fm2612/"}}</script>
+<style>#code{width:100%;box-sizing:border-box;font-family:monospace}fieldset{display:grid;gap:12px;margin-block:20px}input[type="range"]{display:block;width:min(100%,520px)}.actions{flex-wrap:wrap}output{font-variant-numeric:tabular-nums}</style>
+</head><body><main><nav><a href="../../../../../index.html">← Examples</a><a href="./main.js">Source ↗</a></nav>
+<header><p class="eyebrow">ps1/spu/02-reverb · WEB / NODE</p><h1>SPU：送信と共有リバーブ</h1><p>2つのボイスを使い、個別Sendと1つの共有プリセット・左右Returnを比較します。</p></header>
+<section class="sample-panel"><label for="code">実行するSPUコード</label><textarea id="code" rows="25" spellcheck="false"></textarea>
+<div class="actions"><button id="play" type="button">Play</button><button id="stop" type="button" disabled>Stop · clear tails</button></div>
+<fieldset><legend>1つの共有SPU Reverb · 近似プリセット</legend>
+<label><input id="enable-reverb" type="checkbox" checked>Enable reverb</label>
+<label for="preset">Shared preset <select id="preset"><option value="room">Room</option><option value="studio-small">Studio Small</option><option value="studio-medium">Studio Medium</option><option value="studio-large">Studio Large</option><option value="hall">Hall</option><option value="space-echo">Space Echo</option><option value="half-echo">Half Echo</option></select></label>
+<label for="return-left">Return left: <output id="return-left-value">0.60</output><input id="return-left" type="range" min="0" max="1" step="0.01" value="0.6"></label>
+<label for="return-right">Return right: <output id="return-right-value">0.25</output><input id="return-right" type="range" min="0" max="1" step="0.01" value="0.25"></label>
+<div><label><input id="send0" type="checkbox" checked>CH1 send</label> <label><input id="send1" type="checkbox">CH2 send</label></div>
+<p>Returnは元のdry音へ加算されます。SendをOffにしても既存の残響は続きます。StopはSPUごと解放して残響も消します。</p></fieldset>
+<p id="status" role="status" aria-live="polite">Ready.</p><pre><code id="detail"></code></pre>
+<p>コード編集は次のPlayに反映されます。applyControls()は個別Send・共有preset・左右Returnを読み取り、演奏中も送ります。 startAudio()・sleep(秒)・console・encodePs1Adpcm()を使えます。初期化中もStopでき、終了・エラー・ページ移動時に解放します。</p>
+<p>PCM→ADPCMはソフトウェアの準備処理です。SPUは符号化サンプルを固定44,100 Hzで再生し、デバイス出力時だけリサンプリングします。音源へ送るVoice volumeを抑えて内部加算の余裕を作り、host gain 0.6を1回だけ適用します。</p>
+<h2>Web — 全コード</h2><pre class="source"><code data-source="./main.js">Loading…</code></pre>
+<h2>Node — WAV 保存</h2><pre><code>node examples/ps1/spu/02-reverb/node/main.mjs ./spu-02-reverb.wav</code></pre><pre class="source"><code data-source="../node/main.mjs">Loading…</code></pre>
+<p><a href="../README.md">README</a>。Nodeは44,100 Hz stereo PCM16 WAVを生成します。AudioContext・audify・ゲームROMは不要です。</p></section></main>
+<script type="module" src="./main.js"></script><script type="module">
+for(const code of document.querySelectorAll('[data-source]')){try{const response=await fetch(code.dataset.source);if(!response.ok)throw new Error(`HTTP ${response.status}`);code.textContent=await response.text();}catch(error){code.textContent=error.message;}}
+</script></body></html>

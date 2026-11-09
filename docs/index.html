@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>tetorica-fm2612 — Web &amp; Node Examples</title>
-  <meta name="description" content="FM・OPL・OPLL・AY・MSX・DX7 SysEx・SNES BRR・SPC・PC Engine CD-ROM²・CD-DA・MSM5205・WonderSwan・POKEY・C64 SID・PSG・PCM を機能別に学ぶ、Web と Node.js の小さなサンプル集。">
+  <meta name="description" content="FM・OPL・OPLL・AY・MSX・DX7 SysEx・SNES BRR・SPC・PC Engine CD-ROM²・CD-DA・MSM5205・WonderSwan・POKEY・C64 SID・PS1 SPU・Saturn SCSP・PSG・PCM を機能別に学ぶ、Web と Node.js の小さなサンプル集。">
   <link rel="stylesheet" href="./style.css">
 </head>
 <body><main>
@@ -29,6 +29,7 @@ npm run dev</code></pre>
   <p class="muted">WonderSwanは4CHの4-bit波形、Noise・Sweep、時刻付きVoice PCMの3例。Webは汎用AudioWorklet、Nodeはraw PCMのWAV保存です。PCMの各バイトにJavaScriptタイマーは使いません。</p>
   <p class="muted">POKEYは4CHのメロディ、Noise・結合タイマー、2台で4+4CHを使うDual POKEYの3例。Webでコードを編集して試奏し、Nodeでは同じDC除去処理を通したWAVを保存できます。</p>
   <p class="muted">C64 SIDは6581／8580 Previewを選び、3ボイスとADSR、共有Filterの音作りを試せます。WebはAudioWorklet、Nodeは音声デバイス不要のWAV生成です。</p>
+  <p class="muted">0.2.33〜0.2.37の追加分として、PS1 SPU、Saturn SCSPのPCM・LFO・slot変調、PCM→BRR／ADPCM-A、Game Boy Waveの実音previewも掲載しています。PCM変換はソフトウェア前処理として、実チップの再生と分けて示します。</p>
   <div id="catalog"><p role="status">Loading examples…</p></div>
   <section class="setup">
     <h2>フォルダーの読み方</h2>

@@ -20,7 +20,7 @@ MegaSynth はゲームへの埋め込み用の統合 API として別枠に残�
 <p><a href="./examples/genesis/fm/01-single-note/web/index.html">FM 発音</a> ·
 <a href="./examples/transport/direct/01-single-note/web/index.html">DirectTransport の PCM / WAV</a></p></section>
   <section class="sample-panel"><h2>Mixer の音量プリセット</h2>
-    <p><code>new SoundChipMixer(SOUNDCHIP_MIXER_PRESETS.calibrated)</code> を選ぶと、チップの種類ごとに測定した音量倍率を使えます。
+    <p><code>new SoundChipMixer(SOUNDCHIP_MIXER_PRESETS.calibrated)</code> を選ぶと、チップごとの測定と聴感バランス方針による音量倍率を使えます。
       <code>createSoundChip(name, {execution: 'worklet', mixer, audioContext})</code> へ渡して接続します。プリセットの指定は任意です。</p>
     <p><a href="./examples/embedding/11-chip-mixer/web/index.html">個別の Volume / Pan / Mute</a> ·
       <a href="./examples/embedding/12-calibrated-mixer/web/index.html">従来値と calibrated の比較</a></p>
@@ -88,6 +88,32 @@ Web Audio / encodeWav()  ブラウザ再生 / Web・Node の WAV 保存</code></
       <a href="./examples/msx/ay/02-envelope/web/index.html">AYエンベロープ</a> ·
       <a href="./examples/msx/music/01-duet/web/index.html">MSX合奏</a> ·
       <a href="./examples/msx-audio/fm/01-three-chips/web/index.html">MSX Audio合奏</a></p>
+  </section>
+  <section class="sample-panel"><h2>PS1 SPU：ADPCM音色・live ADSR・共有Reverb</h2>
+    <p><code>encodePs1AdpcmCycle()</code>で112点のPCMをソフトウェア変換し、<code>Ps1Spu</code>／<code>Ps1Synth</code>へ読み込みます。
+      サンプルの基準音程を明示し、<code>setEnvelope()</code>で鳴っている音のADSRを編集します。</p>
+    <p>Reverbはvoice別sendと1つの共有effectを組み合わせます。左右returnは独立です。
+      Webは専用AudioWorklet endpoint、Nodeは44.1 kHzの実SPU PCMをWAVへ保存します。</p>
+    <p><a href="./examples/ps1/spu/01-sample-adsr/web/index.html">PCMから音色・ADSR</a> ·
+      <a href="./examples/ps1/spu/02-reverb/web/index.html">共有Reverb</a>。</p>
+  </section>
+  <section class="sample-panel"><h2>Saturn SCSP：PCM・LFO・2slot変調</h2>
+    <p><code>ScspSynth</code>でsigned PCM8／PCM16・forward loop・envelope・mixを操作します。32の物理slotを持ち、内部レートは44.1 kHzです。
+      <code>setLfo()</code>はpitch／amplitudeのhardware LFOをlive変更し、resetで位相をholdします。</p>
+    <p><code>setModulation()</code>はsound stackによるsample address変調です。2slotの例ではfull loopとguard領域を確保します。
+      X／Y offsetはslot番号ではありません。公開0.2.37の範囲を使い、DSP／SSF／68000は扱いません。</p>
+    <p><a href="./examples/saturn/scsp/01-pcm/web/index.html">PCM形式とloop</a> ·
+      <a href="./examples/saturn/scsp/02-lfo/web/index.html">hardware LFO</a> ·
+      <a href="./examples/saturn/scsp/03-modulation/web/index.html">2slotの変調</a>。</p>
+  </section>
+  <section class="sample-panel"><h2>PCM変換はソフトウェアの前処理</h2>
+    <p><code>encodeBrr()</code>はS-DSP用BRR、<code>encodeAdpcmA()</code>はYM2610/B用ADPCM-Aを作ります。
+      チップがPCMを変換するのではなく、ソフトウェアで符号化したデータを実コアが復号します。</p>
+    <p>Game Boyの比較・preview helperはPCMをWave RAM向けに準備し、独立した実APUで音を確認します。
+      音源や音声デバイスの寿命も、各例のコードへ明記しています。</p>
+    <p><a href="./examples/snes/03-pcm-to-brr/web/index.html">PCM → BRR</a> ·
+      <a href="./examples/neo-geo/adpcm-a/01-pcm-encode/web/index.html">PCM → ADPCM-A</a> ·
+      <a href="./examples/gameboy/pcm/01-wave-preview/web/index.html">Game Boy Wave preview</a>。</p>
   </section>
   <section class="sample-panel"><h2>C64 SID：6581 / 8580 Preview</h2>
     <pre><code>Web:  createSidAudio(context, gainNode, {model})

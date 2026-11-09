@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ja"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SCSP：ハードウェア LFO をライブ操作 — tetorica-fm2612 examples</title>
+<link rel="stylesheet" href="../../../../../style.css">
+<script type="importmap">{"imports":{"tetorica-fm2612":"../../../../../vendor/tetorica-fm2612/soundchip.js","tetorica-fm2612/":"../../../../../vendor/tetorica-fm2612/"}}</script>
+<style>#code{width:100%;box-sizing:border-box;font-family:monospace}.actions{flex-wrap:wrap;gap:1rem}label{display:inline-flex;gap:.5rem;align-items:center}#state{max-height:20rem;overflow:auto}</style>
+</head><body><main>
+<nav><a href="../../../../../index.html">← Examples</a><a href="./main.js">Source ↗</a></nav>
+<header><p class="eyebrow">saturn/scsp/02-lfo · WEB / NODE · EXPERIMENTAL</p><h1>SCSP：ハードウェア LFO をライブ操作</h1><p>音を押し直さずに、各スロットのハードウェア LFO の速度・波形・ピッチ変調・振幅変調を変更します。</p></header>
+<section class="sample-panel">
+<div class="actions"><label>実行先 <select id="execution"><option value="worker" selected>Worker</option><option value="main">Main</option></select></label><button id="play">Play</button><button id="stop" disabled>Stop</button></div>
+<p id="status" role="status" aria-live="polite">Ready.</p>
+<div class="actions"><label>Speed code <input id="speed" data-live disabled type="range" min="0" max="31" value="20"></label>
+<label>Pitch depth <input id="pitch-depth" data-live disabled type="range" min="0" max="7" value="5"></label>
+<label>AM depth <input id="am-depth" data-live disabled type="range" min="0" max="7" value="4"></label>
+<label>Pitch wave <select id="pitch-wave" data-live disabled><option value="0">Saw</option><option value="1">Square</option><option value="2" selected>Triangle</option><option value="3">Noise</option></select></label>
+<label>AM wave <select id="am-wave" data-live disabled><option value="0">Saw</option><option value="1">Square</option><option value="2" selected>Triangle</option><option value="3">Noise</option></select></label>
+<label><input id="hold" data-live disabled type="checkbox">Reset / hold phase zero</label></div>
+<p>speed は Hz でなく0〜31のレジスタコード。公称0.17〜172.3 Hzです。pitch / AM depth はそれぞれ0〜7。Reset=true は瞬間的なリセットではなく、両方の位相を0で保持します。チェックを外すと進行を再開します。setPreset({lfo}) は次回発音用、setLfo() は再生中にも反映されます。</p>
+<p>SCSP は32物理スロット・512 KiB RAM・44,100 Hz固定。自動ラウンドロビンや音程検出はありません。標準コードは20秒で終了し、Stop は読み込み中にも使えます。ソフトウェアの変換 / ガード確保と、ハードウェアの再生 / LFO / 変調を区別しています。</p>
+<label for="code">実行コード（変更は次の Play から）</label><textarea id="code" rows="27" spellcheck="false"></textarea>
+<pre id="detail"></pre><details><summary>実チップ状態（操作後に取得）</summary><pre id="state"></pre></details>
+<p><a href="../README.md">README</a> · <a href="../node/main.mjs">Node source</a></p>
+<pre><code>node examples/saturn/scsp/02-lfo/node/main.mjs ./scsp-02-lfo.wav</code></pre>
+<p>Node.js 22+。実コアで44,100 Hz stereo WAVを生成します。音声デバイス・ROM・ゲームデータ・SSFは不要です。</p>
+</section></main><script type="module" src="./main.js"></script></body></html>

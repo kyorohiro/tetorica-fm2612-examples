@@ -56,6 +56,14 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 | SPC（実験用・Web / Node） | [02-spc-player](examples/snes/02-spc-player/README.md) | SPC700＋S-DSP の再生・停止、32kHz PCM / WAV |
 | C64 SID（Web / Node） | [01-voices](examples/c64/sid/01-voices/README.md) | 3ボイス・ADSR・6581／8580 Previewの比較 |
 | C64 SID（Web / Node） | [02-filter](examples/c64/sid/02-filter/README.md) | 共有LP／BP／HP、Cutoff・Resonanceの音作り |
+| PS1 SPU（Web / Node） | [01-sample-adsr](examples/ps1/spu/01-sample-adsr/README.md) | cyclic ADPCM変換、音程、live ADSR |
+| PS1 SPU（Web / Node） | [02-reverb](examples/ps1/spu/02-reverb/README.md) | voice別send・共有preset・左右return |
+| Saturn SCSP（Web / Node） | [01-pcm](examples/saturn/scsp/01-pcm/README.md) | PCM8／PCM16・forward loop・envelope・32slot |
+| Saturn SCSP（Web / Node） | [02-lfo](examples/saturn/scsp/02-lfo/README.md) | live pitch／amplitude LFO、reset／hold |
+| Saturn SCSP（Web / Node） | [03-modulation](examples/saturn/scsp/03-modulation/README.md) | guard付きPCMと2slot sound-stack変調 |
+| SNES BRR変換（Web / Node） | [03-pcm-to-brr](examples/snes/03-pcm-to-brr/README.md) | PCMをソフトウェアでBRRへ変換し、実S-DSPで再生 |
+| Neo Geo ADPCM-A変換（Web / Node） | [01-pcm-encode](examples/neo-geo/adpcm-a/01-pcm-encode/README.md) | PCMをソフトウェアでADPCM-Aへ変換し、実YM2610/Bで再生 |
+| Game Boy Wave変換（Web / Node） | [01-wave-preview](examples/gameboy/pcm/01-wave-preview/README.md) | PCM比較と独立した実APU preview |
 | Chip raw | [01-register-note](examples/chip-raw/01-register-note/README.md) | YM2612 レジスタ直接操作 |
 | PSG | [01-tone](examples/genesis/psg/01-tone/README.md) | Sega PSG のトーン |
 | PSG | [02-noise](examples/genesis/psg/02-noise/README.md) | 周期 / ホワイトノイズ |
@@ -126,6 +134,27 @@ npm run check:sid
 正規化は行いません。ゲーム曲・C64 CPU・ROMを使わず、自作の音符から音を作ります。
 npmに同梱された可読ソースとライセンスは静的サイトの`vendor/tetorica-fm2612/`にも含めます。
 8580の元ソースから再ビルドするときは、source kit READMEの`restore-npm-sources.mjs`によるmetadata復元を先に行ってください。
+
+## 0.2.33〜0.2.37で増えたAPI
+
+PS1の例では`encodePs1AdpcmCycle()`で112点のPCMをADPCMへ準備し、`Ps1Spu`／`Ps1Synth`で再生します。
+Gaussian補間と改善されたloop予測は公開版のまま使い、`setEnvelope()`のlive編集、voice別Reverb sendと共有effectも試せます。
+
+SCSPは`Scsp`／`ScspSynth`のsigned PCM8／16・forward loopから始め、`setLfo()`のhardware LFO、
+`setModulation()`のsound-stack address変調へ進みます。stack offsetはslot番号ではありません。
+変調用PCMにはfull loopとguard領域が必要です。DSP／delay・SSF／68000は0.2.37の公開高級APIに含まれないため、この例集には追加していません。
+
+PCM→BRR、PCM→ADPCM-A、Game Boy用Wave変換は**ソフトウェアの前処理**です。
+変換結果は実際のS-DSP／YM2610/B／Game Boyコアへ渡して音を確かめます。
+どれも元から公開されているnpm APIを使用し、ゲーム音楽・ROM・他のrepositoryを必要としません。
+
+```sh
+npm run build
+npm run check:node
+npm run check:spu
+npm run check:scsp
+npm run check:pcm-helpers
+```
 
 ## 各フォルダーの構成
 
@@ -246,7 +275,7 @@ MegaSynth のゲーム埋め込み例は別枠で維持します。
 Web の `SoundChipMixer` でチップ別の音量・Pan・Mute を設定できます。`createSoundChip()` の `id` は省略でき、生成後の `chip.id` から取得できます。Game Boy は初期音量28%です。
 [複数チップの実行例](examples/embedding/11-chip-mixer/README.md) と MegaSynth / Playground Worker の例を参照してください。
 
-音源間の音量を測定値から合わせる場合は、任意で `calibrated` プリセットを指定します。
+音源間の音量を測定値と聴感バランス方針から合わせる場合は、任意で `calibrated` プリセットを指定します。
 
 ```javascript
 import {createSoundChip, SoundChipMixer, SOUNDCHIP_MIXER_PRESETS} from 'tetorica-fm2612';
@@ -257,7 +286,7 @@ const chip = await createSoundChip('segapsg', {
 });
 ```
 
-[プリセットの比較例](examples/embedding/12-calibrated-mixer/README.md) では、FM・Sega PSG・AY・NESを同じ440 Hzで順に鳴らします。従来値と `calibrated` を選び、表示される倍率と音量差を確認できます。0.2.27ではSega PSG・AY・NESの倍率を再調整しています。Mixerやプリセットを使わない基本例の音量は従来どおりです。
+[プリセットの比較例](examples/embedding/12-calibrated-mixer/README.md) では、FM・Sega PSG・AY・NESを同じ440 Hzで順に鳴らします。従来値と `calibrated` を選び、表示される倍率と音量差を確認できます。0.2.37の初期値はSega PSGが0.35、AYが0.85、NESが1.16です。Mixerやプリセットを使わない基本例の音量は従来どおりです。
 
 ```sh
 npm run build

@@ -22,7 +22,10 @@
     "check:wonderswan": "node scripts/check-wonderswan-browser.mjs",
     "check:pokey": "node scripts/check-pokey-browser.mjs",
     "check:pcengine-cd": "node scripts/check-pcengine-cd-browser.mjs",
-    "check:sid": "node scripts/check-sid-browser.mjs"
+    "check:sid": "node scripts/check-sid-browser.mjs",
+    "check:spu": "node scripts/check-spu-browser.mjs",
+    "check:scsp": "node scripts/check-scsp-browser.mjs",
+    "check:pcm-helpers": "node scripts/check-pcm-helpers-browser.mjs"
   },
   "dependencies": {
     "tetorica-fm2612": "0.2.37"

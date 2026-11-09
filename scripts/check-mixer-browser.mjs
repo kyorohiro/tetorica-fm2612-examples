@@ -12,8 +12,9 @@ const dist = resolve(process.argv.find(argument => argument.startsWith('--root='
 const prefix = '/examples-site/';
 const examplePath = 'embedding/12-calibrated-mixer';
 const names = ['ym2612', 'segapsg', 'ay8910', 'nes'];
-// Independent expectations from the published 0.2.27 measurement policy.
-const calibrated = {ym2612:0.775938, segapsg:0.455420, ay8910:1.100331, nes:1.514209};
+// Independent expectations from the declared published 0.2.37 listening policy.
+// PSG/APU listening balance changed after the original 0.2.27 measurements.
+const calibrated = {ym2612:0.775938, segapsg:0.35, ay8910:0.85, nes:1.16};
 const mime = {'.html':'text/html', '.js':'text/javascript', '.mjs':'text/javascript', '.css':'text/css', '.wasm':'application/wasm', '.json':'application/json'};
 const server = http.createServer(async (request, response) => {
   try {

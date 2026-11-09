@@ -187,6 +187,9 @@ function checkSidWav(id, model, wav) {
     console.log(`PASS ${id}/${model}: ${frames} frames, peak ${peak.toFixed(6)}, three solo pitches ${solo.map(value=>value.frequency.toFixed(2)).join('/')}, chord AC ${chord.acRms.toFixed(6)}, release settled`);
   }else{
     const labels=['dry','LP','BP','HP','notch','LP+BP+HP','LP cutoff 1400','LP resonance 10'];
+    // E4's 25th harmonic (~8.24 kHz) is beyond the code-700 LP knee and
+    // separated from A3/A4 overtones. Near-cutoff partials can be boosted by
+    // resonance, so they are not valid probes for simple LP attenuation.
     const phases=labels.map((label,index)=>({...sustained(index*.6+.15,index*.6+.45,label),fundamental:tone(index*.6+.15,index*.6+.45,220),upper:tone(index*.6+.15,index*.6+.45,440*2**(-5/12)*25)}));
     assert(phases[3].fundamental<phases[0].fundamental*.9,`${id}/${model}: HP must attenuate the low fundamental`);
     assert(phases[1].upper<phases[0].upper*.95,`${id}/${model}: LP must attenuate a high saw harmonic`);

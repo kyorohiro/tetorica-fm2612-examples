@@ -40,12 +40,17 @@ function installAudit(){
   if(destination!==this.context.destination)return connect.call(this,destination,...rest);
   const context=this.context,splitter=context.createChannelSplitter(2),mute=context.createGain();mute.gain.value=0;
   const analysers=[0,1].map(channel=>{const analyser=context.createAnalyser();analyser.fftSize=4096;connect.call(splitter,analyser,channel);connect.call(analyser,mute);return analyser;});
-  connect.call(this,splitter);connect.call(mute,destination);meters.push({label,context,mute,analysers,peak:0,acRms:0,frequency:0,channelDifference:0,current:null});return destination;
+  // Compare L-R inside the graph. Sequential JS reads of two analysers can
+  // straddle different audio quanta even when their input PCM is identical.
+  const differenceAnalyser=context.createAnalyser(),invert=context.createGain();differenceAnalyser.fftSize=4096;invert.gain.value=-1;
+  connect.call(splitter,differenceAnalyser,0);connect.call(splitter,invert,1);connect.call(invert,differenceAnalyser);connect.call(differenceAnalyser,mute);
+  connect.call(this,splitter);connect.call(mute,destination);meters.push({label,context,mute,analysers,differenceAnalyser,peak:0,acRms:0,frequency:0,channelDifference:0,current:null});return destination;
  };
  function sample(){
   for(const meter of meters){if(meter.context.state!=='running')continue;
    const pcm=meter.analysers.map(analyser=>{const values=new Float32Array(analyser.fftSize);analyser.getFloatTimeDomainData(values);return values;});
-   let sum=0,squares=0,peak=0,difference=0,finite=true;for(let i=0;i<pcm[0].length;i++){const value=pcm[0][i];sum+=value;squares+=value*value;peak=Math.max(peak,Math.abs(value),Math.abs(pcm[1][i]));difference=Math.max(difference,Math.abs(value-pcm[1][i]));finite&&=Number.isFinite(value)&&Number.isFinite(pcm[1][i]);}
+   const differencePcm=new Float32Array(meter.differenceAnalyser.fftSize);meter.differenceAnalyser.getFloatTimeDomainData(differencePcm);
+   let sum=0,squares=0,peak=0,difference=0,finite=true;for(let i=0;i<pcm[0].length;i++){const value=pcm[0][i];sum+=value;squares+=value*value;peak=Math.max(peak,Math.abs(value),Math.abs(pcm[1][i]));difference=Math.max(difference,Math.abs(differencePcm[i]));finite&&=Number.isFinite(value)&&Number.isFinite(pcm[1][i])&&Number.isFinite(differencePcm[i]);}
    if(!finite)failures.push('Non-finite final PCM');const mean=sum/pcm[0].length,acRms=Math.sqrt(Math.max(0,squares/pcm[0].length-mean*mean)),crossings=[];
    for(let i=1;i<pcm[0].length;i++)if(pcm[0][i-1]<=mean&&pcm[0][i]>mean)crossings.push(i-1+(mean-pcm[0][i-1])/(pcm[0][i]-pcm[0][i-1]));
    const frequency=crossings.length>4?meter.context.sampleRate*(crossings.length-1)/(crossings.at(-1)-crossings[0]):0;
@@ -82,7 +87,14 @@ async function checkPage(browser,base,browserName,kind,id){
   assert.equal(await page.locator('#model').inputValue(),'6581');
   for(const model of ['6581','8580']){
    const label=kind+'/'+model;console.log('CHECK '+browserName+'/'+label+': actual UI, dedicated SID, PCM and cleanup');
-   await page.selectOption('#model',model);await evaluate(page,label=>__sidExamplesAudit.label(label),label);await page.click('#play');await status(page,'Playing');
+   await page.selectOption('#model',model);
+   if(kind==='filter'){
+    // Filter choices intentionally survive Stop and model selection. Set the
+    // same LP baseline explicitly before comparing either model's cutoff.
+    const before=(await audit(page)).contexts.length;await page.check('#lowpass');await page.uncheck('#bandpass');await page.uncheck('#highpass');await setRange(page,'cutoff',700);await setRange(page,'resonance',5);
+    assert.equal((await audit(page)).contexts.length,before,'Editing the stopped filter must stay silent');
+   }
+   await evaluate(page,label=>__sidExamplesAudit.label(label),label);await page.click('#play');await status(page,'Playing');
    assert.equal(await page.locator('#model').isDisabled(),true,'Model stays fixed during playback');assert.equal(await page.locator('#stop').isEnabled(),true);
    await until(page,async()=>(await audit(page)).meters.some(meter=>meter.label===label&&meter.acRms>.0005),'Sustained final AC PCM');
    if(kind==='voices'){

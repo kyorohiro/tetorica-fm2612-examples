@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SPU：自作サンプルとLive ADSR — tetorica-fm2612 examples</title>
+<link rel="stylesheet" href="../../../../../style.css">
+<script type="importmap">{"imports":{"tetorica-fm2612":"../../../../../vendor/tetorica-fm2612/soundchip.js","tetorica-fm2612/":"../../../../../vendor/tetorica-fm2612/"}}</script>
+<style>#code{width:100%;box-sizing:border-box;font-family:monospace}fieldset{display:grid;gap:12px;margin-block:20px}input[type="range"]{display:block;width:min(100%,520px)}.actions{flex-wrap:wrap}output{font-variant-numeric:tabular-nums}</style>
+</head><body><main><nav><a href="../../../../../index.html">← Examples</a><a href="./main.js">Source ↗</a></nav>
+<header><p class="eyebrow">ps1/spu/01-sample-adsr · WEB / NODE</p><h1>SPU：自作サンプルとLive ADSR</h1><p>112点の自作PCMをソフトウェアでSPU ADPCMへ変換し、基準音程を指定して鳴らします。</p></header>
+<section class="sample-panel"><label for="code">実行するSPUコード</label><textarea id="code" rows="25" spellcheck="false"></textarea>
+<div class="actions"><button id="play" type="button">Play</button><button id="stop" type="button" disabled>Stop · clear tails</button></div>
+<fieldset><legend>Live ADSR · CH1（APIの0番）</legend><label for="attack">Attack rate: <output id="attack-value">40</output><input id="attack" type="range" min="0" max="127" step="1" value="40"></label><label for="decay">Decay rate: <output id="decay-value">7</output><input id="decay" type="range" min="0" max="15" step="1" value="7"></label><label for="sustain">Sustain level: <output id="sustain-value">10</output><input id="sustain" type="range" min="0" max="15" step="1" value="10"></label><label for="sustain-rate">Sustain rate · decrease: <output id="sustain-rate-value">127</output><input id="sustain-rate" type="range" min="0" max="127" step="1" value="127"></label><label for="release">Release rate: <output id="release-value">8</output><input id="release" type="range" min="0" max="31" step="1" value="8"></label><p>Rateはチップのコードで、msではありません。0が速く、大きい値は遅くなります。現在の段階をlive更新し、Attackは次の発音、Releaseは次の離鍵で確認できます。Sustain rateを127から64へ下げると、押しっぱなしの音が減衰します。</p></fieldset>
+<p id="status" role="status" aria-live="polite">Ready.</p><pre><code id="detail"></code></pre>
+<p>コード編集は次のPlayに反映されます。applyControls()は上のADSR値を読み、setEnvelope(..., {live:true})で送ります。 startAudio()・sleep(秒)・console・encodePs1AdpcmCycle()を使えます。初期化中もStopでき、終了・エラー・ページ移動時に解放します。</p>
+<p>PCM→ADPCMはソフトウェアの準備処理です。SPUは符号化サンプルを固定44,100 Hzで再生し、デバイス出力時だけリサンプリングします。音源へ送るVoice volumeを抑えて内部加算の余裕を作り、host gain 0.6を1回だけ適用します。</p>
+<h2>Web — 全コード</h2><pre class="source"><code data-source="./main.js">Loading…</code></pre>
+<h2>Node — WAV 保存</h2><pre><code>node examples/ps1/spu/01-sample-adsr/node/main.mjs ./spu-01-sample-adsr.wav</code></pre><pre class="source"><code data-source="../node/main.mjs">Loading…</code></pre>
+<p><a href="../README.md">README</a>。Nodeは44,100 Hz stereo PCM16 WAVを生成します。AudioContext・audify・ゲームROMは不要です。</p></section></main>
+<script type="module" src="./main.js"></script><script type="module">
+for(const code of document.querySelectorAll('[data-source]')){try{const response=await fetch(code.dataset.source);if(!response.ok)throw new Error(`HTTP ${response.status}`);code.textContent=await response.text();}catch(error){code.textContent=error.message;}}
+</script></body></html>

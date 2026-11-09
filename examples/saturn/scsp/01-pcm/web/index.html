@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ja"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SCSP：PCM8 / PCM16・ループ・32スロット — tetorica-fm2612 examples</title>
+<link rel="stylesheet" href="../../../../../style.css">
+<script type="importmap">{"imports":{"tetorica-fm2612":"../../../../../vendor/tetorica-fm2612/soundchip.js","tetorica-fm2612/":"../../../../../vendor/tetorica-fm2612/"}}</script>
+<style>#code{width:100%;box-sizing:border-box;font-family:monospace}.actions{flex-wrap:wrap;gap:1rem}label{display:inline-flex;gap:.5rem;align-items:center}#state{max-height:20rem;overflow:auto}</style>
+</head><body><main>
+<nav><a href="../../../../../index.html">← Examples</a><a href="./main.js">Source ↗</a></nav>
+<header><p class="eyebrow">saturn/scsp/01-pcm · WEB / NODE · EXPERIMENTAL</p><h1>SCSP：PCM8 / PCM16・ループ・32スロット</h1><p>ソフトウェアで同じ元波形を signed PCM8 / PCM16 に変換し、SCSP の前進ループで演奏します。選択・音程は再生中にも変更できます。</p></header>
+<section class="sample-panel">
+<div class="actions"><label>実行先 <select id="execution"><option value="worker" selected>Worker</option><option value="main">Main</option></select></label><button id="play">Play</button><button id="stop" disabled>Stop</button></div>
+<p id="status" role="status" aria-live="polite">Ready.</p>
+<div class="actions"><label>PCM / 物理スロット <select id="slot" data-live disabled><option value="0">PCM8 · slot 0</option><option value="1" selected>PCM16 · slot 1</option><option value="31">PCM16 · slot 31</option></select></label>
+<label>音程 <select id="note" data-live disabled><option>A2</option><option selected>A3</option><option>A4</option></select></label>
+<button id="retrigger" data-live disabled>Retrigger</button><button id="release" data-live disabled>Key off</button>
+<label>Release code <input id="release-rate" data-live disabled type="range" min="0" max="31" value="24"></label></div>
+<p>PCM は signed。PCM16 の RAM 格納は API が big endian に変換します。ループは [loopStartSamples, length)。rootNote / baseFrequencyHz は明示的な調律で、自動検出ではありません。Release は0〜31のハードウェアコードで、変更後に Retrigger してください。</p>
+<p>SCSP は32物理スロット・512 KiB RAM・44,100 Hz固定。自動ラウンドロビンや音程検出はありません。標準コードは20秒で終了し、Stop は読み込み中にも使えます。ソフトウェアの変換 / ガード確保と、ハードウェアの再生 / LFO / 変調を区別しています。</p>
+<label for="code">実行コード（変更は次の Play から）</label><textarea id="code" rows="27" spellcheck="false"></textarea>
+<pre id="detail"></pre><details><summary>実チップ状態（操作後に取得）</summary><pre id="state"></pre></details>
+<p><a href="../README.md">README</a> · <a href="../node/main.mjs">Node source</a></p>
+<pre><code>node examples/saturn/scsp/01-pcm/node/main.mjs ./scsp-01-pcm.wav</code></pre>
+<p>Node.js 22+。実コアで44,100 Hz stereo WAVを生成します。音声デバイス・ROM・ゲームデータ・SSFは不要です。</p>
+</section></main><script type="module" src="./main.js"></script></body></html>
