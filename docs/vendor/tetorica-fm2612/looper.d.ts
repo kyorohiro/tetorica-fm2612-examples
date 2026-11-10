@@ -192,7 +192,7 @@ export declare class MegaSynthLooper {
         running: boolean;
         recording: boolean;
         armed: boolean;
-        loopLength: number | null;
+        loopLength: any;
         startedAt: number | null;
         loopStartedAt: any;
         currentUnitId: any;

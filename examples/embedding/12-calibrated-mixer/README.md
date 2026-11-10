@@ -1,6 +1,6 @@
 # Calibrated Mixer：音源間の音量を比較
 
-`tetorica-fm2612@0.2.37` の公開APIで、通常の初期値と任意のcalibratedプリセットを聴き比べるブラウザー用の例です。
+`tetorica-fm2612@0.2.39` の公開APIで、通常の初期値と任意のcalibratedプリセットを聴き比べるブラウザー用の例です。
 [Web ページ](web/index.html) と [全コード](web/main.js) を参照してください。
 
 Play前に **Calibrated preset** または **Legacy defaults** を選びます。

@@ -266,7 +266,7 @@ export declare class MegaSynth {
     rf5c164WasmUrl: string;
     rf5c164WorkletUrl: string;
     rf5c164Fetch: typeof fetch | undefined;
-    /** RF5C164 API after start() when megaCD is enabled; its methods return promises.
+    /** RF5C164 API after start() when megaCD is enabled; transport methods return promises, while setRootNote is synchronous.
      * @type {(ReturnType<typeof createRf5c164Client> & {readonly id: string}) | null} */
     pcm: (ReturnType<typeof createRf5c164Client> & {
         readonly id: string;

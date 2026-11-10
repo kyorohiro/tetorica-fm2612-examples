@@ -16,7 +16,7 @@ export declare function createNativeGenesisExtraRf5c164Endpoint(synth: any, { de
         reset: () => Promise<void>;
         setClock: (hz: any) => Promise<any>;
         dispose(): void;
-    };
+    } & import("./rf5c164_notes.js").RF5C164AsyncNoteControls;
     dispatch: (message: any, timing?: {}) => {
         deferred: Promise<{
             id: any;

@@ -88,6 +88,14 @@
     ]
   },
   {
+    "id": "c64/sid/03-factory-wav",
+    "title": "SID：共通factoryからPCM・WAVへ",
+    "description": "createSoundChip('sid')で6581／8580を生成し、1音の設定・発音・ReleaseからWAV出力までを短いNodeコードで試す。",
+    "environments": [
+      "node"
+    ]
+  },
+  {
     "id": "chip-raw/01-register-note",
     "title": "レジスタを直接書く",
     "description": "YM2612 の OP4・algorithm・pan・周波数・key on/off をレジスタで設定。"

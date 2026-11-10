@@ -13,6 +13,7 @@
     "build": "node scripts/build.mjs",
     "build:docs": "node scripts/build.mjs --docs",
     "check:node": "node scripts/check-node.mjs",
+    "render:sid-factory": "node examples/c64/sid/03-factory-wav/node/main.mjs",
     "check:mixer": "node scripts/check-mixer-browser.mjs",
     "check:dx7": "node scripts/check-dx7-browser.mjs",
     "check:snes": "node scripts/check-snes-browser.mjs",
@@ -28,7 +29,7 @@
     "check:pcm-helpers": "node scripts/check-pcm-helpers-browser.mjs"
   },
   "dependencies": {
-    "tetorica-fm2612": "0.2.37"
+    "tetorica-fm2612": "0.2.39"
   },
   "devDependencies": {
     "playwright": "1.63.0"

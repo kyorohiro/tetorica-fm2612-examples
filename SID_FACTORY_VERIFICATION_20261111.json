@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "date": "2026-11-11 Asia/Tokyo",
+  "packageVersion": "0.2.39",
+  "resolved": "https://registry.npmjs.org/tetorica-fm2612/-/tetorica-fm2612-0.2.39.tgz",
+  "integrity": "sha512-U2dlxqSADHS4XNkCsLrBCjcsxF2Ixep/QQc5BhjmLgE6Ad5wmAbjUgcWcfvFyBVr83GYdIZ0NH6UMz5XPITdlQ==",
+  "candidateSha256": "fb82ffb75f40907e44a9e3672c83796a779a88e09a2a597f306b734da05db874",
+  "registryByteIdentityConfirmedByParent": true,
+  "catalogEntries": 76,
+  "copiedVendorFiles": 1251,
+  "layouts": [
+    "dist",
+    "docs"
+  ],
+  "allVendorBytesMatchInstalledPackage": true,
+  "newExampleBytesMatch": true,
+  "sidModelCases": 6,
+  "defaultBothPcmMatchesIndependentConcatenation": true,
+  "candidateOfflineNodeCases": 50,
+  "audioDeviceOpened": false,
+  "listeningPerformed": false,
+  "committed": false,
+  "pushed": false,
+  "logs": [
+    "/private/tmp/sid-factory-examples-registry-build-20261111.log",
+    "/private/tmp/sid-factory-examples-registry-build-docs-20261111.log",
+    "/private/tmp/sid-factory-examples-registry-sid-20261111.log"
+  ],
+  "lockIntegrityMatchesVerifiedTarball": true,
+  "installedPayloadMatchesVerifiedTarball": true
+}

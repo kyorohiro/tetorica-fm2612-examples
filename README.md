@@ -1,8 +1,8 @@
 # tetorica-fm2612 examples
 
 `tetorica-fm2612` を import して使う、機能別の小さなサンプル集。
-公開済み npm `tetorica-fm2612@0.2.37` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES・PC Engine・MSX 合奏の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
-SIDは専用APIのAudioWorklet接続と、直接PCMを生成するNode例を用意しています。
+公開済み npm `tetorica-fm2612@0.2.39` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES・PC Engine・MSX 合奏の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
+SIDは専用APIのAudioWorklet接続と、共通factory／専用coreから直接PCMを生成するNode例を用意しています。
 PCM 生成・WAV 保存は専用例に置き、Web Audio を使う埋め込み例と、Node の nativeFX / 音声デバイス出力の例も掲載しています。本体リポジトリには依存しません。
 
 [公開 examples](https://kyorohiro.github.io/tetorica-fm2612-examples/) と
@@ -56,6 +56,7 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 | SPC（実験用・Web / Node） | [02-spc-player](examples/snes/02-spc-player/README.md) | SPC700＋S-DSP の再生・停止、32kHz PCM / WAV |
 | C64 SID（Web / Node） | [01-voices](examples/c64/sid/01-voices/README.md) | 3ボイス・ADSR・6581／8580 Previewの比較 |
 | C64 SID（Web / Node） | [02-filter](examples/c64/sid/02-filter/README.md) | 共有LP／BP／HP、Cutoff・Resonanceの音作り |
+| C64 SID（Node） | [03-factory-wav](examples/c64/sid/03-factory-wav/README.md) | 共通factory、6581／8580選択、1音のPCM生成・WAV保存 |
 | PS1 SPU（Web / Node） | [01-sample-adsr](examples/ps1/spu/01-sample-adsr/README.md) | cyclic ADPCM変換、音程、live ADSR |
 | PS1 SPU（Web / Node） | [02-reverb](examples/ps1/spu/02-reverb/README.md) | voice別send・共有preset・左右return |
 | Saturn SCSP（Web / Node） | [01-pcm](examples/saturn/scsp/01-pcm/README.md) | PCM8／PCM16・forward loop・envelope・32slot |
@@ -119,7 +120,8 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 
 ## C64 SIDの入口
 
-SIDは専用APIを使います。Nodeでは`SidCore`（6581）または`Sid8580Core`（PALの8580 Preview）を作り、
+最小のNode例は`createSoundChip('sid', {model:'6581'})`でcoreを作ります。
+`model:'8580'`でPALの8580 Previewを選べます。専用の`SidCore.create()`／`Sid8580Core.create()`を使う例も残しています。
 `SidSynth`で操作してmono PCMを生成します。WAVでは左右へ同じPCMを複製します。
 Webでは`createSidAudio()`と`createSidClient()`でAudioWorkletへ接続し、同じ音色・発音APIを使います。
 例ごとに初期化・発音・Stop・解放のコードをすべて載せています。音声デバイスを開かずにNodeでWAVを生成できます。
@@ -127,6 +129,8 @@ Webでは`createSidAudio()`と`createSidClient()`でAudioWorkletへ接続し、�
 ```sh
 node examples/c64/sid/01-voices/node/main.mjs --model=both
 node examples/c64/sid/02-filter/node/main.mjs --model=both
+npm run render:sid-factory
+npm run check:node -- --only=sid
 npm run check:sid
 ```
 
@@ -142,7 +146,7 @@ Gaussian補間と改善されたloop予測は公開版のまま使い、`setEnve
 
 SCSPは`Scsp`／`ScspSynth`のsigned PCM8／16・forward loopから始め、`setLfo()`のhardware LFO、
 `setModulation()`のsound-stack address変調へ進みます。stack offsetはslot番号ではありません。
-変調用PCMにはfull loopとguard領域が必要です。DSP／delay・SSF／68000は0.2.37の公開高級APIに含まれないため、この例集には追加していません。
+変調用PCMにはfull loopとguard領域が必要です。DSP／delay・SSF／68000は0.2.39の公開高級APIに含まれないため、この例集には追加していません。
 
 PCM→BRR、PCM→ADPCM-A、Game Boy用Wave変換は**ソフトウェアの前処理**です。
 変換結果は実際のS-DSP／YM2610/B／Game Boyコアへ渡して音を確かめます。
@@ -232,7 +236,7 @@ Node 専用の場合は `environments: ["node"]`、ブラウザ専用の場合�
 
 ## MegaSynth Node examples
 
-`embedding/06`〜`10` は `tetorica-fm2612@0.2.37` の実験用 MegaSynth API を使います。
+`embedding/06`〜`10` は `tetorica-fm2612@0.2.39` の実験用 MegaSynth API を使います。
 通常の `npm ci` で公開 package を導入できます。
 
 ```sh
@@ -255,7 +259,7 @@ WAV の RIFF ヘッダー・非ゼロ PCM とイベント JSON を確認しま�
 ## Transport の例
 
 Genesis / PC-98 / Game Boy / X68000 FM の基本例は、WorkletTransport / AudifyTransport を使用します。
-公開済み npm 0.2.37 を使用します。Node のリアルタイム再生には audify を追加してください。
+公開済み npm 0.2.39 を使用します。Node のリアルタイム再生には audify を追加してください。
 
 ```sh
 npm install
@@ -286,7 +290,7 @@ const chip = await createSoundChip('segapsg', {
 });
 ```
 
-[プリセットの比較例](examples/embedding/12-calibrated-mixer/README.md) では、FM・Sega PSG・AY・NESを同じ440 Hzで順に鳴らします。従来値と `calibrated` を選び、表示される倍率と音量差を確認できます。0.2.37の初期値はSega PSGが0.35、AYが0.85、NESが1.16です。Mixerやプリセットを使わない基本例の音量は従来どおりです。
+[プリセットの比較例](examples/embedding/12-calibrated-mixer/README.md) では、FM・Sega PSG・AY・NESを同じ440 Hzで順に鳴らします。従来値と `calibrated` を選び、表示される倍率と音量差を確認できます。現在の初期値はSega PSGが0.35、AYが0.85、NESが1.16です。Mixerやプリセットを使わない基本例の音量は従来どおりです。
 
 ```sh
 npm run build
@@ -299,7 +303,7 @@ npm run check:mixer
 
 ## OPL / OPL2 / Y8950 FM / OPL3
 
-`tetorica-fm2612@0.2.37` の `OPLSynth` とオリジナル音色 `OPL_PRESETS` を使います。
+`tetorica-fm2612@0.2.39` の `OPLSynth` とオリジナル音色 `OPL_PRESETS` を使います。
 Webは `createSoundChip(name, {execution:'worklet'})` → `OPLWorkletTransport` → `OPLSynth` でリアルタイム再生。
 Nodeは `OPLDirectTransport` と `generateStereo()` でPCMを生成し、WAVへ保存します。音声デバイスや `audify` は不要です。
 Webのコード欄を編集して再実行でき、Stopは読み込み中にも使えます。
@@ -323,7 +327,7 @@ npm run check:opl
 
 ## AY / OPLL / MSX
 
-6例は `tetorica-fm2612@0.2.37` の AY / OPLL API を使います。
+6例は `tetorica-fm2612@0.2.39` の AY / OPLL API を使います。
 MSX は AY-3-8910＋YM2413、MSX Audio はさらに Y8950 の FM 部分を加えた構成です。
 Master System の2例は YM2413 を使い、音色比較では Sega PSG も伴奏します。
 
@@ -351,7 +355,7 @@ npm run check:msx
 
 ## PC Engine / HuC6280
 
-`pc-engine/` の3例は公開済み `tetorica-fm2612@0.2.37` を使います。
+`pc-engine/` の3例は公開済み `tetorica-fm2612@0.2.39` を使います。
 Web は `Playground({chip:'huc6280'})` の主音源 `pce` を Main / Worker から操作します。
 Node は `Huc6280AudioEngine` → `Huc6280DirectTransport` → `Huc6280Synth` でPCMを生成し、WAVへ保存します。音声ドライバーは不要です。
 package root の `createSoundChip('huc6280')` や専用 AudifyTransport は使いません。
@@ -374,7 +378,7 @@ npm run check:pcengine
 
 ## PC Engine CD-ROM² / CD-DA / MSM5205
 
-公開済み `tetorica-fm2612@0.2.37` の音声APIを使う3例です。
+公開済み `tetorica-fm2612@0.2.39` の音声APIを使う3例です。
 音声はすべてコード内で生成します。ゲームのディスク・BIOS・外部サンプルは不要です。
 
 | Example | 内容 |
@@ -460,7 +464,7 @@ Pause / Resume・音量・不正ファイル後の再実行を確認します。
 
 ## WonderSwan
 
-3例は `tetorica-fm2612@0.2.37` の共通factoryを使います。
+3例は `tetorica-fm2612@0.2.39` の共通factoryを使います。
 Webは `createSoundChip('wonderswan', {execution:'worklet'})` → `WonderSwanWorkletTransport` → `WonderSwanSynth`。
 NodeはDirect生成したチップを `WonderSwanDirectTransport` → `WonderSwanSynth` へ渡し、WAVに保存します。
 物理4CH、32点・4-bit波形、左右Volumeは各0〜15。VoiceはCH1、SweepはCH2、NoiseはCH3を使います。
@@ -485,7 +489,7 @@ npm run check:wonderswan
 
 ## POKEY / Dual POKEY
 
-3例は公開済み `tetorica-fm2612@0.2.37` の共通factoryと `PokeySynth` を使います。
+3例は公開済み `tetorica-fm2612@0.2.39` の共通factoryと `PokeySynth` を使います。
 Webは `createSoundChip('pokey', {execution:'worklet'})` → `PokeyWorkletTransport` → `PokeySynth`。
 コードを編集して再実行でき、Stop・終了・ページ移動で音源とAudioContextを解放します。読み込み中のStopにも対応します。
 

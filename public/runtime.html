@@ -9,7 +9,7 @@
     <p>公開済み npm package のどの API を使うか、アプリ・ゲームへの組み込み方に合わせて選びます。</p>
     <pre><code>npm install tetorica-fm2612</code></pre>
   </header>
-  <section><h2>チップ別の基本例（npm 0.2.37）</h2>
+  <section><h2>チップ別の基本例（npm 0.2.39）</h2>
 <pre><code>Web: createSoundChip(name, {execution: 'worklet'})
      → WorkletTransport → Synth（Main）→ WASM（Worklet）
 Node: createSoundChip(name)
@@ -101,7 +101,7 @@ Web Audio / encodeWav()  ブラウザ再生 / Web・Node の WAV 保存</code></
     <p><code>ScspSynth</code>でsigned PCM8／PCM16・forward loop・envelope・mixを操作します。32の物理slotを持ち、内部レートは44.1 kHzです。
       <code>setLfo()</code>はpitch／amplitudeのhardware LFOをlive変更し、resetで位相をholdします。</p>
     <p><code>setModulation()</code>はsound stackによるsample address変調です。2slotの例ではfull loopとguard領域を確保します。
-      X／Y offsetはslot番号ではありません。公開0.2.37の範囲を使い、DSP／SSF／68000は扱いません。</p>
+      X／Y offsetはslot番号ではありません。公開0.2.39の範囲を使い、DSP／SSF／68000は扱いません。</p>
     <p><a href="./examples/saturn/scsp/01-pcm/web/index.html">PCM形式とloop</a> ·
       <a href="./examples/saturn/scsp/02-lfo/web/index.html">hardware LFO</a> ·
       <a href="./examples/saturn/scsp/03-modulation/web/index.html">2slotの変調</a>。</p>
@@ -119,15 +119,17 @@ Web Audio / encodeWav()  ブラウザ再生 / Web・Node の WAV 保存</code></
     <pre><code>Web:  createSidAudio(context, gainNode, {model})
       → createSidClient(endpoint.port, endpoint)
       → 3 voice / ADSR / shared filter → AudioWorklet
-Node: SidCore.create({wasmBinary}) / Sid8580Core.create({wasmBinary})
+Node: createSoundChip('sid', {model: '6581'}) // または '8580'
       → new SidSynth({core}) → core.render(frames) → encodeWav()
+      専用SidCore.create() / Sid8580Core.create()の例も保持
 </code></pre>
-    <p>npm 0.2.37のSID専用APIです。両モデルで3ボイスの波形・hardware ADSR・共有LP／BP／HPを試せます。
+    <p>npm 0.2.39の共通factoryとSID専用APIを使います。両モデルで3ボイスの波形・hardware ADSR・共有LP／BP／HPを試せます。
       Cutoffは0〜2047、Resonanceは0〜15のチップコード。選んだfilter出力を同じCutoff／Resonanceで加算します。</p>
     <p>Webのモデル変更は新しい音源を作ります。Nodeは48 kHzのmono PCMを左右へ複製して保存します。
       同じ音符・同じPAL clockでモデルを比較し、元の12 Hz host DC blockerと固定の出力gainを保ちます。</p>
     <p><a href="./examples/c64/sid/01-voices/web/index.html">3ボイス・ADSR・モデル比較</a> ·
-      <a href="./examples/c64/sid/02-filter/web/index.html">共有Filterの音作り</a>。
+      <a href="./examples/c64/sid/02-filter/web/index.html">共有Filterの音作り</a> ·
+      <a href="./examples/c64/sid/03-factory-wav/README.md">共通factoryでWAV生成（Node）</a>。
       C64 CPUやゲーム曲は使いません。元ソース・license・再build手順もvendor内へコピーします。</p>
   </section>
   <section class="sample-panel"><h2>PC Engine / HuC6280</h2>

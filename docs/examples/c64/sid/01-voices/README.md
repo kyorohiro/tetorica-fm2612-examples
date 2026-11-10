@@ -1,6 +1,6 @@
 # SID：3ボイス・ADSR・モデル比較
 
-公開済み `tetorica-fm2612@0.2.37` の専用SID APIを使います。
+公開済み `tetorica-fm2612@0.2.39` の専用SID APIを使います。
 Triangle・Saw・Pulseの3ボイスを1つずつ鳴らした後、同じ音を重ねます。
 6581と8580 Previewを、同じPALクロック・音色設定・出力gainで比較できます。
 コード内の短いオリジナル音列だけを使い、C64 CPU・ROM・SID曲は不要です。

@@ -24,7 +24,7 @@ export async function verifySidRuntime(source=join(root,'node_modules/tetorica-f
     assert.equal(bytes.length,expected.bytes,'SID source bytes differ: '+name);
     assert.equal(sha(bytes),expected.sha256,'SID source hash differs: '+name);return bytes;
   };
-  for(const name of ['sid.js','sid.d.ts','sid8580.js','sid8580.d.ts','sidsynth.js','sidsynth.d.ts',
+  for(const name of ['sid.js','sid.d.ts','sid8580.js','sid8580.d.ts','sidsynth.js','sidsynth.d.ts','sid_soundchip.js','sid_soundchip.d.ts',
     'sid_waveforms.js','sid_waveforms.d.ts','playground_sid.js','playground_sid.d.ts',
     'playground_sid_audio.js','playground_sid_audio.d.ts','playground_sid_worklet.js',
     'playground_sid_worklet.d.ts','playground_sid_inspector.js','playground_sid_inspector.d.ts',
@@ -224,7 +224,7 @@ export async function copyRuntime(destination) {
   try {
     await verifySidRuntime(source);
   } catch(error) {
-    throw new Error('The SID examples require the complete tetorica-fm2612 >= 0.2.37 payload: both cores, Synth, typed clients, Worklets, WASM, matching sources, npm-safe metadata aliases and notices. Run npm install.',{cause:error});
+    throw new Error('The SID examples require the complete tetorica-fm2612 >= 0.2.39 payload: common factory, both cores, Synth, typed clients, Worklets, WASM, matching sources, npm-safe metadata aliases and notices. Run npm install.',{cause:error});
   }
   const target = join(destination, 'vendor/tetorica-fm2612');
   await mkdir(join(destination, 'vendor'), {recursive: true});

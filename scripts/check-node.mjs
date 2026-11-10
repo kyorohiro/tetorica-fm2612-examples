@@ -145,15 +145,16 @@ function checkPcEngineCdWav(id, wav) {
 }
 
 function checkSidWav(id, model, wav) {
-  const rate=48000,frames=(wav.length-44)/4,voices=id==='c64/sid/01-voices';
-  assert(voices||id==='c64/sid/02-filter',`Unknown SID example ${id}`);
+  const rate=48000,frames=(wav.length-44)/4,voices=id==='c64/sid/01-voices',factory=id==='c64/sid/03-factory-wav';
+  const seconds=factory ? 0.75 : voices ? 4.05 : 5.4;
+  assert(voices||factory||id==='c64/sid/02-filter',`Unknown SID example ${id}`);
   assert.equal(wav.toString('ascii',12,16),'fmt ');assert.equal(wav.readUInt32LE(16),16);
   assert.equal(wav.readUInt16LE(20),1);assert.equal(wav.readUInt16LE(22),2);
   assert.equal(wav.readUInt32LE(24),rate);assert.equal(wav.readUInt32LE(28),rate*4);
   assert.equal(wav.readUInt16LE(32),4);assert.equal(wav.readUInt16LE(34),16);
   assert.equal(wav.toString('ascii',36,40),'data');assert.equal(wav.readUInt32LE(4),wav.length-8);
   assert.equal(wav.readUInt32LE(40),wav.length-44);
-  assert.equal(frames,Math.round((voices?4.05:5.4)*rate),`${id}/${model}: complete one-model phrase duration`);
+  assert.equal(frames,Math.round(seconds*rate),`${id}/${model}: complete one-model phrase duration`);
   const sample=frame=>wav.readInt16LE(44+frame*4)/32768;
   let peak=0;
   for(let frame=0;frame<frames;frame++){
@@ -179,8 +180,12 @@ function checkSidWav(id, model, wav) {
   const sustained=(start,end,label)=>{
     const result=window(start,end);assert(result.acRms>.0005&&result.span>.002,`${id}/${model}: ${label} sustained AC signal`);return result;
   };
-  const final=window((voices?4.05:5.4)-.08,voices?4.05:5.4);assert(final.acRms<.0001,`${id}/${model}: release settles to silence`);
-  if(voices){
+  const final=window(seconds-.08,seconds);assert(final.acRms<.0001,`${id}/${model}: release settles to silence`);
+  if(factory){
+    const held=sustained(.15,.45,'common-factory Triangle A4');
+    assert(Math.abs(held.frequency-440)<4,`${id}/${model}: expected A4, got ${held.frequency} Hz`);
+    console.log(`PASS ${id}/${model}: ${frames} frames, A4 ${held.frequency.toFixed(2)} Hz, AC RMS ${held.acRms.toFixed(6)}, peak ${peak.toFixed(6)}, Release settled; no audio device`);
+  }else if(voices){
     const notes=[[.15,.4,440],[.9,1.15,440*2**(-5/12)],[1.65,1.9,220]];
     const solo=notes.map(([start,end,hz],index)=>{const result=sustained(start,end,'CH '+(index+1));assert(Math.abs(result.frequency-hz)<4,`${id}/${model}: CH ${index+1} expected ${hz} Hz, got ${result.frequency}`);return result;});
     const chord=sustained(2.5,3.2,'three-voice chord');
@@ -207,11 +212,20 @@ try {
   let count=0;
   for(const item of manifest.filter(item=>(!item.environments||item.environments.includes('node'))&&!item.nodeAudioOutput&&(!onlyPcEngineCd||item.id.startsWith('pc-engine-cd/'))&&(!onlySid||item.id.startsWith('c64/sid/')))){
    if(item.id.startsWith('c64/sid/')) {
+     const segments=[];
      for(const model of ['6581','8580']) {
        const out=join(directory,`${item.id.replaceAll('/','-')}-${model}.wav`);
        execFileSync(process.execPath,[`examples/${item.id}/node/main.mjs`,out,`--model=${model}`],{cwd:root,timeout:30000,stdio:'pipe'});
        const wav=await readFile(out);assert.equal(wav.toString('ascii',0,4),'RIFF');assert.equal(wav.toString('ascii',8,12),'WAVE');
-       checkSidWav(item.id,model,wav);count++;
+       checkSidWav(item.id,model,wav);segments.push(wav.subarray(44));count++;
+     }
+     if(item.id==='c64/sid/03-factory-wav'){
+       const out=join(directory,'sid-common-factory-default-both.wav');
+       execFileSync(process.execPath,[`examples/${item.id}/node/main.mjs`,out],{cwd:root,timeout:30000,stdio:'pipe'});
+       const both=await readFile(out);
+       assert.equal(both.readUInt32LE(40),72000*4,'default both output is 1.5 seconds of stereo PCM16');
+       assert.deepEqual(both.subarray(44),Buffer.concat(segments),'default both output keeps each model in order without gain changes');
+       console.log('PASS c64/sid/03-factory-wav/both: default output exactly concatenates the two independent model renders');
      }
      continue;
    }
@@ -239,7 +253,7 @@ try {
    const data=JSON.parse(await readFile(root+'/output/'+file,'utf8'));assert.equal(data.format,'megasynth-recording-v1');assert.equal(data.commands.length,2);
   }
   if(onlyPcEngineCd)assert.equal(count,3,'Expected all three PC Engine CD Node examples');
-  if(onlySid)assert.equal(count,4,'Expected two SID examples with both models');
+  if(onlySid)assert.equal(count,6,'Expected three SID examples with both models');
   console.log(`PASS ${count} installed-package Node examples: audible WAV${onlyPcEngineCd||onlySid?'':' + event JSON'}`);
 
 } finally {await rm(directory, {recursive: true, force: true});}

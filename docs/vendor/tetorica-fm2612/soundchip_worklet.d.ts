@@ -8,6 +8,7 @@ export type WorkletSoundChip = {
     readonly id: string;
     readonly fdsEnabled?: boolean;
     readonly clock?: number;
+    readonly model?: '6581' | '8580';
     sampleRate(): number;
     request(method: string, args?: unknown[]): Promise<unknown>;
     createTransportPort(): MessagePort;

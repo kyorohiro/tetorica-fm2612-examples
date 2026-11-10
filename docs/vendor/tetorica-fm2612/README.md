@@ -61,7 +61,7 @@ entry points, rather than every internal Worker or Worklet module.
 | Select a primary runtime synth | `tetorica-fm2612/tetorica_synth.js` | `createTetoricaSynth`, `TETORICA_CHIPS` |
 | DX7 inside browser Playground scripts | `tetorica-fm2612/playground_runtime.js` | Script globals `useSoundChip('dx7')`, `createSoundChip('dx7')` |
 | SNES S-DSP / SPC700 | `tetorica-fm2612/snessynth.js`, `tetorica-fm2612/spc.js` | CPU-free BRR instrument / SPC file PCM core |
-| C64 SID 6581 / PAL 8580 Preview PCM cores | `tetorica-fm2612/sid.js`, `tetorica-fm2612/sid8580.js` | `SidCore`, `Sid8580Core`: explicit creation, register access and owned mono PCM |
+| C64 SID 6581 / PAL 8580 Preview PCM cores | `tetorica-fm2612`, `tetorica-fm2612/sid.js`, `tetorica-fm2612/sid8580.js` | `createSoundChip('sid')`, `SidCore`, `Sid8580Core`: register access and owned mono PCM; factory Worklet output |
 | C64 SID voice and shared filter controls | `tetorica-fm2612/sidsynth.js` | `SidSynth`, `SidDirectTransport`, combined waveform helpers; either core model |
 | Pure SID waveform flags | `tetorica-fm2612/sid_waveforms.js` | `SID_WAVEFORMS`, `sidWaveformBits`, `sidWaveformFromBits`; no WASM or audio imports |
 | Experimental Saturn SCSP, low level | `tetorica-fm2612/scsp.js` | `Scsp`: register/RAM access and 44.1 kHz stereo PCM |
@@ -118,6 +118,13 @@ flags (including combinations), ADSR, oscillator Sync/Ring and one shared
 LP/BP/HP filter. Cutoff and resonance are chip codes; neither model promises
 physical-chip accuracy or analogue unit variation.
 
+Version **0.2.39** also connects both models to the common package-root
+`createSoundChip('sid', options)` factory. Direct creation returns the same
+`SidCore` / `Sid8580Core`, with an immutable `id`; it does not open audio or
+add keyboard allocation. Select `model:'6581'` (default) or `model:'8580'`.
+The factory option `clock` maps to the core's creation-fixed `clockHz`.
+The 8580 Preview accepts PAL **985,248 Hz** only.
+
 | Core | Creation | Clock | Output |
 | --- | --- | --- | --- |
 | `SidCore` | `await SidCore.create(options)` | Creation-fixed 900,000–1,100,000 Hz; default PAL 985,248 | Owned mono `Float32Array` |
@@ -135,10 +142,8 @@ to `'6581'` to use the other core with the same voice settings:
 
 ```js
 import {readFile, writeFile} from 'node:fs/promises';
-import {encodeWav} from 'tetorica-fm2612';
+import {createSoundChip, encodeWav} from 'tetorica-fm2612';
 import {runtimeAssetUrl} from 'tetorica-fm2612/assets';
-import {SidCore} from 'tetorica-fm2612/sid.js';
-import {Sid8580Core} from 'tetorica-fm2612/sid8580.js';
 import {SidSynth} from 'tetorica-fm2612/sidsynth.js';
 
 const model = '8580', sampleRate = 48000;
@@ -146,9 +151,9 @@ const asset = model === '8580'
   ? 'generated/sid8580-machine/sid8580-endpoint.wasm'
   : 'generated/sid/sid.wasm';
 const wasmBinary = await readFile(runtimeAssetUrl(asset));
-const core = model === '8580'
-  ? await Sid8580Core.create({sampleRate, wasmBinary})
-  : await SidCore.create({sampleRate, wasmBinary});
+const core = await createSoundChip('sid', {
+  model, sampleRate, clock: 985248, moduleOptions: {wasmBinary},
+});
 const sid = new SidSynth({core}); // Borrows the core; the caller owns it.
 try {
   sid.initialize();
@@ -169,13 +174,27 @@ try {
 }
 ```
 
-In a directly served browser package, the core defaults fetch its packaged
-WASM relative to the module. A bundler must preserve/copy the assets or supply
-`wasmBinary` / `wasmUrl`; `runtimeAssetUrl(path, publicPackageBaseUrl)` resolves
-a deployed location. Node callers supply `wasmBinary` as above because these
-dedicated core loaders use `fetch` for their default URLs. Both extensionless
-and `.js` subpaths have TypeScript contracts. The plain waveform helper module
-can be imported independently without loading a core or WASM.
+The common factory resolves the packaged WASM in Node and browsers; omit
+`moduleOptions` to use its default assets. For a relocated deployment, provide
+`assetBaseUrl` for the generated-asset directory, or a specific `wasmUrl`.
+Explicit bytes can use `wasmBinary` or `moduleOptions.wasmBinary`.
+A bundler must preserve/copy the assets or supply those options;
+`runtimeAssetUrl(path, publicPackageBaseUrl)` resolves a deployed location.
+The explicit `SidCore.create()` / `Sid8580Core.create()` subpaths remain
+available; their own default loaders use `fetch`, so Node callers supply
+`wasmBinary` as shown above. Both extensionless and `.js` subpaths have
+TypeScript contracts. The plain waveform helper module can be imported
+independently without loading a core or WASM.
+
+For browser output, `createSoundChip('sid', {execution:'worklet', model:'8580'})`
+returns the same generic Worklet endpoint used by the other package-root chips.
+It exposes the selected `model` and `clock`, `request('writeRegister', [address,
+value])`, `request('readRegister', [address])` and `request('getState')`.
+The Worklet renders the existing mono SID core into both output channels at
+the AudioContext sample rate. After setting registers, use `await chip.start()`
+to connect output, `await chip.stop()` to disconnect, and `await chip.dispose()`
+to release it. Creation alone does not connect a speaker. This entry uses raw
+registers; it does not add preset, round-robin or Legato helpers.
 
 Inside a running **browser Playground script**, its Web Audio Main/Worker
 runtime additionally provides an asynchronous SID client:
@@ -190,10 +209,10 @@ const applied = await voice.getState();
 ```
 
 That `createSoundChip` is a **Playground script global** from
-`playground_runtime.js`. The generic package-root
-`import {createSoundChip} from 'tetorica-fm2612'` remains a separate factory
-and does **not** accept `'sid'`. Importing `playground_sid.js` directly supplies
-client/transport helpers, not a complete standalone audio session.
+`playground_runtime.js`: it returns the script's musical/register client.
+The package-root factory shown above returns a raw core or generic Worklet
+endpoint instead. Importing `playground_sid.js` directly supplies client/transport
+helpers, not a complete standalone audio session.
 Keep the runtime's primary SID at its default 6581 model. The 8580 script
 example creates an **independent** SID instance; selecting 8580 as the primary
 runtime is not supported across Main/Worker in this release.
@@ -1305,15 +1324,16 @@ const synth = new MegaSynth({megaCD: true});
 await synth.start();
 const wave = Float32Array.from({length: 256}, (_, i) => Math.sin(i * 2 * Math.PI / 256));
 const sample = await synth.pcm.loadSample(
-  {channels: [wave], sampleRate: 32768},
-  {address: 0, loopStart: 0},
+  {channels: [wave], sampleRate: 440 * wave.length},
+  {address: 0, loopStart: 0, endGuardBytes: 32},
 );
 await synth.pcm.setChannel(0, {
   ...sample, volume: 200, pan: {left: 15, right: 15},
 });
-await synth.pcm.keyOn(0);
+synth.pcm.setRootNote('A4'); // This known waveform is A4 at its original speed.
+await synth.pcm.noteOn(0, 'A5'); // Twice the original sample speed.
 // Later:
-await synth.pcm.keyOff(0);
+await synth.pcm.noteOff(0);
 await synth.close();
 ```
 
@@ -1325,6 +1345,24 @@ stereo samples are mixed to mono and encoded for the chip. The shared RAM is
 64 KiB, channel indices are 0..7, starts are 256-byte aligned, volume is 0..255
 and left/right pan levels are 0..15. Reserve non-overlapping RAM regions when
 loading multiple samples. `setPitch` uses the chip's raw playback step.
+
+The software note helpers accept note names or integer MIDI 0..127 on channels
+0..7. First pass the `loadSample()` result to `setChannel(ch, {...sample, ...})`
+to declare the original playback step, then set its known original pitch with
+`setRootNote(note)`. Root defaults to C4; `setRootNote(null)` restores C4. This
+setter returns the effective MIDI number synchronously and does not retune held
+voices. Await `setNote(ch, note)` for a raw step number without retriggering,
+`noteOn(ch, note)` to tune and retrigger, and `noteOff(ch)` to stop the channel.
+The direct `RF5C164Synth` class provides the same four methods synchronously.
+No waveform pitch detection or hardware envelope is added.
+
+Raw `setPitch` or step-register writes replace that channel's reference step.
+`reset()` keeps Root but clears reference steps, so configure `setChannel` again
+before using note helpers. Changing the chip clock changes pitch as with raw
+steps; the helpers do not compensate it. Reference steps belong to each client,
+so another client's temporary register writes do not redefine them. Synth Code
+has a separate editor-based default: its Root inherits the upper PCM editor,
+including when `setRootNote(null)` is used.
 
 `synth.pcm` is available after `start()` and is cleared by `close()`. Await
 `synth.reset()` to reset PCM along with FM while preserving waveform RAM.
@@ -1490,10 +1528,10 @@ FM/PSG/PCM mixing, stop/reset and close/restart. Playwright is a development
 dependency; it is not required by users of the sound-chip runtime.
 
 The build is staged in `dist/fm2612/`; packing produces
-`tetorica-fm2612-0.2.37.tgz`. To install a local build in another project:
+`tetorica-fm2612-0.2.39.tgz`. To install a local build in another project:
 
 ```sh
-npm install /absolute/path/to/tetorica-fm2612-0.2.37.tgz
+npm install /absolute/path/to/tetorica-fm2612-0.2.39.tgz
 ```
 
 The build pins an unpublished `tetorica-soundchip-native` SDK **0.1.7** source
@@ -1521,6 +1559,17 @@ MIT adaptation, BSD host code, readable rebuild sources and Rust toolchain
 notices. They are packaged alongside the unchanged fixed SDK snapshot.
 
 ## Release notes
+
+`0.2.39` adds SID to the package-root `createSoundChip()` factory. Select
+6581 or PAL 8580 Preview, generate raw mono PCM directly, or use the generic
+browser AudioWorklet endpoint with explicit start/stop/dispose. It retains the
+existing cores, gain policy and source kits, with typed factory options and
+independent IDs. No keyboard allocation or preset performance helpers are added.
+
+`0.2.38` adds RF5C164 note helpers: `setRootNote()`, `setNote()` and `noteOn()`,
+using each sample's declared source rate and root
+note. The helpers are software tuning controls; raw pitch/register access
+remains available and source pitch is not automatically detected.
 
 `0.2.37` publishes the CPU-free C64 SID 6581 and PAL 8580 Preview cores,
 `SidSynth`, waveform-flag helpers and Main/Worker Playground runtime modules.

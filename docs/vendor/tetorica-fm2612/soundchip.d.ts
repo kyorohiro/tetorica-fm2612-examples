@@ -85,6 +85,18 @@ export type SoundChipOptions = {
      */
     clock?: number;
     /**
+     * SID model; default 6581, 8580 Preview requires PAL.
+     */
+    model?: '6581' | '8580';
+    /**
+     * Dedicated SID core bytes (moduleOptions.wasmBinary is also accepted).
+     */
+    wasmBinary?: BufferSource;
+    /**
+     * Dedicated SID WASM URL; defaults below assetBaseUrl.
+     */
+    wasmUrl?: URL | string;
+    /**
      * Enable the FDS expansion on NES.
      */
     fds?: boolean;
@@ -122,6 +134,7 @@ export type SoundChipOptions = {
     gain?: number;
 };
 export type SoundChipMap = {
+    sid: import('./sid.js').SidCore | import('./sid8580.js').Sid8580Core;
     pokey: import('./pokey.js').Pokey;
     wonderswan: import('./wonderswan.js').WonderSwan;
     gameboy: import('./gameboyapu.js').GameboyApu;
@@ -144,7 +157,7 @@ export type SoundChipMap = {
     ymf278b: import('./ymf278b.js').Ymf278b;
     ymf288: import('./ymf288.js').Ymf288;
 };
-export type WorkletChipName = 'ym2612' | 'ym2608' | 'ym2151' | 'gameboy' | 'segapsg' | 'pwm' | 'nes' | 'ym3526' | 'ym3812' | 'y8950' | 'ymf262' | 'ym2413' | 'ay8910' | 'wonderswan' | 'pokey';
+export type WorkletChipName = 'ym2612' | 'ym2608' | 'ym2151' | 'gameboy' | 'segapsg' | 'pwm' | 'nes' | 'ym3526' | 'ym3812' | 'y8950' | 'ymf262' | 'ym2413' | 'ay8910' | 'wonderswan' | 'pokey' | 'sid';
 export declare function createSoundChip<Name extends WorkletChipName>(name: Name, options: SoundChipOptions & {
     execution: 'worklet';
 }): Promise<import('./soundchip_worklet.js').WorkletSoundChip & {

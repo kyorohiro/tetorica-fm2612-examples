@@ -1,6 +1,6 @@
 # SCSP：PCM8 / PCM16・ループ・32スロット
 
-公開済み **tetorica-fm2612@0.2.37** の実験的な CPU-free SCSP を使います。
+公開済み **tetorica-fm2612@0.2.39** の実験的な CPU-free SCSP を使います。
 ソフトウェアで同じ元波形を signed PCM8 / PCM16 に変換し、SCSP の前進ループで演奏します。選択・音程は再生中にも変更できます。
 自作の数式波形のみを使い、SaturnのROM・ゲーム音色・68000・SSFは使いません。
 

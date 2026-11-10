@@ -27,7 +27,7 @@ export declare function createNativeGenesisRf5c164(synth: any, { decodeAudio, fe
         reset: () => any;
         setClock(hz: any): Promise<void>;
         dispose(): void;
-    };
+    } & import("./rf5c164_notes.js").RF5C164AsyncNoteControls;
     dispatch(message: any, timing?: {}): Promise<void>;
     read(): Promise<{
         memoryRevision: number;

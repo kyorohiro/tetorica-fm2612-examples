@@ -1,6 +1,6 @@
 # SID：1つの共有フィルター
 
-公開済み `tetorica-fm2612@0.2.37` の専用SID APIで、3つのSawボイスを
+公開済み `tetorica-fm2612@0.2.39` の専用SID APIで、3つのSawボイスを
 1つのハードウェアフィルターへ送ります。LP / BP / HPの出力選択と、
 共通のCutoff・Resonanceを6581／8580 Previewで試します。
 音列はコード内のオリジナルで、C64 CPU・ROM・SID曲は使いません。

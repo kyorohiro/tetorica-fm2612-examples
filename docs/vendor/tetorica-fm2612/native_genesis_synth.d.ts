@@ -398,7 +398,7 @@ export declare class NativeGenesisSynth {
             reset: () => any;
             setClock(hz: any): Promise<void>;
             dispose(): void;
-        };
+        } & import("./rf5c164_notes.js").RF5C164AsyncNoteControls;
         dispatch(message: any, timing?: {}): Promise<void>;
         read(): Promise<{
             memoryRevision: number;
@@ -437,7 +437,7 @@ export declare class NativeGenesisSynth {
         stopped(): void;
         reset(): void;
     } | null;
-    pcm: {
+    pcm: ({
         id: string;
         loadMemory(bytes: any, address?: number): any;
         loadSample(source: any, { address, loopStart, endGuardBytes }?: {
@@ -457,7 +457,7 @@ export declare class NativeGenesisSynth {
         reset: () => any;
         setClock(hz: any): Promise<void>;
         dispose(): void;
-    } | null;
+    } & import("./rf5c164_notes.js").RF5C164AsyncNoteControls) | null;
     nativeDx7: {
         client: {
             id: string;

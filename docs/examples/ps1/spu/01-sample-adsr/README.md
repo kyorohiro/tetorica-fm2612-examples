@@ -1,6 +1,6 @@
 # SPU：自作サンプルとLive ADSR
 
-公開済み `tetorica-fm2612@0.2.37` だけを使う、独立したWeb / Node例です。
+公開済み `tetorica-fm2612@0.2.39` だけを使う、独立したWeb / Node例です。
 112点の自作サイン波を **ソフトウェアで** SPU ADPCMへ変換してから再生します。
 WAV・ゲーム音色・ROM・PS1 CPUは不要です。
 
