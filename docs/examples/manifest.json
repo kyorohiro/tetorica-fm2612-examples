@@ -555,6 +555,15 @@
     ]
   },
   {
+    "id": "ps1/spu/03-vab-bank",
+    "title": "SPU：VABを開いてToneを使う",
+    "description": "標準VABのProgram／Tone選択、調律済みADPCMの試奏、Node WAV保存、選択Toneの標準VAB書き出し。自作バンクを同梱。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
     "id": "saturn/scsp/01-pcm",
     "title": "Saturn SCSP：PCM8 / PCM16",
     "description": "32物理slot、符号付きPCM、forward loop、音程・envelope・mix。",

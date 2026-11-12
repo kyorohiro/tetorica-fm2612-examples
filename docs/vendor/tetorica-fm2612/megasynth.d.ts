@@ -296,7 +296,21 @@ export declare class MegaSynth {
         readonly id: string;
     }) | null;
     noise: {
-        create: (options?: {}) => any;
+        create: (options?: {}) => {
+            type: any;
+            gain: any;
+            pan: any;
+            attack: any;
+            release: any;
+            filter: {
+                cutoff: any;
+                q: any;
+                set(mode: any, frequency: any, q?: any): void;
+            };
+            start: () => void;
+            stop: () => void;
+            dispose(): void;
+        };
         stopAll: () => void;
     };
     /** @type {Promise<void> | null} */

@@ -1,6 +1,6 @@
 # SCSP：2スロットの sound-stack 変調
 
-公開済み **tetorica-fm2612@0.2.39** の実験的な CPU-free SCSP を使います。
+公開済み **tetorica-fm2612@0.2.40** の実験的な CPU-free SCSP を使います。
 slot 0 を変調器、slot 1 をキャリアとして、ハードウェアの波形アドレス変調を比較します。Depth 0 は変調を切断します。
 自作の数式波形のみを使い、SaturnのROM・ゲーム音色・68000・SSFは使いません。
 

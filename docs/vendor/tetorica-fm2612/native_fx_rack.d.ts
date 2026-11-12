@@ -2,7 +2,34 @@
  * @returns Native rack node, FX/sample/noise controllers and Main/Worker ownership/lifecycle methods. */
 export declare function createNativeFXRack(context: AudioContext): Promise<{
     node: AudioWorkletNode;
-    controller: any;
+    controller: {
+        liveFx(name: string, { process, context, resetState }?: {
+            process: (input: Float32Array[], output: Float32Array[], state: Record<string, unknown>, context: Record<string, unknown>) => void;
+            context?: Record<string, unknown>;
+            resetState?: boolean;
+        }): void;
+        updateContext(name: any, context: any): void;
+        removeLiveFx(name: any): void;
+        branch: (...children: any[]) => {
+            type: string;
+            children: any[];
+            owner: /*elided*/ any;
+            dispose(): void;
+        };
+        parallel: (...children: any[]) => {
+            type: string;
+            children: any[];
+            owner: /*elided*/ any;
+            dispose(): void;
+        };
+        setChain(effects?: any[]): any[];
+        clear({ dispose }?: {
+            dispose?: boolean | undefined;
+        }): any[];
+        dispose(): void;
+        getChain(): any[];
+        syncTempo(): void;
+    };
     mainActive: boolean;
     sample: {
         accept(d: any): void;

@@ -1,6 +1,13 @@
 export { SoundChipMixer, soundChipMixDefaults } from './soundchip_mixer.js';
 export { SOUNDCHIP_MIXER_PRESETS } from './soundchip_mixer_presets.js';
 export { encodeWav } from './wav.js';
+export { MAX_VAB_FILE_BYTES, readVab, prepareVabTone, exportVab } from './ps1_vab.js';
+export type Ps1VabBank = import('./ps1_vab.js').Ps1VabBank;
+export type Ps1VabProgram = import('./ps1_vab.js').Ps1VabProgram;
+export type Ps1VabTone = import('./ps1_vab.js').Ps1VabTone;
+export type Ps1VabSample = import('./ps1_vab.js').Ps1VabSample;
+export type Ps1VabPreparedTone = import('./ps1_vab.js').Ps1VabPreparedTone;
+export type Ps1VabExportOptions = import('./ps1_vab.js').Ps1VabExportOptions;
 export type WasmLoaderOptions = {
     /**
      * Preloaded WASM bytes.

@@ -226,6 +226,26 @@ export async function copyRuntime(destination) {
   } catch(error) {
     throw new Error('The SID examples require the complete tetorica-fm2612 >= 0.2.39 payload: common factory, both cores, Synth, typed clients, Worklets, WASM, matching sources, npm-safe metadata aliases and notices. Run npm install.',{cause:error});
   }
+  try {
+    for(const file of ['ps1_vab.js','ps1_vab.d.ts','ps1synth.js','ps1synth.d.ts',
+      'playground_ps1_audio.js','playground_ps1.js','generated/ps1_spu_wasm.js','generated/ps1_spu_wasm.wasm'])
+      await readFile(join(source,file));
+    const [api,vab,bare]=await Promise.all([
+      import('tetorica-fm2612'),import('tetorica-fm2612/ps1_vab.js'),import('tetorica-fm2612/ps1_vab'),
+    ]);
+    for(const name of ['readVab','prepareVabTone','exportVab']) {
+      assert.equal(typeof api[name],'function','Missing public VAB helper: '+name);
+      assert.equal(api[name],vab[name],'Package root and VAB subpath must share source-bank ownership');
+      assert.equal(api[name],bare[name],'Extensionless VAB subpath must share the same helpers');
+    }
+    const bytes=await readFile(join(root,'examples/ps1/spu/03-vab-bank/assets/demo.vab'));
+    const bank=api.readVab(bytes);
+    assert.deepEqual(Buffer.from(api.exportVab(bank)),bytes,'Original VAB export preserves every source byte');
+    assert(api.prepareVabTone(bank,0).adpcm.length>0,'Original demo Tone can be prepared');
+    assert.equal(api.readVab(api.exportVab(bank,{toneNumber:0})).tones.length,1,'Selected standard VAB round trip');
+  } catch(error) {
+    throw new Error('The VAB example requires tetorica-fm2612 >= 0.2.40 with shared readVab / prepareVabTone / exportVab APIs, typed SPU clients and its original demo asset. Run npm install.',{cause:error});
+  }
   const target = join(destination, 'vendor/tetorica-fm2612');
   await mkdir(join(destination, 'vendor'), {recursive: true});
   await rm(target, {recursive: true, force: true});

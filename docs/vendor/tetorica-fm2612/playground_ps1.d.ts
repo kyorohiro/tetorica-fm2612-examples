@@ -1,5 +1,3 @@
-/** Ordered Browser/logic-Worker controls for the experimental PS1 SPU. */
-import { Ps1Synth } from './ps1synth.js';
 /** @param {MessagePort} port @param {{sampleRate?:number,state?:any}} [initial] */
 export declare function createPs1Client(port: MessagePort, initial?: {
     sampleRate?: number;
@@ -78,8 +76,8 @@ export declare function createPs1Client(port: MessagePort, initial?: {
      * @param {{clearRam?:boolean}} [options] */ reset(options?: {
         clearRam?: boolean;
     }): void;
-    /** @returns {Promise<ReturnType<Ps1Synth['getState']>>} */ getState(): Promise<ReturnType<Ps1Synth['getState']>>;
-    /** @param {number} ch @returns {Promise<ReturnType<Ps1Synth['getPreset']>>} */ getPreset(ch: number): Promise<ReturnType<Ps1Synth['getPreset']>>;
-    /** @returns {Promise<ReturnType<Ps1Synth['snapshot']>>} */ snapshot(): Promise<ReturnType<Ps1Synth['snapshot']>>;
+    /** @returns {Promise<ReturnType<import('./ps1synth.js').Ps1Synth['getState']>>} */ getState(): Promise<ReturnType<import('./ps1synth.js').Ps1Synth['getState']>>;
+    /** @param {number} ch @returns {Promise<ReturnType<import('./ps1synth.js').Ps1Synth['getPreset']>>} */ getPreset(ch: number): Promise<ReturnType<import('./ps1synth.js').Ps1Synth['getPreset']>>;
+    /** @returns {Promise<ReturnType<import('./ps1synth.js').Ps1Synth['snapshot']>>} */ snapshot(): Promise<ReturnType<import('./ps1synth.js').Ps1Synth['snapshot']>>;
     dispose(): void;
 };

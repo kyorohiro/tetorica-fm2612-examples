@@ -1,4 +1,5 @@
 import { SoundChipMixer } from './soundchip_mixer.js';
+import * as fx from "./megasynth_fx.js";
 /**
  * Chip-independent browser audio state shared by Tetorica synths.
  *
@@ -19,7 +20,83 @@ export declare class TetoricaAudioRuntime {
     /** @type {Set<AudioNode>} Non-audible observation branches after FX and master volume. */
     outputMonitors: Set<AudioNode>;
     fxChain: any[];
-    nativeFXPreparation: any;
+    nativeFXPreparation: Promise<{
+        node: AudioWorkletNode;
+        controller: {
+            liveFx(name: string, { process, context, resetState }?: {
+                process: (input: Float32Array[], output: Float32Array[], state: Record<string, unknown>, context: Record<string, unknown>) => void;
+                context?: Record<string, unknown>;
+                resetState?: boolean;
+            }): void;
+            updateContext(name: any, context: any): void;
+            removeLiveFx(name: any): void;
+            branch: (...children: any[]) => {
+                type: string;
+                children: any[];
+                owner: /*elided*/ any;
+                dispose(): void;
+            };
+            parallel: (...children: any[]) => {
+                type: string;
+                children: any[];
+                owner: /*elided*/ any;
+                dispose(): void;
+            };
+            setChain(effects?: any[]): any[];
+            clear({ dispose }?: {
+                dispose?: boolean | undefined;
+            }): any[];
+            dispose(): void;
+            getChain(): any[];
+            syncTempo(): void;
+        };
+        mainActive: boolean;
+        sample: {
+            accept(d: any): void;
+            load(name: string, pcm: import('./wav.js').ChannelPCM): Promise<{
+                name: string;
+                length: number;
+                sampleRate: number;
+                numberOfChannels: number;
+                duration: number;
+            }>;
+            play(name: string, options?: import('./megasynth.js').MegaSynthSamplePlayOptions): Promise<{
+                name: string;
+                stop: () => void;
+            }>;
+            stop(name: any): void;
+            stopAll(): void;
+            unload(name: any): boolean;
+            isLoaded: (name: any) => boolean;
+            get: (name: any) => any;
+            list: () => any[];
+            invalidate(): void;
+        };
+        noise: {
+            create(options?: {}): {
+                type: any;
+                gain: any;
+                pan: any;
+                attack: any;
+                release: any;
+                filter: {
+                    cutoff: any;
+                    q: any;
+                    set(mode: any, frequency: any, q?: any): void;
+                };
+                start: () => void;
+                stop: () => void;
+                dispose(): void;
+            };
+            stopAll(): void;
+            disposeAll(): void;
+        };
+        getBeatSeconds: () => number;
+        useMain(): void;
+        workerPort(): MessagePort;
+        stop(): void;
+        dispose(): void;
+    }> | null;
     nativeFXGeneration: number;
     sampleBuffers: Map<any, any>;
     sampleVoices: Set<any>;
@@ -29,10 +106,100 @@ export declare class TetoricaAudioRuntime {
     sample: any;
     stream: any;
     noise: {
-        create: (options?: {}) => any;
+        create: (options?: {}) => {
+            type: any;
+            gain: any;
+            pan: any;
+            attack: any;
+            release: any;
+            filter: {
+                cutoff: any;
+                q: any;
+                set(mode: any, frequency: any, q?: any): void;
+            };
+            start: () => void;
+            stop: () => void;
+            dispose(): void;
+        };
         stopAll: () => void;
     } | null;
-    nativeFX: any;
+    nativeFX: {
+        node: AudioWorkletNode;
+        controller: {
+            liveFx(name: string, { process, context, resetState }?: {
+                process: (input: Float32Array[], output: Float32Array[], state: Record<string, unknown>, context: Record<string, unknown>) => void;
+                context?: Record<string, unknown>;
+                resetState?: boolean;
+            }): void;
+            updateContext(name: any, context: any): void;
+            removeLiveFx(name: any): void;
+            branch: (...children: any[]) => {
+                type: string;
+                children: any[];
+                owner: /*elided*/ any;
+                dispose(): void;
+            };
+            parallel: (...children: any[]) => {
+                type: string;
+                children: any[];
+                owner: /*elided*/ any;
+                dispose(): void;
+            };
+            setChain(effects?: any[]): any[];
+            clear({ dispose }?: {
+                dispose?: boolean | undefined;
+            }): any[];
+            dispose(): void;
+            getChain(): any[];
+            syncTempo(): void;
+        };
+        mainActive: boolean;
+        sample: {
+            accept(d: any): void;
+            load(name: string, pcm: import('./wav.js').ChannelPCM): Promise<{
+                name: string;
+                length: number;
+                sampleRate: number;
+                numberOfChannels: number;
+                duration: number;
+            }>;
+            play(name: string, options?: import('./megasynth.js').MegaSynthSamplePlayOptions): Promise<{
+                name: string;
+                stop: () => void;
+            }>;
+            stop(name: any): void;
+            stopAll(): void;
+            unload(name: any): boolean;
+            isLoaded: (name: any) => boolean;
+            get: (name: any) => any;
+            list: () => any[];
+            invalidate(): void;
+        };
+        noise: {
+            create(options?: {}): {
+                type: any;
+                gain: any;
+                pan: any;
+                attack: any;
+                release: any;
+                filter: {
+                    cutoff: any;
+                    q: any;
+                    set(mode: any, frequency: any, q?: any): void;
+                };
+                start: () => void;
+                stop: () => void;
+                dispose(): void;
+            };
+            stopAll(): void;
+            disposeAll(): void;
+        };
+        getBeatSeconds: () => number;
+        useMain(): void;
+        workerPort(): MessagePort;
+        stop(): void;
+        dispose(): void;
+    } | null | undefined;
     /** @param {{audioContext?:AudioContext|null,outputNode?:AudioNode|null,sampleOutputNode?:AudioNode|null,masterVolume?:number,mixer?:SoundChipMixer}} [options] */
     constructor(options?: {
         audioContext?: AudioContext | null;
@@ -56,7 +223,10 @@ export declare class TetoricaAudioRuntime {
     listSamples(): any[];
     createSampleApi(options?: {}): {
         load: (name: any, source: any) => Promise<any>;
-        play: (name: any, playOptions?: {}) => Promise<any> | {
+        play: (name: any, playOptions?: {}) => Promise<{
+            name: string;
+            stop: () => void;
+        }> | {
             name: string;
             source: AudioBufferSourceNode;
             gainNode: GainNode;
@@ -90,21 +260,177 @@ export declare class TetoricaAudioRuntime {
         list: () => any[];
     };
     createNoiseApi(): {
-        create: (options?: {}) => any;
+        create: (options?: {}) => {
+            type: any;
+            gain: any;
+            pan: any;
+            attack: any;
+            release: any;
+            filter: {
+                cutoff: any;
+                q: any;
+                set(mode: any, frequency: any, q?: any): void;
+            };
+            start: () => void;
+            stop: () => void;
+            dispose(): void;
+        };
         stopAll: () => void;
     };
-    prepareNativeFX(): Promise<any>;
-    createFXApi(options?: {}): any;
+    prepareNativeFX(): Promise<{
+        node: AudioWorkletNode;
+        controller: {
+            liveFx(name: string, { process, context, resetState }?: {
+                process: (input: Float32Array[], output: Float32Array[], state: Record<string, unknown>, context: Record<string, unknown>) => void;
+                context?: Record<string, unknown>;
+                resetState?: boolean;
+            }): void;
+            updateContext(name: any, context: any): void;
+            removeLiveFx(name: any): void;
+            branch: (...children: any[]) => {
+                type: string;
+                children: any[];
+                owner: /*elided*/ any;
+                dispose(): void;
+            };
+            parallel: (...children: any[]) => {
+                type: string;
+                children: any[];
+                owner: /*elided*/ any;
+                dispose(): void;
+            };
+            setChain(effects?: any[]): any[];
+            clear({ dispose }?: {
+                dispose?: boolean | undefined;
+            }): any[];
+            dispose(): void;
+            getChain(): any[];
+            syncTempo(): void;
+        };
+        mainActive: boolean;
+        sample: {
+            accept(d: any): void;
+            load(name: string, pcm: import('./wav.js').ChannelPCM): Promise<{
+                name: string;
+                length: number;
+                sampleRate: number;
+                numberOfChannels: number;
+                duration: number;
+            }>;
+            play(name: string, options?: import('./megasynth.js').MegaSynthSamplePlayOptions): Promise<{
+                name: string;
+                stop: () => void;
+            }>;
+            stop(name: any): void;
+            stopAll(): void;
+            unload(name: any): boolean;
+            isLoaded: (name: any) => boolean;
+            get: (name: any) => any;
+            list: () => any[];
+            invalidate(): void;
+        };
+        noise: {
+            create(options?: {}): {
+                type: any;
+                gain: any;
+                pan: any;
+                attack: any;
+                release: any;
+                filter: {
+                    cutoff: any;
+                    q: any;
+                    set(mode: any, frequency: any, q?: any): void;
+                };
+                start: () => void;
+                stop: () => void;
+                dispose(): void;
+            };
+            stopAll(): void;
+            disposeAll(): void;
+        };
+        getBeatSeconds: () => number;
+        useMain(): void;
+        workerPort(): MessagePort;
+        stop(): void;
+        dispose(): void;
+    }>;
+    createFXApi(options?: {}): {
+        liveFx(name: string, { process, context, resetState }?: {
+            process: (input: Float32Array[], output: Float32Array[], state: Record<string, unknown>, context: Record<string, unknown>) => void;
+            context?: Record<string, unknown>;
+            resetState?: boolean;
+        }): void;
+        updateContext(name: any, context: any): void;
+        removeLiveFx(name: any): void;
+        branch: (...children: any[]) => {
+            type: string;
+            children: any[];
+            owner: /*elided*/ any;
+            dispose(): void;
+        };
+        parallel: (...children: any[]) => {
+            type: string;
+            children: any[];
+            owner: /*elided*/ any;
+            dispose(): void;
+        };
+        setChain(effects?: any[]): any[];
+        clear({ dispose }?: {
+            dispose?: boolean | undefined;
+        }): any[];
+        dispose(): void;
+        getChain(): any[];
+        syncTempo(): void;
+    } | {
+        gain: (fxOptions?: {}) => fx.GainFXUnit;
+        eq: (fxOptions?: {}) => fx.EqFXUnit;
+        radioTone: (fxOptions?: {}) => fx.RadioToneFXUnit;
+        lofi: (fxOptions?: {}) => fx.LofiFXUnit;
+        stereoWidth: (fxOptions?: {}) => fx.StereoWidthFXUnit;
+        bitcrusher: (fxOptions?: {}) => fx.BitcrusherFXUnit;
+        filter: (fxOptions?: {}) => fx.FilterFXUnit;
+        delay: (fxOptions?: {}) => fx.DelayFXUnit;
+        distortion: (fxOptions?: {}) => fx.DistortionFXUnit;
+        compressor: (fxOptions?: {}) => fx.CompressorFXUnit;
+        gate: (fxOptions?: {}) => fx.GateFXUnit;
+        wobble: (fxOptions?: {}) => fx.WobbleFXUnit;
+        flanger: (fxOptions?: {}) => fx.FlangerFXUnit;
+        chorus: (fxOptions?: {}) => fx.ChorusFXUnit;
+        tapeSaturation: (fxOptions?: {}) => fx.TapeSaturationFXUnit;
+        reverb: (fxOptions?: {}) => fx.ReverbFXUnit;
+        branch: (...effects: any[]) => fx.FXBranch;
+        parallel: (...branches: any[]) => fx.ParallelFXUnit;
+        slicer: (fxOptions?: {}) => fx.SlicerFXUnit;
+        setChain: (effects?: any[]) => any[];
+        clear: (fxOptions?: {}) => any[];
+    };
     setAudioHandle(id: any, value: any): any;
     getAudioHandle(id: any): any;
     disposeAudioHandle(id: any): void;
     disposeAudioHandles(ids?: MapIterator<any>): void;
-    createNoiseVoice(options?: {}): any;
+    createNoiseVoice(options?: {}): {
+        type: any;
+        gain: any;
+        pan: any;
+        attack: any;
+        release: any;
+        filter: {
+            cutoff: any;
+            q: any;
+            set(mode: any, frequency: any, q?: any): void;
+        };
+        start: () => void;
+        stop: () => void;
+        dispose(): void;
+    };
     stopNoise(): void;
     disposeNoise(): void;
     mediaOutputNode(): AudioNode;
     loadSample(name: any, source: any, options?: {}): Promise<any>;
-    playSample(name: any, options?: {}): Promise<any> | {
+    playSample(name: any, options?: {}): Promise<{
+        name: string;
+        stop: () => void;
+    }> | {
         name: string;
         source: AudioBufferSourceNode;
         gainNode: GainNode;
@@ -133,10 +459,10 @@ export declare class TetoricaAudioRuntime {
     ensureRouting(audioContext: AudioContext): void;
     /** @param {AudioNode} node */
     connectChipOutput(node: AudioNode): void;
-    setFXChain(effects?: any[], options?: {}): any;
-    getFXChain(): any;
+    setFXChain(effects?: any[], options?: {}): any[] | undefined;
+    getFXChain(): any[];
     connect(effect: any): void;
-    clearFXChain(options?: {}): any;
+    clearFXChain(options?: {}): any[];
     disposeFXChain(): void;
     /** @param {AudioNode|null} [node] */
     connectOutput(node?: AudioNode | null): void;

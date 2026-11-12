@@ -6,6 +6,7 @@
  */
 import { OPNDirectTransport, OPNWorkletTransport, OPNFMSynth } from "./opn_fm_synth.js";
 import { OPNRuntimeSynth } from "./opn_runtime_synth.js";
+import { SSGSynth } from "./ssgsynth.js";
 /** Direct transport for YM2608 register operations. */
 /** @extends {OPNDirectTransport<import('./ym2608.js').Ym2608>} */
 export declare class YM2608DirectTransport extends OPNDirectTransport<import('./ym2608.js').Ym2608> {
@@ -149,7 +150,7 @@ export declare class YM2608AdpcmSynth {
 export declare class YM2608Synth extends OPNFMSynth {
     adpcm: YM2608AdpcmSynth;
     rhythm: YM2608RhythmSynth;
-    ssg: any;
+    ssg: SSGSynth;
     /** @param {{transport: import('./opn_fm_synth.js').OPNTransport, clock?: number}} options
      * clock is the master clock in Hz. SSG frequency helpers assume standard prescaling.
      */

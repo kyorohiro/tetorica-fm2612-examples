@@ -158,9 +158,9 @@ export declare function createNativePrimaryClient(name: any, port: any, options?
     reset(options?: {
         clearRam?: boolean;
     }): void;
-    getState(): Promise<ReturnType<import("./ps1synth.js").Ps1Synth['getState']>>;
-    getPreset(ch: number): Promise<ReturnType<import("./ps1synth.js").Ps1Synth['getPreset']>>;
-    snapshot(): Promise<ReturnType<import("./ps1synth.js").Ps1Synth['snapshot']>>;
+    getState(): Promise<ReturnType<import('./ps1synth.js').Ps1Synth['getState']>>;
+    getPreset(ch: number): Promise<ReturnType<import('./ps1synth.js').Ps1Synth['getPreset']>>;
+    snapshot(): Promise<ReturnType<import('./ps1synth.js').Ps1Synth['snapshot']>>;
     dispose(): void;
 } | {
     sampleRate: number;

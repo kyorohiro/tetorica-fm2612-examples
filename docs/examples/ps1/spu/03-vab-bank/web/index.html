@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SPU：VABのProgramとTone — tetorica-fm2612 examples</title>
+<link rel="stylesheet" href="../../../../../style.css">
+<script type="importmap">{"imports":{"tetorica-fm2612":"../../../../../vendor/tetorica-fm2612/soundchip.js","tetorica-fm2612/":"../../../../../vendor/tetorica-fm2612/"}}</script>
+<style>fieldset{display:grid;gap:12px;margin-block:20px}.actions{flex-wrap:wrap}select,input{max-width:100%}#code{width:100%;box-sizing:border-box;font-family:monospace}#detail{white-space:pre-wrap;overflow-wrap:anywhere}.file-input{display:none}label{display:grid;gap:6px}</style>
+</head><body><main><nav><a href="../../../../../index.html">← Examples</a><a href="./main.js">Source ↗</a></nav>
+<header><p class="eyebrow">ps1/spu/03-vab-bank · WEB / NODE</p><h1>SPU：VABのProgramとTone</h1><p>標準Sony VABを開き、元のADPCM・ADSR・基準音程を使って1音を試します。選択するだけでは音は鳴りません。</p></header>
+<section class="sample-panel">
+<div class="actions"><button id="load-demo" type="button">Load demo</button><button id="load-local" type="button">Open VAB…</button><input id="vab-file" class="file-input" type="file" accept=".vab" aria-label="Choose a combined VAB file"></div>
+<p id="status" role="status" aria-live="polite">Load demo または手元のVABを選んでください。</p>
+<fieldset><legend>Bank / Tone · 読み込みだけでは音声を開始しません</legend>
+<label for="program">Program<select id="program" disabled><option value="">No bank</option></select></label>
+<label for="tone">Tone<select id="tone" disabled><option value="">No Tone</option></select></label>
+<label for="note">Note<input id="note" type="text" value="C4" spellcheck="false" aria-describedby="note-help"></label>
+<span id="note-help">C4などの音名。元のCenter / Shiftから基準周波数を設定します。</span>
+<div class="actions"><button id="play" type="button" disabled>Play selected note</button><button id="stop" type="button" disabled>Stop</button><button id="export-tone" type="button" disabled>Export selected VAB</button></div>
+</fieldset>
+<p id="audio-status" role="status" aria-live="polite">Audio idle.</p><pre id="detail">No bank selected.</pre>
+<p>対応は標準VAB v6/v7のcombined .vab（最大1 MiB）。Noiseや不正なADPCMなど、試奏できないToneには理由を表示します。Program番号は飛び番のままです。</p>
+<p>Shared reverbはOffで試奏します。元ToneのReverb sendは保持しますが、VABには共有リバーブ設定がありません。Key範囲・Vibrato・Portamentoは表示用の記録で、自動演奏ドライバは再現しません。</p>
+<label for="code">次のPlayで実行するコード</label><textarea id="code" rows="19" spellcheck="false"></textarea>
+<p>preparedは選択時にprepareVabTone()で検証したデータのコピーです。startAudio()・sleep(秒)・note・consoleが使えます。既定は0.6秒で離鍵し、元のReleaseの後0.15秒で音源を閉じます。終了・Stopには8 msのソフトウェア出力フェードを使い、元のADSRは変更しません。音量の自動正規化はせず、host gain 0.6を1回だけ適用します。</p>
+<p>書き出しはexportVab(bank, {toneNumber})です。元のProgram番号と生ADPCMを保持した標準VABを保存し、Tone 0 / Sample 1へ再配置します。試奏用コードの編集を元のVABへ逆変換する機能ではありません。</p>
+<details id="web-source"><summary>Web — 全コード</summary><pre class="source"><code id="web-source-code">開くとmain.jsを読み込みます。</code></pre></details>
+<p><a href="../node/main.mjs">Node source ↗</a> · <a href="../README.md">README</a> · <a href="../assets/demo.vab" download>Original demo VAB</a></p>
+<pre><code>node examples/ps1/spu/03-vab-bank/node/main.mjs ./spu-vab.wav</code></pre>
+</section></main><script type="module" src="./main.js"></script></body></html>

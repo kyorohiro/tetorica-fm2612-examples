@@ -250,6 +250,7 @@
     "ps1_parameters.js",
     "ps1_resampler.js",
     "ps1_spu.js",
+    "ps1_vab.js",
     "ps1_waveform.js",
     "ps1synth.js",
     "pwm32x.js",

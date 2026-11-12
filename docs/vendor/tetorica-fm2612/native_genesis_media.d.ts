@@ -37,10 +37,10 @@ export declare function createNativeGenesisMedia(synth: any, { fetch: fetcher, d
         value: number | undefined;
         error?: undefined;
     } | {
-        value?: undefined;
         op: string;
         id: any;
         error: string;
+        value?: undefined;
     }>;
     loadDacBank(name: any, bytes: any): Promise<any>;
     playDacBank(name: any, time: any, timing?: {}): Promise<void>;

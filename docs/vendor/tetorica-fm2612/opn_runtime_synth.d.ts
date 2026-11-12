@@ -43,7 +43,21 @@ export declare class OPNRuntimeSynth {
     initializationController: AbortController | null;
     state: string;
     noise: {
-        create: (options?: {}) => any;
+        create: (options?: {}) => {
+            type: any;
+            gain: any;
+            pan: any;
+            attack: any;
+            release: any;
+            filter: {
+                cutoff: any;
+                q: any;
+                set(mode: any, frequency: any, q?: any): void;
+            };
+            start: () => void;
+            stop: () => void;
+            dispose(): void;
+        };
         stopAll: () => void;
     };
     /** @param {OPNRuntimeSynthOptions|undefined} options */
@@ -66,9 +80,9 @@ export declare class OPNRuntimeSynth {
     /** @param {number} volume */
     setMasterVolume(volume: number): number;
     getMasterVolume(): number;
-    setFXChain(effects?: any[], options?: {}): any;
-    getFXChain(): any;
-    clearFXChain(options?: {}): any;
+    setFXChain(effects?: any[], options?: {}): any[] | undefined;
+    getFXChain(): any[];
+    clearFXChain(options?: {}): any[];
     connect(effect: any): this;
     connectOutput(node?: null): this;
     close(): Promise<void>;

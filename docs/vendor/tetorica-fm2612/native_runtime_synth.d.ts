@@ -114,7 +114,21 @@ export declare class NativeRuntimeSynth {
     initializationController: AbortController | null;
     state: string;
     noise: {
-        create: (options?: {}) => any;
+        create: (options?: {}) => {
+            type: any;
+            gain: any;
+            pan: any;
+            attack: any;
+            release: any;
+            filter: {
+                cutoff: any;
+                q: any;
+                set(mode: any, frequency: any, q?: any): void;
+            };
+            start: () => void;
+            stop: () => void;
+            dispose(): void;
+        };
         stopAll: () => void;
     };
     /** @param {NativeRuntimeSynthOptions} [options] */
@@ -134,9 +148,9 @@ export declare class NativeRuntimeSynth {
     removeListener(listener: any): void;
     setMasterVolume(volume: any): number;
     getMasterVolume(): number;
-    setFXChain(effects?: any[], options?: {}): any;
-    getFXChain(): any;
-    clearFXChain(options?: {}): any;
+    setFXChain(effects?: any[], options?: {}): any[] | undefined;
+    getFXChain(): any[];
+    clearFXChain(options?: {}): any[];
     connect(effect: any): this;
     connectOutput(node?: null): this;
     /** Stop voices while keeping uploaded samples, patches, waveforms and clocks. */

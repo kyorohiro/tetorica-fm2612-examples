@@ -12,7 +12,9 @@ export type Ps1ADPCMOptions = ({
 /** Validate complete 16-byte / 28-frame SPU ADPCM packets and explicit tuning.
  * Predictors 0..4 and shifts 0..12 are accepted. END must be the final packet.
  * Looped data requires a packet-aligned loopStartSamples; any encoded LOOP START
- * marker must agree with it. The returned bytes are an owned copy.
+ * marker must agree with it. A marker in one-shot data is retained but does not
+ * enable repeating: only the END packet's Repeat bit does. The returned bytes
+ * are an owned copy.
  * @param {ArrayBuffer|ArrayBufferView} input @param {Ps1ADPCMOptions} options
  * @returns {{adpcm:Uint8Array,rootNote:string|number|null,rootFrequencyHz:number,basePitch:number,loop:boolean,loopStartSamples:number|null,decodedFrames:number}}
  */

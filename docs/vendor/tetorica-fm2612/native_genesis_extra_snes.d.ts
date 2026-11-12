@@ -39,8 +39,8 @@ export declare function createNativeGenesisExtraSnesEndpoint(synth: any): {
         value: boolean;
         deferred?: undefined;
     } | {
-        value?: undefined;
         id?: undefined;
+        value?: undefined;
         deferred: Promise<{
             id: any;
             value: any;

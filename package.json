@@ -26,10 +26,12 @@
     "check:sid": "node scripts/check-sid-browser.mjs",
     "check:spu": "node scripts/check-spu-browser.mjs",
     "check:scsp": "node scripts/check-scsp-browser.mjs",
-    "check:pcm-helpers": "node scripts/check-pcm-helpers-browser.mjs"
+    "check:pcm-helpers": "node scripts/check-pcm-helpers-browser.mjs",
+    "check:vab:node": "node scripts/check-vab-node.mjs",
+    "check:vab": "node scripts/check-vab-node.mjs && node scripts/check-vab-browser.mjs"
   },
   "dependencies": {
-    "tetorica-fm2612": "0.2.39"
+    "tetorica-fm2612": "0.2.40"
   },
   "devDependencies": {
     "playwright": "1.63.0"

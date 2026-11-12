@@ -1,6 +1,6 @@
 # SID：共通factoryからPCM・WAVへ
 
-`tetorica-fm2612@0.2.39`の共通`createSoundChip('sid')`を使うNode専用の最小例です。
+`tetorica-fm2612@0.2.40`の共通`createSoundChip('sid')`を使うNode専用の最小例です。
 modelを選び、TriangleのA4を0.5秒鳴らして、0.25秒のReleaseとともにWAVへ保存します。
 音声デバイス、AudioContext、C64 CPU、ROM、SID曲は使いません。
 

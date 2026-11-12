@@ -151,7 +151,7 @@ try{
  const vendor=JSON.parse(await readFile(join(site,'vendor/tetorica-fm2612/package.json'),'utf8'));assert.equal(vendor.version,dependency,'Static vendor matches published dependency');
  const node=await nodeChecks();await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});const base='http://127.0.0.1:'+server.address().port+prefix,results=[];
  const browsers=args.includes('--chromium')?[['chromium',chromium]]:args.includes('--webkit')?[['webkit',webkit]]:[['chromium',chromium],['webkit',webkit]];
- for(const[name,engine]of browsers){const browser=await bounded(engine.launch({headless:true}),'launch '+name,30000);try{for(const[kind,id]of Object.entries(cases))results.push(await checkPage(browser,base,name,kind,id));}finally{await bounded(browser.close(),'close '+name);}}
+ for(const[name,engine]of browsers){const browser=await bounded(engine.launch({headless:true,...(name==='chromium'?{args:['--mute-audio']}: {})}),'launch '+name,30000);try{for(const[kind,id]of Object.entries(cases))results.push(await checkPage(browser,base,name,kind,id));}finally{await bounded(browser.close(),'close '+name);}}
  assert.deepEqual(missing,[],'No missing assets, repository fallback or external files');
  for(const name of ['playground_ps1_audio.js','playground_ps1_worklet.js','playground_ps1.js','ps1_adpcm_encoder.js','generated/ps1_spu_wasm.wasm'])assert(served.has('vendor/tetorica-fm2612/'+name),'Actual packaged asset used '+name);
  const report={schemaVersion:1,passed:true,packageVersion:vendor.version,physicalOutputMuted:true,listeningPerformed:false,staticSiteOnly:true,node,results,assets:Object.fromEntries([...served].sort(([a],[b])=>a.localeCompare(b)))};
