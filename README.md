@@ -1,7 +1,7 @@
 # tetorica-fm2612 examples
 
 `tetorica-fm2612` を import して使う、機能別の小さなサンプル集。
-公開済み npm `tetorica-fm2612@0.2.41` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES・PC Engine・MSX 合奏の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
+公開済み npm `tetorica-fm2612@0.2.44` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES・PC Engine・MSX 合奏の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
 SIDは専用APIのAudioWorklet接続と、共通factory／専用coreから直接PCMを生成するNode例を用意しています。
 PCM 生成・WAV 保存は専用例に置き、Web Audio を使う埋め込み例と、Node の nativeFX / 音声デバイス出力の例も掲載しています。本体リポジトリには依存しません。
 
@@ -79,6 +79,8 @@ Nativeの予約実行をJavaScriptタイマーで代替する処理はありま�
 | Saturn SCSP（Web / Node） | [01-pcm](examples/saturn/scsp/01-pcm/README.md) | PCM8／PCM16・forward loop・envelope・32slot |
 | Saturn SCSP（Web / Node） | [02-lfo](examples/saturn/scsp/02-lfo/README.md) | live pitch／amplitude LFO、reset／hold |
 | Saturn SCSP（Web / Node） | [03-modulation](examples/saturn/scsp/03-modulation/README.md) | guard付きPCMと2slot sound-stack変調 |
+| Saturn SCSP DSP（Web / Node） | [04-dsp-programs](examples/saturn/scsp/04-dsp-programs/README.md) | 命令のassemble／disassemble、Gain／IIRとCOEFのライブ変更 |
+| Saturn SCSP DSP（Web / Node） | [05-dsp-delay](examples/saturn/scsp/05-dsp-delay/README.md) | 管理されたRAM ring、離鍵後のEcho、Time／Feedback |
 | SNES BRR変換（Web / Node） | [03-pcm-to-brr](examples/snes/03-pcm-to-brr/README.md) | PCMをソフトウェアでBRRへ変換し、実S-DSPで再生 |
 | Neo Geo ADPCM-A変換（Web / Node） | [01-pcm-encode](examples/neo-geo/adpcm-a/01-pcm-encode/README.md) | PCMをソフトウェアでADPCM-Aへ変換し、実YM2610/Bで再生 |
 | Game Boy Wave変換（Web / Node） | [01-wave-preview](examples/gameboy/pcm/01-wave-preview/README.md) | PCM比較と独立した実APU preview |
@@ -163,7 +165,7 @@ Gaussian補間と改善されたloop予測は公開版のまま使い、`setEnve
 
 SCSPは`Scsp`／`ScspSynth`のsigned PCM8／16・forward loopから始め、`setLfo()`のhardware LFO、
 `setModulation()`のsound-stack address変調へ進みます。stack offsetはslot番号ではありません。
-変調用PCMにはfull loopとguard領域が必要です。DSP／delay・SSF／68000は0.2.41の公開高級APIに含まれないため、この例集には追加していません。
+変調用PCMにはfull loopとguard領域が必要です。0.2.42〜0.2.44のDSP追加分として、命令のassemble／disassemble、RAM-free Gain／IIR、管理されたDelay ringを試せます。SSF／68000の曲再生はこの例集の範囲外です。
 
 PCM→BRR、PCM→ADPCM-A、Game Boy用Wave変換は**ソフトウェアの前処理**です。
 変換結果は実際のS-DSP／YM2610/B／Game Boyコアへ渡して音を確かめます。
@@ -174,6 +176,7 @@ npm run build
 npm run check:node
 npm run check:spu
 npm run check:scsp
+npm run check:scsp-dsp
 npm run check:pcm-helpers
 ```
 

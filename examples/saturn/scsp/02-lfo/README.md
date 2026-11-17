@@ -1,6 +1,6 @@
 # SCSP：ハードウェア LFO をライブ操作
 
-公開済み **tetorica-fm2612@0.2.40** の実験的な CPU-free SCSP を使います。
+公開済み **tetorica-fm2612@0.2.44** の実験的な CPU-free SCSP を使います。
 音を押し直さずに、各スロットのハードウェア LFO の速度・波形・ピッチ変調・振幅変調を変更します。
 自作の数式波形のみを使い、SaturnのROM・ゲーム音色・68000・SSFは使いません。
 
@@ -34,7 +34,7 @@ node examples/saturn/scsp/02-lfo/node/main.mjs ./scsp-02-lfo.wav
 - `setPreset()` / `setEnvelope()` は次回keyOn用。`setMix()` / `setFrequency()` / `setLfo()` / `setModulation()` はライブ更新です。
 - `totalLevel` は0〜255の減衰コード（0が最大音量）、`directLevel` は0〜7（0が直接出力ミュート）。
 - PCM準備・リサンプル・ガード確保はソフトウェア側の処理。PCM再生・EG・LFO・sound-stack変調がチップ側の機能です。
-- 公開APIの範囲に合わせ、DSPエフェクト・delay・SSFの曲再生は扱いません。
+- この例はDSPを使用しません。DSPは[Gain / IIR](../04-dsp-programs/README.md)と[Delay](../05-dsp-delay/README.md)へ進めます。SSFの曲再生は扱いません。
 - コアはMAME由来の実験的実装。ライセンス・対応ソースはnpm packageの `licenses/` / `sources/` に含まれます。
 
 ## 何を比べるか

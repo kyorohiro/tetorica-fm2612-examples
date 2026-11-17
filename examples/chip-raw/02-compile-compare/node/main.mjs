@@ -1,12 +1,15 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Published npm only. No WASM, AudioContext, native output or device is opened.
 import assert from 'node:assert/strict';
-import {mkdir, writeFile} from 'node:fs/promises';
+import {mkdir, readFile, writeFile} from 'node:fs/promises';
 import {dirname, resolve} from 'node:path';
 import {YM2612Synth} from 'tetorica-fm2612/ym2612synth.js';
 import {attachYm2612TimedClient} from 'tetorica-fm2612/ym2612_timed_client.js';
 import {createYm2612OperationResetState, observeYm2612OperationWrite} from 'tetorica-fm2612/ym2612_operations.js';
 import {createYm2612TimedSnapshot} from 'tetorica-fm2612/ym2612_timed_state.js';
+import {runtimeAssetUrl} from 'tetorica-fm2612/package_assets.js';
+
+const packageVersion = JSON.parse(await readFile(runtimeAssetUrl('package.json'),'utf8')).version;
 
 // This transport records authoring writes, rather than sending them to a chip.
 // Its independently owned shadow is an explicit, known offline baseline.
@@ -74,7 +77,7 @@ try {
   };
   for (const [name, ok] of Object.entries(checks)) assert.equal(ok, true, name);
   const result = {
-    format:'tetorica-register-comparison-v1', packageVersion:'0.2.41', chip:'ym2612',
+    format:'tetorica-register-comparison-v1', packageVersion, chip:'ym2612',
     snapshotOrigin:'Explicit local recording transport; not an AudioWorklet capture.',
     clock:fm.clock, referenceSampleRate:operations.referenceSampleRate,
     baselines:{client, reset, snapshotA, snapshotB}, checks,

@@ -90,6 +90,7 @@ export declare class ScspInstrumentProcessor extends AudioWorkletProcessor {
     attach(port: any, worker: any): void;
     sendResources(port: any, resetPort: any, editedSlot: any): void;
     resourcesChanged(resetPort: any, editedSlot: any): void;
+    dspChanged(method: any, args: any): void;
     receive(data: any, port: any): void;
     stopVoices(): void;
     apply({ method, args, id, resourceFence }: {

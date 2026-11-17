@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "outputDeviceOpened": false,
+  "results": [
+    {
+      "kind": "gain-iir",
+      "ramUnchanged": true,
+      "frames": 83790,
+      "profile": "ram-free",
+      "peak": 0.03582763671875
+    },
+    {
+      "kind": "delay",
+      "pcmUnchanged": true,
+      "frames": 50715,
+      "profile": "delay-ring",
+      "delay": {
+        "enabled": true,
+        "timeMs": 120,
+        "feedback": 0.5
+      },
+      "ram": {
+        "address": 8192,
+        "byteLength": 65536
+      },
+      "peak": 0.043731689453125
+    }
+  ]
+}

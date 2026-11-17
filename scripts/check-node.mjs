@@ -215,7 +215,7 @@ try {
      const out=join(directory,'register-comparison.json');
      execFileSync(process.execPath,[`examples/${item.id}/node/main.mjs`,out],{cwd:root,timeout:30000,stdio:'pipe'});
      const data=JSON.parse(await readFile(out,'utf8'));
-     assert.equal(data.format,'tetorica-register-comparison-v1');assert.equal(data.packageVersion,'0.2.41');
+     assert.equal(data.format,'tetorica-register-comparison-v1');assert.equal(data.packageVersion,JSON.parse(await readFile(root+'/node_modules/tetorica-fm2612/package.json','utf8')).version);
      assert.equal(data.physicalOutputUsed,false);assert.equal(data.native.captureSupported,false);assert.equal(data.native.scheduleSupported,false);
      assert(Object.keys(data.checks).length>=8&&Object.values(data.checks).every(value=>value===true),'Register comparison checks');
      assert.equal(data.baselines.client[0].value,0x72);assert.equal(data.baselines.reset[0].value,2);

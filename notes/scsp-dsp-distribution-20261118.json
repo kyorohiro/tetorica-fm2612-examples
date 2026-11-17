@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "packageVersion": "0.2.44",
+  "resolved": "https://registry.npmjs.org/tetorica-fm2612/-/tetorica-fm2612-0.2.44.tgz",
+  "integrity": "sha512-wOua7x33rGkNmY2PcPO5oN6xNd6r6O0dc/q+HdyjcW2nwIEx9N41OsujNTE/6AXodZw4RgicPnP3b77iGNR15A==",
+  "registryTarballSha256": "224e477c4ecd5b01b16296c296cea150992a9a93d6802060e08d3f239ecb8ffe",
+  "installedAndVendorFiles": 1299,
+  "sameRegistryInstalledDistDocsVendor": true,
+  "staticSiteFiles": 1622,
+  "distDocsByteIdentical": true,
+  "allExampleSourcesCopiedExactly": true,
+  "manifestItems": 83,
+  "allCatalogTargetsExist": true,
+  "testedBrowserAssetsMatchFinalDocs": true,
+  "publicRegistryLockfile": true,
+  "physicalListeningPerformed": false
+}

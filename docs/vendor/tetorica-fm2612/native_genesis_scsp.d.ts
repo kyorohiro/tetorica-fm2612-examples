@@ -37,6 +37,8 @@ export declare function createNativeGenesisScsp(owner: any, { additional }?: {
             nextSampleId: number;
             ramUsedBytes: number;
             ramFreeBytes: number;
+            dsp?: any;
+            dspRam?: any;
             playingFrequencies: any[];
             playingLfos: any[];
             playingModulations: any[];
@@ -48,6 +50,7 @@ export declare function createNativeGenesisScsp(owner: any, { additional }?: {
                 totalLevel: number;
                 directLevel: number;
                 pan: number;
+                dspSend: number;
                 envelope: {
                     attackRate: number;
                     decay1Rate: number;
@@ -96,6 +99,8 @@ export declare function createNativeGenesisScsp(owner: any, { additional }?: {
                 nextSampleId: number;
                 ramUsedBytes: number;
                 ramFreeBytes: number;
+                dsp?: any;
+                dspRam?: any;
                 playingFrequencies: any[];
                 playingLfos: any[];
                 playingModulations: any[];
@@ -107,6 +112,7 @@ export declare function createNativeGenesisScsp(owner: any, { additional }?: {
                     totalLevel: number;
                     directLevel: number;
                     pan: number;
+                    dspSend: number;
                     envelope: {
                         attackRate: number;
                         decay1Rate: number;

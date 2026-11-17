@@ -599,6 +599,24 @@
     ]
   },
   {
+    "id": "saturn/scsp/04-dsp-programs",
+    "title": "Saturn SCSP：DSP命令・Gain / IIR",
+    "description": "フィールド表記のassemble / disassemble、RAM-free GainとIIR、発音中のCOEF更新を比べる。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
+    "id": "saturn/scsp/05-dsp-delay",
+    "title": "Saturn SCSP：DSP Delay / RAM",
+    "description": "管理された64 KiB ring、離鍵後のEcho、Time / FeedbackとCOEF・RAMの適用済み状態。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
     "id": "snes/03-pcm-to-brr",
     "title": "SNES：PCM → BRR",
     "description": "ソフトウェアでPCMをBRRへ変換し、実S-DSPで再生・WAV保存する。",

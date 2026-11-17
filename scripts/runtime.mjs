@@ -109,6 +109,18 @@ export async function copyRuntime(destination) {
   const manifest = JSON.parse(await readFile(join(source, 'package.json'), 'utf8'));
   const {version} = manifest;
   try {
+    for (const name of ['scsp_dsp_assembler.js','scsp_dsp_assembler.d.ts','scsp_dsp.js',
+      'scsp_dsp_program.js','scsp_dsp_coefficients.js','scsp_dsp_delay.js',
+      'scspsynth.d.ts','playground_scsp.d.ts']) await readFile(join(source,name));
+    const [{ScspSynth},codec]=await Promise.all([
+      import('tetorica-fm2612/scspsynth.js'),import('tetorica-fm2612/scsp_dsp_assembler.js'),
+    ]);
+    assert.equal(typeof ScspSynth.prototype.setDspDelay,'function');
+    assert.equal(typeof codec.assembleScspDsp,'function');assert.equal(typeof codec.disassembleScspDsp,'function');
+  } catch(error) {
+    throw new Error('SCSP DSP examples require tetorica-fm2612 >= 0.2.44 with assembler, Gain/IIR and managed Delay APIs, types and readable dependencies. Run npm install.',{cause:error});
+  }
+  try {
     for (const name of ['ay8910_operations','ay8910_timed_client','ay8910_timed_state',
       'ym2612_operations','ym2612_timed_client','ym2612_timed_state']) {
       for (const extension of ['js','d.ts']) await readFile(join(source,name+'.'+extension));

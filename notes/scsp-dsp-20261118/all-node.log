@@ -1,0 +1,20 @@
+npm warn Unknown user config "python". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> tetorica-fm2612-examples@0.1.0 check:node
+> node scripts/check-node.mjs
+
+PASS c64/sid/01-voices/6581: 194400 frames, peak 0.082092, three solo pitches 440.03/329.63/219.99, chord AC 0.019832, release settled
+PASS c64/sid/01-voices/8580: 194400 frames, peak 0.088074, three solo pitches 440.03/329.63/219.98, chord AC 0.028755, release settled
+PASS c64/sid/02-filter/6581: 259200 frames, peak 0.117523, shared-filter phases [{"mode":"dry","rms":0.020561969075058768,"fundamental":0.011572972348737474,"upper":0.00044317670692447397},{"mode":"LP","rms":0.020501875093366057,"fundamental":0.011560483743128945,"upper":0.00012421416445696363},{"mode":"BP","rms":0.005554593946702434,"fundamental":0.000639002465444016,"upper":0.0002515505368622246},{"mode":"HP","rms":0.005738638161912692,"fundamental":0.000032632918700410914,"upper":0.0005300443782603119},{"mode":"notch","rms":0.018895967872764482,"fundamental":0.011567928049220768,"upper":0.0004014913346026289},{"mode":"LP+BP+HP","rms":0.01865353565708457,"fundamental":0.011563519917520663,"upper":0.0004830719141759709},{"mode":"LP cutoff 1400","rms":0.01844520146999627,"fundamental":0.011528506591244882,"upper":0.0005833915255915856},{"mode":"LP resonance 10","rms":0.019149090091132817,"fundamental":0.011555161797822608,"upper":0.00013041934574756854}], release settled
+PASS c64/sid/02-filter/8580: 259200 frames, peak 0.098236, shared-filter phases [{"mode":"dry","rms":0.029798344958380955,"fundamental":0.01678753065753022,"upper":0.0006078603146660508},{"mode":"LP","rms":0.029229814935725133,"fundamental":0.016760779198027233,"upper":0.00019928231078592977},{"mode":"BP","rms":0.006778300759695464,"fundamental":0.0008376141708572983,"upper":0.00037206463751081066},{"mode":"HP","rms":0.006438598247070645,"fundamental":0.00003842820126839972,"upper":0.0007065327940570002},{"mode":"notch","rms":0.02733067019717432,"fundamental":0.01677525000192053,"upper":0.0005006853006075733},{"mode":"LP+BP+HP","rms":0.02651717757262102,"fundamental":0.016778853849286592,"upper":0.0006387455666172472},{"mode":"LP cutoff 1400","rms":0.02645745207770748,"fundamental":0.016720238112348827,"upper":0.0006986610489333859},{"mode":"LP resonance 10","rms":0.026836949741715518,"fundamental":0.016753576891812887,"upper":0.00021439145793171243}], release settled
+PASS c64/sid/03-factory-wav/6581: 36000 frames, A4 440.03 Hz, AC RMS 0.008390, peak 0.038940, Release settled; no audio device
+PASS c64/sid/03-factory-wav/8580: 36000 frames, A4 440.03 Hz, AC RMS 0.012188, peak 0.030701, Release settled; no audio device
+PASS c64/sid/03-factory-wav/both: default output exactly concatenates the two independent model renders
+PASS pc-engine-cd/cdda/01-stereo-tracks: 172800 frames, peak 0.079987, AC RMS 0.051283; actual source frequencies, lifecycle, gain routing and exact silent tail
+PASS pc-engine-cd/adpcm/01-sample: 124800 frames, peak 0.101318, AC RMS 0.060182; actual source frequencies, lifecycle, gain routing and exact silent tail
+PASS pc-engine-cd/mix/01-three-sources: 144000 frames, peak 0.111145, AC RMS 0.034954; actual source frequencies, lifecycle, gain routing and exact silent tail
+PASS pokey/tone/01-four-channels: 145530 frames, peak 0.079376, AC RMS 0.018999, DC/AC 0.0811; mono PCM16, 8 audible phrases, exact silent gaps/tail
+PASS pokey/noise/01-distortion-joined: 180810 frames, peak 0.039734, AC RMS 0.017248, DC/AC 0.0367; mono PCM16, 8 audible phrases, exact silent gaps/tail
+PASS pokey/dual/01-eight-channels: 145530 frames, peak 0.122406, AC RMS 0.018506, DC/AC 0.1300; mono PCM16, 8 audible phrases, exact silent gaps/tail
+PASS chip-raw/02-compile-compare: local/reset/reused snapshot traces, packed fields, immutable state and Native restrictions; no audio device
+PASS 54 installed-package Node examples: audible WAV + event / register JSON

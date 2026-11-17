@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "packageVersion": "0.2.44",
+  "examplesPackageVersion": "0.1.0",
+  "officialRegistryInstall": true,
+  "freshNpmCiPassed": true,
+  "newNodeWavChecksPassed": true,
+  "allOfflineNodeExamples": 54,
+  "newBrowserCases": 16,
+  "existingScspBrowserCases": 12,
+  "mainWorker": true,
+  "newBrowserSampleRates": [
+    44100,
+    48000
+  ],
+  "browsers": [
+    "chromium",
+    "webkit"
+  ],
+  "physicalOutputMuted": true,
+  "listeningPerformed": false,
+  "distribution": {
+    "passed": true,
+    "packageVersion": "0.2.44",
+    "resolved": "https://registry.npmjs.org/tetorica-fm2612/-/tetorica-fm2612-0.2.44.tgz",
+    "integrity": "sha512-wOua7x33rGkNmY2PcPO5oN6xNd6r6O0dc/q+HdyjcW2nwIEx9N41OsujNTE/6AXodZw4RgicPnP3b77iGNR15A==",
+    "registryTarballSha256": "224e477c4ecd5b01b16296c296cea150992a9a93d6802060e08d3f239ecb8ffe",
+    "installedAndVendorFiles": 1299,
+    "sameRegistryInstalledDistDocsVendor": true,
+    "staticSiteFiles": 1622,
+    "distDocsByteIdentical": true,
+    "allExampleSourcesCopiedExactly": true,
+    "manifestItems": 83,
+    "allCatalogTargetsExist": true,
+    "testedBrowserAssetsMatchFinalDocs": true,
+    "publicRegistryLockfile": true,
+    "physicalListeningPerformed": false
+  },
+  "evidence": {
+    "new-browser": {
+      "path": "notes/scsp-dsp-20261118/new-browser.json",
+      "sha256": "c4e08be6a6cfb2030377f486f8ff487c004723ee057c6aa61f2be8651d5f5667"
+    },
+    "existing-browser": {
+      "path": "notes/scsp-dsp-20261118/existing-browser.json",
+      "sha256": "88e9cf364e849fd1278ab7a8482d3e109367f83c7d77f3987ea2d021771ff99b"
+    },
+    "new-node": {
+      "path": "notes/scsp-dsp-20261118/new-node.log",
+      "sha256": "7e7bb47a40604a919f76b86fd0ed2f25e3ba5ea510b7f17b8c7128d17bbdd2c4"
+    },
+    "all-node": {
+      "path": "notes/scsp-dsp-20261118/all-node.log",
+      "sha256": "c61941e6bc5e78c8b0e56235ecb89d340791453f3d91b54c7d4c07c06e4fa58b"
+    }
+  },
+  "committed": false,
+  "pushed": false,
+  "pagesDeployed": false
+}

@@ -185,10 +185,10 @@ export declare class NativeGenesisSynth {
             value: number | undefined;
             error?: undefined;
         } | {
-            value?: undefined;
             op: string;
             id: any;
             error: string;
+            value?: undefined;
         }>;
         loadDacBank(name: any, bytes: any): Promise<any>;
         playDacBank(name: any, time: any, timing?: {}): Promise<void>;
@@ -917,6 +917,8 @@ export declare class NativeGenesisSynth {
                 nextSampleId: number;
                 ramUsedBytes: number;
                 ramFreeBytes: number;
+                dsp?: any;
+                dspRam?: any;
                 playingFrequencies: any[];
                 playingLfos: any[];
                 playingModulations: any[];
@@ -928,6 +930,7 @@ export declare class NativeGenesisSynth {
                     totalLevel: number;
                     directLevel: number;
                     pan: number;
+                    dspSend: number;
                     envelope: {
                         attackRate: number;
                         decay1Rate: number;
@@ -976,6 +979,8 @@ export declare class NativeGenesisSynth {
                     nextSampleId: number;
                     ramUsedBytes: number;
                     ramFreeBytes: number;
+                    dsp?: any;
+                    dspRam?: any;
                     playingFrequencies: any[];
                     playingLfos: any[];
                     playingModulations: any[];
@@ -987,6 +992,7 @@ export declare class NativeGenesisSynth {
                         totalLevel: number;
                         directLevel: number;
                         pan: number;
+                        dspSend: number;
                         envelope: {
                             attackRate: number;
                             decay1Rate: number;
@@ -1035,6 +1041,8 @@ export declare class NativeGenesisSynth {
             nextSampleId: number;
             ramUsedBytes: number;
             ramFreeBytes: number;
+            dsp?: any;
+            dspRam?: any;
             playingFrequencies: any[];
             playingLfos: any[];
             playingModulations: any[];
@@ -1046,6 +1054,7 @@ export declare class NativeGenesisSynth {
                 totalLevel: number;
                 directLevel: number;
                 pan: number;
+                dspSend: number;
                 envelope: {
                     attackRate: number;
                     decay1Rate: number;
@@ -3185,6 +3194,8 @@ export declare class NativeGenesisSynth {
                 nextSampleId: number;
                 ramUsedBytes: number;
                 ramFreeBytes: number;
+                dsp?: any;
+                dspRam?: any;
                 playingFrequencies: any[];
                 playingLfos: any[];
                 playingModulations: any[];
@@ -3196,6 +3207,7 @@ export declare class NativeGenesisSynth {
                     totalLevel: number;
                     directLevel: number;
                     pan: number;
+                    dspSend: number;
                     envelope: {
                         attackRate: number;
                         decay1Rate: number;

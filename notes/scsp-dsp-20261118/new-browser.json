@@ -1,0 +1,1046 @@
+{
+  "passed": true,
+  "packageVersion": "0.2.44",
+  "physicalOutputMuted": true,
+  "listeningPerformed": false,
+  "results": [
+    {
+      "browser": "chromium",
+      "lesson": "04-dsp-programs",
+      "execution": "main",
+      "rate": 44100,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "chromium",
+      "lesson": "04-dsp-programs",
+      "execution": "worker",
+      "rate": 44100,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "chromium",
+      "lesson": "05-dsp-delay",
+      "execution": "main",
+      "rate": 44100,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "chromium",
+      "lesson": "05-dsp-delay",
+      "execution": "worker",
+      "rate": 44100,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "chromium",
+      "lesson": "04-dsp-programs",
+      "execution": "main",
+      "rate": 48000,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "chromium",
+      "lesson": "04-dsp-programs",
+      "execution": "worker",
+      "rate": 48000,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "chromium",
+      "lesson": "05-dsp-delay",
+      "execution": "main",
+      "rate": 48000,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "chromium",
+      "lesson": "05-dsp-delay",
+      "execution": "worker",
+      "rate": 48000,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "webkit",
+      "lesson": "04-dsp-programs",
+      "execution": "main",
+      "rate": 44100,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "webkit",
+      "lesson": "04-dsp-programs",
+      "execution": "worker",
+      "rate": 44100,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "webkit",
+      "lesson": "05-dsp-delay",
+      "execution": "main",
+      "rate": 44100,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "webkit",
+      "lesson": "05-dsp-delay",
+      "execution": "worker",
+      "rate": 44100,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "webkit",
+      "lesson": "04-dsp-programs",
+      "execution": "main",
+      "rate": 48000,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "webkit",
+      "lesson": "04-dsp-programs",
+      "execution": "worker",
+      "rate": 48000,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "webkit",
+      "lesson": "05-dsp-delay",
+      "execution": "main",
+      "rate": 48000,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "webkit",
+      "lesson": "05-dsp-delay",
+      "execution": "worker",
+      "rate": 48000,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    }
+  ],
+  "assets": {
+    "examples/saturn/scsp/04-dsp-programs/web/index.html": {
+      "bytes": 3157,
+      "sha256": "9465822c3fef3d744bcb56fb60cfe7bb2c9ecaa7a3e04ea34c1f5726f7446d21"
+    },
+    "examples/saturn/scsp/04-dsp-programs/web/main.js": {
+      "bytes": 6597,
+      "sha256": "279f46944366a50a9aed4d8ad45dd48a0c8d91eb01c9e62b1faa71de53741275"
+    },
+    "examples/saturn/scsp/04-dsp-programs/web/programs.js": {
+      "bytes": 342,
+      "sha256": "441379dbf3e1091f4292a8deb8782d7b12dea8c871fa800873d425b2ddb410e6"
+    },
+    "examples/saturn/scsp/05-dsp-delay/web/index.html": {
+      "bytes": 3036,
+      "sha256": "2d0cfabac4419f1834e276a38107e229f8e37d46aa2207285443dfb6de612813"
+    },
+    "examples/saturn/scsp/05-dsp-delay/web/main.js": {
+      "bytes": 6093,
+      "sha256": "3a62aa93f9f2416be28657e09ee206ecabab7b5f94bb0c7b7d601804913741ca"
+    },
+    "style.css": {
+      "bytes": 2943,
+      "sha256": "ec3cde4b86adbfb8b8d55707245daea5b531249eb4d17e2a053b81091462d7fc"
+    },
+    "vendor/tetorica-fm2612/adpcm_a_sample.js": {
+      "bytes": 6155,
+      "sha256": "ed99db330a6fbf0579f593d2ad1cbde6839fb4db2125d817325ef4385b1f5851"
+    },
+    "vendor/tetorica-fm2612/adpcm_b_sample.js": {
+      "bytes": 7109,
+      "sha256": "6cd2346c09713427384f14c152c03b2334928f10e618184a521790a7e9815f93"
+    },
+    "vendor/tetorica-fm2612/audio_decode.js": {
+      "bytes": 1955,
+      "sha256": "0f972b3983adb38f09e218cf4f1b1dc2fc5e840f0e3cf754c4bd2cd40083e9f4"
+    },
+    "vendor/tetorica-fm2612/ay8910_operations.js": {
+      "bytes": 10810,
+      "sha256": "020912378dfa537a8ce6977ae711e9b82fcc7ac7b18f98dcd7e44ec074be51ec"
+    },
+    "vendor/tetorica-fm2612/ay8910_timed_client.js": {
+      "bytes": 9439,
+      "sha256": "1d8f407b0d2cc4b8025814c12a53334b31658a8f9a46a99a6f62a8cd753c8d12"
+    },
+    "vendor/tetorica-fm2612/ay8910_timed_state.js": {
+      "bytes": 2651,
+      "sha256": "b9f3af9f19ea369f1a1f572d4e2cf53ed6f0216ac5d0cacf9f2b7c866fb89fec"
+    },
+    "vendor/tetorica-fm2612/ay8910.js": {
+      "bytes": 6210,
+      "sha256": "795422d40430adeae7a6bb57e505de1dba0378b91432bbe902f309f48a258f3b"
+    },
+    "vendor/tetorica-fm2612/ay8910synth.js": {
+      "bytes": 12899,
+      "sha256": "30fd1bdd4406162e6539136597237db3f79a4093a56e4b86b94ac9c05e13a031"
+    },
+    "vendor/tetorica-fm2612/cdda_audio.js": {
+      "bytes": 3808,
+      "sha256": "1c994e3b9ddf6d6e45772555546c2693a052f45e9a3df2c419907fc1dfa3cae1"
+    },
+    "vendor/tetorica-fm2612/cdda_native.js": {
+      "bytes": 2687,
+      "sha256": "7617bbd841b3881189472d90ca192fb6c0f59946a389cc191bffc1388dfff037"
+    },
+    "vendor/tetorica-fm2612/cdda_player.js": {
+      "bytes": 4941,
+      "sha256": "e5422a26c8171d686484eb45572b49b440d6ac10bf9bbc57977e1339239e4cb4"
+    },
+    "vendor/tetorica-fm2612/cdda_source.js": {
+      "bytes": 11833,
+      "sha256": "4c1bb3f1d1deedd01a9e0856fe0513422741a7b6f81ad9047720ace5d5d05d30"
+    },
+    "vendor/tetorica-fm2612/chip_worklet_transport.js": {
+      "bytes": 15460,
+      "sha256": "a7d1e5634cdf9baeb702cf069ef805a00c6a479951a90825f3a557c8dc31893a"
+    },
+    "vendor/tetorica-fm2612/custom_fx.js": {
+      "bytes": 5764,
+      "sha256": "f719e32f063bdbdb4d7cb9bb7aff1087dde2152ade7449b2819f2d3a6cc4424e"
+    },
+    "vendor/tetorica-fm2612/fds_audio.js": {
+      "bytes": 5112,
+      "sha256": "a40594267909ec49f07897913877e3e27aee345ed783f8044d7f5f6e13c09ee9"
+    },
+    "vendor/tetorica-fm2612/gameboy_runtime_synth.js": {
+      "bytes": 9610,
+      "sha256": "1ebaddef0aa5bd1986c5e2e20d4de2eccd8647ef7bd309457bacdf27eaf9f970"
+    },
+    "vendor/tetorica-fm2612/gameboyapu.js": {
+      "bytes": 7082,
+      "sha256": "a652fa6e4b15457878d41ba4bfa47474bb902c943230ddc8ab89a2327f7b0cc4"
+    },
+    "vendor/tetorica-fm2612/gameboysynth.js": {
+      "bytes": 13903,
+      "sha256": "762e227143aa264208d239479ed6376ab39d3b5fb6cdb05d7ad1f8ac6f9dfcf4"
+    },
+    "vendor/tetorica-fm2612/generated/scsp_wasm.js": {
+      "bytes": 11384,
+      "sha256": "296b3d0074cc0cc457e47e14e0ab55193a947fd55d9ed6ecf8932f82067281c9"
+    },
+    "vendor/tetorica-fm2612/generated/scsp_wasm.wasm": {
+      "bytes": 17722,
+      "sha256": "a7a9671b0065b4389b430924e420e67526878b34567f79b616c9347a0fdb9020"
+    },
+    "vendor/tetorica-fm2612/huc6280synth.js": {
+      "bytes": 11417,
+      "sha256": "f46a04311244f011c30a45c381f91af433c1e15c6016106586eb468a6c605a8b"
+    },
+    "vendor/tetorica-fm2612/looper.js": {
+      "bytes": 24025,
+      "sha256": "a0cc220fd5754a106f3281e3bc69ee14baad6efe24897bba7c2706379ea1c366"
+    },
+    "vendor/tetorica-fm2612/megasynth_fx.js": {
+      "bytes": 62352,
+      "sha256": "e30a0ba1b8edddc95c14772c0b2792f20757d9fea3e64e9abd6f74584958c6e6"
+    },
+    "vendor/tetorica-fm2612/megasynth_recording.js": {
+      "bytes": 10125,
+      "sha256": "3d1b4bdce3f790bc1a648a07e61b8f3bd0ef9009d0133e35203c24400cc5a7cd"
+    },
+    "vendor/tetorica-fm2612/megasynth-fm-presets.js": {
+      "bytes": 6954,
+      "sha256": "daf3c42d3d6b1777d5729073eed9edf4d96a78d55e22fedfad394137d41bb06c"
+    },
+    "vendor/tetorica-fm2612/megasynth.js": {
+      "bytes": 33721,
+      "sha256": "b32cb770a4664620c0c5e590168da8ca68ea4589639f2437402d3030f89a0615"
+    },
+    "vendor/tetorica-fm2612/midi_file.js": {
+      "bytes": 5332,
+      "sha256": "09d44d1efc1cc805b15607574743cce0110c3e5472ce44f839ca94a4341e9f1c"
+    },
+    "vendor/tetorica-fm2612/midi_song.js": {
+      "bytes": 6966,
+      "sha256": "d86a06c6a37f57869fd11156a5ed5ebee5f093d8a01daf6430ac5c9499e99bb6"
+    },
+    "vendor/tetorica-fm2612/msfa_dx7/src/preset.js": {
+      "bytes": 8629,
+      "sha256": "f1373d4699172658b979482e0bb1585301967ebb7d2668ad21d146b6d3824fe2"
+    },
+    "vendor/tetorica-fm2612/msfa_dx7/src/sysex.js": {
+      "bytes": 8610,
+      "sha256": "0bda70c08b34f084e10c4ff46c4319147d089c5a174b9e84bf023b86759c2b7e"
+    },
+    "vendor/tetorica-fm2612/msm5205_audio.js": {
+      "bytes": 3837,
+      "sha256": "f052987f65a28e3b0627f3fe440151b807a6564b26b6e69b679d52fa3f4e0c1d"
+    },
+    "vendor/tetorica-fm2612/msm5205_native.js": {
+      "bytes": 2905,
+      "sha256": "388b7b39cfac9434a5c6ed3ce8a4008265d4a81d7dd75587fa8e003e5903e381"
+    },
+    "vendor/tetorica-fm2612/msm5205_player.js": {
+      "bytes": 4617,
+      "sha256": "6a6cb90cd902e456893969560033faedc8de5ae7e95d8f7f7e995b241af2c683"
+    },
+    "vendor/tetorica-fm2612/msm5205_sample.js": {
+      "bytes": 7476,
+      "sha256": "35a8372f052ce36fb82f662f976a2ef9dee28c3c0a7c9d54e685cd3046fe3a92"
+    },
+    "vendor/tetorica-fm2612/native_audio_effect.wasm": {
+      "bytes": 48297,
+      "sha256": "d5183259003b3f7fdda5ba1f85e69c10687e95d13f5499fa2f5fbcf08d3de290"
+    },
+    "vendor/tetorica-fm2612/native_fx_engine.js": {
+      "bytes": 7041,
+      "sha256": "2e291a2213e6cb0f59c17804b1c937f2538608817cb367fda84bf230f4e0fca5"
+    },
+    "vendor/tetorica-fm2612/native_fx_graph.js": {
+      "bytes": 3612,
+      "sha256": "fc9345f3a1c499b6fb5d2a893ed2c31c92394397e1a0ccaa343fc7b722e64ccf"
+    },
+    "vendor/tetorica-fm2612/native_fx_rack.js": {
+      "bytes": 2088,
+      "sha256": "31aa4d947975238e59147f30a76c49f9e0956b28f00222e222b49f9f5c801e6d"
+    },
+    "vendor/tetorica-fm2612/native_fx.js": {
+      "bytes": 7922,
+      "sha256": "42cf0829acbc3cf779a5fc2005a6c1ac1ecfee92075f468da968c59b0fe4e27f"
+    },
+    "vendor/tetorica-fm2612/native_genesis_fx.js": {
+      "bytes": 863,
+      "sha256": "917dd7dd431a553e798de9f36affe772d51fac7c9aa01209caa9341577adba4f"
+    },
+    "vendor/tetorica-fm2612/native_genesis_livefx.js": {
+      "bytes": 5891,
+      "sha256": "bac52d6a63bcafe48086cb69959d006285e578473f6d4900adfca1b3d065716b"
+    },
+    "vendor/tetorica-fm2612/native_genesis_noise.js": {
+      "bytes": 5379,
+      "sha256": "92949c736bb44e4a1a577d562cc95bd8ad3bf62ed72e79c892bf48fe6a76a86c"
+    },
+    "vendor/tetorica-fm2612/native_genesis_worker.js": {
+      "bytes": 16400,
+      "sha256": "76851f4a2f7ce464398beaa44e44207a508063b7ad685940031ea8b9b3cf8069"
+    },
+    "vendor/tetorica-fm2612/native_livefx_context.js": {
+      "bytes": 8401,
+      "sha256": "2bf0d1eacceceea2932304505b2c68d01b8d1be174a93a09d0af7432361318f1"
+    },
+    "vendor/tetorica-fm2612/native_noise.js": {
+      "bytes": 4209,
+      "sha256": "c0ce2bdb16f1aed62e6b83f1b27c8e37b25fa2ee5035f0d332f59cd21ae3996f"
+    },
+    "vendor/tetorica-fm2612/native_runtime_synth.js": {
+      "bytes": 20459,
+      "sha256": "2fc84584c4649586ef6daf5eb1843a7c452efceb9185c325c77218e3a0a48713"
+    },
+    "vendor/tetorica-fm2612/native_sample_processor.js": {
+      "bytes": 4443,
+      "sha256": "a1ee1cfa04b11bf4c66d8012e4a22d8a526a7a006333e6fe4e4540af3f1c8f27"
+    },
+    "vendor/tetorica-fm2612/native_sample.js": {
+      "bytes": 3627,
+      "sha256": "9676779755cdc947241821f971aeef3b033e59c781d8e523ef5ef46b051df43c"
+    },
+    "vendor/tetorica-fm2612/native-fx-worklet.js": {
+      "bytes": 8763,
+      "sha256": "3ecde22e631af4c6dccb06018efc59773944531b78f98988f9dba6e93efd35b6"
+    },
+    "vendor/tetorica-fm2612/nes_apu_vendor/channel-dm.js": {
+      "bytes": 6890,
+      "sha256": "94eed4be74f42c3a12f0559e736cefa73598be4b49bb83cd95ff619183b7cae7"
+    },
+    "vendor/tetorica-fm2612/nes_apu_vendor/channel-noise.js": {
+      "bytes": 3592,
+      "sha256": "9955835564f858bbb74927d0ffc202f815c24f67d63d17be09308a7cd5ccb812"
+    },
+    "vendor/tetorica-fm2612/nes_apu_vendor/channel-square.js": {
+      "bytes": 5728,
+      "sha256": "668da0573d064a3c6a7afe777f84d1635c7d541cfae315ee477b2209adbc6317"
+    },
+    "vendor/tetorica-fm2612/nes_apu_vendor/channel-triangle.js": {
+      "bytes": 3615,
+      "sha256": "4729ea94c099b7c08b6f74c3d96249212261c1f1bbf3ba53dd261e18347c6506"
+    },
+    "vendor/tetorica-fm2612/nes_apu_vendor/index.js": {
+      "bytes": 31024,
+      "sha256": "04b0d09d5a3a8dad0667d764decc6e261c81c83ab493e2423191f259f2a98122"
+    },
+    "vendor/tetorica-fm2612/nes_apu_vendor/utils.js": {
+      "bytes": 1154,
+      "sha256": "3e97884bae801319ac802378ace60591f489dec533aec2e26663685ab08f378c"
+    },
+    "vendor/tetorica-fm2612/nesapu.js": {
+      "bytes": 4072,
+      "sha256": "40310717d0f0a75b4bdb1a3d20e5350eb1274a67c406fad0eeff9e8a188aba55"
+    },
+    "vendor/tetorica-fm2612/nesapuaudioengine.js": {
+      "bytes": 5704,
+      "sha256": "5c0f6d91170b339cca384d5cdf99180af39c2b6a0b2afdb14b8582a04676c947"
+    },
+    "vendor/tetorica-fm2612/nesapusynth.js": {
+      "bytes": 15083,
+      "sha256": "29e45e817b0d419ef875a537333802516bcf508103161d08a6f07d1ece01bde6"
+    },
+    "vendor/tetorica-fm2612/okim6258synth.js": {
+      "bytes": 14629,
+      "sha256": "1f788ddec663ad5a8be72823f6d50a69e8e024146f14990dcc01ba7fdcdf8bda"
+    },
+    "vendor/tetorica-fm2612/opl_synth.js": {
+      "bytes": 20452,
+      "sha256": "18ac5165c25956409cc2acdca9bca48847b1ff597a1d16eaa381f0633b354a48"
+    },
+    "vendor/tetorica-fm2612/opn_fm_synth.js": {
+      "bytes": 25209,
+      "sha256": "bbcfcdb66e495f0733752d4c673b6dd98e321ba4a2fb9f743ff451eb7238a558"
+    },
+    "vendor/tetorica-fm2612/opn_runtime_synth.js": {
+      "bytes": 11895,
+      "sha256": "12484bfc9da7030da1876214293dfa005ebf807dbb801b0d4628a80cad8b835e"
+    },
+    "vendor/tetorica-fm2612/opn_ssg_retained.js": {
+      "bytes": 1083,
+      "sha256": "ae6abb99646ab5efdd48c5236f04b7e7dfac09480062f77d432c6619a5903239"
+    },
+    "vendor/tetorica-fm2612/package_assets.js": {
+      "bytes": 868,
+      "sha256": "84bdfa00aac849f8f581f8620957aa4007d1486ddf61eebe9252c283a93c186c"
+    },
+    "vendor/tetorica-fm2612/pcm_44100_resampler.js": {
+      "bytes": 4242,
+      "sha256": "53b5e846322e2715fa396f92533f9b6a33da51466ec5cc4838ff6802765c615e"
+    },
+    "vendor/tetorica-fm2612/pitch.js": {
+      "bytes": 1888,
+      "sha256": "fd20f1f31c6c02fcf48213ed51209185a7addc8c526c867e7214563d6825cf42"
+    },
+    "vendor/tetorica-fm2612/playground_async_tasks.js": {
+      "bytes": 2223,
+      "sha256": "17fa8f4c308b5cd758c5230f274da3a1b4a984f3752479ebfd0e184b9bda08fd"
+    },
+    "vendor/tetorica-fm2612/playground_audio_endpoint.js": {
+      "bytes": 2002,
+      "sha256": "e8171d21fe682dd58d8d60c1cfb3f74b442586c254a8698d341fc4e1a7f1f9cd"
+    },
+    "vendor/tetorica-fm2612/playground_audio_scheduler.js": {
+      "bytes": 2799,
+      "sha256": "7ccc762cccce700ef496a764e8970ae21b0d97fd653c9611d885554f28aeeca8"
+    },
+    "vendor/tetorica-fm2612/playground_ay_timed_lifecycle.js": {
+      "bytes": 9043,
+      "sha256": "d208dca6228bbc0c6793c5cd5804504f286a2215e865be0af0e1103bf3a38401"
+    },
+    "vendor/tetorica-fm2612/playground_ay8910_audio.js": {
+      "bytes": 4740,
+      "sha256": "0e9c874eede5af4281aa8df93e35ffe0433ed29d35ff076692bf0677996b05be"
+    },
+    "vendor/tetorica-fm2612/playground_ay8910.js": {
+      "bytes": 4593,
+      "sha256": "fdc7d807f64fccfd7ce0ea93d0713f2ee744a3348e89f98a133f9ba17330232e"
+    },
+    "vendor/tetorica-fm2612/playground_chip_clock.js": {
+      "bytes": 5244,
+      "sha256": "3802e15503424667324c4f6e067d5cae3ff4ad1b2adf81d780e8a47aa922ca2d"
+    },
+    "vendor/tetorica-fm2612/playground_chip_inspector_state.js": {
+      "bytes": 13049,
+      "sha256": "89a5f4c62defa490d5fd1603af0baeb763dcb00c319ea377714ada92cd350d9e"
+    },
+    "vendor/tetorica-fm2612/playground_chip_inspector.js": {
+      "bytes": 9394,
+      "sha256": "520c87891eb459d300e9ae36f942f23ad83cd5d04213aee6d1ef3662fe2755c6"
+    },
+    "vendor/tetorica-fm2612/playground_clock.js": {
+      "bytes": 19367,
+      "sha256": "e16aeee557adf6b1752bd48907e0671a979b2dd0c46a4afaa20befa9db7e885d"
+    },
+    "vendor/tetorica-fm2612/playground_duration.js": {
+      "bytes": 2009,
+      "sha256": "b6f1664b84569fd627d4d4e82a6c0b500edf142a3d9ced13f33ab5dc5606bfb1"
+    },
+    "vendor/tetorica-fm2612/playground_dx7_audio.js": {
+      "bytes": 5703,
+      "sha256": "56eef7f0d0375c26aabfa93cdca528821df697745bd471e125f9b6e95f076555"
+    },
+    "vendor/tetorica-fm2612/playground_dx7.js": {
+      "bytes": 10267,
+      "sha256": "5937b29957d616a2b2b63f99f3a4a11e4fe01c5ea7999fab1f90e7b3e84bac9d"
+    },
+    "vendor/tetorica-fm2612/playground_execution.js": {
+      "bytes": 8875,
+      "sha256": "a4178b59713536fd21af4edd367b4afe2e9efbe2fee42862f61c59cc9d80b82e"
+    },
+    "vendor/tetorica-fm2612/playground_gameboy_audio.js": {
+      "bytes": 1895,
+      "sha256": "c82bffe7e0b5b9cbcc083c40d40b95cf547a751fcff8624b3a46b5ac895362a7"
+    },
+    "vendor/tetorica-fm2612/playground_gameboy.js": {
+      "bytes": 3581,
+      "sha256": "2a14b2fa6c3993a32e6903ba68a94beb63d9f768290d7c7285af3865c58afad3"
+    },
+    "vendor/tetorica-fm2612/playground_huc6280_audio.js": {
+      "bytes": 4049,
+      "sha256": "cf8dc2a598d8fcb43d8a3b6837f23c64f66cc6616219899b78c52e9eb0e950ac"
+    },
+    "vendor/tetorica-fm2612/playground_huc6280.js": {
+      "bytes": 4343,
+      "sha256": "ff21964929aa1ed0536648b09fd501f21327eecdd9cea8a5f4db449bc2cfb88b"
+    },
+    "vendor/tetorica-fm2612/playground_keyboard.js": {
+      "bytes": 7290,
+      "sha256": "adfac62ea27c791390bba81feab06b82615bfdd1baa356c0bcc8cfb464699478"
+    },
+    "vendor/tetorica-fm2612/playground_live.js": {
+      "bytes": 14734,
+      "sha256": "e2cb7e5982d4e607ca72ac7d3af9e5613ba5410611dc591f1ae52e941e663f4e"
+    },
+    "vendor/tetorica-fm2612/playground_log.js": {
+      "bytes": 2169,
+      "sha256": "6f9e858988686497c6beb3b07dcd5067761463994c1de1edd4f8acd506a4f0e6"
+    },
+    "vendor/tetorica-fm2612/playground_logic_worker.js": {
+      "bytes": 60362,
+      "sha256": "788f19798b0e0554805bd3a136d68fc0d025e7245678f0a6ab4d26631ced9567"
+    },
+    "vendor/tetorica-fm2612/playground_midi.js": {
+      "bytes": 17528,
+      "sha256": "719d4a242f696926c8986b8276ebeeba09faf96e8dd4e5c7b855490af1716f59"
+    },
+    "vendor/tetorica-fm2612/playground_music.js": {
+      "bytes": 11260,
+      "sha256": "42b51c82342af6632e263b32dcbf2aa5d87f16f1c717d4cb5a065cb9731e96d3"
+    },
+    "vendor/tetorica-fm2612/playground_native_primary.js": {
+      "bytes": 7213,
+      "sha256": "d9ed27e3288bf5ec147461c6d6e7696e98454c595c06f57416dce5e712cf29d0"
+    },
+    "vendor/tetorica-fm2612/playground_nes_audio.js": {
+      "bytes": 2760,
+      "sha256": "2ff151820890d799ceb437054206bc8f5cc8880e0dbccadde6ff9fc8d1d0c8ed"
+    },
+    "vendor/tetorica-fm2612/playground_nes.js": {
+      "bytes": 5371,
+      "sha256": "9379cf844dadaeb772b74524aa16ecf19c7269e8b97fb87edf7be49285a3b269"
+    },
+    "vendor/tetorica-fm2612/playground_noise.js": {
+      "bytes": 990,
+      "sha256": "64e4608fd0af00ce8e34eaa231d43da66f584d725c7b7f26fd3c376c5999de2d"
+    },
+    "vendor/tetorica-fm2612/playground_okim6258_audio.js": {
+      "bytes": 4052,
+      "sha256": "369ebb07f72a0c76467bbc2cf1f2aebdfe37ff3dc319ff9e88d9bc8a18992b64"
+    },
+    "vendor/tetorica-fm2612/playground_okim6258.js": {
+      "bytes": 4713,
+      "sha256": "347625c2bb1a0ae3be8b680196e65fa953c1b2e8fd90c79df2627889c8972fd9"
+    },
+    "vendor/tetorica-fm2612/playground_opl_audio.js": {
+      "bytes": 4283,
+      "sha256": "e6032df6c644f8b23240825a95e96d5935a8a973f3b125a56476c0c1cbce19e6"
+    },
+    "vendor/tetorica-fm2612/playground_opl.js": {
+      "bytes": 8836,
+      "sha256": "f32553450f8906996b4b5231e9345fefaab17414ebca58fa950c931ae0159a64"
+    },
+    "vendor/tetorica-fm2612/playground_opn_audio.js": {
+      "bytes": 2575,
+      "sha256": "e55526932b1b31498cd2c3d3e334a3912299f82c6c31b9d238af9d95cea119b0"
+    },
+    "vendor/tetorica-fm2612/playground_opn.js": {
+      "bytes": 7730,
+      "sha256": "7e1f884ddb2cf72a5cd66ec7e1f8746824160aee54bde72f1af1c43b0bbe6a78"
+    },
+    "vendor/tetorica-fm2612/playground_performance_host.js": {
+      "bytes": 3817,
+      "sha256": "10426e607006b7c136a4c327fa4ce3f76557587b3090bda9d0384de7f8cf8028"
+    },
+    "vendor/tetorica-fm2612/playground_performance_processor.js": {
+      "bytes": 31224,
+      "sha256": "f6809ebe61cddc6a975d820711acfc15d839a37ccdf416ab5da914ccf13a73d2"
+    },
+    "vendor/tetorica-fm2612/playground_performance_queue.js": {
+      "bytes": 24020,
+      "sha256": "3f70eb200e3f97ae7ae5b688066035319c71dbe3b7f7631e25fe3d455eaa3567"
+    },
+    "vendor/tetorica-fm2612/playground_performance_sender.js": {
+      "bytes": 9818,
+      "sha256": "563c7db269e6c3c8a831e27a567ab69fa031f314a0a87a9709411cb8af972398"
+    },
+    "vendor/tetorica-fm2612/playground_pokey_audio.js": {
+      "bytes": 4417,
+      "sha256": "01e904988f3771e5adacb9795b3badcea69d1ad6baff4b46a6c0acd38d5b6ef4"
+    },
+    "vendor/tetorica-fm2612/playground_pokey.js": {
+      "bytes": 10789,
+      "sha256": "0e2cbcad872d707e750241c981ce4e00f99cdc612c470812d64b4710fda2574b"
+    },
+    "vendor/tetorica-fm2612/playground_ps1_audio.js": {
+      "bytes": 3624,
+      "sha256": "f2862551bf1507535fefc2b26a711db9a1fca558202cdb85334105fe2caef68c"
+    },
+    "vendor/tetorica-fm2612/playground_ps1.js": {
+      "bytes": 8787,
+      "sha256": "d3ceadfaabb1616909b0558d13add683b3623f62850eacaf8895afee2f317b25"
+    },
+    "vendor/tetorica-fm2612/playground_pwm_audio.js": {
+      "bytes": 2521,
+      "sha256": "79ce91247781975c8599704ce909edc01c311b58b6e25ed5582248e7291a1cff"
+    },
+    "vendor/tetorica-fm2612/playground_rf5c164_audio.js": {
+      "bytes": 2580,
+      "sha256": "39e0f023bb7fa8ce930a356039d2369f6e8e7f4eecb2a7b9fc1ae9c5ee224959"
+    },
+    "vendor/tetorica-fm2612/playground_rf5c164.js": {
+      "bytes": 5180,
+      "sha256": "2cca3212cafe8c6aa73ebc112ecdb1523ab23f2c1452f4d7f1f67e6c63f40c19"
+    },
+    "vendor/tetorica-fm2612/playground_runtime.js": {
+      "bytes": 164355,
+      "sha256": "f86879018896f2368f123e8cca6bcf1100862291f3d9ce5560d8a94d10fa53cf"
+    },
+    "vendor/tetorica-fm2612/playground_sample_edit.js": {
+      "bytes": 17672,
+      "sha256": "789268d79daaff5a2e6e122a7cef3eb2280d758f742e3a2d3c2df655c5ac4cec"
+    },
+    "vendor/tetorica-fm2612/playground_sample_instrument.js": {
+      "bytes": 12126,
+      "sha256": "7a9db670b74c0c152654f0292aae193b38767e814d9532d2699fed3d52e9decc"
+    },
+    "vendor/tetorica-fm2612/playground_sample_ps1.js": {
+      "bytes": 6793,
+      "sha256": "aa605bed25186e7292b66e6bca64b93d36f6e18bd91df313e94bae5828f78f6b"
+    },
+    "vendor/tetorica-fm2612/playground_scsp_audio.js": {
+      "bytes": 3688,
+      "sha256": "00154c7e4ab94fe4ab76342f5dd7ecc6eda753785f838aa19039928150b41fa5"
+    },
+    "vendor/tetorica-fm2612/playground_scsp_inspector.js": {
+      "bytes": 3434,
+      "sha256": "56c49068000db411e8985d68aaca78391196c8533d00935ac591765a03f92e1a"
+    },
+    "vendor/tetorica-fm2612/playground_scsp_worklet.js": {
+      "bytes": 8528,
+      "sha256": "a10316ad2ffcb6482ac7092617536dbbddfd407636083441f32730d46c135c72"
+    },
+    "vendor/tetorica-fm2612/playground_scsp.js": {
+      "bytes": 7723,
+      "sha256": "ee0c94e8a67f71ad03459470eeff99414ebcf23f8e913cac8bc25ddc914dda8b"
+    },
+    "vendor/tetorica-fm2612/playground_segapsg_audio.js": {
+      "bytes": 4164,
+      "sha256": "68585301e8b1a11292d340c8602ccb19b0b57580cf0c28eba1b233f72c571c31"
+    },
+    "vendor/tetorica-fm2612/playground_segapsg.js": {
+      "bytes": 1695,
+      "sha256": "2641d1b209648593ded734a20e74fd0e86b7ed74c3fd7e7a3066bf34bd4b11b6"
+    },
+    "vendor/tetorica-fm2612/playground_sid_audio.js": {
+      "bytes": 4613,
+      "sha256": "17dbcb2d9c8274c75d6aa22100011f1e7bfefa3eedbf014af0a995d092d2be2d"
+    },
+    "vendor/tetorica-fm2612/playground_sid.js": {
+      "bytes": 4259,
+      "sha256": "73be912de3378eadd5e22d3941b60d34b05dc8c671ff89ac12c55976401865e2"
+    },
+    "vendor/tetorica-fm2612/playground_snes_audio.js": {
+      "bytes": 3526,
+      "sha256": "a8a9aa642d80a7e758b185e58d4def15f402b3bbc7922a15423068d0e3dd205e"
+    },
+    "vendor/tetorica-fm2612/playground_snes.js": {
+      "bytes": 9023,
+      "sha256": "abe0eb7d3cc06289707e1224217ef4533fcc31b6e166c0bac31e645bad813948"
+    },
+    "vendor/tetorica-fm2612/playground_soundchip_options.js": {
+      "bytes": 1768,
+      "sha256": "e7a07958ee12a076ac9a15acff1f9116441f2b5144d46c062d88ebe0c18449df"
+    },
+    "vendor/tetorica-fm2612/playground_soundchips.js": {
+      "bytes": 2723,
+      "sha256": "3dd5b8c176cdd6577ddf35ac059a5d2a04832a9551512b8e92acaf11d9d52ced"
+    },
+    "vendor/tetorica-fm2612/playground_spc_audio.js": {
+      "bytes": 3496,
+      "sha256": "71d5dad41968626f18b9137dd534d13349bfde8375bd802072430457785eb6fc"
+    },
+    "vendor/tetorica-fm2612/playground_spc.js": {
+      "bytes": 10828,
+      "sha256": "dfdb2419da22ccaf71ff1e99c01efc5736cba409aa969e42e25883d336b29168"
+    },
+    "vendor/tetorica-fm2612/playground_sync.js": {
+      "bytes": 6838,
+      "sha256": "add1a962a23c6cbf9ecce8821b5682d36204e2584553156a2cf201a1363d1420"
+    },
+    "vendor/tetorica-fm2612/playground_wonderswan_audio.js": {
+      "bytes": 3500,
+      "sha256": "c2e12dbad40017a69e1a6ac337900ee74ff577af049bc827f6efb6bbbb40bce4"
+    },
+    "vendor/tetorica-fm2612/playground_wonderswan.js": {
+      "bytes": 4283,
+      "sha256": "ca0ec003444379428b562c19d040c950a55f3ed5b15ed976e9f45fcf61b9ef9c"
+    },
+    "vendor/tetorica-fm2612/playground_worker_chip.js": {
+      "bytes": 10959,
+      "sha256": "e758a3e244dcc5f789de4b13fbe9b99d4df7b1b473f5ad954c4b2be1ad48f00c"
+    },
+    "vendor/tetorica-fm2612/playground_worker_dac.js": {
+      "bytes": 2739,
+      "sha256": "dc73ef5d97dbe853c6cf069f1ad55eeffcd412880e5ce9fe1559218f0d695261"
+    },
+    "vendor/tetorica-fm2612/playground_ym2151_audio.js": {
+      "bytes": 2813,
+      "sha256": "092ef95ebc1cde222ce241f16adac5488c15bbc0667cb23e11d25b52c81253b6"
+    },
+    "vendor/tetorica-fm2612/playground_ym2151.js": {
+      "bytes": 4928,
+      "sha256": "2cd39d0c42283aed4fb0fd8ec646d081fc7f70572f7b1f26160c52a58ac3aa6d"
+    },
+    "vendor/tetorica-fm2612/playground_ym2413_audio.js": {
+      "bytes": 4126,
+      "sha256": "f63196165a0cf737a34b27581fd8f39255686f0068b26b31115f494245d2b13f"
+    },
+    "vendor/tetorica-fm2612/playground_ym2413.js": {
+      "bytes": 3478,
+      "sha256": "fae58e94a8ff7612e392eefac97dc73fbf6b1f9420e71c3970c705039a987eb2"
+    },
+    "vendor/tetorica-fm2612/playground_ym2608_audio.js": {
+      "bytes": 1950,
+      "sha256": "69aaebbbc857bdaf2a013288c3576038a64c0a6ff8c0a77f826f4f4a941ae34d"
+    },
+    "vendor/tetorica-fm2612/playground_ym2608.js": {
+      "bytes": 5110,
+      "sha256": "3b6f8c2468334e790d2ae9c3615191bf516e29abe44abbeed4215ed2272a8ae5"
+    },
+    "vendor/tetorica-fm2612/pokey_timeline_builder.js": {
+      "bytes": 4675,
+      "sha256": "1b302151adffb2f58fc83b1e75c1813ca03d763336fbe8f46ac2d972306e2380"
+    },
+    "vendor/tetorica-fm2612/pokey_timeline_upload.js": {
+      "bytes": 6150,
+      "sha256": "38eb30ee6b2097c74f992f68671e32f1fe442fe57e09e9f83935919b6700978b"
+    },
+    "vendor/tetorica-fm2612/pokey_timeline.js": {
+      "bytes": 3815,
+      "sha256": "c06c5519a2773f353d43bed1c1f96033b22d3bf0e56b2861ee28c69837db95aa"
+    },
+    "vendor/tetorica-fm2612/pokey.js": {
+      "bytes": 8390,
+      "sha256": "5df2648616b46f159397e6899ce12f93dca9f8150db63c475584263d43b97ca1"
+    },
+    "vendor/tetorica-fm2612/pokeysynth.js": {
+      "bytes": 8278,
+      "sha256": "902c89bbe773ab0aa63f7148eb07a3b8d082b797cda5487f2900435c038acbeb"
+    },
+    "vendor/tetorica-fm2612/ps1_adpcm_encoder.js": {
+      "bytes": 10402,
+      "sha256": "f1e24d4e67d609bdecebe2bedd6271961d8ea2010081f1b4f84f0ee29a97d8e2"
+    },
+    "vendor/tetorica-fm2612/ps1_parameters.js": {
+      "bytes": 6237,
+      "sha256": "c5e4d60ffb4605bac11b275a9089895c114732fc51f1a9f04c88e5133dd3ced1"
+    },
+    "vendor/tetorica-fm2612/ps1_spu.js": {
+      "bytes": 10826,
+      "sha256": "a032c4f68e28c44ec062ba38ae341e01a901e52ff9cf75c38095ffb55442d549"
+    },
+    "vendor/tetorica-fm2612/ps1_vab.js": {
+      "bytes": 14976,
+      "sha256": "1f5b5f0a1f4fce7935b27a805aeccce24c1623e6f0ce5951c27639b3b5639a87"
+    },
+    "vendor/tetorica-fm2612/ps1_waveform.js": {
+      "bytes": 1066,
+      "sha256": "3eda13a145da436b5fbb52d8577362e7a2963bec34ca88069206bbbc1bbcd8fd"
+    },
+    "vendor/tetorica-fm2612/ps1synth.js": {
+      "bytes": 21654,
+      "sha256": "444e2dfa2de24bf4ad987396564fb0117a845a345e91e1a98f83bed4a2469bbd"
+    },
+    "vendor/tetorica-fm2612/pwm32x_playback.js": {
+      "bytes": 8983,
+      "sha256": "1c66e5a14b80653a7a45aef0e4104655999befa72db3803a0db6b5665b7b3e0e"
+    },
+    "vendor/tetorica-fm2612/pwm32x_wasm.js": {
+      "bytes": 12348,
+      "sha256": "4a2153fecd827b463ed417f790ee80aab244e990e502a2b97396b013f65164c9"
+    },
+    "vendor/tetorica-fm2612/pwm32x.js": {
+      "bytes": 6836,
+      "sha256": "90d2387f25fc630ff42bee4ccf86c26235b484b73431ece73e61461e55fc9cb6"
+    },
+    "vendor/tetorica-fm2612/rf5c164_notes.js": {
+      "bytes": 8631,
+      "sha256": "cd10b0abe19000e699edd181b3527edbea8d06ada2dbf34a88c51e12bf9d273f"
+    },
+    "vendor/tetorica-fm2612/rf5c164_pcm.js": {
+      "bytes": 1537,
+      "sha256": "da5835ccd54b0b8d07a82ea8cab10153044c7c20513b973c622957dc8d0b657a"
+    },
+    "vendor/tetorica-fm2612/rf5c164synth.js": {
+      "bytes": 6252,
+      "sha256": "9b5d8d0b6fb6811a2d126c6bf969ec5aae68acd680f636c2ef793e3603d61a73"
+    },
+    "vendor/tetorica-fm2612/scsp_dsp_assembler.js": {
+      "bytes": 8081,
+      "sha256": "1392ea532fc4c674b97f200e6dc1d8223288b4d3e167084e26dc78152b3ddf43"
+    },
+    "vendor/tetorica-fm2612/scsp_dsp_coefficients.js": {
+      "bytes": 1857,
+      "sha256": "89970ded43fc3f857ad49978d3eb82971148872f02e3ddca51cc0a953e691496"
+    },
+    "vendor/tetorica-fm2612/scsp_dsp_delay.js": {
+      "bytes": 3165,
+      "sha256": "81944feec3a34ff633bca3ac59591edb9c185d6b08d1babc37f5ba6e1f04e597"
+    },
+    "vendor/tetorica-fm2612/scsp_dsp_program.js": {
+      "bytes": 4693,
+      "sha256": "d0d4f26d1d9535c5130c4ddcee9581c74df7fa23529fff20ff8af6722f67f8be"
+    },
+    "vendor/tetorica-fm2612/scsp_dsp.js": {
+      "bytes": 11496,
+      "sha256": "c13e8c9a85d6dc54ff13faf9434d7237e9446be989e6d9da0ec25491bdf64000"
+    },
+    "vendor/tetorica-fm2612/scsp.js": {
+      "bytes": 10554,
+      "sha256": "50dcc4f4df918163e04fe67be99e6acb2720e19d5f4ee160b2cf3cbd4b08b407"
+    },
+    "vendor/tetorica-fm2612/scspsynth.js": {
+      "bytes": 25972,
+      "sha256": "208281f1ac6129c73c21b624f91d1a36c434d458c3a6da36e8ac973c3a093c2a"
+    },
+    "vendor/tetorica-fm2612/segapsg_api.js": {
+      "bytes": 1032,
+      "sha256": "1a55c1d148536425eef54fe5ec4c3151b6ef5a734f9695a379b3a6344a7bd75d"
+    },
+    "vendor/tetorica-fm2612/segapsg.js": {
+      "bytes": 10113,
+      "sha256": "e63e1c25a9ac80721f8cd7ea1474710af125c83d4d2e682e6c4a97f40aa50bed"
+    },
+    "vendor/tetorica-fm2612/segapsgsynth.js": {
+      "bytes": 10390,
+      "sha256": "e19b274b8b2e11241e3bf3354d7a23a4d1fdf44b0a912dca3f291b4ab217ef8d"
+    },
+    "vendor/tetorica-fm2612/sid_waveforms.js": {
+      "bytes": 2012,
+      "sha256": "5ef93ebfff79ae1c7cddd8e2463ed4818752f4428ad3014e644c2cc90722b393"
+    },
+    "vendor/tetorica-fm2612/sid.js": {
+      "bytes": 4845,
+      "sha256": "6c61f6616e29faed214da59de613d1acb2c0c64ada691300c96d45e99cdc8dcb"
+    },
+    "vendor/tetorica-fm2612/sidsynth.js": {
+      "bytes": 14845,
+      "sha256": "c1172f4d7b8681a49cb7ca3a1d834e6b5b17d89817eb2cfae80b7513bfde771d"
+    },
+    "vendor/tetorica-fm2612/snes_brr_encoder.js": {
+      "bytes": 8204,
+      "sha256": "d59e92433158c12173f42d4d3ed3412605d8f4c58819396e663ad02969fbe796"
+    },
+    "vendor/tetorica-fm2612/snes_brr.js": {
+      "bytes": 11126,
+      "sha256": "99891c0b95189bf9e86ec310e59c79ca34a3c7a8459576c3066ff0e50fb03c2f"
+    },
+    "vendor/tetorica-fm2612/snessynth.js": {
+      "bytes": 17289,
+      "sha256": "2c3ee1d092eeb1c66942864f05593654f1182d0cd456744a4ee90e31d54a5f7c"
+    },
+    "vendor/tetorica-fm2612/soundchip_mixer.js": {
+      "bytes": 26367,
+      "sha256": "c041315110e9b98119c37cea04b1c4bea308fb52cb591b53101e1e61213eb5bb"
+    },
+    "vendor/tetorica-fm2612/soundchip_pitch.js": {
+      "bytes": 2854,
+      "sha256": "c8bcce0f27c2500d6090b5e56660e697b8b03d7ec011cee4deba05664038bae9"
+    },
+    "vendor/tetorica-fm2612/spc_events.js": {
+      "bytes": 11461,
+      "sha256": "7142e0fad5e39e6d04c986c40fc00ef07e657e3d5dda250b52a1161de955e58e"
+    },
+    "vendor/tetorica-fm2612/spc_file.js": {
+      "bytes": 8896,
+      "sha256": "0fb197919fad347724ceec4038b67606bcffc037749f4eb2b547c55b9bd77578"
+    },
+    "vendor/tetorica-fm2612/spc_voice_edit.js": {
+      "bytes": 2920,
+      "sha256": "9fdcbec795e6134ddfddb5c22b7b3ceab8efd1287c50955428d9c48e90085fc9"
+    },
+    "vendor/tetorica-fm2612/spc.js": {
+      "bytes": 17252,
+      "sha256": "619ac66b23f710eb6f42f01ae97f1feb23560d856a9eead24cde812e87bad904"
+    },
+    "vendor/tetorica-fm2612/ssgsynth.js": {
+      "bytes": 6592,
+      "sha256": "c396b56e2d8033af183c6bdec9254ff40185e390d84e343188cf395856893e9f"
+    },
+    "vendor/tetorica-fm2612/tetorica_audio_runtime.js": {
+      "bytes": 35681,
+      "sha256": "5870f179da0efa3004f341f390f32da72147c19cc6696870c954d8385ba9dc39"
+    },
+    "vendor/tetorica-fm2612/tetorica_synth.js": {
+      "bytes": 3031,
+      "sha256": "50d1b46bd44f07049f9034bffe2097ff952e701351037d2d769f23bdaff3f54d"
+    },
+    "vendor/tetorica-fm2612/tfi.js": {
+      "bytes": 9704,
+      "sha256": "7e7a3ff7d840ff0d12555d30ff373896c91e6d89641e5db6c6f39875e39dd720"
+    },
+    "vendor/tetorica-fm2612/vgi.js": {
+      "bytes": 4326,
+      "sha256": "3d4212ba18485d250607060b1eef3e7e4e78491e12a952e85738d2c0a5c1226f"
+    },
+    "vendor/tetorica-fm2612/wav.js": {
+      "bytes": 2582,
+      "sha256": "986245e48eb0c28cc5b0e967c131f604177b839b8f34e17bd0aa3f5f1e385fd6"
+    },
+    "vendor/tetorica-fm2612/wonderswan_timeline.js": {
+      "bytes": 7324,
+      "sha256": "b4b8b3fabcb4f7bed231b61f6af6f8e2e81b80915d167ac0bc6f76df93c3f00f"
+    },
+    "vendor/tetorica-fm2612/wonderswan.js": {
+      "bytes": 9684,
+      "sha256": "effda6602a156ffaa34f94b6f1edf14a44a1722dc20e116fd3e7df397bef9957"
+    },
+    "vendor/tetorica-fm2612/wonderswansynth.js": {
+      "bytes": 16488,
+      "sha256": "d544ac6450cb2951e374b51f5b1310381a082be85d59248a96b98e2f1f063de2"
+    },
+    "vendor/tetorica-fm2612/y8950_adpcm_preview.js": {
+      "bytes": 5782,
+      "sha256": "e5b8110148683216a631bd8be37f80297981fa36919bbfa02b138dd746dd50af"
+    },
+    "vendor/tetorica-fm2612/y8950_adpcm.js": {
+      "bytes": 8958,
+      "sha256": "72d93e31932282f8f77fd1eff81779c269db207f608d89befceb19a8ec380ba5"
+    },
+    "vendor/tetorica-fm2612/ym2203.js": {
+      "bytes": 12725,
+      "sha256": "d66a1f566a58d80e9db8b83c420ed14b05a3be14e9a32d7d282ec1fc3390b065"
+    },
+    "vendor/tetorica-fm2612/ym2203synth.js": {
+      "bytes": 2438,
+      "sha256": "fab8cd345e13fbbec28fdec220e3d59140ff3f201b2e61465e5d3c199c6388ed"
+    },
+    "vendor/tetorica-fm2612/ym2413.js": {
+      "bytes": 9473,
+      "sha256": "7515e2659b95e202041185661a6e1d103434c28d4b146166db7e99aaf562b20e"
+    },
+    "vendor/tetorica-fm2612/ym2413synth.js": {
+      "bytes": 17614,
+      "sha256": "b63870c11ece05fe0ca2571fd758a4d8fa276b45ecf486bac5acf1ad65990407"
+    },
+    "vendor/tetorica-fm2612/ym2608.js": {
+      "bytes": 17920,
+      "sha256": "e4d0baf9a625011488f7903e6956abeb0bf7695f0f6bf74c789609d938b548c7"
+    },
+    "vendor/tetorica-fm2612/ym2608synth.js": {
+      "bytes": 15508,
+      "sha256": "dae35a2c5f961a0567ee960680398b566fa8eca2c4ad3dcc1cb64c576d511cee"
+    },
+    "vendor/tetorica-fm2612/ym2610b.js": {
+      "bytes": 11122,
+      "sha256": "74c94f231bf16d2bd756aaa734829c3a9cfed24336ce32d0d78b73f24990bdd6"
+    },
+    "vendor/tetorica-fm2612/ym2610bsynth.js": {
+      "bytes": 14641,
+      "sha256": "114407383cda4b9074d3ca1384c2ae5a32b0d34ad1121964318932c0a50d3473"
+    },
+    "vendor/tetorica-fm2612/ym2612_dac.js": {
+      "bytes": 7251,
+      "sha256": "c5b5c78066cc665604085efb5ad395efddee39ebcc760bc7e7adbe4960e2bcaf"
+    },
+    "vendor/tetorica-fm2612/ym2612_operation_state.js": {
+      "bytes": 4556,
+      "sha256": "85c7472e8bf0300c6e00d0d11046df9a0aa88c446fd38778572c3cfb6f94379b"
+    },
+    "vendor/tetorica-fm2612/ym2612_operations.js": {
+      "bytes": 12889,
+      "sha256": "01c93a26453d393b4ca06e20c4ca57df524299513a61766f27a3a155bbc10f20"
+    },
+    "vendor/tetorica-fm2612/ym2612_timed_client.js": {
+      "bytes": 12059,
+      "sha256": "9d4d4279afb7b1a74795e5447a237a9f6d2eb473349a7f0f1bc7cb024ed78e20"
+    },
+    "vendor/tetorica-fm2612/ym2612_timed_state.js": {
+      "bytes": 3613,
+      "sha256": "19a831a5bb6025b0a293c9210f300abdb0ec7fdcdfcbbec6807edc710d8de465"
+    },
+    "vendor/tetorica-fm2612/ym2612.js": {
+      "bytes": 22574,
+      "sha256": "a94016aa0f36d8a48465d7c8420af282e00c27e3ffb2b6d00d668f266a4f92b2"
+    },
+    "vendor/tetorica-fm2612/ym2612synth.js": {
+      "bytes": 39425,
+      "sha256": "2a34a686dad5c8415535f850ac254a6026247eefd1ad99d9e4a4a87a5ab60109"
+    }
+  }
+}

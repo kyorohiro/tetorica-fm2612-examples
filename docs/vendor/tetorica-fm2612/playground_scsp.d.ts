@@ -1,62 +1,89 @@
-import { ScspSynth } from './scspsynth.js';
-export declare const SCSP_CONTROLS: readonly string[];
-export declare function createScspValidation(): ScspSynth;
-/** Resolve cloned handles only at a transport boundary. Numeric IDs alone are
- * deliberately insufficient: two SCSP instances can allocate the same ID. */
-export declare function scspCommandArgs(synth: any, method: any, args: any): any;
-/** Ordered Main/Worker facade; waveform upload/state reads are asynchronous. */
-export declare function createScspClient(port: any, initial?: {}, lifecycle?: {}): {
-    sampleRate: any;
-    nativeSampleRate: number;
-    channelCount: number;
-    _getState: () => {
-        sampleRate: number;
-        bankId: string;
-        nextSampleId: number;
-        ramUsedBytes: number;
-        ramFreeBytes: number;
-        playingFrequencies: any[];
-        playingLfos: any[];
-        playingModulations: any[];
-        playingSampleIds: any[];
-        samples: any[];
-        slots: {
-            sample: null;
-            frequencyHz: number;
-            totalLevel: number;
-            directLevel: number;
-            pan: number;
-            envelope: {
-                attackRate: number;
-                decay1Rate: number;
-                decay2Rate: number;
-                decayLevel: number;
-                releaseRate: number;
-                keyRateScaling: number;
-                loopLink: boolean;
-            };
-            lfo: {
-                frequencyCode: number;
-                pitchWave: number;
-                pitchDepth: number;
-                amplitudeWave: number;
-                amplitudeDepth: number;
-                reset: boolean;
-            };
-            modulation: {
-                depth: number;
-                xOffset: number;
-                yOffset: number;
-                writeInhibit: boolean;
-            };
-            gate: any;
-        }[];
-    };
-    _setLifecycle: (options: any) => void;
-    _applyAuthorEdit: (edit: any) => void;
-    _adoptState: (state: any) => void;
-    _stopVoices: () => Promise<any>;
-    loadPCM(input: any, options: any): Promise<any>;
-    getState: () => Promise<any>;
-    dispose(): void;
-};
+import type {
+  ScspSynth, ScspPCMOptions, ScspSample, ScspState,
+  ScspDspProgram, ScspDspApplyOptions, ScspDspCoefficients,
+  ScspDspCoefficientPatch, ScspDspReturn, ScspDspDelayPatch,
+  ScspDspRegisterProgram, ScspDspDelayProgram,
+} from './scspsynth.js';
+
+export type ScspControlMethod = 'setPreset' | 'setEnvelope' | 'setLfo' |
+  'setModulation' | 'setFrequency' | 'setNote' | 'setMix' | 'keyOn' | 'keyOff' |
+  'noteOn' | 'noteOff' | 'allNotesOff' | 'reset';
+export type ScspDspMethod = 'applyDspProgram' | 'getDspProgram' |
+  'getDspCoefficients' | 'setDspCoefficients' | 'setDspReturn' | 'setDspDelay';
+type ScspOperationMethod = ScspControlMethod | ScspDspMethod | 'loadPCM' | 'getState';
+
+export const SCSP_CONTROLS: readonly ScspControlMethod[];
+export const SCSP_DSP_METHODS: readonly ScspDspMethod[];
+export function assertNativeScspControl(method: string, args?: readonly unknown[]): void;
+export function createScspValidation(): ScspSynth;
+export function validateScspDspCommand<Method extends ScspDspMethod>(
+  validation: ScspSynth, method: Method, args: Parameters<ScspSynth[Method]>,
+): ReturnType<ScspSynth[Method]>;
+export function scspCommandArgs<Method extends ScspOperationMethod>(
+  synth: ScspSynth, method: Method, args: Parameters<ScspSynth[Method]>,
+): Parameters<ScspSynth[Method]>;
+
+export interface ScspClientInitial {
+  sampleRate?: number;
+  state?: ScspState;
+  /** Native DSP commands reject with NotSupportedError. */
+  native?: boolean;
+  [metadata: string]: unknown;
+}
+export interface ScspClientLifecycle<Context = unknown> {
+  captureContext?: () => Context;
+  restoreContext?: (context: Context) => void;
+  isStopped?: (context: Context) => boolean;
+}
+/** Minimal MessagePort transport, also accepted by performance sender facades. */
+export interface ScspClientPort {
+  postMessage(message: unknown, transfer: ArrayBuffer[]): void;
+  postMessage(message: unknown): void;
+  onmessage: ((event: any) => void) | null;
+  onmessageerror: ((event: any) => void) | null;
+  start?(): void;
+  close(): void;
+}
+interface ScspControlEvent {
+  method: ScspControlMethod;
+  args: unknown[];
+}
+interface ScspAuthorEdit {
+  resources?: ScspState;
+  editedSlot?: number;
+  preset?: ScspControlEvent;
+}
+
+/** Ordered browser/Worker client. PCM uploads and DSP requests resolve after
+ * the audio owner acknowledges the result. Controls retain their synchronous
+ * authored-state validation and ordered dispatch. */
+export interface ScspClient extends Pick<ScspSynth, ScspControlMethod> {
+  readonly sampleRate: number;
+  readonly nativeSampleRate: 44100;
+  readonly channelCount: 32;
+  loadPCM(pcm: Int8Array | Int16Array, options: ScspPCMOptions): Promise<ScspSample>;
+  getState(): Promise<ScspState>;
+  applyDspProgram(words: Uint16Array | readonly number[], options?: ScspDspApplyOptions): Promise<ScspDspRegisterProgram>;
+  getDspProgram(): Promise<ScspDspProgram>;
+  getDspCoefficients(): Promise<ScspDspCoefficients>;
+  setDspCoefficients(patch: ScspDspCoefficientPatch): Promise<ScspDspCoefficients>;
+  setDspReturn(patch: Partial<ScspDspReturn>): Promise<ScspDspReturn>;
+  /** Reserve a fixed Delay ring and apply the acknowledged time / feedback settings. */
+  setDspDelay(patch: ScspDspDelayPatch): Promise<ScspDspDelayProgram>;
+  dispose(): void;
+  /** Internal transport hooks used by the Playground host. */
+  _getState(): ScspState;
+  _setLifecycle<Context>(lifecycle: ScspClientLifecycle<Context>): void;
+  _applyAuthorEdit(edit: ScspAuthorEdit): void;
+  _adoptState(state?: ScspState): void;
+  _stopVoices(): Promise<unknown>;
+  _before?: (event: ScspControlEvent) => false | void;
+  _observe?: (event: ScspControlEvent) => void;
+  _onStateChange?: () => void;
+}
+
+export function createScspClient<Context = unknown>(
+  port: ScspClientPort,
+  initial?: ScspClientInitial,
+  lifecycle?: ScspClientLifecycle<Context>,
+): ScspClient;
