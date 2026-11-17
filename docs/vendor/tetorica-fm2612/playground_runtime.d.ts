@@ -37,6 +37,7 @@ export type PlaygroundKeyboardTarget = {
  *   workletUrl?: string,
  *   audioWorkletUrl?: string,
  *   ym2612WasmUrl?: string,
+ *   engine?: 'ymfm'|'nuked',
  *   segaPsgWasmUrl?: string,
  *   gameboyWasmUrl?: string,
  *   presets?: Record<string, object>,
@@ -89,6 +90,7 @@ export declare function createPlaygroundRuntime(options?: {
     workletUrl?: string;
     audioWorkletUrl?: string;
     ym2612WasmUrl?: string;
+    engine?: 'ymfm' | 'nuked';
     segaPsgWasmUrl?: string;
     gameboyWasmUrl?: string;
     presets?: Record<string, object>;

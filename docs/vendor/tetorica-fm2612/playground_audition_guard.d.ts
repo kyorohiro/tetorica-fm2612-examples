@@ -3,6 +3,12 @@
  * are suppressed. Commands use physical chip channels (Neo Geo maps in host).
  */
 export declare function createOpnAuditionGuard(chip: any, channelCount?: number): {
+    /** Explicit sample-timed edits follow application order. A new Key On
+     * claims the voice, invalidating the old manual key-up token. Parameter
+     * and pitch writes retain that token; an old scheduled Off cannot release
+     * a currently held manual replacement. Ordinary script writes keep their
+     * existing keyboard-priority path above. */
+    writeTimedRegister(register: any, value: any, port?: number): boolean;
     /** Return false for unrelated commands. Invalid audition data throws before
      * changing claims or chip state; the processor reports that error to host. */
     handle(command: any): boolean;

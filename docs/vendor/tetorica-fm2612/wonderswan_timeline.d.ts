@@ -1,12 +1,14 @@
 export declare const WONDERSWAN_TIMELINE_MAX_BYTES: number;
+export declare const WONDERSWAN_TIMELINE_MAX_HOST_BYTES: number;
 export declare const WONDERSWAN_TIMELINE_MAX_WRITES_PER_QUANTUM = 512;
 /** Validate and own an exact, one-pass WonderSwan register/RAM/Voice PCM trace.
  * Authored times are unsigned 44100-Hz sample positions, independent of clock.
  * @param {any} trace
- * @param {{sampleRate?:number}} [options] Actual output rate enables callback density validation.
+ * @param {{sampleRate?:number,maxBytes?:number}} [options] Actual output rate enables callback density validation. Hosts may opt into a bounded larger preparation budget.
  */
-export declare function prepareWonderSwanTimeline(trace: any, { sampleRate }?: {
+export declare function prepareWonderSwanTimeline(trace: any, { sampleRate, maxBytes }?: {
     sampleRate?: number;
+    maxBytes?: number;
 }): {
     version: number;
     clock: number;

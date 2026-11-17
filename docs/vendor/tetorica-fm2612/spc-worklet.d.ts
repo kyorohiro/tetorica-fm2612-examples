@@ -10,6 +10,7 @@ export declare class SpcProcessor extends AudioWorkletProcessor {
     failed: boolean;
     muteMask: number;
     seekId: any;
+    voiceEditEpoch: number;
     remote: any;
     playbackOwner: any;
     cancelledOwners: Set<any>;

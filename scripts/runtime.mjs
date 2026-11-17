@@ -109,6 +109,14 @@ export async function copyRuntime(destination) {
   const manifest = JSON.parse(await readFile(join(source, 'package.json'), 'utf8'));
   const {version} = manifest;
   try {
+    for (const name of ['ay8910_operations','ay8910_timed_client','ay8910_timed_state',
+      'ym2612_operations','ym2612_timed_client','ym2612_timed_state']) {
+      for (const extension of ['js','d.ts']) await readFile(join(source,name+'.'+extension));
+    }
+  } catch(error) {
+    throw new Error('Timed examples require the published tetorica-fm2612 >= 0.2.41 modules and declarations. Run npm install.',{cause:error});
+  }
+  try {
     const entry = await readFile(join(source, manifest.exports?.['.']?.import ?? 'soundchip.js'), 'utf8');
     if (!entry.includes('SOUNDCHIP_MIXER_PRESETS')) throw new Error('Missing preset export');
     await readFile(join(source, 'soundchip_mixer_presets.js'));

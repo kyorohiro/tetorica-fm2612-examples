@@ -17,5 +17,6 @@ export declare function createAy8910Audio(context: AudioContext, destination: Au
     chip: string;
     type: 0 | 16;
     flags: number;
+    instanceId: string;
     dispose: () => void;
 }>;

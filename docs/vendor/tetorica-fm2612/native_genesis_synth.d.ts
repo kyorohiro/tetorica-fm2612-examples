@@ -935,6 +935,7 @@ export declare class NativeGenesisSynth {
                         decayLevel: number;
                         releaseRate: number;
                         keyRateScaling: number;
+                        loopLink: boolean;
                     };
                     lfo: {
                         frequencyCode: number;
@@ -993,6 +994,7 @@ export declare class NativeGenesisSynth {
                             decayLevel: number;
                             releaseRate: number;
                             keyRateScaling: number;
+                            loopLink: boolean;
                         };
                         lfo: {
                             frequencyCode: number;
@@ -1051,6 +1053,7 @@ export declare class NativeGenesisSynth {
                     decayLevel: number;
                     releaseRate: number;
                     keyRateScaling: number;
+                    loopLink: boolean;
                 };
                 lfo: {
                     frequencyCode: number;
@@ -3200,6 +3203,7 @@ export declare class NativeGenesisSynth {
                         decayLevel: number;
                         releaseRate: number;
                         keyRateScaling: number;
+                        loopLink: boolean;
                     };
                     lfo: {
                         frequencyCode: number;

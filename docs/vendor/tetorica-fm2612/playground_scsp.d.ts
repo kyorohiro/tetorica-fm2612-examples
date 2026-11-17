@@ -33,6 +33,7 @@ export declare function createScspClient(port: any, initial?: {}, lifecycle?: {}
                 decayLevel: number;
                 releaseRate: number;
                 keyRateScaling: number;
+                loopLink: boolean;
             };
             lfo: {
                 frequencyCode: number;

@@ -1,13 +1,22 @@
+export declare const PERFORMANCE_PATTERN_LIMITS: Readonly<{
+    maxPatterns: 128;
+    maxPatternEntries: 4096;
+    maxPatternRate: 48000;
+}>;
 /** AudioWorklet performance reservations. Time is absolute audio-clock seconds.
  * Ordinary untagged messages remain the caller's immediate path. A batch is
  * validated on arrival and applied atomically, in submission order, at its frame.
  */
-export declare function createPerformanceQueue({ apply, nowFrame, sampleRate, maxCommands, validate, prepare, onDiscard, onCancelOwner, }: {
+export declare function createPerformanceQueue({ apply, nowFrame, sampleRate, maxCommands, maxPatterns, maxPatternEntries, maxPatternRate, patternCommandCost, validate, prepare, onDiscard, onCancelOwner, }: {
     apply: any;
     maxCommands?: number | undefined;
+    maxPatternEntries?: 4096 | undefined;
+    maxPatternRate?: 48000 | undefined;
+    maxPatterns?: 128 | undefined;
     nowFrame: any;
     onCancelOwner: any;
     onDiscard: any;
+    patternCommandCost: any;
     prepare: any;
     sampleRate: any;
     validate: any;
@@ -16,6 +25,51 @@ export declare function createPerformanceQueue({ apply, nowFrame, sampleRate, ma
     receive(data: any, reply: any): boolean;
     nextFrame: () => any;
     advance(frame?: any): void;
+    validatePattern: (spec: any) => {
+        name: any;
+        entries: {
+            offsetSeconds: any;
+            command: any;
+        }[];
+        repeatSeconds: any;
+        startFrame: number;
+        cost: number;
+        performance: {
+            session: any;
+            owner: any;
+            time: any;
+        };
+    };
+    schedulePattern: (spec: any, reply: any) => {
+        name: any;
+        startFrame: any;
+        sampleRate: any;
+        entries: any;
+        repeatSeconds: any;
+    };
+    clearPattern: (name: string, { session, owner }?: {
+        session?: number;
+        owner?: string;
+    }) => boolean;
+    commitPatterns: (changes: any, { session, owner, dryRun }?: {
+        session: number;
+        owner: string;
+        dryRun?: boolean;
+    }, reply?: (message: any) => void) => {
+        session: number;
+        owner: string;
+        reservations: {
+            name: any;
+            startFrame: any;
+            sampleRate: any;
+            entries: any;
+            repeatSeconds: any;
+        }[];
+        cleared: any[];
+    };
+    cancelPatternOwner: (owner: string, { session }?: {
+        session?: number;
+    }) => boolean;
     clear: () => void;
     cancelOwner: (owner: any, reply: any) => void;
     getStats: () => {
@@ -23,6 +77,11 @@ export declare function createPerformanceQueue({ apply, nowFrame, sampleRate, ma
         latestSession: number;
         queuedCommands: number;
         queuedBatches: number;
+        patternCount: number;
+        storedPatternCommands: number;
+        patternRate: number;
+        storedPatternCost: number;
+        patternCostRate: number;
         lateCommands: number;
         maxLateFrames: number;
         rejectedBatches: number;
@@ -39,6 +98,7 @@ export declare function createPerformanceChipOwnership({ writeFm, writePsg, chan
     writePsg: any;
 }): {
     observe(command: any, performance: any): void;
+    canApplyTimed(command: any, performance: any): boolean;
     cancel(owner: any): void;
     reset: () => void;
 };

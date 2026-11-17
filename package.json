@@ -13,6 +13,7 @@
     "build": "node scripts/build.mjs",
     "build:docs": "node scripts/build.mjs --docs",
     "check:node": "node scripts/check-node.mjs",
+    "check:timed": "node scripts/check-timed-browser.mjs",
     "render:sid-factory": "node examples/c64/sid/03-factory-wav/node/main.mjs",
     "check:mixer": "node scripts/check-mixer-browser.mjs",
     "check:dx7": "node scripts/check-dx7-browser.mjs",
@@ -31,7 +32,7 @@
     "check:vab": "node scripts/check-vab-node.mjs && node scripts/check-vab-browser.mjs"
   },
   "dependencies": {
-    "tetorica-fm2612": "0.2.40"
+    "tetorica-fm2612": "0.2.41"
   },
   "devDependencies": {
     "playwright": "1.63.0"

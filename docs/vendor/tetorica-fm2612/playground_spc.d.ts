@@ -25,6 +25,8 @@ export declare function createSpcClient(port: any, initial?: {}, { getOwner, cap
     }): () => void;
     getState(): Promise<any>;
     snapshot(): Promise<any>;
+    cancelVoiceEdits(): Promise<any>;
+    editVoice(channel: any, changes: any): Promise<any>;
     setMuteMask(mask: any): Promise<any>;
     seek(seconds: any): Promise<any>;
     dispose(): void;

@@ -55,6 +55,7 @@ export declare function createNativeGenesisScsp(owner: any, { additional }?: {
                     decayLevel: number;
                     releaseRate: number;
                     keyRateScaling: number;
+                    loopLink: boolean;
                 };
                 lfo: {
                     frequencyCode: number;
@@ -113,6 +114,7 @@ export declare function createNativeGenesisScsp(owner: any, { additional }?: {
                         decayLevel: number;
                         releaseRate: number;
                         keyRateScaling: number;
+                        loopLink: boolean;
                     };
                     lfo: {
                         frequencyCode: number;

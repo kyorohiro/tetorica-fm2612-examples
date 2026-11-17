@@ -167,5 +167,18 @@ export declare class YM2608Synth extends OPNFMSynth {
 }
 /** Browser-hosted YM2608 FM synth with shared Tetorica audio services. */
 export declare class YM2608RuntimeSynth extends OPNRuntimeSynth {
-    constructor(options?: {});
+    outputGains: import("./ym2608.js").Ym2608OutputGains;
+    /** @param {import('./opn_runtime_synth.js').OPNRuntimeSynthOptions & {outputGains?:import('./ym2608.js').Ym2608OutputGainPatch}} [options] */
+    constructor(options?: import('./opn_runtime_synth.js').OPNRuntimeSynthOptions & {
+        outputGains?: import('./ym2608.js').Ym2608OutputGainPatch;
+    });
+    start(): Promise<this>;
+    /** Configure host software gains before the native outputs are combined.
+     * FM includes Rhythm and ADPCM-B. Settings survive close/restart and reset.
+     * @param {import('./ym2608.js').Ym2608OutputGainPatch} gains Partial linear gains, each 0..1024.
+     * @returns {import('./ym2608.js').Ym2608OutputGains} Accepted gains.
+     */
+    setOutputGains(gains: import('./ym2608.js').Ym2608OutputGainPatch): import('./ym2608.js').Ym2608OutputGains;
+    /** @returns {import('./ym2608.js').Ym2608OutputGains} Detached linear gains. */
+    getOutputGains(): import('./ym2608.js').Ym2608OutputGains;
 }

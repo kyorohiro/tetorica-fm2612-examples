@@ -1,7 +1,7 @@
 # tetorica-fm2612 examples
 
 `tetorica-fm2612` を import して使う、機能別の小さなサンプル集。
-公開済み npm `tetorica-fm2612@0.2.40` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES・PC Engine・MSX 合奏の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
+公開済み npm `tetorica-fm2612@0.2.41` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES・PC Engine・MSX 合奏の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
 SIDは専用APIのAudioWorklet接続と、共通factory／専用coreから直接PCMを生成するNode例を用意しています。
 PCM 生成・WAV 保存は専用例に置き、Web Audio を使う埋め込み例と、Node の nativeFX / 音声デバイス出力の例も掲載しています。本体リポジトリには依存しません。
 
@@ -37,10 +37,22 @@ npm install
 npm run dev
 ```
 
-http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します。
+http://127.0.0.1:5173 の一覧から Web 版を開いて Play（レジスタ比較はInspect）を押します。
 `PORT=8080 npm run dev` でポートを変更できます。
 
 ## サンプル一覧
+
+0.2.41のtimed APIは、音源操作を記録し、AudioWorkletのサンプル時計で
+実行し、そのレジスタ書き込み列を確認するためのものです。
+まず[YM2149のSync-buzzer](examples/atari-st/ym2149/01-sync-buzzer/README.md)、
+[音量変調](examples/atari-st/ym2149/02-volume-modulation/README.md)、
+[YM2612の独立したOperator変調](examples/genesis/fm/07-timed-operators/README.md)
+を試せます。ソフトウェアによる予約で、発振器・Envelope・Operatorはチップの機能です。
+
+[レジスタ比較](examples/chip-raw/02-compile-compare/README.md)では、
+`current`／`client`／`reset`／同じsnapshotを使った`compile()`の結果を比べます。
+Webの状態取得は無音で行い、Nodeは既知の状態からJSONを生成します。
+Nativeの予約実行をJavaScriptタイマーで代替する処理はありません。
 
 | 分類 | サンプル | 学ぶこと |
 | --- | --- | --- |
@@ -50,6 +62,10 @@ http://127.0.0.1:5173 の一覧から Web 版を開いて Play を押します�
 | FM | [04-operators](examples/genesis/fm/04-operators/README.md) | algorithm / operator |
 | FM | [05-stereo-pan](examples/genesis/fm/05-stereo-pan/README.md) | 左・右・両側の出力 |
 | FM | [06-chord](examples/genesis/fm/06-chord/README.md) | 複数チャンネルで和音 |
+| FM（Web） | [07-timed-operators](examples/genesis/fm/07-timed-operators/README.md) | メロディとTL／MULTの別周期制御、port付きレジスタ列 |
+| Atari ST / YM2149（Web） | [01-sync-buzzer](examples/atari-st/ym2149/01-sync-buzzer/README.md) | 共有EnvelopeのR13再トリガー、音名と変調周期の分離 |
+| Atari ST / YM2149（Web） | [02-volume-modulation](examples/atari-st/ym2149/02-volume-modulation/README.md) | 16段階Volumeの予約変調、非線形音量 |
+| レジスタ比較（Web / Node JSON） | [02-compile-compare](examples/chip-raw/02-compile-compare/README.md) | 現在状態・ローカル状態・reset・snapshotの比較 |
 | DX7（Web） | [01-notes](examples/dx7/01-notes/README.md) | MIDI ノート番号でメロディと和音、Main / Worker の切替 |
 | DX7（Web） | [02-sysex](examples/dx7/02-sysex/README.md) | 1音色 / 32音色の SysEx 読込み、音色選択、試聴 |
 | SNES（実験用・Web / Node） | [01-brr-notes](examples/snes/01-brr-notes/README.md) | 自作 BRR、基準音程、8ボイス、Main / Worker、Node WAV |
@@ -147,7 +163,7 @@ Gaussian補間と改善されたloop予測は公開版のまま使い、`setEnve
 
 SCSPは`Scsp`／`ScspSynth`のsigned PCM8／16・forward loopから始め、`setLfo()`のhardware LFO、
 `setModulation()`のsound-stack address変調へ進みます。stack offsetはslot番号ではありません。
-変調用PCMにはfull loopとguard領域が必要です。DSP／delay・SSF／68000は0.2.40の公開高級APIに含まれないため、この例集には追加していません。
+変調用PCMにはfull loopとguard領域が必要です。DSP／delay・SSF／68000は0.2.41の公開高級APIに含まれないため、この例集には追加していません。
 
 PCM→BRR、PCM→ADPCM-A、Game Boy用Wave変換は**ソフトウェアの前処理**です。
 変換結果は実際のS-DSP／YM2610/B／Game Boyコアへ渡して音を確かめます。
@@ -235,9 +251,29 @@ Node 専用の場合は `environments: ["node"]`、ブラウザ専用の場合�
 サンプルコードは BSD-3-Clause。ランタイムの第三者ライセンスは
 配布パッケージ内の `THIRD_PARTY_LICENSES.txt`、`licenses/`、`sources/` を参照してください。
 
+## YM2149 / YM2612 timed API
+
+4例のWebページは、公開パッケージの専用AudioWorkletクライアントを使います。
+`build()`で操作を記録し、`compile()`で予測レジスタ列を表示し、
+`schedule()`でサンプル時計による予約を実行します。
+`beat()`は各ページ内の短いMain側ヘルパーで、音符の間隔だけをBPMへ追従させます。
+Nativeでの予約実行をJavaScriptタイマーへ置き換える機能はありません。
+
+```sh
+npm run build
+npm run check:timed
+npm run check:timed -- --sample-rate=44100
+node examples/chip-raw/02-compile-compare/node/main.mjs ./register-comparison.json
+```
+
+`check:timed`はChromium／WebKitで、実際の予約・レジスタ変化・編集後の再実行・Stopを検証します。
+デフォルトは48 kHzです。物理出力は常時消音し、その手前のPCMを測定します。
+Nodeの比較例は音声デバイスを使わず、既知の状態からJSONを生成します。
+Webの取得済みsnapshotと同じものを持っているとは扱いません。
+
 ## MegaSynth Node examples
 
-`embedding/06`〜`10` は `tetorica-fm2612@0.2.40` の実験用 MegaSynth API を使います。
+`embedding/06`〜`10` は `tetorica-fm2612@0.2.41` の実験用 MegaSynth API を使います。
 通常の `npm ci` で公開 package を導入できます。
 
 ```sh
@@ -260,7 +296,7 @@ WAV の RIFF ヘッダー・非ゼロ PCM とイベント JSON を確認しま�
 ## Transport の例
 
 Genesis / PC-98 / Game Boy / X68000 FM の基本例は、WorkletTransport / AudifyTransport を使用します。
-公開済み npm 0.2.40 を使用します。Node のリアルタイム再生には audify を追加してください。
+公開済み npm 0.2.41 を使用します。Node のリアルタイム再生には audify を追加してください。
 
 ```sh
 npm install
@@ -304,7 +340,7 @@ npm run check:mixer
 
 ## OPL / OPL2 / Y8950 FM / OPL3
 
-`tetorica-fm2612@0.2.40` の `OPLSynth` とオリジナル音色 `OPL_PRESETS` を使います。
+`tetorica-fm2612@0.2.41` の `OPLSynth` とオリジナル音色 `OPL_PRESETS` を使います。
 Webは `createSoundChip(name, {execution:'worklet'})` → `OPLWorkletTransport` → `OPLSynth` でリアルタイム再生。
 Nodeは `OPLDirectTransport` と `generateStereo()` でPCMを生成し、WAVへ保存します。音声デバイスや `audify` は不要です。
 Webのコード欄を編集して再実行でき、Stopは読み込み中にも使えます。
@@ -328,7 +364,7 @@ npm run check:opl
 
 ## AY / OPLL / MSX
 
-6例は `tetorica-fm2612@0.2.40` の AY / OPLL API を使います。
+6例は `tetorica-fm2612@0.2.41` の AY / OPLL API を使います。
 MSX は AY-3-8910＋YM2413、MSX Audio はさらに Y8950 の FM 部分を加えた構成です。
 Master System の2例は YM2413 を使い、音色比較では Sega PSG も伴奏します。
 
@@ -356,7 +392,7 @@ npm run check:msx
 
 ## PC Engine / HuC6280
 
-`pc-engine/` の3例は公開済み `tetorica-fm2612@0.2.40` を使います。
+`pc-engine/` の3例は公開済み `tetorica-fm2612@0.2.41` を使います。
 Web は `Playground({chip:'huc6280'})` の主音源 `pce` を Main / Worker から操作します。
 Node は `Huc6280AudioEngine` → `Huc6280DirectTransport` → `Huc6280Synth` でPCMを生成し、WAVへ保存します。音声ドライバーは不要です。
 package root の `createSoundChip('huc6280')` や専用 AudifyTransport は使いません。
@@ -379,7 +415,7 @@ npm run check:pcengine
 
 ## PC Engine CD-ROM² / CD-DA / MSM5205
 
-公開済み `tetorica-fm2612@0.2.40` の音声APIを使う3例です。
+公開済み `tetorica-fm2612@0.2.41` の音声APIを使う3例です。
 音声はすべてコード内で生成します。ゲームのディスク・BIOS・外部サンプルは不要です。
 
 | Example | 内容 |
@@ -465,7 +501,7 @@ Pause / Resume・音量・不正ファイル後の再実行を確認します。
 
 ## WonderSwan
 
-3例は `tetorica-fm2612@0.2.40` の共通factoryを使います。
+3例は `tetorica-fm2612@0.2.41` の共通factoryを使います。
 Webは `createSoundChip('wonderswan', {execution:'worklet'})` → `WonderSwanWorkletTransport` → `WonderSwanSynth`。
 NodeはDirect生成したチップを `WonderSwanDirectTransport` → `WonderSwanSynth` へ渡し、WAVに保存します。
 物理4CH、32点・4-bit波形、左右Volumeは各0〜15。VoiceはCH1、SweepはCH2、NoiseはCH3を使います。
@@ -490,7 +526,7 @@ npm run check:wonderswan
 
 ## POKEY / Dual POKEY
 
-3例は公開済み `tetorica-fm2612@0.2.40` の共通factoryと `PokeySynth` を使います。
+3例は公開済み `tetorica-fm2612@0.2.41` の共通factoryと `PokeySynth` を使います。
 Webは `createSoundChip('pokey', {execution:'worklet'})` → `PokeyWorkletTransport` → `PokeySynth`。
 コードを編集して再実行でき、Stop・終了・ページ移動で音源とAudioContextを解放します。読み込み中のStopにも対応します。
 
@@ -520,7 +556,7 @@ npm run check:node
 
 ## VABの音色を自分のコードで使う
 
-[03-vab-bank](examples/ps1/spu/03-vab-bank/README.md) は公開済み0.2.40の
+[03-vab-bank](examples/ps1/spu/03-vab-bank/README.md) は公開済み0.2.41の
 `readVab()` → `prepareVabTone()` → `loadADPCM()` / `setPreset()` を使います。
 Webでは自作デモまたは手元の標準VABを開き、Program／Toneを選んで明示的に試奏できます。
 選択だけでは音声を開始しません。`exportVab()` は元のサンプル・属性を保持した標準VABを

@@ -96,6 +96,8 @@ export declare class SpcCore extends Core {
     /** Reload the original snapshot, including its original echo RAM. Keeps mute mask. */
     restart(): void;
     reset(): void;
+    /** Host control of one existing SPC voice, preserving time, RAM and phase. */
+    editVoice(channel: any, changes: any): void;
     /** Enable bounded DSP-write observation at the current position without
      * resetting phase/envelopes. Draining is independent of offline RAM tracing.
      * @param {{capacity?:number}} [options] */

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ja"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>YM2612：メロディとOperator予約 — tetorica-fm2612 examples</title>
+  <link rel="stylesheet" href="../../../../../style.css">
+  <script type="importmap">{"imports":{"tetorica-fm2612":"../../../../../vendor/tetorica-fm2612/soundchip.js","tetorica-fm2612/":"../../../../../vendor/tetorica-fm2612/"}}</script>
+  <style>
+    #code { width:100%; box-sizing:border-box; font-family:monospace; }
+    .trace { overflow:auto; margin:20px 0; }
+    table { border-collapse:collapse; width:100%; font-family:monospace; font-size:.85rem; }
+    th,td { padding:6px 12px; border-bottom:1px solid var(--line); text-align:left; }
+    select { font:inherit; padding:8px; }
+  </style>
+</head><body><main>
+  <nav><a href="../../../../../index.html">← Examples</a><a href="./main.js">Source ↗</a></nav>
+  <header><p class="eyebrow">genesis/fm/07-timed-operators · WEB</p><h1>YM2612：メロディと<br>Operator予約</h1><p>メロディの拍と、TL／MULTを動かす秒周期を分けて演奏します。操作がどのレジスタ書き込みになるかも確認できます。</p></header>
+  <section class="sample-panel">
+    <label for="code">実行するコード — fm、setBpm、beat、console</label>
+    <textarea id="code" rows="32" spellcheck="false" aria-describedby="code-help"></textarea>
+    <div class="actions">
+      <label for="engine">YM2612 engine</label><select id="engine"><option value="ymfm">ymfm</option><option value="nuked">Nuked-OPN2</option></select>
+      <button id="play" type="button">Play</button><button id="stop" type="button" disabled>Stop</button>
+    </div>
+    <p id="status" role="status" aria-live="polite">Ready.</p><pre><code id="detail"></code></pre>
+    <p id="code-help">編集は次のPlayに反映されます。setBpm(120)を変えるとメロディが速く／遅くなります。motionSecondsは秒指定なので独立したままです。初期コードは約5秒で終了します。</p>
+    <h2>compile()で予測した書き込み</h2>
+    <p id="traceSummary">No compiled writes yet.</p>
+    <div class="trace"><table><thead><tr><th>offsetSeconds</th><th>port</th><th>register</th><th>value</th></tr></thead><tbody id="traceBody"></tbody></table></div>
+    <p>Software timing：予約はソフトウェアが行い、OperatorとEnvelopeはYM2612が処理します。build()は操作を記録し、compile()は基準状態から書き込み列を予測します。どちらも音源を書き換えません。</p>
+    <p>MULTとDTは同じレジスタです。MULTだけの予約は、実行時のDTを保ちます。schedule()の完了は「受付完了」で、演奏完了ではありません。同名予約は置換・再開始され、clearSchedule()は未来の操作を取り消します。適用済みの値は戻りません。</p>
+    <p>Stopは出力を閉じ、音源と予約を破棄します。Nativeの予約実行は対象外です。この例では実ゲーム音色・曲・サンプルは使いません。</p>
+    <h2>Web — 全コード</h2><pre class="source"><code data-source="./main.js">Loading…</code></pre>
+    <p><a href="../README.md">README</a>。npm 0.2.41の公開モジュールだけを使います。</p>
+  </section>
+</main><script type="module" src="./main.js"></script><script type="module">
+for (const code of document.querySelectorAll('[data-source]')) {
+  try { const response = await fetch(code.dataset.source); if (!response.ok) throw new Error(`HTTP ${response.status}`); code.textContent = await response.text(); }
+  catch (error) { code.textContent = error.message; }
+}
+</script></body></html>

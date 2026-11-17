@@ -17,12 +17,64 @@ export declare class SnesInstrumentProcessor extends AudioWorkletProcessor {
         beginAudition(channel: any, owner: any): void;
         endAudition(channel: any, owner: any): void;
         applyImmediate(command: any, port: any, metadata: any): boolean | undefined;
+        schedulePattern: (spec: any, reply: any) => {
+            name: any;
+            startFrame: any;
+            sampleRate: any;
+            entries: any;
+            repeatSeconds: any;
+        };
+        validatePattern: (spec: any) => {
+            name: any;
+            entries: {
+                offsetSeconds: any;
+                command: any;
+            }[];
+            repeatSeconds: any;
+            startFrame: number;
+            cost: number;
+            performance: {
+                session: any;
+                owner: any;
+                time: any;
+            };
+        };
+        clearPattern: (name: string, { session, owner }?: {
+            session?: number;
+            owner?: string;
+        }) => boolean;
+        commitPatterns: (changes: any, { session, owner, dryRun }?: {
+            session: number;
+            owner: string;
+            dryRun?: boolean;
+        }, reply?: (message: any) => void) => {
+            session: number;
+            owner: string;
+            reservations: {
+                name: any;
+                startFrame: any;
+                sampleRate: any;
+                entries: any;
+                repeatSeconds: any;
+            }[];
+            cleared: any[];
+        };
+        cancelPatternOwner: (owner: string, { session }?: {
+            session?: number;
+        }) => boolean;
+        cancelOwner: (owner: any, reply: any) => void;
+        nowFrame: () => any;
         clear(): void;
         getStats: () => {
             activeSession: number;
             latestSession: number;
             queuedCommands: number;
             queuedBatches: number;
+            patternCount: number;
+            storedPatternCommands: number;
+            patternRate: number;
+            storedPatternCost: number;
+            patternCostRate: number;
             lateCommands: number;
             maxLateFrames: number;
             rejectedBatches: number;

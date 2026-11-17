@@ -4,8 +4,10 @@ import { PsgInspectorState } from './playground_chip_inspector_state.js';
 import { YM2612DacPlayer } from "./ym2612_dac.js";
 import { SegaPSG } from "./segapsg.js";
 export declare class YM2612Processor extends AudioWorkletProcessor {
+    instanceId: any;
     ym2612: import("./ym2612.js").Ym2612 | null;
     auditions: {
+        writeTimedRegister(register: any, value: any, port?: number): boolean;
         handle(command: any): boolean;
     } | null;
     psg: SegaPSG | null;
@@ -56,6 +58,7 @@ export declare class YM2612Processor extends AudioWorkletProcessor {
     captureFrameCount: number;
     performanceOwnership: {
         observe(command: any, performance: any): void;
+        canApplyTimed(command: any, performance: any): boolean;
         cancel(owner: any): void;
         reset: () => void;
     };
@@ -63,6 +66,51 @@ export declare class YM2612Processor extends AudioWorkletProcessor {
         receive(data: any, reply: any): boolean;
         nextFrame: () => any;
         advance(frame?: any): void;
+        validatePattern: (spec: any) => {
+            name: any;
+            entries: {
+                offsetSeconds: any;
+                command: any;
+            }[];
+            repeatSeconds: any;
+            startFrame: number;
+            cost: number;
+            performance: {
+                session: any;
+                owner: any;
+                time: any;
+            };
+        };
+        schedulePattern: (spec: any, reply: any) => {
+            name: any;
+            startFrame: any;
+            sampleRate: any;
+            entries: any;
+            repeatSeconds: any;
+        };
+        clearPattern: (name: string, { session, owner }?: {
+            session?: number;
+            owner?: string;
+        }) => boolean;
+        commitPatterns: (changes: any, { session, owner, dryRun }?: {
+            session: number;
+            owner: string;
+            dryRun?: boolean;
+        }, reply?: (message: any) => void) => {
+            session: number;
+            owner: string;
+            reservations: {
+                name: any;
+                startFrame: any;
+                sampleRate: any;
+                entries: any;
+                repeatSeconds: any;
+            }[];
+            cleared: any[];
+        };
+        cancelPatternOwner: (owner: string, { session }?: {
+            session?: number;
+        }) => boolean;
         clear: () => void;
         cancelOwner: (owner: any, reply: any) => void;
         getStats: () => {
@@ -70,6 +118,11 @@ export declare class YM2612Processor extends AudioWorkletProcessor {
             latestSession: number;
             queuedCommands: number;
             queuedBatches: number;
+            patternCount: number;
+            storedPatternCommands: number;
+            patternRate: number;
+            storedPatternCost: number;
+            patternCostRate: number;
             lateCommands: number;
             maxLateFrames: number;
             rejectedBatches: number;
@@ -77,6 +130,14 @@ export declare class YM2612Processor extends AudioWorkletProcessor {
         };
     };
     performanceDacOwner: any;
+    timed: {
+        receive(data: any, port: any): boolean;
+        apply(operation: any, port: any, frame: any, metadata: any): void;
+        clear(): void;
+    };
+    timedChip: {
+        getState: () => import("./ym2612_operation_state.js").YM2612OperationState;
+    } | undefined;
     opnInspector: OpnKeyboardInspector | undefined;
     psgInspector: PsgInspectorState | undefined;
     psgAuditions: {
@@ -86,10 +147,10 @@ export declare class YM2612Processor extends AudioWorkletProcessor {
         clear(): void;
     } | undefined;
     clock: number | undefined;
-    constructor();
+    constructor(options?: {});
     init(wasmBinary: any, psgWasmBinary: any): Promise<void>;
     preparePerformanceCommand(command: any, reply: any, performance: any): any;
-    applyCommand(command: any, reply: ((message: any) => any) | undefined, commandFrame: any, performance: any): void;
+    applyCommand(command: any, reply: ((message: any) => any) | undefined, commandFrame: any, performance: any): void | boolean;
     process(inputs: any, outputs: any): boolean;
     nextDacFrame(): number;
     writeDueDacFrames(frame: any): void;

@@ -124,10 +124,10 @@ async function checkPage(browser,name,base){
   finally{await page.close();}
 }
 
-let failure;
+let failure,packageVersion;
 try{
   const dependency=JSON.parse(await readFile(join(repo,'package.json'),'utf8')).dependencies['tetorica-fm2612'];
-  const vendor=JSON.parse(await readFile(join(site,'vendor/tetorica-fm2612/package.json'),'utf8'));assert.equal(vendor.version,dependency);assert.equal(vendor.version,'0.2.40');
+  const vendor=JSON.parse(await readFile(join(site,'vendor/tetorica-fm2612/package.json'),'utf8'));assert.equal(vendor.version,dependency);packageVersion=vendor.version;
   await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});const base='http://127.0.0.1:'+server.address().port+prefix;
   const engines=args.includes('--chromium')?[['chromium',chromium]]:args.includes('--webkit')?[['webkit',webkit]]:[['chromium',chromium],['webkit',webkit]];
   for(const[name,engine]of engines){const browser=await engine.launch({headless:true,...(name==='chromium'?{args:['--mute-audio','--autoplay-policy=no-user-gesture-required']}:{})});try{results.push(await checkPage(browser,name,base));console.log('PASS '+name+' VAB example (physical gain0)');}finally{await browser.close();}}
@@ -136,7 +136,7 @@ try{
 }catch(error){failure=error;}
 finally{
   server.closeIdleConnections?.();server.closeAllConnections?.();if(server.listening)await new Promise(resolve=>server.close(resolve));
-  await mkdir(dirname(output),{recursive:true});await writeFile(output,JSON.stringify({schemaVersion:1,passed:!failure,packageVersion:'0.2.40',physicalOutputMuted:true,listeningPerformed:false,staticSiteOnly:true,
+  await mkdir(dirname(output),{recursive:true});await writeFile(output,JSON.stringify({schemaVersion:1,passed:!failure,packageVersion,physicalOutputMuted:true,listeningPerformed:false,staticSiteOnly:true,
     results,assets:Object.fromEntries([...served].sort(([a],[b])=>a.localeCompare(b))),...(failure?{error:failure.stack??String(failure)}:{})},null,2)+'\n');
 }
 if(failure)throw failure;console.log('PASS VAB Web example: source selection/export, native PCM and resource cleanup; '+output);

@@ -18,7 +18,8 @@ const sourcePath=join(root,'examples/ps1/spu/03-vab-bank/assets/demo.vab');
 const source=await readFile(sourcePath),bank=readVab(source);
 const wasmBinary=await readFile(runtimeAssetUrl('generated/ps1_spu_wasm.wasm'));
 const directory=await mkdtemp(join(tmpdir(),'tetorica-vab-node-'));
-const report={passed:false,package:'tetorica-fm2612@0.2.40',cases:[],rejected:[],audioDeviceUsed:false};
+const installedVersion=JSON.parse(await readFile(join(root,'node_modules/tetorica-fm2612/package.json'),'utf8')).version;
+const report={passed:false,package:`tetorica-fm2612@${installedVersion}`,cases:[],rejected:[],audioDeviceUsed:false};
 assert.equal(typeof globalThis.AudioContext,'undefined');
 
 function checkWav(wav) {

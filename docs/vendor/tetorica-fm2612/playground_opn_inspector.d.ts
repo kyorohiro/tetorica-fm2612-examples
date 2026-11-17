@@ -5,6 +5,7 @@
 export declare class OpnKeyboardInspector {
     kind: "ym2203" | "ym2608" | "ym2610" | "ym2610b" | "ym2612";
     guard: {
+        writeTimedRegister(register: any, value: any, port?: number): boolean;
         handle(command: any): boolean;
     };
     clock: () => number;
@@ -35,6 +36,10 @@ export declare class OpnKeyboardInspector {
         channel: number;
     };
     observe(register: any, value: any, port: any): void;
+    /** Explicit timed edits bypass the manual pitch lease, then update the
+     * authored inspector shadow without issuing a second native write. A new
+     * timed Gate retires the corresponding stale manual release identity. */
+    writeTimedRegister(register: any, value: any, port?: number): boolean;
     filter(register: any, value: any, port: any): any;
     read(): {
         kind: "ym2203" | "ym2608" | "ym2610" | "ym2610b" | "ym2612";

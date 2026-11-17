@@ -6,6 +6,23 @@
  */
 export declare const YM2608_CLOCK = 8000000;
 export declare const YM2608_ADPCM_B_MEMORY_SIZE = 2097152;
+export type Ym2608OutputGains = {
+    fm: number;
+    ssg: number;
+};
+export type Ym2608OutputGainPatch = {
+    fm?: number;
+    ssg?: number;
+};
+/** @typedef {{fm:number,ssg:number}} Ym2608OutputGains */
+/** @typedef {{fm?:number,ssg?:number}} Ym2608OutputGainPatch */
+/** Validate host-side output gains before changing either bus.
+ * FM includes the chip's already combined Rhythm and ADPCM-B outputs.
+ * @param {Ym2608OutputGainPatch} gains Partial linear gains, each 0..1024.
+ * @param {Ym2608OutputGains} [current] Previously accepted gains.
+ * @returns {Ym2608OutputGains} Detached validated gains.
+ */
+export declare function normalizeYm2608OutputGains(gains: Ym2608OutputGainPatch, current?: Ym2608OutputGains): Ym2608OutputGains;
 /**
  * Ym2608 chip instance backed by WASM. No AudioContext or playback device is created.
  * Use create() to initialize and dispose() to release native resources.
@@ -25,6 +42,10 @@ export declare class Ym2608 {
     leftPtr: number;
     rightPtr: number;
     bufferFrames: number;
+    outputGains: {
+        fm: number;
+        ssg: number;
+    };
     pcmView: {
         left: Float32Array<any>;
         right: Float32Array<any>;
@@ -125,6 +146,14 @@ export declare class Ym2608 {
     clearAdpcmBMemory(): void;
     /** @param {number} mask */
     setSourceMuteMask(mask: number): void;
+    /** Set host software gain before combining the FM-side stereo bus and SSG.
+     * The FM-side bus includes Rhythm and ADPCM-B. Gains survive reset and state restore.
+     * @param {Ym2608OutputGainPatch} gains Partial linear gain multipliers, each 0..1024.
+     * @returns {Ym2608OutputGains} Accepted output gains.
+     */
+    setOutputGains(gains: Ym2608OutputGainPatch): Ym2608OutputGains;
+    /** @returns {Ym2608OutputGains} Detached linear output gain multipliers. */
+    getOutputGains(): Ym2608OutputGains;
     /**
      * Generate PCM synchronously, advancing the chip by the requested number of frames.
      * Returned arrays are copied from WASM memory and survive later generation/disposal.

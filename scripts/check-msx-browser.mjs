@@ -34,9 +34,9 @@ const server = http.createServer(async (request, response) => {
   } catch (error) { response.writeHead(404).end(String(error)); }
 });
 
-// Observe output without changing what is sent to the speakers.
+// Measure actual PCM before a permanent physical-output mute.
 function installOutputAudit() {
-  const contexts = [], nodes = [], meters = [], observed = new WeakMap();
+  const contexts = [], nodes = [], meters = [], physicalSinks = [], observed = new WeakMap();
   const NativeContext = window.AudioContext, NativeWorklet = window.AudioWorkletNode;
   window.AudioContext = new Proxy(NativeContext, {construct(Target, args) {
     const context = Reflect.construct(Target, args); contexts.push(context); return context;
@@ -48,10 +48,16 @@ function installOutputAudit() {
   }});
   const connect = AudioNode.prototype.connect;
   AudioNode.prototype.connect = function(destination, ...args) {
-    const result = connect.call(this, destination, ...args);
+    // Never connect an example's output directly to the physical destination.
+    // Keep a separate pre-mute analyser branch so PCM/pitch checks stay meaningful.
+    let result;
+    if (destination === this.context.destination) {
+      const mute = this.context.createGain(); mute.gain.value = 0; physicalSinks.push(mute);
+      connect.call(this, mute, ...args); connect.call(mute, destination); result = destination;
+    } else result = connect.call(this, destination, ...args);
     if (destination === this.context.destination && !observed.has(this)) {
       const splitter = this.context.createChannelSplitter(2), silent = this.context.createGain();
-      silent.gain.value = 0;
+      silent.gain.value = 0; physicalSinks.push(silent);
       const analysers = [0, 1].map(channel => {
         const analyser = this.context.createAnalyser(); analyser.fftSize = 4096;
         connect.call(splitter, analyser, channel); connect.call(analyser, silent); return analyser;
@@ -87,7 +93,7 @@ function installOutputAudit() {
     reset() { for (const meter of meters) {meter.peak = meter.maxAbs = 0; meter.frequency = [0,0];} },
     read() {
       sample();
-      return {states:contexts.map(context => context.state), nodes:[...nodes], meters:meters.map(({peak,maxAbs,finite,frequency}) => ({peak,maxAbs,finite,frequency}))};
+      return {states:contexts.map(context => context.state), nodes:[...nodes], physicallyMuted:physicalSinks.every(node => node.gain.value === 0), meters:meters.map(({peak,maxAbs,finite,frequency}) => ({peak,maxAbs,finite,frequency}))};
     },
   };
 }
@@ -104,6 +110,7 @@ const status = (page, expected) => until(page, async () => (await page.locator('
 async function output(page, example, {closed = true, audible = true, pitch = false} = {}) {
   if (closed) await until(page, () => page.evaluate(() => window.__msxOutput.read().states.every(state => state === 'closed')), 'AudioContext leak');
   const result = await page.evaluate(() => window.__msxOutput.read());
+  assert(result.physicallyMuted, 'Audit physical output must stay silent');
   assert(result.meters.every(meter => meter.finite && meter.maxAbs <= 1.000001), `Invalid/clipped PCM ${JSON.stringify(result)}`);
   const allowed = new Set(example.composite ? ['tetorica-native-fx', ...example.chips.map(chip => `tetorica-${chip === 'y8950' ? 'opl' : chip}`)] : ['tetorica-soundchip']);
   assert(result.nodes.every(node => allowed.has(node.processor) && (node.processor !== 'tetorica-soundchip' || example.chips.includes(node.chip))), `Unexpected hidden chip: ${JSON.stringify(result.nodes)}`);

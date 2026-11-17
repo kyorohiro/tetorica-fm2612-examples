@@ -211,6 +211,18 @@ try {
   const manifest=JSON.parse(await readFile(root+'/examples/manifest.json','utf8'));
   let count=0;
   for(const item of manifest.filter(item=>(!item.environments||item.environments.includes('node'))&&!item.nodeAudioOutput&&(!onlyPcEngineCd||item.id.startsWith('pc-engine-cd/'))&&(!onlySid||item.id.startsWith('c64/sid/')))){
+   if(item.id==='chip-raw/02-compile-compare') {
+     const out=join(directory,'register-comparison.json');
+     execFileSync(process.execPath,[`examples/${item.id}/node/main.mjs`,out],{cwd:root,timeout:30000,stdio:'pipe'});
+     const data=JSON.parse(await readFile(out,'utf8'));
+     assert.equal(data.format,'tetorica-register-comparison-v1');assert.equal(data.packageVersion,'0.2.41');
+     assert.equal(data.physicalOutputUsed,false);assert.equal(data.native.captureSupported,false);assert.equal(data.native.scheduleSupported,false);
+     assert(Object.keys(data.checks).length>=8&&Object.values(data.checks).every(value=>value===true),'Register comparison checks');
+     assert.equal(data.baselines.client[0].value,0x72);assert.equal(data.baselines.reset[0].value,2);
+     assert.equal(data.baselines.snapshotA[0].value,0x32);assert.equal(data.baselines.snapshotB[0].value,0x11);
+     console.log('PASS '+item.id+': local/reset/reused snapshot traces, packed fields, immutable state and Native restrictions; no audio device');
+     count++;continue;
+   }
    if(item.id.startsWith('c64/sid/')) {
      const segments=[];
      for(const model of ['6581','8580']) {
@@ -254,6 +266,6 @@ try {
   }
   if(onlyPcEngineCd)assert.equal(count,3,'Expected all three PC Engine CD Node examples');
   if(onlySid)assert.equal(count,6,'Expected three SID examples with both models');
-  console.log(`PASS ${count} installed-package Node examples: audible WAV${onlyPcEngineCd||onlySid?'':' + event JSON'}`);
+  console.log(`PASS ${count} installed-package Node examples: audible WAV${onlyPcEngineCd||onlySid?'':' + event / register JSON'}`);
 
 } finally {await rm(directory, {recursive: true, force: true});}

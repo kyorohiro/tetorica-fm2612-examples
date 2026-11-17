@@ -171,6 +171,8 @@ export declare class YM2612Synth {
     };
     _lastIrqState: any;
     channels: any[];
+    _timedState: import("./ym2612_operation_state.js").YM2612OperationState | undefined;
+    _timedClientStateComplete: boolean | undefined;
     _pendingAddressPort: any;
     _pendingAddressRegister: any;
     _modeRegister: number | undefined;
@@ -483,6 +485,9 @@ export declare class YM2612Synth {
     _write(port: number, register: number, value: number): void;
     _writeBatch(commands: any): void;
     getState(): any;
+    _getTimedState(): import("./ym2612_operation_state.js").YM2612OperationState;
+    _adoptTimedState(state: any): void;
+    _invalidateTimedState(): void;
     /** @param {number} offset */
     _notifyRead(offset: number, value: any): void;
     _syncIrq(): void;

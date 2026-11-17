@@ -1,0 +1,2656 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-11-17T08:14:53.072Z",
+  "package": "tetorica-fm2612@0.2.41",
+  "parentBase": "d3f20bfb9d5170b0ede6ef9882ebb0ba18e3105e",
+  "examplesBase": "dd4544c839e343c9ab4f5f7bfd2cc50b66eac864",
+  "nodeVersion": "v26.12.0",
+  "physicalOutputUsed": false,
+  "listeningPerformed": false,
+  "sourceReadable": true,
+  "publicationPerformed": false,
+  "newBrowserCases": 20,
+  "browserReports": [
+    {
+      "passed": true,
+      "packageVersion": "0.2.41",
+      "sampleRate": 44100,
+      "physicalOutputMuted": true,
+      "staticSiteOnly": true,
+      "site": "dist",
+      "results": [
+        {
+          "browser": "chromium",
+          "example": "atari-st/ym2149/01-sync-buzzer",
+          "repeatSeconds": 0.00909090909090909,
+          "writesPerPattern": 1,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              },
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.008162072536785643,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.009781528571385992,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "chromium",
+          "example": "atari-st/ym2149/02-volume-modulation",
+          "repeatSeconds": 0.02,
+          "writesPerPattern": 16,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              },
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.01023022848858411,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.010566281360120031,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "chromium",
+          "example": "genesis/fm/07-timed-operators",
+          "engine": "ymfm",
+          "repeatSeconds": 1.5,
+          "writesPerPattern": 32,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.01586151123046875,
+                "acRms": 0.007396751322962732,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.01586151123046875,
+                "acRms": 0.0075385943642888,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "chromium",
+          "example": "genesis/fm/07-timed-operators",
+          "engine": "nuked",
+          "repeatSeconds": 1.5,
+          "writesPerPattern": 32,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "nuked"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "nuked"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.02492523193359375,
+                "acRms": 0.011744013106522202,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.02492523193359375,
+                "acRms": 0.01184623823882073,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "chromium",
+          "example": "chip-raw/02-compile-compare",
+          "baselines": {
+            "current": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 82,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "client": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 50,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "reset": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 2,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "snapshotA": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 82,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "snapshotB": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 17,
+                "operationIndex": 0,
+                "writeIndex": 0
+              }
+            ]
+          },
+          "snapshot": {
+            "frame": 2432,
+            "sampleRate": 44100,
+            "engine": "ymfm"
+          },
+          "checks": {
+            "currentMatchesSnapshot": true,
+            "snapshotReusable": true,
+            "snapshotUnchanged": true,
+            "liveStateUnchanged": true,
+            "repeatedKeysKept": true
+          },
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "atari-st/ym2149/01-sync-buzzer",
+          "repeatSeconds": 0.00909090909090909,
+          "writesPerPattern": 1,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              },
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.008040319608184618,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.009034410766007786,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "atari-st/ym2149/02-volume-modulation",
+          "repeatSeconds": 0.02,
+          "writesPerPattern": 16,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              },
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.010442468975596362,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.010452325407736196,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "genesis/fm/07-timed-operators",
+          "engine": "ymfm",
+          "repeatSeconds": 1.5,
+          "writesPerPattern": 32,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.01586151123046875,
+                "acRms": 0.007537201075816238,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.01586151123046875,
+                "acRms": 0.007471460474220465,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "genesis/fm/07-timed-operators",
+          "engine": "nuked",
+          "repeatSeconds": 1.5,
+          "writesPerPattern": 32,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "nuked"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "nuked"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "nuked"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.02492523193359375,
+                "acRms": 0.011843252682888546,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.02492523193359375,
+                "acRms": 0.0118438142711187,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "chip-raw/02-compile-compare",
+          "baselines": {
+            "current": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 82,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "client": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 50,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "reset": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 2,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "snapshotA": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 82,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "snapshotB": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 17,
+                "operationIndex": 0,
+                "writeIndex": 0
+              }
+            ]
+          },
+          "snapshot": {
+            "frame": 1664,
+            "sampleRate": 44100,
+            "engine": "ymfm"
+          },
+          "checks": {
+            "currentMatchesSnapshot": true,
+            "snapshotReusable": true,
+            "snapshotUnchanged": true,
+            "liveStateUnchanged": true,
+            "repeatedKeysKept": true
+          },
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        }
+      ]
+    },
+    {
+      "passed": true,
+      "packageVersion": "0.2.41",
+      "sampleRate": 48000,
+      "physicalOutputMuted": true,
+      "staticSiteOnly": true,
+      "site": "dist",
+      "results": [
+        {
+          "browser": "chromium",
+          "example": "atari-st/ym2149/01-sync-buzzer",
+          "repeatSeconds": 0.00909090909090909,
+          "writesPerPattern": 1,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              },
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.008762106651721785,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.009754785492055629,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "chromium",
+          "example": "atari-st/ym2149/02-volume-modulation",
+          "repeatSeconds": 0.02,
+          "writesPerPattern": 16,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              },
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.009637895999255545,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.010538678626925879,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "chromium",
+          "example": "genesis/fm/07-timed-operators",
+          "engine": "ymfm",
+          "repeatSeconds": 1.5,
+          "writesPerPattern": 32,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.01586151123046875,
+                "acRms": 0.007425256171893225,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.01586151123046875,
+                "acRms": 0.007504724853343616,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "chromium",
+          "example": "genesis/fm/07-timed-operators",
+          "engine": "nuked",
+          "repeatSeconds": 1.5,
+          "writesPerPattern": 32,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "nuked"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "nuked"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.02492523193359375,
+                "acRms": 0.011682488772476695,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.02492523193359375,
+                "acRms": 0.01179190997830586,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "chromium",
+          "example": "chip-raw/02-compile-compare",
+          "baselines": {
+            "current": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 82,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "client": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 50,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "reset": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 2,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "snapshotA": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 82,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "snapshotB": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 17,
+                "operationIndex": 0,
+                "writeIndex": 0
+              }
+            ]
+          },
+          "snapshot": {
+            "frame": 1792,
+            "sampleRate": 48000,
+            "engine": "ymfm"
+          },
+          "checks": {
+            "currentMatchesSnapshot": true,
+            "snapshotReusable": true,
+            "snapshotUnchanged": true,
+            "liveStateUnchanged": true,
+            "repeatedKeysKept": true
+          },
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "atari-st/ym2149/01-sync-buzzer",
+          "repeatSeconds": 0.00909090909090909,
+          "writesPerPattern": 1,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              },
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.008220549832040831,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.009600273908889206,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "atari-st/ym2149/02-volume-modulation",
+          "repeatSeconds": 0.02,
+          "writesPerPattern": 16,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              },
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.009255042143578477,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.010658706478726852,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "genesis/fm/07-timed-operators",
+          "engine": "ymfm",
+          "repeatSeconds": 1.5,
+          "writesPerPattern": 32,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.01586151123046875,
+                "acRms": 0.007411114402987142,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.01586151123046875,
+                "acRms": 0.007502521100265435,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "genesis/fm/07-timed-operators",
+          "engine": "nuked",
+          "repeatSeconds": 1.5,
+          "writesPerPattern": 32,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "nuked"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "nuked"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "nuked"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.02492523193359375,
+                "acRms": 0.011678505035506069,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.02492523193359375,
+                "acRms": 0.011782139466693785,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "chip-raw/02-compile-compare",
+          "baselines": {
+            "current": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 82,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "client": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 50,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "reset": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 2,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "snapshotA": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 82,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "snapshotB": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 17,
+                "operationIndex": 0,
+                "writeIndex": 0
+              }
+            ]
+          },
+          "snapshot": {
+            "frame": 2560,
+            "sampleRate": 48000,
+            "engine": "ymfm"
+          },
+          "checks": {
+            "currentMatchesSnapshot": true,
+            "snapshotReusable": true,
+            "snapshotUnchanged": true,
+            "liveStateUnchanged": true,
+            "repeatedKeysKept": true
+          },
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "node": {
+    "passed": true,
+    "cases": 52,
+    "logSha256": "0e94adbb99e4ebf5a4c87dc4e53c0c4513efbacb87fe00768e269575f9477d9c",
+    "casesReported": [
+      "PASS c64/sid/01-voices/6581: 194400 frames, peak 0.082092, three solo pitches 440.03/329.63/219.99, chord AC 0.019832, release settled",
+      "PASS c64/sid/01-voices/8580: 194400 frames, peak 0.088074, three solo pitches 440.03/329.63/219.98, chord AC 0.028755, release settled",
+      "PASS c64/sid/02-filter/6581: 259200 frames, peak 0.117523, shared-filter phases [{\"mode\":\"dry\",\"rms\":0.020561969075058768,\"fundamental\":0.011572972348737474,\"upper\":0.00044317670692447397},{\"mode\":\"LP\",\"rms\":0.020501875093366057,\"fundamental\":0.011560483743128945,\"upper\":0.00012421416445696363},{\"mode\":\"BP\",\"rms\":0.005554593946702434,\"fundamental\":0.000639002465444016,\"upper\":0.0002515505368622246},{\"mode\":\"HP\",\"rms\":0.005738638161912692,\"fundamental\":0.000032632918700410914,\"upper\":0.0005300443782603119},{\"mode\":\"notch\",\"rms\":0.018895967872764482,\"fundamental\":0.011567928049220768,\"upper\":0.0004014913346026289},{\"mode\":\"LP+BP+HP\",\"rms\":0.01865353565708457,\"fundamental\":0.011563519917520663,\"upper\":0.0004830719141759709},{\"mode\":\"LP cutoff 1400\",\"rms\":0.01844520146999627,\"fundamental\":0.011528506591244882,\"upper\":0.0005833915255915856},{\"mode\":\"LP resonance 10\",\"rms\":0.019149090091132817,\"fundamental\":0.011555161797822608,\"upper\":0.00013041934574756854}], release settled",
+      "PASS c64/sid/02-filter/8580: 259200 frames, peak 0.098236, shared-filter phases [{\"mode\":\"dry\",\"rms\":0.029798344958380955,\"fundamental\":0.01678753065753022,\"upper\":0.0006078603146660508},{\"mode\":\"LP\",\"rms\":0.029229814935725133,\"fundamental\":0.016760779198027233,\"upper\":0.00019928231078592977},{\"mode\":\"BP\",\"rms\":0.006778300759695464,\"fundamental\":0.0008376141708572983,\"upper\":0.00037206463751081066},{\"mode\":\"HP\",\"rms\":0.006438598247070645,\"fundamental\":0.00003842820126839972,\"upper\":0.0007065327940570002},{\"mode\":\"notch\",\"rms\":0.02733067019717432,\"fundamental\":0.01677525000192053,\"upper\":0.0005006853006075733},{\"mode\":\"LP+BP+HP\",\"rms\":0.02651717757262102,\"fundamental\":0.016778853849286592,\"upper\":0.0006387455666172472},{\"mode\":\"LP cutoff 1400\",\"rms\":0.02645745207770748,\"fundamental\":0.016720238112348827,\"upper\":0.0006986610489333859},{\"mode\":\"LP resonance 10\",\"rms\":0.026836949741715518,\"fundamental\":0.016753576891812887,\"upper\":0.00021439145793171243}], release settled",
+      "PASS c64/sid/03-factory-wav/6581: 36000 frames, A4 440.03 Hz, AC RMS 0.008390, peak 0.038940, Release settled; no audio device",
+      "PASS c64/sid/03-factory-wav/8580: 36000 frames, A4 440.03 Hz, AC RMS 0.012188, peak 0.030701, Release settled; no audio device",
+      "PASS c64/sid/03-factory-wav/both: default output exactly concatenates the two independent model renders",
+      "PASS pc-engine-cd/cdda/01-stereo-tracks: 172800 frames, peak 0.079987, AC RMS 0.051283; actual source frequencies, lifecycle, gain routing and exact silent tail",
+      "PASS pc-engine-cd/adpcm/01-sample: 124800 frames, peak 0.101318, AC RMS 0.060182; actual source frequencies, lifecycle, gain routing and exact silent tail",
+      "PASS pc-engine-cd/mix/01-three-sources: 144000 frames, peak 0.111145, AC RMS 0.034954; actual source frequencies, lifecycle, gain routing and exact silent tail",
+      "PASS pokey/tone/01-four-channels: 145530 frames, peak 0.079376, AC RMS 0.018999, DC/AC 0.0811; mono PCM16, 8 audible phrases, exact silent gaps/tail",
+      "PASS pokey/noise/01-distortion-joined: 180810 frames, peak 0.039734, AC RMS 0.017248, DC/AC 0.0367; mono PCM16, 8 audible phrases, exact silent gaps/tail",
+      "PASS pokey/dual/01-eight-channels: 145530 frames, peak 0.122406, AC RMS 0.018506, DC/AC 0.1300; mono PCM16, 8 audible phrases, exact silent gaps/tail",
+      "PASS chip-raw/02-compile-compare: local/reset/reused snapshot traces, packed fields, immutable state and Native restrictions; no audio device"
+    ]
+  },
+  "existingAyBrowser": [
+    {
+      "browser": "chromium",
+      "passed": true,
+      "subpath": true,
+      "path": "msx/ay/02-envelope",
+      "execution": "worklet",
+      "originalOutput": {
+        "peak": 0.03777970495671438,
+        "nodes": [
+          {
+            "processor": "tetorica-soundchip",
+            "chip": "ay8910"
+          }
+        ]
+      },
+      "editedA4": [
+        "ay"
+      ],
+      "cancelledInitialization": true,
+      "stoppedPlayback": true,
+      "rerun": true
+    },
+    {
+      "browser": "webkit",
+      "passed": true,
+      "subpath": true,
+      "path": "msx/ay/02-envelope",
+      "execution": "worklet",
+      "originalOutput": {
+        "peak": 0.03779967906294728,
+        "nodes": [
+          {
+            "processor": "tetorica-soundchip",
+            "chip": "ay8910"
+          }
+        ]
+      },
+      "editedA4": [
+        "ay"
+      ],
+      "cancelledInitialization": true,
+      "stoppedPlayback": true,
+      "rerun": true
+    }
+  ],
+  "existingVabNode": {
+    "passed": true,
+    "package": "tetorica-fm2612@0.2.41",
+    "cases": [
+      {
+        "program": 3,
+        "tone": 0,
+        "frames": 114660,
+        "peak": 0.401519775390625,
+        "nonzero": 158760,
+        "stopSilentFrames": 8820,
+        "baseFrequencyHz": 261.6255653005986,
+        "pitches": [
+          4096,
+          5161,
+          6137,
+          8192
+        ],
+        "exportedBytes": 3200,
+        "samplePaddingPreserved": true,
+        "pcmRoundTripExact": true
+      },
+      {
+        "program": 3,
+        "tone": 1,
+        "frames": 114660,
+        "peak": 0.401519775390625,
+        "nonzero": 158760,
+        "stopSilentFrames": 8820,
+        "baseFrequencyHz": 254.17759331190004,
+        "pitches": [
+          4216,
+          5312,
+          6317,
+          8432
+        ],
+        "exportedBytes": 3200,
+        "samplePaddingPreserved": true,
+        "pcmRoundTripExact": true
+      },
+      {
+        "program": 11,
+        "tone": 0,
+        "frames": 114660,
+        "peak": 0.01300048828125,
+        "nonzero": 276,
+        "stopSilentFrames": 8820,
+        "baseFrequencyHz": 440,
+        "pitches": [
+          2435,
+          3069,
+          3649,
+          4871
+        ],
+        "exportedBytes": 3152,
+        "samplePaddingPreserved": true,
+        "pcmRoundTripExact": true
+      }
+    ],
+    "rejected": [
+      "bad arguments",
+      "out-of-range Program",
+      "absent Tone",
+      "bad VAB",
+      "Noise Tone"
+    ],
+    "audioDeviceUsed": false,
+    "inputClobberPrevented": true
+  },
+  "existingVabBrowser": {
+    "schemaVersion": 1,
+    "passed": true,
+    "packageVersion": "0.2.41",
+    "physicalOutputMuted": true,
+    "listeningPerformed": false,
+    "staticSiteOnly": true,
+    "results": [
+      {
+        "browser": "chromium",
+        "version": "153.0.8010.12",
+        "sparsePrograms": [
+          3,
+          11
+        ],
+        "sourceBytes": 3744,
+        "selectedTone": 1,
+        "prepared": {
+          "baseFrequencyHz": 254.17759331190004,
+          "loopStartSamples": 0
+        },
+        "download": {
+          "name": "local-kept-p3-t1.vab",
+          "bytes": 3200,
+          "sha256": "26fb74292f1e38056657271146531be790f0e513f57b6652beedd6466193d504"
+        },
+        "sourceAndSelectionKept": true,
+        "unavailableReason": true,
+        "staleReadDiscarded": true,
+        "noAutomaticAudioOrFetch": true,
+        "allContextsClosed": true,
+        "stopDuringLoading": true,
+        "pagehideCleanup": true,
+        "uploaded": {
+          "id": 1,
+          "startAddress": 4160,
+          "repeatAddress": 4160,
+          "byteLength": 64,
+          "decodedFrames": 112,
+          "rootNote": null,
+          "rootFrequencyHz": 254.17759331190004,
+          "basePitch": 4096,
+          "loop": true,
+          "loopStartSamples": 0
+        },
+        "meters": [
+          {
+            "state": "closed",
+            "muted": true,
+            "peak": 0.24091549217700958,
+            "rms": 0.17036010395303736,
+            "current": {
+              "peak": 0,
+              "rms": 0
+            }
+          },
+          {
+            "state": "closed",
+            "muted": true,
+            "peak": 0.24086788296699524,
+            "rms": 0.12382501592012471,
+            "current": {
+              "peak": 0,
+              "rms": 0
+            }
+          },
+          {
+            "state": "closed",
+            "muted": true,
+            "peak": 0,
+            "rms": 0,
+            "current": {
+              "peak": 0,
+              "rms": 0
+            }
+          },
+          {
+            "state": "closed",
+            "muted": true,
+            "peak": 0,
+            "rms": 0,
+            "current": {
+              "peak": 0,
+              "rms": 0
+            }
+          }
+        ],
+        "screenshot": "/private/tmp/timed-api-existing-vab-browser-chromium.png"
+      },
+      {
+        "browser": "webkit",
+        "version": "26.6",
+        "sparsePrograms": [
+          3,
+          11
+        ],
+        "sourceBytes": 3744,
+        "selectedTone": 1,
+        "prepared": {
+          "baseFrequencyHz": 254.17759331190004,
+          "loopStartSamples": 0
+        },
+        "download": {
+          "name": "local-kept-p3-t1.vab",
+          "bytes": 3200,
+          "sha256": "26fb74292f1e38056657271146531be790f0e513f57b6652beedd6466193d504"
+        },
+        "sourceAndSelectionKept": true,
+        "unavailableReason": true,
+        "staleReadDiscarded": true,
+        "noAutomaticAudioOrFetch": true,
+        "allContextsClosed": true,
+        "stopDuringLoading": true,
+        "pagehideCleanup": true,
+        "uploaded": {
+          "id": 1,
+          "startAddress": 4160,
+          "repeatAddress": 4160,
+          "byteLength": 64,
+          "decodedFrames": 112,
+          "rootNote": null,
+          "rootFrequencyHz": 254.17759331190004,
+          "basePitch": 4096,
+          "loop": true,
+          "loopStartSamples": 0
+        },
+        "meters": [
+          {
+            "state": "closed",
+            "muted": true,
+            "peak": 0.24091549217700958,
+            "rms": 0.17036051746839595,
+            "current": {
+              "peak": 0,
+              "rms": 0
+            }
+          },
+          {
+            "state": "closed",
+            "muted": true,
+            "peak": 0.2409072369337082,
+            "rms": 0.14081794715389567,
+            "current": {
+              "peak": 0,
+              "rms": 0
+            }
+          },
+          {
+            "state": "closed",
+            "muted": true,
+            "peak": 0,
+            "rms": 0,
+            "current": {
+              "peak": 0,
+              "rms": 0
+            }
+          },
+          {
+            "state": "closed",
+            "muted": true,
+            "peak": 0,
+            "rms": 0,
+            "current": {
+              "peak": 0,
+              "rms": 0
+            }
+          }
+        ],
+        "screenshot": "/private/tmp/timed-api-existing-vab-browser-webkit.png"
+      }
+    ],
+    "assets": {
+      "examples/ps1/spu/03-vab-bank/assets/demo.vab": {
+        "bytes": 3744,
+        "sha256": "71a7de205c0ebe1b8743288d90cd3b0204da9bd81aed9159af31f404d7cf2be6"
+      },
+      "examples/ps1/spu/03-vab-bank/web/index.html": {
+        "bytes": 4107,
+        "sha256": "2536467289021147033212b61e41c3d29282120c8ec2dfb97aa9ff0b31cc4319"
+      },
+      "examples/ps1/spu/03-vab-bank/web/main.js": {
+        "bytes": 12037,
+        "sha256": "e947f6606f6f7f3b80b8eeae3543ba6fcb82ddfba0993280407e13aa629b322d"
+      },
+      "style.css": {
+        "bytes": 2943,
+        "sha256": "ec3cde4b86adbfb8b8d55707245daea5b531249eb4d17e2a053b81091462d7fc"
+      },
+      "vendor/tetorica-fm2612/generated/ps1_spu_wasm.js": {
+        "bytes": 17985,
+        "sha256": "1bce9139f84bc05662a3b8bcb1dfc6da44bebb90c104aa08dd904df3c5821b5b"
+      },
+      "vendor/tetorica-fm2612/generated/ps1_spu_wasm.wasm": {
+        "bytes": 52082,
+        "sha256": "cd1223fe41624db415c31395e3eba30cab18c56c46a28d57425dfa71f038f96f"
+      },
+      "vendor/tetorica-fm2612/pcm_44100_resampler.js": {
+        "bytes": 4242,
+        "sha256": "53b5e846322e2715fa396f92533f9b6a33da51466ec5cc4838ff6802765c615e"
+      },
+      "vendor/tetorica-fm2612/playground_chip_clock.js": {
+        "bytes": 5244,
+        "sha256": "3802e15503424667324c4f6e067d5cae3ff4ad1b2adf81d780e8a47aa922ca2d"
+      },
+      "vendor/tetorica-fm2612/playground_chip_inspector_state.js": {
+        "bytes": 13049,
+        "sha256": "89a5f4c62defa490d5fd1603af0baeb763dcb00c319ea377714ada92cd350d9e"
+      },
+      "vendor/tetorica-fm2612/playground_performance_processor.js": {
+        "bytes": 31224,
+        "sha256": "f6809ebe61cddc6a975d820711acfc15d839a37ccdf416ab5da914ccf13a73d2"
+      },
+      "vendor/tetorica-fm2612/playground_performance_queue.js": {
+        "bytes": 24020,
+        "sha256": "3f70eb200e3f97ae7ae5b688066035319c71dbe3b7f7631e25fe3d455eaa3567"
+      },
+      "vendor/tetorica-fm2612/playground_ps1_audio.js": {
+        "bytes": 3624,
+        "sha256": "f2862551bf1507535fefc2b26a711db9a1fca558202cdb85334105fe2caef68c"
+      },
+      "vendor/tetorica-fm2612/playground_ps1_inspector.js": {
+        "bytes": 8056,
+        "sha256": "ace76e99ccf23deea12fc18a99386b0e6b7e12d104ed11d3447f6f96ab688ed5"
+      },
+      "vendor/tetorica-fm2612/playground_ps1_worklet.js": {
+        "bytes": 7245,
+        "sha256": "692f0800753276d022fcdb8349dd00f526d2fb2f78dbe514f0b649a4dc0b8580"
+      },
+      "vendor/tetorica-fm2612/playground_ps1.js": {
+        "bytes": 8787,
+        "sha256": "d3ceadfaabb1616909b0558d13add683b3623f62850eacaf8895afee2f317b25"
+      },
+      "vendor/tetorica-fm2612/ps1_parameters.js": {
+        "bytes": 6237,
+        "sha256": "c5e4d60ffb4605bac11b275a9089895c114732fc51f1a9f04c88e5133dd3ced1"
+      },
+      "vendor/tetorica-fm2612/ps1_resampler.js": {
+        "bytes": 181,
+        "sha256": "3969c59a53f5bc27b6761bb488e64fd3f5925b90145debd9906a93221f2ad190"
+      },
+      "vendor/tetorica-fm2612/ps1_spu.js": {
+        "bytes": 10826,
+        "sha256": "a032c4f68e28c44ec062ba38ae341e01a901e52ff9cf75c38095ffb55442d549"
+      },
+      "vendor/tetorica-fm2612/ps1_vab.js": {
+        "bytes": 14976,
+        "sha256": "1f5b5f0a1f4fce7935b27a805aeccce24c1623e6f0ce5951c27639b3b5639a87"
+      },
+      "vendor/tetorica-fm2612/ps1synth.js": {
+        "bytes": 21654,
+        "sha256": "444e2dfa2de24bf4ad987396564fb0117a845a345e91e1a98f83bed4a2469bbd"
+      },
+      "vendor/tetorica-fm2612/rf5c164_notes.js": {
+        "bytes": 8631,
+        "sha256": "cd10b0abe19000e699edd181b3527edbea8d06ada2dbf34a88c51e12bf9d273f"
+      },
+      "vendor/tetorica-fm2612/rf5c164_pcm.js": {
+        "bytes": 1537,
+        "sha256": "da5835ccd54b0b8d07a82ea8cab10153044c7c20513b973c622957dc8d0b657a"
+      },
+      "vendor/tetorica-fm2612/rf5c164synth.js": {
+        "bytes": 6252,
+        "sha256": "9b5d8d0b6fb6811a2d126c6bf969ec5aae68acd680f636c2ef793e3603d61a73"
+      },
+      "vendor/tetorica-fm2612/segapsg_api.js": {
+        "bytes": 1032,
+        "sha256": "1a55c1d148536425eef54fe5ec4c3151b6ef5a734f9695a379b3a6344a7bd75d"
+      },
+      "vendor/tetorica-fm2612/segapsg.js": {
+        "bytes": 10113,
+        "sha256": "e63e1c25a9ac80721f8cd7ea1474710af125c83d4d2e682e6c4a97f40aa50bed"
+      },
+      "vendor/tetorica-fm2612/segapsgsynth.js": {
+        "bytes": 10390,
+        "sha256": "e19b274b8b2e11241e3bf3354d7a23a4d1fdf44b0a912dca3f291b4ab217ef8d"
+      },
+      "vendor/tetorica-fm2612/soundchip_pitch.js": {
+        "bytes": 2854,
+        "sha256": "c8bcce0f27c2500d6090b5e56660e697b8b03d7ec011cee4deba05664038bae9"
+      }
+    }
+  },
+  "ym2149EnvelopeCpu": [
+    {
+      "sampleRate": 250000,
+      "distinctLevels": 32,
+      "periodFrames": 3200,
+      "periodMilliseconds": 12.8,
+      "frequencyHz": 78.125,
+      "profile": {
+        "clock": 2000000,
+        "type": 16,
+        "flags": 1
+      },
+      "registers": {
+        "R7": 63,
+        "R8": 16,
+        "R11": 100,
+        "R12": 0,
+        "R13": 8
+      }
+    },
+    {
+      "sampleRate": 44100,
+      "periodFrames": 564.4444444444445,
+      "periodMilliseconds": 12.799193751574705,
+      "frequencyHz": 78.12992125984252,
+      "profile": {
+        "clock": 2000000,
+        "type": 16,
+        "flags": 1
+      },
+      "registers": {
+        "R7": 63,
+        "R8": 16,
+        "R11": 100,
+        "R12": 0,
+        "R13": 8
+      }
+    },
+    {
+      "sampleRate": 48000,
+      "periodFrames": 614.3888888888889,
+      "periodMilliseconds": 12.799768518518519,
+      "frequencyHz": 78.12641287639026,
+      "profile": {
+        "clock": 2000000,
+        "type": 16,
+        "flags": 1
+      },
+      "registers": {
+        "R7": 63,
+        "R8": 16,
+        "R11": 100,
+        "R12": 0,
+        "R13": 8
+      }
+    }
+  ],
+  "visualViewportChecks": [
+    {
+      "id": "atari-st/ym2149/01-sync-buzzer",
+      "viewport": 390,
+      "width": 390
+    },
+    {
+      "id": "atari-st/ym2149/02-volume-modulation",
+      "viewport": 390,
+      "width": 390
+    },
+    {
+      "id": "genesis/fm/07-timed-operators",
+      "viewport": 390,
+      "width": 390
+    },
+    {
+      "id": "chip-raw/02-compile-compare",
+      "viewport": 390,
+      "width": 390
+    }
+  ],
+  "integrity": {
+    "passed": true,
+    "generatedAt": "2026-11-17T08:12:48.605Z",
+    "packageVersion": "0.2.41",
+    "treeDigestFormat": "sha256 of locale-sorted relative-path NUL byte-count NUL per-file-sha256 LF records",
+    "sitesEqual": {
+      "passed": true,
+      "files": 1589,
+      "bytes": 12703048,
+      "sha256": "cf49f7e04da7b22084f6cf7e1cfaf777e5b6fa28e6fe8e48df85d46b7cacc50a",
+      "missing": [],
+      "extra": [],
+      "different": []
+    },
+    "vendors": {
+      "dist": {
+        "passed": true,
+        "files": 1275,
+        "bytes": 11636124,
+        "sha256": "743ab4e22003e951a8905ee23426fb4150bad6bfe83d2662c362184c612bbab4",
+        "missing": [],
+        "extra": [],
+        "different": []
+      },
+      "docs": {
+        "passed": true,
+        "files": 1275,
+        "bytes": 11636124,
+        "sha256": "743ab4e22003e951a8905ee23426fb4150bad6bfe83d2662c362184c612bbab4",
+        "missing": [],
+        "extra": [],
+        "different": []
+      }
+    },
+    "examples": [
+      {
+        "example": "atari-st/ym2149/01-sync-buzzer",
+        "site": "dist",
+        "passed": true,
+        "files": 3,
+        "bytes": 13953,
+        "sha256": "fcfba06e130614b32bd9ed88a82af6e2a563ca8d9c71fc31632a1d7b589ff218",
+        "missing": [],
+        "extra": [],
+        "different": []
+      },
+      {
+        "example": "atari-st/ym2149/01-sync-buzzer",
+        "site": "docs",
+        "passed": true,
+        "files": 3,
+        "bytes": 13953,
+        "sha256": "fcfba06e130614b32bd9ed88a82af6e2a563ca8d9c71fc31632a1d7b589ff218",
+        "missing": [],
+        "extra": [],
+        "different": []
+      },
+      {
+        "example": "atari-st/ym2149/02-volume-modulation",
+        "site": "dist",
+        "passed": true,
+        "files": 3,
+        "bytes": 13736,
+        "sha256": "ca7a74b0d4ba5de75524a9a33ddc1fa614c5e515ea76a6220c2793e6e0ff5b26",
+        "missing": [],
+        "extra": [],
+        "different": []
+      },
+      {
+        "example": "atari-st/ym2149/02-volume-modulation",
+        "site": "docs",
+        "passed": true,
+        "files": 3,
+        "bytes": 13736,
+        "sha256": "ca7a74b0d4ba5de75524a9a33ddc1fa614c5e515ea76a6220c2793e6e0ff5b26",
+        "missing": [],
+        "extra": [],
+        "different": []
+      },
+      {
+        "example": "genesis/fm/07-timed-operators",
+        "site": "dist",
+        "passed": true,
+        "files": 3,
+        "bytes": 18217,
+        "sha256": "3f2ba9a5993c7c00a5ca9bb63920584b93f545879cac48f1927c4fbf2502b2d0",
+        "missing": [],
+        "extra": [],
+        "different": []
+      },
+      {
+        "example": "genesis/fm/07-timed-operators",
+        "site": "docs",
+        "passed": true,
+        "files": 3,
+        "bytes": 18217,
+        "sha256": "3f2ba9a5993c7c00a5ca9bb63920584b93f545879cac48f1927c4fbf2502b2d0",
+        "missing": [],
+        "extra": [],
+        "different": []
+      },
+      {
+        "example": "chip-raw/02-compile-compare",
+        "site": "dist",
+        "passed": true,
+        "files": 4,
+        "bytes": 21188,
+        "sha256": "eede1c8ef624e638e8bbeee6e55382f8b44f0faea087f3b5eadf71605602eea2",
+        "missing": [],
+        "extra": [],
+        "different": []
+      },
+      {
+        "example": "chip-raw/02-compile-compare",
+        "site": "docs",
+        "passed": true,
+        "files": 4,
+        "bytes": 21188,
+        "sha256": "eede1c8ef624e638e8bbeee6e55382f8b44f0faea087f3b5eadf71605602eea2",
+        "missing": [],
+        "extra": [],
+        "different": []
+      }
+    ],
+    "staticReferences": {
+      "linksChecked": 32,
+      "imports": [
+        {
+          "example": "atari-st/ym2149/01-sync-buzzer",
+          "specifier": "tetorica-fm2612",
+          "resolved": "/published-examples/vendor/tetorica-fm2612/soundchip.js"
+        },
+        {
+          "example": "atari-st/ym2149/01-sync-buzzer",
+          "specifier": "tetorica-fm2612/",
+          "resolved": "/published-examples/vendor/tetorica-fm2612/"
+        },
+        {
+          "example": "atari-st/ym2149/02-volume-modulation",
+          "specifier": "tetorica-fm2612",
+          "resolved": "/published-examples/vendor/tetorica-fm2612/soundchip.js"
+        },
+        {
+          "example": "atari-st/ym2149/02-volume-modulation",
+          "specifier": "tetorica-fm2612/",
+          "resolved": "/published-examples/vendor/tetorica-fm2612/"
+        },
+        {
+          "example": "genesis/fm/07-timed-operators",
+          "specifier": "tetorica-fm2612",
+          "resolved": "/published-examples/vendor/tetorica-fm2612/soundchip.js"
+        },
+        {
+          "example": "genesis/fm/07-timed-operators",
+          "specifier": "tetorica-fm2612/",
+          "resolved": "/published-examples/vendor/tetorica-fm2612/"
+        },
+        {
+          "example": "chip-raw/02-compile-compare",
+          "specifier": "tetorica-fm2612",
+          "resolved": "/published-examples/vendor/tetorica-fm2612/soundchip.js"
+        },
+        {
+          "example": "chip-raw/02-compile-compare",
+          "specifier": "tetorica-fm2612/",
+          "resolved": "/published-examples/vendor/tetorica-fm2612/"
+        }
+      ],
+      "links": [
+        {
+          "example": "atari-st/ym2149/01-sync-buzzer",
+          "target": "../../../../../style.css",
+          "resolved": "/published-examples/style.css"
+        },
+        {
+          "example": "atari-st/ym2149/01-sync-buzzer",
+          "target": "../../../../../index.html",
+          "resolved": "/published-examples/index.html"
+        },
+        {
+          "example": "atari-st/ym2149/01-sync-buzzer",
+          "target": "./main.js",
+          "resolved": "/published-examples/examples/atari-st/ym2149/01-sync-buzzer/web/main.js"
+        },
+        {
+          "example": "atari-st/ym2149/01-sync-buzzer",
+          "target": "../README.md",
+          "resolved": "/published-examples/examples/atari-st/ym2149/01-sync-buzzer/README.md"
+        },
+        {
+          "example": "atari-st/ym2149/01-sync-buzzer",
+          "target": "./main.js",
+          "resolved": "/published-examples/examples/atari-st/ym2149/01-sync-buzzer/web/main.js"
+        },
+        {
+          "example": "atari-st/ym2149/01-sync-buzzer",
+          "target": "./main.js",
+          "resolved": "/published-examples/examples/atari-st/ym2149/01-sync-buzzer/web/main.js"
+        },
+        {
+          "example": "atari-st/ym2149/02-volume-modulation",
+          "target": "../../../../../style.css",
+          "resolved": "/published-examples/style.css"
+        },
+        {
+          "example": "atari-st/ym2149/02-volume-modulation",
+          "target": "../../../../../index.html",
+          "resolved": "/published-examples/index.html"
+        },
+        {
+          "example": "atari-st/ym2149/02-volume-modulation",
+          "target": "./main.js",
+          "resolved": "/published-examples/examples/atari-st/ym2149/02-volume-modulation/web/main.js"
+        },
+        {
+          "example": "atari-st/ym2149/02-volume-modulation",
+          "target": "../README.md",
+          "resolved": "/published-examples/examples/atari-st/ym2149/02-volume-modulation/README.md"
+        },
+        {
+          "example": "atari-st/ym2149/02-volume-modulation",
+          "target": "../../01-sync-buzzer/web/index.html",
+          "resolved": "/published-examples/examples/atari-st/ym2149/01-sync-buzzer/web/index.html"
+        },
+        {
+          "example": "atari-st/ym2149/02-volume-modulation",
+          "target": "./main.js",
+          "resolved": "/published-examples/examples/atari-st/ym2149/02-volume-modulation/web/main.js"
+        },
+        {
+          "example": "atari-st/ym2149/02-volume-modulation",
+          "target": "./main.js",
+          "resolved": "/published-examples/examples/atari-st/ym2149/02-volume-modulation/web/main.js"
+        },
+        {
+          "example": "genesis/fm/07-timed-operators",
+          "target": "../../../../../style.css",
+          "resolved": "/published-examples/style.css"
+        },
+        {
+          "example": "genesis/fm/07-timed-operators",
+          "target": "../../../../../index.html",
+          "resolved": "/published-examples/index.html"
+        },
+        {
+          "example": "genesis/fm/07-timed-operators",
+          "target": "./main.js",
+          "resolved": "/published-examples/examples/genesis/fm/07-timed-operators/web/main.js"
+        },
+        {
+          "example": "genesis/fm/07-timed-operators",
+          "target": "./main.js",
+          "resolved": "/published-examples/examples/genesis/fm/07-timed-operators/web/main.js"
+        },
+        {
+          "example": "genesis/fm/07-timed-operators",
+          "target": "../README.md",
+          "resolved": "/published-examples/examples/genesis/fm/07-timed-operators/README.md"
+        },
+        {
+          "example": "genesis/fm/07-timed-operators",
+          "target": "./main.js",
+          "resolved": "/published-examples/examples/genesis/fm/07-timed-operators/web/main.js"
+        },
+        {
+          "example": "genesis/fm/07-timed-operators",
+          "readme": true,
+          "target": "web/index.html",
+          "resolved": "/published-examples/examples/genesis/fm/07-timed-operators/web/index.html"
+        },
+        {
+          "example": "genesis/fm/07-timed-operators",
+          "readme": true,
+          "target": "web/main.js",
+          "resolved": "/published-examples/examples/genesis/fm/07-timed-operators/web/main.js"
+        },
+        {
+          "example": "genesis/fm/07-timed-operators",
+          "readme": true,
+          "target": "../../../chip-raw/02-compile-compare/README.md",
+          "resolved": "/published-examples/examples/chip-raw/02-compile-compare/README.md"
+        },
+        {
+          "example": "chip-raw/02-compile-compare",
+          "target": "../../../../style.css",
+          "resolved": "/published-examples/style.css"
+        },
+        {
+          "example": "chip-raw/02-compile-compare",
+          "target": "../../../../index.html",
+          "resolved": "/published-examples/index.html"
+        },
+        {
+          "example": "chip-raw/02-compile-compare",
+          "target": "./main.js",
+          "resolved": "/published-examples/examples/chip-raw/02-compile-compare/web/main.js"
+        },
+        {
+          "example": "chip-raw/02-compile-compare",
+          "target": "./main.js",
+          "resolved": "/published-examples/examples/chip-raw/02-compile-compare/web/main.js"
+        },
+        {
+          "example": "chip-raw/02-compile-compare",
+          "target": "../node/main.mjs",
+          "resolved": "/published-examples/examples/chip-raw/02-compile-compare/node/main.mjs"
+        },
+        {
+          "example": "chip-raw/02-compile-compare",
+          "target": "../README.md",
+          "resolved": "/published-examples/examples/chip-raw/02-compile-compare/README.md"
+        },
+        {
+          "example": "chip-raw/02-compile-compare",
+          "target": "./main.js",
+          "resolved": "/published-examples/examples/chip-raw/02-compile-compare/web/main.js"
+        },
+        {
+          "example": "chip-raw/02-compile-compare",
+          "readme": true,
+          "target": "web/index.html",
+          "resolved": "/published-examples/examples/chip-raw/02-compile-compare/web/index.html"
+        },
+        {
+          "example": "chip-raw/02-compile-compare",
+          "readme": true,
+          "target": "web/main.js",
+          "resolved": "/published-examples/examples/chip-raw/02-compile-compare/web/main.js"
+        },
+        {
+          "example": "chip-raw/02-compile-compare",
+          "readme": true,
+          "target": "node/main.mjs",
+          "resolved": "/published-examples/examples/chip-raw/02-compile-compare/node/main.mjs"
+        }
+      ],
+      "noParentRepositoryRuntimeDependency": true
+    },
+    "packageLock": {
+      "version": "0.2.41",
+      "resolved": "https://registry.npmjs.org/tetorica-fm2612/-/tetorica-fm2612-0.2.41.tgz",
+      "integrity": "sha512-ZcI76xCsFaUCKsdSLBpXEnGv7IagoVUX1nCoQKrWIKZhJpKB1VY1uctf3nCGU8xYhh132CeVjbzSwZSHTr10ig==",
+      "sha256": "4eb6c579bff602c1f865bf4806ef87b21f43749cc12cbc9ea5f98557832ee24d"
+    },
+    "payload": {
+      "files": 1275,
+      "bytes": 11636124,
+      "sha256": "743ab4e22003e951a8905ee23426fb4150bad6bfe83d2662c362184c612bbab4",
+      "categories": {
+        "javascript": 449,
+        "declarations": 420,
+        "wasm": 37,
+        "licenses": 56,
+        "sources": 307,
+        "thirdPartySources": 164
+      },
+      "authoredSourceReadabilitySamples": [
+        {
+          "file": "ay8910_operations.js",
+          "lines": 223,
+          "bytes": 10810,
+          "sha256": "020912378dfa537a8ce6977ae711e9b82fcc7ac7b18f98dcd7e44ec074be51ec"
+        },
+        {
+          "file": "ay8910_timed_client.js",
+          "lines": 195,
+          "bytes": 9439,
+          "sha256": "1d8f407b0d2cc4b8025814c12a53334b31658a8f9a46a99a6f62a8cd753c8d12"
+        },
+        {
+          "file": "ym2612_operations.js",
+          "lines": 240,
+          "bytes": 12889,
+          "sha256": "01c93a26453d393b4ca06e20c4ca57df524299513a61766f27a3a155bbc10f20"
+        },
+        {
+          "file": "ym2612_timed_client.js",
+          "lines": 233,
+          "bytes": 12059,
+          "sha256": "9d4d4279afb7b1a74795e5447a237a9f6d2eb473349a7f0f1bc7cb024ed78e20"
+        },
+        {
+          "file": "playground_opn_audio.js",
+          "lines": 44,
+          "bytes": 2575,
+          "sha256": "e55526932b1b31498cd2c3d3e334a3912299f82c6c31b9d238af9d95cea119b0"
+        },
+        {
+          "file": "playground_ay8910_audio.js",
+          "lines": 71,
+          "bytes": 4740,
+          "sha256": "0e9c874eede5af4281aa8df93e35ffe0433ed29d35ff076692bf0677996b05be"
+        }
+      ],
+      "important": {
+        "LICENSE": {
+          "bytes": 1519,
+          "sha256": "2d2e9213c170a9866c616fa85b6da993a6724e10befc61f468ed9bfb84c4691c"
+        },
+        "THIRD_PARTY_LICENSES.txt": {
+          "bytes": 3014,
+          "sha256": "9e0155af521eaa7238931f3e4bdda0466c87000130ab58bff740b2a281966f79"
+        },
+        "ay8910_operations.d.ts": {
+          "bytes": 2040,
+          "sha256": "139085c13302a05f3c3a0513c7210613471c25457f4f557dfef944bcd8dd1c48"
+        },
+        "ym2612_operations.d.ts": {
+          "bytes": 4082,
+          "sha256": "8bcce6fb5100261f598916424e8e1a5d69c2111d98655a1bd081b8ba12c6bce9"
+        },
+        "generated/ay8910_wasm.wasm": {
+          "bytes": 15254,
+          "sha256": "45f1d0cf1ece4ee609cae3a37dbe3c6293961c7f22d9d6ad82fc268a29ab3d74"
+        },
+        "generated/ym2612_wasm.wasm": {
+          "bytes": 40357,
+          "sha256": "3ac5ce16924386956d23522bdc56c8e52fa67f7d15869bd616017d755993e633"
+        },
+        "generated/nuked_opn2_wasm.wasm": {
+          "bytes": 21071,
+          "sha256": "de4eb53660a8fd98230509efe038c4b75dcfd7dc57424a25a5be3db277a468c1"
+        }
+      }
+    },
+    "issues": []
+  },
+  "authoredSources": {
+    "examples/atari-st/ym2149/01-sync-buzzer/README.md": {
+      "bytes": 3642,
+      "sha256": "fff56de4a771a5e198a9af534bb17590f993eb3f0f237098f8b3e3739ab7f51f"
+    },
+    "examples/atari-st/ym2149/01-sync-buzzer/web/index.html": {
+      "bytes": 3022,
+      "sha256": "c9d1c75079461ec9282a4bf61b81cc3e196c3a1af5d52740f34977176f923632"
+    },
+    "examples/atari-st/ym2149/01-sync-buzzer/web/main.js": {
+      "bytes": 7289,
+      "sha256": "d2539c82ee8b47ed533062224ad0df39d6dd857f590da5a7fa94c0ca415c9ee6"
+    },
+    "examples/atari-st/ym2149/02-volume-modulation/README.md": {
+      "bytes": 3133,
+      "sha256": "0d7edf91b95b39643230545afe7c8ac287ffa18606daa9723588ae112c27a95f"
+    },
+    "examples/atari-st/ym2149/02-volume-modulation/web/index.html": {
+      "bytes": 3069,
+      "sha256": "935df87926ae38fc48a87e7d891d87b0612053ef9279e068f421c589f86d73a3"
+    },
+    "examples/atari-st/ym2149/02-volume-modulation/web/main.js": {
+      "bytes": 7534,
+      "sha256": "7f385ca88f2ae5369a3fcef40341d61bd8c4d1b6b93ba37ea1ca1266da8017f1"
+    },
+    "examples/genesis/fm/07-timed-operators/README.md": {
+      "bytes": 3818,
+      "sha256": "a529a915123280bf405be096a0ebcf679b834b3fb253034bca47832add5e0858"
+    },
+    "examples/genesis/fm/07-timed-operators/web/index.html": {
+      "bytes": 3744,
+      "sha256": "a25c43b2d3b78bd9fde24d6da2a318ee72478374117b85457b5b75f88aac9867"
+    },
+    "examples/genesis/fm/07-timed-operators/web/main.js": {
+      "bytes": 10655,
+      "sha256": "954d6319abb57a1508f6caa4710d4ed5bf4342362a6863b2b8c3abeadffc6d14"
+    },
+    "examples/chip-raw/02-compile-compare/README.md": {
+      "bytes": 3802,
+      "sha256": "e458c3f766cab78b93ed61d81175eaab4a0f7836654821f3031e3cc6bf7d3528"
+    },
+    "examples/chip-raw/02-compile-compare/node/main.mjs": {
+      "bytes": 4869,
+      "sha256": "f5da83ce37f016dc16761d85e0d06700a02050f95690dba38152beeab270bd80"
+    },
+    "examples/chip-raw/02-compile-compare/web/index.html": {
+      "bytes": 3172,
+      "sha256": "3373b2e95b853e954b8abcc39d96ffea4cf7483dff485202ac8725b1cd15a7f5"
+    },
+    "examples/chip-raw/02-compile-compare/web/main.js": {
+      "bytes": 9345,
+      "sha256": "af42323a68a1221434a973ff8385d257de064f2008140ce8af072ea75cf0b58a"
+    }
+  },
+  "limits": [
+    "No physical listening performed.",
+    "Native timed playback is explicitly unsupported; no wall-clock fallback.",
+    "Node compile comparison uses a documented known local state; it does not pretend to capture an AudioWorklet.",
+    "Compile rows predict the selected baseline, not the interleaved execution history.",
+    "No commit, push, Pages deployment, Tauri import, package publication, SDK or C++/WASM rebuild."
+  ]
+}

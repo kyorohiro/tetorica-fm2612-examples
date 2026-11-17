@@ -81,6 +81,7 @@ export type MegaSynthOptions = {
     audioContext?: AudioContext | null;
     outputNode?: AudioNode | null;
     workletUrl?: string;
+    engine?: 'ymfm' | 'nuked';
     stereoWidthWorkletUrl?: string;
     bitcrusherWorkletUrl?: string;
     ym2612WasmUrl?: string;
@@ -235,6 +236,7 @@ export declare class MegaSynth {
     audio: TetoricaAudioRuntime;
     mixerReleases: any[];
     workletUrl: string;
+    engine: string;
     stereoWidthWorkletUrl: string;
     bitcrusherWorkletUrl: string;
     ym2612WasmUrl: string;

@@ -36,6 +36,14 @@
     "nodeAudioOutput": true
   },
   {
+    "id": "genesis/fm/07-timed-operators",
+    "title": "YM2612：メロディとOperatorの別周期制御",
+    "description": "メロディとTL／MULTを別周期で動かし、port付きレジスタ列を確認。ymfm／NukedのAudioWorkletでソフトウェア予約する。",
+    "environments": [
+      "web"
+    ]
+  },
+  {
     "id": "dx7/01-notes",
     "title": "DX7：メロディと和音",
     "description": "useSoundChip('dx7') と MIDI ノート番号で、INIT SINE のメロディと和音を演奏。Main / Worker を切り替える。",
@@ -612,6 +620,31 @@
     "id": "gameboy/pcm/01-wave-preview",
     "title": "Game Boy：Wave音色のPCM比較",
     "description": "元PCMと4-bit Waveへの変換、独立した実APU previewを比較する。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
+    "id": "atari-st/ym2149/01-sync-buzzer",
+    "title": "YM2149：Sync-buzzer",
+    "description": "共有EnvelopeのR13を同じ値で再トリガー。メロディと独立したAudioWorklet予約と、実際の書き込み列を調べる。",
+    "environments": [
+      "web"
+    ]
+  },
+  {
+    "id": "atari-st/ym2149/02-volume-modulation",
+    "title": "YM2149：音量レジスタ変調",
+    "description": "16段階の固定Volumeをサンプル時計で更新。ハードウェアの非線形音量とソフトウェアの変調を分けて理解する。",
+    "environments": [
+      "web"
+    ]
+  },
+  {
+    "id": "chip-raw/02-compile-compare",
+    "title": "レジスタ比較：compileとsnapshot",
+    "description": "current／client／reset／同じsnapshotで部分更新を比較。Webは無音で実状態を取得し、Nodeは既知の状態からJSONを出力する。",
     "environments": [
       "web",
       "node"

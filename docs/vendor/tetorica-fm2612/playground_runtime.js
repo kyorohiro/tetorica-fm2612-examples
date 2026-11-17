@@ -11,6 +11,7 @@ import {encodePs1Adpcm} from './ps1_adpcm_encoder.js';
 import {readVab,prepareVabTone,exportVab,MAX_VAB_FILE_BYTES} from './ps1_vab.js';
 import {createChipInspector} from './playground_chip_inspector.js';
 import {createPerformanceHost} from './playground_performance_host.js';
+import {createAyTimedLifecycle} from './playground_ay_timed_lifecycle.js';
 import {createNativeGenesisWorkerBridge} from './native_genesis_worker.js';
 import {DEFAULT_WORKER_LOOKAHEAD_SECONDS, validateWorkerLookahead} from './playground_performance_sender.js';
 import {midiToOpnPitch, opnPitchFromHz} from './soundchip_pitch.js';
@@ -58,7 +59,7 @@ import {createYm2608Client} from './playground_ym2608.js?v=loop-async-tasks-1';
 import {createRf5c164Client} from './playground_rf5c164.js';
 import {createRf5c164Audio} from './playground_rf5c164_audio.js';
 import {samplePCM} from './native_sample.js';
-import {formatLogArgs} from './playground_log.js';
+import {formatLogArgs,formatLogTable} from './playground_log.js?v=console-table-1';
 import {createLiveFxLifecycle} from './native_fx.js?v=live-fx-definitions-1';
 /**
  * @file playground_runtime.js
@@ -137,6 +138,7 @@ const SCALE_INTERVALS = {
  *   workletUrl?: string,
  *   audioWorkletUrl?: string,
  *   ym2612WasmUrl?: string,
+ *   engine?: 'ymfm'|'nuked',
  *   segaPsgWasmUrl?: string,
  *   gameboyWasmUrl?: string,
  *   presets?: Record<string, object>,
@@ -166,6 +168,7 @@ export function createPlaygroundRuntime(
     options.megaDrive ??
     createTetoricaSynth({
       chip: options.chip,
+      engine:options.engine,
       type:options.type,
       flags:options.flags,
       stereoEnabled:options.stereoEnabled,
@@ -851,7 +854,8 @@ export function createPlaygroundRuntime(
         const loop=currentLoopContext,token=currentRunToken;
         return result.then(value=>resumeNativeExtraCaller(loop,()=>value,token),error=>resumeNativeExtraCaller(loop,()=>{throw error;},token));
       }:undefined));
-      return [name,nativeApiCache.get(raw)];
+      const api=nativeApiCache.get(raw);
+      return [name,endpoint.name==='ay8910'?ayTimedLifecycle.wrap(api,raw._timedOperations):api];
     }));
   }
   let sectionLoads = new AbortController();
@@ -914,7 +918,9 @@ export function createPlaygroundRuntime(
       if (core?.adpcmA?.levels) sections.adpcmA = {levels:Array.from(core.adpcmA.levels)};
       if (core?.adpcmB?.registers) sections.adpcmB = {registers:Array.from(core.adpcmB.registers)};
     }
-    return {...core?.getState?.(), clock:sharedFm?.clock ?? core?.clock, ...sections};
+    return {...core?.getState?.(), clock:sharedFm?.clock ?? core?.clock,
+      ...(capabilities.chip==='ym2612'?{engine:core?.engine??megaDrive.engine??'ymfm'}:{}),
+      ...(capabilities.chip==='ym2612'&&core?._timedClientStateComplete?{timedState:core._getTimedState()}:{}), ...sections};
   }
   // UI notes share the chip and its output gain, but own their channel until
   // released. The worklet arbitrates against Main and direct Worker writes.
@@ -1439,6 +1445,8 @@ export function createPlaygroundRuntime(
 
   const loopTasks = createLoopAsyncTasks({getLoop: () => currentLoopContext,
     cancelWaits: loop => clockApi.cancelWaits(loop)});
+  const ayTimedLifecycle=createAyTimedLifecycle({getLoop:()=>currentLoopContext,setLoop:loop=>{currentLoopContext=loop;},
+    trackAsync:pending=>loopTasks.track(pending),onError:error=>emitLog(`[AY schedules] ${error?.message??String(error)}`)});
   const liveApi =
     createPlaygroundLive({
       runtime,
@@ -1458,9 +1466,10 @@ export function createPlaygroundRuntime(
       setStatus: emitStatus,
       executeCallback: executeUserCallback,
       finishTasks: loop => loopTasks.finish(loop),
-      releaseTasks: loop => loopTasks.release(loop),
+      releaseTasks: loop => {loopTasks.release(loop);ayTimedLifecycle.cancelLoop(loop);},
       getKeyboardNames: () => [...keyboardHandlers.values()].map(handler => handler.name),
       cancelWaits: state => {
+        ayTimedLifecycle.cancelLoop(state);
         cancelNativeExtraCreations(pending=>pending.loop===state);
         if(megaDrive.isReady?.()&&!megaDrive.stopping&&!megaDrive.closing)noiseOwnership?.releaseOwner(state);
         else noiseOwnership?.clear();
@@ -1921,7 +1930,7 @@ export function createPlaygroundRuntime(
         await awaitNativeCreation(performanceHost.attach(device.node?.port),pending);
         pending?.controller.signal.throwIfAborted();
         if(worker!==logicWorker||token!==currentRunToken||!pcmDevices.has(device)||!performanceHost.clock&&playbackState!=='running')throw new Error('Run stopped');
-        return {port:device.port,id:device.mixerId,instance:device.instanceToken,native:device.native,engine:device.engine,state:device.client?._getState?.()??device.state,clock:device.clock,model:device.model,stereoEnabled:device.stereoEnabled,fdsEnabled:device.fdsEnabled,sampleRate:device.sampleRate,internalSampleRate:device.internalSampleRate,voices:device.voices,selectedVoice:device.selectedVoice};
+        return {port:device.port,id:device.mixerId,instance:device.instanceToken,instanceId:device.instanceId,type:device.type,flags:device.flags,native:device.native,engine:device.engine,state:device.client?._getState?.()??device.state,clock:device.clock,model:device.model,stereoEnabled:device.stereoEnabled,fdsEnabled:device.fdsEnabled,sampleRate:device.sampleRate,internalSampleRate:device.internalSampleRate,voices:device.voices,selectedVoice:device.selectedVoice};
       }catch(error){if(device)performanceHost.detach(device.node?.port);device?.dispose();throw error;}
       finally{if(pending)pendingNativeExtraCreations.delete(pending);}
     }
@@ -2195,14 +2204,17 @@ export function createPlaygroundRuntime(
         if (!request || request.runToken !== currentRunToken) return;
         const loopCount = message.loopCount ?? 0;
         const keyboardHandlerCount = message.keyboardHandlerCount ?? 0;
+        const reservationCount = message.scheduledReservationCount ?? 0;
         emitStatus(
           loopCount > 0
             ? `Running ${loopCount} live loop(s) in Worker.`
             : keyboardHandlerCount > 0
               ? `Running ${keyboardHandlerCount} keyboard handler(s) in Worker.`
+              : reservationCount > 0
+                ? `Running ${reservationCount} scheduled pattern(s) in Worker.`
               : "Done."
         );
-        if (loopCount === 0 && keyboardHandlerCount === 0) {
+        if (loopCount === 0 && keyboardHandlerCount === 0 && reservationCount === 0) {
           setPlaybackState("stopped");
         }
         emitRuntimeState("Audio ready");
@@ -2211,6 +2223,7 @@ export function createPlaygroundRuntime(
       if (message.type === "execution-error") {
         const error = new Error(message.message);
         error.stack = message.stack ?? error.stack;
+        error.scheduledReservationCount=message.scheduledReservationCount??0;
         workerRunRequests.shift()?.reject(error);
         return;
       }
@@ -2390,7 +2403,7 @@ export function createPlaygroundRuntime(
       Object.defineProperty(sharedFm, 'id', {value: capabilities.chip ?? 'ym2612', enumerable: true});
       sharedFmSynth = synth;
     }
-    const fm = keyboardApi(sharedFm);
+    const fm = keyboardApi(ayTimedLifecycle.wrap(sharedFm));
     const nativeApis = Object.fromEntries(Object.entries(nativePrimaryApis()).map(([name,api])=>[name,keyboardApi(api)]));
     const gameboy = isGameboy ? nativeApis.gameboy ?? keyboardApi(sharedGameboy) : undefined;
     const psg = nativeApis.psg ?? keyboardApi(megaDrive.psg);
@@ -2512,6 +2525,7 @@ export function createPlaygroundRuntime(
     };
     if (!hasOpn) for (const name of ['fm','dac', ...(capabilities.chip === 'segapsg' ? [] : ['psg'])]) delete livePrepareApi[name];
     const playgroundConsole = {
+      table: (data,columns) => emitLog(formatLogTable(data,columns)),
       log: (...args) => {
         emitLog(
           formatLogArgs(args)
@@ -2574,6 +2588,7 @@ export function createPlaygroundRuntime(
         }, {evictOnDispose: !(name === 'rf5c164' && megaDrive.pcm) && !(name === 'segapsg' && capabilities.psg && capabilities.backend === 'native-genesis') && !megaDrive.primaryEndpoints?.some(endpoint => endpoint.name === name) && !((['ym2612', 'ym2203', 'ym2610', 'ym2610b'].includes(name) || name === 'ym2608' && capabilities.backend === 'native-genesis' || name === 'gameboy') && capabilities.chip === name)});
         check();
         if(ownsMainScope)await resumeNativeExtraCaller(callerLoop,()=>{});
+        if(name==='ay8910'){currentLoopContext=callerLoop;if(callerLoop?.stopped)throw new DOMException('Run stopped','AbortError');}
         return chip;
       },
       createSoundChip: async (name, options = {}) => {
@@ -2594,6 +2609,9 @@ export function createPlaygroundRuntime(
           decodeAudio:decodePcm,
         });
         device.client=client;
+        if(client._timedOperations){
+          const release=device.releaseOwner;device.releaseOwner=loop=>{ayTimedLifecycle.cancelLoop(loop,client._timedOperations);release?.(loop);};
+        }
         if(name==='pokey'&&!device.native)setPokeyTimelineLifecycle(client);
         if(['ps1','scsp'].includes(name)&&!device.native)device.releaseOwner=ownPs1Main(client).releaseOwner;
         if(name==='sid'&&!device.native)device.releaseOwner=ownSidMain(client).releaseOwner;
@@ -2606,7 +2624,8 @@ export function createPlaygroundRuntime(
         // Keep the current method visible: useSoundChip wraps it to evict the
         // cached endpoint, including when a device fails asynchronously.
         device.dispose=()=>client.dispose();
-        const api=keyboardApi(device.native&&name!=='spc'?ownedNativeExtraApi(device,client):name==='rf5c164'?ownedMainPcmApi(device,client):['wonderswan','sid'].includes(name)?wonderSwanExtraApi(client):client);
+        const api=keyboardApi(device.native&&name!=='spc'?ownedNativeExtraApi(device,client):name==='rf5c164'?ownedMainPcmApi(device,client):['wonderswan','sid'].includes(name)?wonderSwanExtraApi(client):ayTimedLifecycle.wrap(client));
+        if(client._timedOperations){currentLoopContext=callerLoop;if(callerLoop?.stopped){device.dispose();throw new DOMException('Run stopped','AbortError');}}
         if(ownsMainScope)return resumeNativeExtraCaller(callerLoop,()=>api).catch(error=>{device.dispose();throw error;});
         return api;
       },
@@ -3013,9 +3032,11 @@ export function createPlaygroundRuntime(
       );
     }
 
+    ayTimedLifecycle.stop();
     cancelAudioInputRequests();
     cancelNativeExtraCreations();
     currentRunToken += 1;
+    ayTimedLifecycle.abortCurrent();
     const runToken = currentRunToken;
     if (logicWorkerStopPromise) await logicWorkerStopPromise;
     await musicalKeyboard.settled();
@@ -3082,7 +3103,8 @@ export function createPlaygroundRuntime(
           const channel = new MessageChannel();
           endpoint.node.port.postMessage({port:channel.port1,primaryWorker:true},[channel.port1]);
           endpoints.push({id:endpoint.id??endpoint.name,name:endpoint.name,globalName:endpoint.globalName,clock:endpoint.client.clock,
-            fdsEnabled:endpoint.client.fdsEnabled,stereoEnabled:endpoint.client.stereoEnabled,sampleRate:endpoint.client.sampleRate,state:endpoint.client._getState?.(),port:channel.port2});
+            fdsEnabled:endpoint.client.fdsEnabled,stereoEnabled:endpoint.client.stereoEnabled,sampleRate:endpoint.client.sampleRate,
+            ...(endpoint.name==='ay8910'?{type:endpoint.type,flags:endpoint.flags,instanceId:endpoint.instanceId}:{}),state:endpoint.client._getState?.(),port:channel.port2});
           transfer.push(channel.port2);
         }
         worker.postMessage({type:'native-primary-ports',endpoints},transfer);
@@ -3135,7 +3157,7 @@ export function createPlaygroundRuntime(
         return await pending;
       } catch (error) {
         if (error.name === "AbortError" || runToken !== currentRunToken) throw error;
-        setPlaybackState("stopped");
+        setPlaybackState(error.scheduledReservationCount>0?"running":"stopped");
         emitStatus(`Error: ${error.message}`);
         emitRuntimeState("Error");
         emitLog(formatLogArgs([error]));
@@ -3151,6 +3173,7 @@ export function createPlaygroundRuntime(
     cancelNativeExtraCreations();
     currentRunToken += 1;
     const runToken = currentRunToken;
+    ayTimedLifecycle.abortCurrent();
     await stopLogicWorker();
     await musicalKeyboard.settled();
     if (runToken !== currentRunToken) return;
@@ -3183,6 +3206,8 @@ export function createPlaygroundRuntime(
       Object.getPrototypeOf(
         async function () {}
       ).constructor;
+    const timedTransaction=ayTimedLifecycle.begin(()=>runToken===currentRunToken);let timedCommitted=false;
+    evaluationState.timedTransaction=timedTransaction;
     try {
       const userFunction = new AsyncFunction(
         ...Object.keys(globals),
@@ -3208,6 +3233,9 @@ export function createPlaygroundRuntime(
       if (runToken !== currentRunToken) return;
       await musicalKeyboard.commit(evaluationState.musicalBinding,()=>runToken===currentRunToken);
       if (runToken !== currentRunToken) return;
+      await ayTimedLifecycle.commit(timedTransaction);
+      timedCommitted=true;
+      if (runToken !== currentRunToken) return;
       liveFxLifecycle.commit(evaluationState.liveFxDefinitions);
       liveApi.commitLiveLoops(
         evaluationState.loopDefinitions
@@ -3225,16 +3253,19 @@ export function createPlaygroundRuntime(
           evaluationState.loopDefinitions.size;
         const keyboardHandlerCount =
           evaluationState.keyboardDefinitions.size + (evaluationState.musicalBinding ? 1 : 0);
+        const reservationCount=ayTimedLifecycle.entryReservationCount;
         emitStatus(
           loopCount > 0
             ? `Running ${loopCount} live loop(s).`
             : keyboardHandlerCount > 0
               ? `Running ${keyboardHandlerCount} keyboard handler(s).`
+              : reservationCount > 0
+                ? `Running ${reservationCount} scheduled pattern(s).`
               : "Done."
         );
         if (
           loopCount === 0 &&
-          keyboardHandlerCount === 0
+          keyboardHandlerCount === 0 && reservationCount === 0
         ) {
           setPlaybackState(
             "stopped"
@@ -3245,12 +3276,13 @@ export function createPlaygroundRuntime(
         );
       }
     } catch (error) {
+      ayTimedLifecycle.abort(timedTransaction);
       evaluationState.collectingKeyboardBinding = false;
       if (runToken !== currentRunToken) {
         if (error?.message === "Run stopped") return;
         throw error;
       }
-      setPlaybackState("stopped");
+      setPlaybackState(ayTimedLifecycle.hasEntryReservations?"running":"stopped");
       if (
         error instanceof Error &&
         error.message ===
@@ -3272,6 +3304,8 @@ export function createPlaygroundRuntime(
       emitRuntimeState("Error");
       emitLog(formatLogArgs([error]));
       throw error;
+    } finally {
+      if(!timedCommitted)ayTimedLifecycle.abort(timedTransaction);
     }
   }
 
@@ -3317,6 +3351,7 @@ export function createPlaygroundRuntime(
   }
 
   function stop() {
+    ayTimedLifecycle.stop();
     void musicalKeyboard.clear();
     cancelAudioInputRequests();
     cancelNativeExtraCreations();

@@ -32,6 +32,13 @@ export type PlaygroundCodeRuntimeOptions<ChipName extends string = DefaultCodeSo
      */
     supportedSoundChips?: readonly ChipName[];
     /**
+     * Map nested/aliased Gate methods to one physical channel owner.
+     */
+    resolveNoteTarget?: (target: object, method: string, args: unknown[]) => {
+        target: object;
+        channel: number;
+    } | null;
+    /**
      * Current FM compatibility client.
      */
     getFm?: () => object | null;
@@ -93,6 +100,7 @@ export type PlaygroundCodeRuntimeOptions<ChipName extends string = DefaultCodeSo
  * @property {()=>number} now Audio clock in seconds.
  * @property {(name:ChipName)=>object|Promise<object>} useSoundChip Borrow a supported chip client.
  * @property {readonly ChipName[]} [supportedSoundChips] Host-owned chip IDs; defaults to the four Genesis instruments.
+ * @property {(target:object,method:string,args:unknown[])=>{target:object,channel:number}|null} [resolveNoteTarget] Map nested/aliased Gate methods to one physical channel owner.
  * @property {()=>object|null} [getFm] Current FM compatibility client.
  * @property {object} [fx] Effect factories and live-effect controls owned by the host.
  * @property {(path:string,options:object,entry:{path:string})=>unknown} [readFile] Read a virtual file; may return a promise.
@@ -111,10 +119,14 @@ export type PlaygroundCodeRuntimeOptions<ChipName extends string = DefaultCodeSo
  * Main-thread live code execution, with an injected audio owner. ensureReady
  * prepares providers before user guards run; readFile / prepareSource bridge
  * the host's virtual files using the existing Playground file helpers.
+ * Timed clients may expose an internal reservation lifecycle capability.
+ * schedule / clearSchedule mutations require an active entry evaluation or an
+ * identified liveLoop; detached ambiguous callbacks are rejected. Timed data
+ * queries (build / compile / captureState) retain their ordinary scoped access.
  * @template {string} [ChipName=DefaultCodeSoundChip]
  * @param {PlaygroundCodeRuntimeOptions<ChipName>} options
  */
-export declare function createPlaygroundCodeRuntime<ChipName extends string = DefaultCodeSoundChip>({ ensureReady, now, useSoundChip, supportedSoundChips, getFm, fx, readFile, prepareSource, onLog, onState, beforeStopSoundChips, stopSoundChips, guardExecution, realm, setTimer, clearTimer, createTaskChannel, }?: PlaygroundCodeRuntimeOptions<ChipName>): {
+export declare function createPlaygroundCodeRuntime<ChipName extends string = DefaultCodeSoundChip>({ ensureReady, now, useSoundChip, supportedSoundChips, getFm, fx, resolveNoteTarget, readFile, prepareSource, onLog, onState, beforeStopSoundChips, stopSoundChips, guardExecution, realm, setTimer, clearTimer, createTaskChannel, }?: PlaygroundCodeRuntimeOptions<ChipName>): {
     run: (source: any, options?: {}) => Promise<{
         state: string;
         playback: string;

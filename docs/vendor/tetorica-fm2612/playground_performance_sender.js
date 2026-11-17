@@ -82,6 +82,11 @@ export function createPerformanceSender({getLoop = () => null, restoreLoop = () 
       if (commands.some(command => command.id !== undefined)) throw new DOMException('Run stopped', 'AbortError');
       return;
     }
+    // Register-operation RPCs own their compact timeline; retain the owner
+    // without adding the performance lead a second time.
+    if(!Array.isArray(data)&&['ayTimed','ym2612Timed'].includes(data?.method)){
+      port.postMessage({...data,timedPerformance:timestamp()},transfer);return;
+    }
     const {time} = timestamp();
     if (transfer?.length && commands.length > 1 && commands.some(command => immediate(command, kind))) {
       // A transfer list can be consumed only once. Mixed prep/performance

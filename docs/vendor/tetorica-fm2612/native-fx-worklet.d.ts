@@ -14,6 +14,51 @@ export declare class NativeFXProcessor extends AudioWorkletProcessor {
         receive(data: any, reply: any): boolean;
         nextFrame: () => any;
         advance(frame?: any): void;
+        validatePattern: (spec: any) => {
+            name: any;
+            entries: {
+                offsetSeconds: any;
+                command: any;
+            }[];
+            repeatSeconds: any;
+            startFrame: number;
+            cost: number;
+            performance: {
+                session: any;
+                owner: any;
+                time: any;
+            };
+        };
+        schedulePattern: (spec: any, reply: any) => {
+            name: any;
+            startFrame: any;
+            sampleRate: any;
+            entries: any;
+            repeatSeconds: any;
+        };
+        clearPattern: (name: string, { session, owner }?: {
+            session?: number;
+            owner?: string;
+        }) => boolean;
+        commitPatterns: (changes: any, { session, owner, dryRun }?: {
+            session: number;
+            owner: string;
+            dryRun?: boolean;
+        }, reply?: (message: any) => void) => {
+            session: number;
+            owner: string;
+            reservations: {
+                name: any;
+                startFrame: any;
+                sampleRate: any;
+                entries: any;
+                repeatSeconds: any;
+            }[];
+            cleared: any[];
+        };
+        cancelPatternOwner: (owner: string, { session }?: {
+            session?: number;
+        }) => boolean;
         clear: () => void;
         cancelOwner: (owner: any, reply: any) => void;
         getStats: () => {
@@ -21,6 +66,11 @@ export declare class NativeFXProcessor extends AudioWorkletProcessor {
             latestSession: number;
             queuedCommands: number;
             queuedBatches: number;
+            patternCount: number;
+            storedPatternCommands: number;
+            patternRate: number;
+            storedPatternCost: number;
+            patternCostRate: number;
             lateCommands: number;
             maxLateFrames: number;
             rejectedBatches: number;

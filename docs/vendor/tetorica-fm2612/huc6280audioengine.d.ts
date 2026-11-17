@@ -1,17 +1,13 @@
 /**
- * @file huc6280audioengine.js
- * 実行環境: Browser / Node.js
- * 依存: 音源チップ／WASM バックエンド（ファクトリーまたはエンジンを注入）。
- * 同期 PCM 生成・ミックス用。DOM・AudioContext・スピーカー出力は不要。
- */
-/**
  * Huc6280AudioEngine adapter for synchronous stereo rendering and VGM register dispatch.
  * Output timing uses sampleRate() frames per second. No browser audio device is opened.
  * Dispose the engine when done to release its underlying chips.
  */
 export declare class Huc6280AudioEngine {
     module: import("./soundchip.js").WasmChipModule;
+    clock: number;
     rate: number;
+    channelMask: number;
     ptr: number;
     capacity: number;
     selectedChannel: number;
@@ -57,6 +53,20 @@ export declare class Huc6280AudioEngine {
      * @returns {void}
      */
     setChannelMuted(channel: number, muted: boolean): void;
+    /** Whether this build exposes the validated, versioned native state ABI. */
+    supportsState(): boolean;
+    /** Output settings must match before restoring a cached native timeline. */
+    stateSettingsKey(): string;
+    _stateHeader(bytes: any, selected?: number, mask?: number): void;
+    _withStateBytes(bytes: any, callback: any): any;
+    /** Save native phase, Wave RAM, Noise/LFO and resampler state without exposing bytes. */
+    saveState(): Readonly<{
+        byteLength: any;
+    }>;
+    /** Reject forged, incompatible or corrupted snapshots before any chip mutation. */
+    validateState(state: any): boolean;
+    /** Restore into a matching build/configuration; PCM output buffers are not state. */
+    loadState(state: any): void;
     /**
      * Dispatch a VGM register/command write to the corresponding sound chip.
      * @param {number} register Register address within the selected chip bank.
