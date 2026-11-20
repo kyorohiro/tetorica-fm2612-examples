@@ -1,5 +1,5 @@
 export declare function createNativeGenesisGameGear(synth: any): {
-    segapsg: {
+    segapsg: Omit<{
         client: any;
         initialize(): Promise<void>;
         mix(volume?: number, pan?: number): Promise<void>;
@@ -12,5 +12,7 @@ export declare function createNativeGenesisGameGear(synth: any): {
         stopped: () => void;
         adoptStopped(data: any): void;
         reset(): void;
+    }, "client"> & {
+        client: ReturnType<typeof import('./playground_segapsg.js').createSegaPsgClient>;
     };
 };

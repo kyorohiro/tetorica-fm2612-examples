@@ -12,6 +12,7 @@ import { SegaPSG } from './segapsg.js';
  * Dispose the engine when done to release its underlying chips.
  */
 export declare class Ym2413AudioEngine {
+    #private;
     ym2413: Ym2413;
     psg: SegaPSG | undefined;
     chipRate: number;
@@ -83,6 +84,21 @@ export declare class Ym2413AudioEngine {
      * @returns {void}
      */
     reset(): void;
+    supportsState(): boolean;
+    stateSettingsKey(): string;
+    /** Opaque same-instance native/resampler snapshot. Current output settings must match.
+     * @returns {Readonly<{byteLength:number}>} */
+    saveState(): Readonly<{
+        byteLength: number;
+    }>;
+    /** @param {Readonly<{byteLength:number}>} state */
+    validateState(state: Readonly<{
+        byteLength: number;
+    }>): void;
+    /** @param {Readonly<{byteLength:number}>} state */
+    loadState(state: Readonly<{
+        byteLength: number;
+    }>): void;
     /**
      * Release the underlying chips and their resources. Do not render after disposal.
      * @returns {void}

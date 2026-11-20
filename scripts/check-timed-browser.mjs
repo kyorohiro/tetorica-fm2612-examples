@@ -8,6 +8,7 @@ import {fileURLToPath} from 'node:url';
 import {chromium,webkit} from 'playwright';
 
 const repo=resolve(dirname(fileURLToPath(import.meta.url)),'..');
+const packageVersion=JSON.parse(await readFile(join(repo,'package.json'),'utf8')).dependencies['tetorica-fm2612'];
 const args=process.argv.slice(2);
 for(const arg of args)assert(/^--(?:site|out|sample-rate|case)=/.test(arg)||['--chromium','--webkit'].includes(arg),'Unknown argument '+arg);
 const option=(name,fallback)=>args.find(arg=>arg.startsWith('--'+name+'='))?.slice(name.length+3)??fallback;
@@ -170,7 +171,7 @@ async function runCase(browser,browserName,base,item){
 let failure;const results=[];
 try{
   const version=JSON.parse(await readFile(join(site,'vendor/tetorica-fm2612/package.json'),'utf8')).version;
-  assert.equal(version,'0.2.45');
+  assert.equal(version,packageVersion);
   await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});
   const base=`http://127.0.0.1:${server.address().port}${prefix}`;
   const engines=args.includes('--chromium')?[['chromium',chromium]]:args.includes('--webkit')?[['webkit',webkit]]:[['chromium',chromium],['webkit',webkit]];
@@ -178,6 +179,6 @@ try{
 }catch(error){failure=error;if(error.caseResult)results.push(error.caseResult);}
 finally{
   server.closeAllConnections?.();if(server.listening)await new Promise(resolve=>server.close(resolve));
-  await mkdir(dirname(out),{recursive:true});await writeFile(out,JSON.stringify({passed:!failure,packageVersion:'0.2.45',sampleRate:requestedSampleRate,physicalOutputMuted:true,staticSiteOnly:true,site,results},null,2)+'\n');
+  await mkdir(dirname(out),{recursive:true});await writeFile(out,JSON.stringify({passed:!failure,packageVersion,sampleRate:requestedSampleRate,physicalOutputMuted:true,staticSiteOnly:true,site,results},null,2)+'\n');
 }
 if(failure)throw failure;console.log('PASS timed examples: '+out);

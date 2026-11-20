@@ -1,14 +1,6 @@
-export declare function createNativeGenesisOpll(context: any): {
-    client: any;
-    initialize(): Promise<void>;
-    mix(volume?: number, pan?: number): Promise<void>;
-    dispatch: (message: any, timing?: {}) => Promise<{
-        id: any;
-        value?: boolean | undefined;
-    } | undefined>;
-    read: (args?: {}) => Promise<any>;
-    invoke: (method: any, args?: any[], options?: {}) => Promise<any>;
-    stopped: () => void;
-    adoptStopped(data: any): void;
-    reset(): void;
+/** @param {any} context
+ * @returns {Omit<ReturnType<typeof import('./native_genesis_voice_endpoint.js').createNativeVoiceEndpoint>,'client'> & {client:ReturnType<typeof import('./playground_ym2413.js').createYm2413Client>}}
+ */
+export declare function createNativeGenesisOpll(context: any): Omit<ReturnType<typeof import('./native_genesis_voice_endpoint.js').createNativeVoiceEndpoint>, 'client'> & {
+    client: ReturnType<typeof import('./playground_ym2413.js').createYm2413Client>;
 };

@@ -1,5 +1,5 @@
 export declare function createNativeGenesisMasterSystem(synth: any): {
-    segapsg: {
+    segapsg: Omit<{
         client: any;
         initialize(): Promise<void>;
         mix(volume?: number, pan?: number): Promise<void>;
@@ -12,8 +12,10 @@ export declare function createNativeGenesisMasterSystem(synth: any): {
         stopped: () => void;
         adoptStopped(data: any): void;
         reset(): void;
+    }, "client"> & {
+        client: ReturnType<typeof import('./playground_segapsg.js').createSegaPsgClient>;
     };
-    ym2413: {
+    ym2413: Omit<{
         client: any;
         initialize(): Promise<void>;
         mix(volume?: number, pan?: number): Promise<void>;
@@ -26,5 +28,7 @@ export declare function createNativeGenesisMasterSystem(synth: any): {
         stopped: () => void;
         adoptStopped(data: any): void;
         reset(): void;
+    }, "client"> & {
+        client: ReturnType<typeof import('./playground_ym2413.js').createYm2413Client>;
     };
 };

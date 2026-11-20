@@ -185,10 +185,10 @@ export declare class NativeGenesisSynth {
             value: number | undefined;
             error?: undefined;
         } | {
-            value?: undefined;
             op: string;
             id: any;
             error: string;
+            value?: undefined;
         }>;
         loadDacBank(name: any, bytes: any): Promise<any>;
         playDacBank(name: any, time: any, timing?: {}): Promise<void>;
@@ -363,7 +363,9 @@ export declare class NativeGenesisSynth {
         reset(): void;
     } | null;
     fm: import("./ym2610bsynth.js").NeoGeoFMSynth | import("./ym2203synth.js").YM2203Synth | import("./ym2608synth.js").YM2608Synth | import("./ym2610bsynth.js").YM2610BSynth | YM2612Synth | null;
-    psg: any;
+    psg: {
+        [k: string]: any;
+    } | null;
     sample: {
         load(name: any, source: any): Promise<any>;
         play(name: any, options?: {}): Promise<{
@@ -2601,7 +2603,7 @@ export declare class NativeGenesisSynth {
     adpcm: import("./okim6258synth.js").Oki6258Synth | null;
     okim6258: import("./okim6258synth.js").Oki6258Synth | null;
     nativeMasterSystem: {
-        segapsg: {
+        segapsg: Omit<{
             client: any;
             initialize(): Promise<void>;
             mix(volume?: number, pan?: number): Promise<void>;
@@ -2614,8 +2616,10 @@ export declare class NativeGenesisSynth {
             stopped: () => void;
             adoptStopped(data: any): void;
             reset(): void;
+        }, "client"> & {
+            client: ReturnType<typeof import('./playground_segapsg.js').createSegaPsgClient>;
         };
-        ym2413: {
+        ym2413: Omit<{
             client: any;
             initialize(): Promise<void>;
             mix(volume?: number, pan?: number): Promise<void>;
@@ -2628,10 +2632,12 @@ export declare class NativeGenesisSynth {
             stopped: () => void;
             adoptStopped(data: any): void;
             reset(): void;
+        }, "client"> & {
+            client: ReturnType<typeof import('./playground_ym2413.js').createYm2413Client>;
         };
     } | null;
     nativeGameGear: {
-        segapsg: {
+        segapsg: Omit<{
             client: any;
             initialize(): Promise<void>;
             mix(volume?: number, pan?: number): Promise<void>;
@@ -2644,11 +2650,19 @@ export declare class NativeGenesisSynth {
             stopped: () => void;
             adoptStopped(data: any): void;
             reset(): void;
+        }, "client"> & {
+            client: ReturnType<typeof import('./playground_segapsg.js').createSegaPsgClient>;
         };
     } | null;
-    segapsg: any;
+    segapsg: ({
+        [k: string]: any;
+    } & import("./segapsg_timed_client.js").PsgTimedApi & {
+        readonly clock: number;
+        readonly stereoEnabled: boolean;
+        setClock(hz: number): Promise<unknown>;
+    }) | null;
     nativeMsx: {
-        ym2413: {
+        ym2413: Omit<{
             client: any;
             initialize(): Promise<void>;
             mix(volume?: number, pan?: number): Promise<void>;
@@ -2661,6 +2675,8 @@ export declare class NativeGenesisSynth {
             stopped: () => void;
             adoptStopped(data: any): void;
             reset(): void;
+        }, "client"> & {
+            client: ReturnType<typeof import('./playground_ym2413.js').createYm2413Client>;
         };
         ay8910: {
             client: any;
@@ -2678,7 +2694,7 @@ export declare class NativeGenesisSynth {
         };
     } | null;
     nativeMsxAudio: {
-        ym2413: {
+        ym2413: Omit<{
             client: any;
             initialize(): Promise<void>;
             mix(volume?: number, pan?: number): Promise<void>;
@@ -2691,6 +2707,8 @@ export declare class NativeGenesisSynth {
             stopped: () => void;
             adoptStopped(data: any): void;
             reset(): void;
+        }, "client"> & {
+            client: ReturnType<typeof import('./playground_ym2413.js').createYm2413Client>;
         };
         ay8910: {
             client: any;
@@ -2721,8 +2739,14 @@ export declare class NativeGenesisSynth {
             reset(): void;
         };
     } | null;
-    opll: any;
-    ym2413: any;
+    opll: (import("./ym2413synth.js").YM2413Synth & import("./ym2413_timed_client.js").OpllTimedApi & {
+        readonly clock: number;
+        setClock(hz: number): Promise<unknown>;
+    }) | null;
+    ym2413: (import("./ym2413synth.js").YM2413Synth & import("./ym2413_timed_client.js").OpllTimedApi & {
+        readonly clock: number;
+        setClock(hz: number): Promise<unknown>;
+    }) | null;
     ay: any;
     ay8910: any;
     nativeOpl: {

@@ -1,7 +1,7 @@
 # tetorica-fm2612 examples
 
 `tetorica-fm2612` を import して使う、機能別の小さなサンプル集。
-公開済み npm `tetorica-fm2612@0.2.45` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES・PC Engine・MSX 合奏の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
+公開済み npm `tetorica-fm2612@0.2.46` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES・PC Engine・MSX 合奏の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
 SIDは専用APIのAudioWorklet接続と、共通factory／専用coreから直接PCMを生成するNode例を用意しています。
 PCM 生成・WAV 保存は専用例に置き、Web Audio を使う埋め込み例と、Node の nativeFX / 音声デバイス出力の例も掲載しています。本体リポジトリには依存しません。
 
@@ -73,6 +73,7 @@ Nativeの予約実行をJavaScriptタイマーで代替する処理はありま�
 | C64 SID（Web / Node） | [01-voices](examples/c64/sid/01-voices/README.md) | 3ボイス・ADSR・6581／8580 Previewの比較 |
 | C64 SID（Web / Node） | [02-filter](examples/c64/sid/02-filter/README.md) | 共有LP／BP／HP、Cutoff・Resonanceの音作り |
 | C64 SID（Node） | [03-factory-wav](examples/c64/sid/03-factory-wav/README.md) | 共通factory、6581／8580選択、1音のPCM生成・WAV保存 |
+| C64 SID（Web / Node JSON） | [04-timed-motion](examples/c64/sid/04-timed-motion/README.md) | メロディ・Pulse width・共有Filterの別周期予約とsnapshot比較 |
 | PS1 SPU（Web / Node） | [01-sample-adsr](examples/ps1/spu/01-sample-adsr/README.md) | cyclic ADPCM変換、音程、live ADSR |
 | PS1 SPU（Web / Node） | [02-reverb](examples/ps1/spu/02-reverb/README.md) | voice別send・共有preset・左右return |
 | PS1 SPU（Web / Node） | [03-vab-bank](examples/ps1/spu/03-vab-bank/README.md) | 標準VAB、Program／Tone選択、調律済みADPCM、WAVと選択ToneのVAB書き出し |
@@ -84,6 +85,7 @@ Nativeの予約実行をJavaScriptタイマーで代替する処理はありま�
 | SNES BRR変換（Web / Node） | [03-pcm-to-brr](examples/snes/03-pcm-to-brr/README.md) | PCMをソフトウェアでBRRへ変換し、実S-DSPで再生 |
 | Neo Geo ADPCM-A変換（Web / Node） | [01-pcm-encode](examples/neo-geo/adpcm-a/01-pcm-encode/README.md) | PCMをソフトウェアでADPCM-Aへ変換し、実YM2610/Bで再生 |
 | Game Boy Wave変換（Web / Node） | [01-wave-preview](examples/gameboy/pcm/01-wave-preview/README.md) | PCM比較と独立した実APU preview |
+| Game Boy DMG（Web / Node JSON） | [01-timed-operations](examples/gameboy/registers/01-timed-operations/README.md) | Pulse／Wave／Noiseの別周期予約、DAC停止とレジスタ比較 |
 | Chip raw | [01-register-note](examples/chip-raw/01-register-note/README.md) | YM2612 レジスタ直接操作 |
 | PSG | [01-tone](examples/genesis/psg/01-tone/README.md) | Sega PSG のトーン |
 | PSG | [02-noise](examples/genesis/psg/02-noise/README.md) | 周期 / ホワイトノイズ |
@@ -584,3 +586,33 @@ npm run check:vab
 観察してから予約演奏できます。後からの手動Gateを共有レジスタ更新が保持する
 ことも確認します。Node例は音声デバイスを開きません。
 予約はソフトウェア制御、raw Gateはハードウェア操作です。
+
+
+## DMG・SIDの時刻付き操作（0.2.46）
+
+[DMGのPulse／Wave／Noise](examples/gameboy/registers/01-timed-operations/README.md)
+と[SIDの別周期制御](examples/c64/sid/04-timed-motion/README.md)では、
+`build()`で操作を記録し、同じsnapshotからの`compile()`結果を確認して、
+`schedule()`で音源へ送ります。Webはコードを編集して試せます。Nodeは音声デバイスも
+WASMも使わず、書き込み比較のJSONを生成します。
+
+SIDは6581／8580を選び、速いメロディ・Pulse width・共有Filterをそれぞれ別周期で
+動かします。DMGはPulse・Wave・Noiseを組み合わせ、Wave RAM更新時のDAC停止と
+再トリガーも確認できます。予約はソフトウェア制御で、発振・Envelope・Filterは
+音源チップの処理です。snapshotは操作解決用の状態で、全体のセーブステートではありません。
+
+`atSample()`は既定44100 Hzの基準、`atSeconds()`と`repeatSeconds`は秒指定です。
+予約内の時間はBPMから独立しています。例の`beat()`は通常の待機と全体の実行時間に使います。
+Nativeの予約実行・確定状態取得には対応せず、JavaScriptタイマーで代替しません。
+
+```sh
+npm run check:dmg-sid:node
+npm run build
+npm run check:dmg-sid:browser
+# 公開用の静的ファイル
+npm run build:docs
+```
+
+今回の検証結果と再開手順は
+[DMG / SID timed examples verification](notes/dmg-sid-timed-verification-20261121.md)
+に記録しています。

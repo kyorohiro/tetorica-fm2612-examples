@@ -49,10 +49,10 @@ export declare function createWorkerChip({ port, capabilities, state, observe }:
     write(...args: any[]): any;
     stop(): void;
 } | {
-    gameboy: {
-        pulse: any;
-        wave: any;
-        noise: any;
+    gameboy: Omit<GameboySynth & import("./gameboy_timed_client.js").GameboyTimedApi & {
+        setClock(hz: number): Promise<unknown>;
+    }, "dispose"> & {
+        readonly id: string;
     };
     raw: GameboySynth;
     send: (command: any) => void;

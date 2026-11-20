@@ -5,7 +5,6 @@
  * import だけでは音声デバイスを開かない。アセット読み込みには fetch を使用する。
  */
 import { TetoricaAudioRuntime } from "./tetorica_audio_runtime.js";
-import { GameboySynth } from "./gameboysynth.js";
 export type GameboyRuntimeSynthOptions = Pick<import('./megasynth.js').MegaSynthOptions, 'audioContext' | 'outputNode' | 'sampleOutputNode' | 'masterVolume' | 'mixer' | 'workletUrl'> & {
     wasmUrl?: string;
 };
@@ -30,7 +29,9 @@ export declare class GameboyRuntimeSynth {
     mixerRelease: (() => void) | null;
     node: AudioWorkletNode | null;
     fm: any;
-    gameboy: GameboySynth | null;
+    gameboy: (import("./gameboysynth.js").GameboySynth & import("./gameboy_timed_client.js").GameboyTimedApi & {
+        setClock(hz: number): Promise<unknown>;
+    }) | null;
     psg: any;
     listeners: Set<any>;
     readyPromise: Promise<void> | null;

@@ -137,6 +137,15 @@ export async function copyRuntime(destination) {
     throw new Error('ASWAN timed examples require published tetorica-fm2612 >= 0.2.45 modules and declarations. Run npm install.',{cause:error});
   }
   try {
+    for(const chip of ['gameboy','sid'])for(const name of ['operations','timed_state','timed_client','timed_processor'])
+      for(const extension of ['js','d.ts'])await readFile(join(source,`${chip}_${name}.${extension}`));
+    for(const chip of ['gameboy','sid'])for(const part of ['', '_audio', '_worklet'])
+      await readFile(join(source,`playground_${chip}${part}.js`));
+    for(const model of ['sid','sid8580-machine'])await readFile(join(source,'generated',model,model==='sid'?'sid.wasm':'sid8580-endpoint.wasm'));
+  } catch(error) {
+    throw new Error('DMG / SID timed examples require published tetorica-fm2612 >= 0.2.46 with register-operation helpers, typed Main/Worker clients and actual Worklet/WASM dependencies. Run npm install.',{cause:error});
+  }
+  try {
     const entry = await readFile(join(source, manifest.exports?.['.']?.import ?? 'soundchip.js'), 'utf8');
     if (!entry.includes('SOUNDCHIP_MIXER_PRESETS')) throw new Error('Missing preset export');
     await readFile(join(source, 'soundchip_mixer_presets.js'));

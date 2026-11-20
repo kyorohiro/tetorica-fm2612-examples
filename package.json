@@ -31,10 +31,13 @@
     "check:vab:node": "node scripts/check-vab-node.mjs",
     "check:vab": "node scripts/check-vab-node.mjs && node scripts/check-vab-browser.mjs",
     "check:scsp-dsp": "node scripts/check-scsp-dsp-node.mjs && node scripts/check-scsp-dsp-browser.mjs",
-    "check:wonderswan-timed": "node examples/wonderswan/registers/01-timed-operations/node/main.mjs && node scripts/check-timed-browser.mjs --case=wonderswanTimed"
+    "check:wonderswan-timed": "node examples/wonderswan/registers/01-timed-operations/node/main.mjs && node scripts/check-timed-browser.mjs --case=wonderswanTimed",
+    "check:dmg-sid:node": "node examples/gameboy/registers/01-timed-operations/node/main.mjs && node examples/c64/sid/04-timed-motion/node/main.mjs",
+    "check:dmg-sid:browser": "node scripts/check-dmg-sid-timed-browser.mjs",
+    "check:dmg-sid-timed": "npm run check:dmg-sid:node && npm run check:dmg-sid:browser"
   },
   "dependencies": {
-    "tetorica-fm2612": "0.2.45"
+    "tetorica-fm2612": "0.2.46"
   },
   "devDependencies": {
     "playwright": "1.63.0"

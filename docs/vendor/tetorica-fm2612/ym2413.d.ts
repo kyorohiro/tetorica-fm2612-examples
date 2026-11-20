@@ -44,6 +44,19 @@ export declare class Ym2413 {
         moduleFactory: import('./soundchip.js').WasmModuleFactory;
         moduleOptions?: import('./soundchip.js').WasmModuleOptions;
     }): Promise<Ym2413>;
+    supportsState(): boolean;
+    /** @returns {Readonly<{byteLength:number}>} Opaque snapshot owned by this instance. */
+    saveState(): Readonly<{
+        byteLength: number;
+    }>;
+    /** @param {Readonly<{byteLength:number}>} state Snapshot returned by this instance. */
+    validateState(state: Readonly<{
+        byteLength: number;
+    }>): void;
+    /** @param {Readonly<{byteLength:number}>} state Snapshot returned by this instance. */
+    loadState(state: Readonly<{
+        byteLength: number;
+    }>): void;
     /**
      * Release native chip state and allocated WASM buffers. Do not use the chip afterward.
      * @returns {void}

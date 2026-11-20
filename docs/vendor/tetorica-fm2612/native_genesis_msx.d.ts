@@ -1,5 +1,5 @@
 export declare function createNativeGenesisMsx(synth: any): {
-    ym2413: {
+    ym2413: Omit<{
         client: any;
         initialize(): Promise<void>;
         mix(volume?: number, pan?: number): Promise<void>;
@@ -12,6 +12,8 @@ export declare function createNativeGenesisMsx(synth: any): {
         stopped: () => void;
         adoptStopped(data: any): void;
         reset(): void;
+    }, "client"> & {
+        client: ReturnType<typeof import('./playground_ym2413.js').createYm2413Client>;
     };
     ay8910: {
         client: any;

@@ -1,34 +1,9 @@
 export declare const EXTRA_YM2413_CLOCK_HELD_ERROR = "Release the manually held additional YM2413 voices before changing the clock";
-export declare function createNativeGenesisYm2413Endpoint(synth: any): {
-    client: any;
-    dispatch: (message: any, timing: {} | undefined, scope: any) => Promise<any>;
-    read: (args?: {}) => Promise<any>;
-    invoke: (method: any, args?: any[], options?: {}) => Promise<any>;
-    loadSample?: ((source: any, options?: {}) => Promise<{
-        start: number;
-        end: number;
-        frames: number;
-        paddedFrames: number;
-        deltaN: number;
-        sampleRate: number;
-        duration: number;
-        name: string;
-        source: string;
-        preview: {
-            start: number;
-            end: number;
-            frames: number;
-            name: string;
-            source: string;
-            waveform: number[];
-        } | null;
-        clock: any;
-    }>) | undefined;
-    cancelOwner(performance: any, owner: any): void;
-    cancelPerformance(performance: any): void;
-    initialize(): Promise<void>;
-    mix(volume?: number, pan?: number): Promise<void>;
-    reset(): void;
+/** @param {any} synth
+ * @returns {Omit<ReturnType<typeof import('./native_genesis_extra_register_voice.js').createNativeExtraRegisterVoice>,'client'> & {client:ReturnType<typeof import('./playground_ym2413.js').createYm2413Client>}}
+ */
+export declare function createNativeGenesisYm2413Endpoint(synth: any): Omit<ReturnType<typeof import('./native_genesis_extra_register_voice.js').createNativeExtraRegisterVoice>, 'client'> & {
+    client: ReturnType<typeof import('./playground_ym2413.js').createYm2413Client>;
 };
 export declare function createNativeGenesisExtraYm2413(synth: any, options?: {}): Promise<{
     native: boolean;

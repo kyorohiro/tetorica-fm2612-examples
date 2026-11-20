@@ -1,17 +1,10 @@
+/** @param {any} context
+ * @param {{stereoEnabled?:boolean,acknowledgeClock?:boolean}} [options]
+ * @returns {Omit<ReturnType<typeof import('./native_genesis_voice_endpoint.js').createNativeVoiceEndpoint>,'client'> & {client:ReturnType<typeof import('./playground_segapsg.js').createSegaPsgClient>}}
+ */
 export declare function createNativeGenesisSegaPsg(context: any, { stereoEnabled, acknowledgeClock }?: {
-    acknowledgeClock?: boolean | undefined;
-    stereoEnabled?: boolean | undefined;
-}): {
-    client: any;
-    initialize(): Promise<void>;
-    mix(volume?: number, pan?: number): Promise<void>;
-    dispatch: (message: any, timing?: {}) => Promise<{
-        id: any;
-        value?: boolean | undefined;
-    } | undefined>;
-    read: (args?: {}) => Promise<any>;
-    invoke: (method: any, args?: any[], options?: {}) => Promise<any>;
-    stopped: () => void;
-    adoptStopped(data: any): void;
-    reset(): void;
+    stereoEnabled?: boolean;
+    acknowledgeClock?: boolean;
+}): Omit<ReturnType<typeof import('./native_genesis_voice_endpoint.js').createNativeVoiceEndpoint>, 'client'> & {
+    client: ReturnType<typeof import('./playground_segapsg.js').createSegaPsgClient>;
 };

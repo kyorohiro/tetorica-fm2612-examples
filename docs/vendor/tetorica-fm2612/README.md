@@ -42,6 +42,7 @@ entry points, rather than every internal Worker or Worklet module.
 | YM2413 OPLL | `tetorica-fm2612/ym2413synth.js` | `YM2413Synth`, `YM2413DirectTransport`, `YM2413_INSTRUMENTS`, `YM2413_USER_PRESETS` |
 | AY-3-8910 PSG | `tetorica-fm2612/ay8910synth.js` | `AY8910Synth`, `AY8910DirectTransport`, `AY8910WorkletTransport` |
 | Game Boy pulse, wave and noise | `tetorica-fm2612/gameboysynth.js` | `GameboySynth`, `GameboyDirectTransport` |
+| Game Boy recorded register operations | `tetorica-fm2612/gameboy_operations.js`, `tetorica-fm2612/playground_gameboy.js` | Pure `buildGameboyOperations` / `compileGameboyOperations`; shared Web Audio client's `build` / `schedule` / `compile` / `captureState`. See [usage and limits](#game-boy-and-sid-timed-operations-0246). |
 | NES APU and FDS | `tetorica-fm2612/nesapusynth.js` | `NesApuSynth`, `NesApuDirectTransport`, `NesApuWorkletTransport` |
 | Sega PSG tone and noise | `tetorica-fm2612/segapsgsynth.js` | `SegaPSGSynth`, `SegaPSGDirectTransport`, `psgPeriodFromFrequency`, `psgPeriodFromNote` |
 | PC Engine wavetable, noise and DDA | `tetorica-fm2612/huc6280synth.js` | `Huc6280Synth`, `Huc6280DirectTransport` |
@@ -63,6 +64,7 @@ entry points, rather than every internal Worker or Worklet module.
 | SNES S-DSP / SPC700 | `tetorica-fm2612/snessynth.js`, `tetorica-fm2612/spc.js` | CPU-free BRR instrument / SPC file PCM core |
 | C64 SID 6581 / PAL 8580 Preview PCM cores | `tetorica-fm2612`, `tetorica-fm2612/sid.js`, `tetorica-fm2612/sid8580.js` | `createSoundChip('sid')`, `SidCore`, `Sid8580Core`: register access and owned mono PCM; factory Worklet output |
 | C64 SID voice and shared filter controls | `tetorica-fm2612/sidsynth.js` | `SidSynth`, `SidDirectTransport`, combined waveform helpers; either core model |
+| SID recorded register operations | `tetorica-fm2612/sid_operations.js`, `tetorica-fm2612/playground_sid.js` | Pure `buildSidOperations` / `compileSidOperations`; shared Web Audio client's timed methods for 6581/8580. See [usage and limits](#game-boy-and-sid-timed-operations-0246). |
 | Pure SID waveform flags | `tetorica-fm2612/sid_waveforms.js` | `SID_WAVEFORMS`, `sidWaveformBits`, `sidWaveformFromBits`; no WASM or audio imports |
 | Experimental Saturn SCSP, low level | `tetorica-fm2612/scsp.js` | `Scsp`: register/RAM access and 44.1 kHz stereo PCM |
 | SCSP tuned PCM instruments / host rate | `tetorica-fm2612/scspsynth.js`, `tetorica-fm2612/pcm_44100_resampler.js` | `ScspSynth`, `createScspInitSample`, `Pcm44100Resampler` |
@@ -1280,6 +1282,64 @@ Pure Node/offline inspection can import `buildWonderSwanOperations`,
 processor modules and declarations are packaged alongside it. Playground Files
 contains `examples/wonderswan/ws-timed-registers.js`.
 
+### Sega PSG and YM2413 timed operations
+
+The Web Audio Sega PSG and YM2413 clients expose `build`, `compile`,
+`captureState`, `schedule` and `clearSchedule` in standalone hosts and Main/Worker
+Playground clients. Existing immediate methods keep their behavior. For a
+standalone SMS-style host, start audio inside a user gesture:
+
+```js
+import {createTetoricaSynth} from 'tetorica-fm2612/tetorica_synth.js';
+const synth = createTetoricaSynth({chip:'segapsg', ym2413:true});
+await synth.start();
+const opll = synth.opll;
+opll.initialize();
+opll.setVoice(0, {instrument:1, attenuation:5});
+const operations = opll.build(b => {
+  b.atSample(0).noteOn(0, 'E3');
+  b.atSeconds(0.1).setAttenuation(0, 8);
+  b.atSeconds(0.2).noteOff(0);
+});
+console.table(await opll.compile(operations));
+await opll.schedule(operations, {name:'bell', repeatSeconds:1});
+// await opll.clearSchedule('bell');
+// await synth.close();
+```
+
+`build` records plain operations once without reading or changing the chip.
+Offsets are absolute seconds or reference samples (44100 Hz by default),
+independent of the output device. Partial register edits resolve against applied
+state when the Worklet executes them. Same-value Noise reset, Key On/Off and
+other meaningful writes retain their order. PSG compilation returns actual
+command bytes with logical register/channel fields; Game Gear stereo writes use
+a separate `stereo` field. Mono Master System configurations reject stereo edits.
+YM2413 compilation returns register/value pairs and partial-update intent masks.
+The user patch is shared by instrument-0 voices; modulator TL belongs to OP1,
+while carrier level uses each channel's attenuation. Rhythm retains its shared
+hardware mode and CH7–CH9 arrangement.
+
+`compile` forecasts writes without changing the live chip. Its default
+`initialState:'current'` captures applied AudioWorklet state asynchronously;
+`'reset'` uses a local reset baseline. A detached `captureState()` snapshot can be
+reused for comparisons on the same instance/configuration. `'client'` performs
+no state request: YM2413 uses its complete local register shadow, which can lag
+other writers; PSG explicitly rejects this baseline because its local shadow is
+incomplete. Native scheduling and capture reject explicitly; local build/reset
+compilation and YM2413 client compilation remain available. There is no timer
+fallback. Prepared VGM timelines and timed reservations are separate transports.
+Named replacement, cancellation and Run/Apply/Stop ownership follow the common
+performance queue.
+
+For Node/offline inspection, import `buildPsgOperations`,
+`compilePsgOperations`, `createPsgOperationResetState` from
+`tetorica-fm2612/segapsg_operations.js`, or `buildOpllOperations`,
+`compileOpllOperations`, `createOpllOperationResetState` from
+`tetorica-fm2612/ym2413_operations.js`. No AudioContext or output device is needed.
+The [timed-register examples](examples/timed-registers/README.md) include an
+installed-package Node example, a browser host with write traces, and a
+beat-based Playground loop.
+
 ### Native configurations and host integration (0.2.21)
 
 The shared runtime supports Game Boy, NES + FDS, SNES, X68000
@@ -1373,6 +1433,59 @@ default sample rate. Set `{outputSampleRate: 48000}` to request a specific outpu
 frame rate; an explicit legacy `chipSampleRate` request remains supported. An
 injected AudioContext keeps its own rate. Chip clocks and note tuning are
 independent of the output rate.
+
+### Game Boy and SID timed operations (0.2.46)
+
+The shared Web Audio clients now expose `build()`, `compile()`, `captureState()`,
+`schedule()` and `clearSchedule()` for Game Boy Pulse / Wave / Noise and SID
+6581 / 8580. Use them from Playground Code or `createTetoricaSynth()`'s existing
+musical clients. These are additional client methods, not new methods on the
+package-root factory's raw core or generic Worklet endpoint.
+
+For example, in SID Playground / Synth Code:
+
+```js
+const sid = await useSoundChip('sid');
+const phrase = sid.build(b => {
+  b.atSample(0).setVoice(0, {waveform:'saw', attack:2, release:5});
+  b.noteOn(0, 'E3');
+  b.atSeconds(0.125).noteOff(0);
+  b.atSeconds(0.25).noteOn(0, 'G3');
+  b.atSeconds(0.375).noteOff(0);
+});
+const snapshot = await sid.captureState();
+console.table(await sid.compile(phrase, {initialState:snapshot}));
+await sid.schedule(phrase, {name:'phrase', repeatSeconds:0.5});
+// await sid.clearSchedule('phrase');
+```
+
+Use `gb.pulse`, `gb.wave` and `gb.noise` on `useSoundChip('gameboy')` with the
+same recorder model. Wave RAM uploads retain the hardware DAC-stop behavior;
+explicitly retrigger CH3 after uploading. SID voice patches preserve packed
+Gate / Sync / Ring / TEST and ADSR fields, and its filter remains shared.
+High-level methods keep their existing initialization requirements. A SID
+`reset` compilation uses uninitialized hardware state, so raw writes can be
+inspected without inserting initialization writes into the trace.
+
+Build callbacks run once without live state capture or writes. Absolute sample
+offsets default to a 44100 Hz reference, independent of device rate and BPM.
+The Worklet resolves partial updates at execution time and preserves repeated
+Gate/trigger writes. Named repeats remain compact. Invalid replacements reject
+atomically; Run / Apply / Stop and live-loop ownership retain their behavior.
+Older scheduled Off/cancel cannot silence a newer manually owned Gate.
+
+Compilation defaults to an asynchronous coherent renderer capture while audio
+continues. `client`, `reset` and a previously captured snapshot compile without
+a capture request. The client shadow can lag scheduled or other-writer edits;
+an incomplete shadow rejects explicitly. The SID Synth's borrowed client has
+no complete client shadow and rejects that mode. Snapshots are detached resolver
+state, not oscillator/envelope or full machine save states. They must match the
+chip instance/configuration, and compilation is a prediction rather than a
+log of interleaved playback. Native execution/capture is unsupported; no timer
+fallback is used. Existing immediate APIs are retained.
+
+Readable standalone browser, offline Node and Code examples are included in
+[examples/timed-registers/README.md](examples/timed-registers/README.md).
 
 ### Inspect and schedule YM2612 register operations
 
@@ -1878,6 +1991,19 @@ MIT adaptation, BSD host code, readable rebuild sources and Rust toolchain
 notices. They are packaged alongside the unchanged fixed SDK snapshot.
 
 ## Release notes
+
+`0.2.46` publishes Game Boy and SID timed register-operation authoring together:
+state-free recording, isolated compilation, reusable coherent snapshots and
+sample-clock named reservations. Both SID models and Game Boy Pulse / Wave /
+Noise share the Main/Worker scheduling and ownership contract, with packed-field
+updates and meaningful repeated writes preserved. The package includes readable
+browser/Node/Code examples, public declarations and editor source navigation.
+Native timed execution/capture remains unsupported. This release also includes
+the intervening Sega PSG / YM2413 timed APIs and OPLL checkpoint/state support,
+including its updated WASM and matching source/build receipts. DMG/SID core/WASM
+bytes and measured mixer gains are unchanged; default-path PCM parity is recorded
+separately for both ports. Synth Files/workspace improvements are application changes and do
+not imply SID song playback in the npm instrument API.
 
 `0.2.45` exposes WonderSwan hardware operation recording, compilation, reusable
 state snapshots and sample-clock scheduling through shared Playground / npm

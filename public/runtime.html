@@ -9,7 +9,7 @@
     <p>公開済み npm package のどの API を使うか、アプリ・ゲームへの組み込み方に合わせて選びます。</p>
     <pre><code>npm install tetorica-fm2612</code></pre>
   </header>
-  <section><h2>チップ別の基本例（npm 0.2.44）</h2>
+  <section><h2>チップ別の基本例（npm 0.2.46）</h2>
 <pre><code>Web: createSoundChip(name, {execution: 'worklet'})
      → WorkletTransport → Synth（Main）→ WASM（Worklet）
 Node: createSoundChip(name)
@@ -19,18 +19,19 @@ Node: createSoundChip(name)
 MegaSynth はゲームへの埋め込み用の統合 API として別枠に残しています。</p>
 <p><a href="./examples/genesis/fm/01-single-note/web/index.html">FM 発音</a> ·
 <a href="./examples/transport/direct/01-single-note/web/index.html">DirectTransport の PCM / WAV</a></p></section>
-  <section class="sample-panel"><h2>YM2149 / YM2612の時刻付き操作</h2>
+  <section class="sample-panel"><h2>時刻付き操作とレジスタ比較</h2>
     <p><code>build()</code>は操作を記録し、<code>compile()</code>は予測レジスタ列を返し、
       <code>schedule()</code>はAudioWorkletのサンプル時計で実行します。
-      専用の<code>createAy8910Audio()</code>／<code>createOpnAudio()</code>と
-      対応クライアントを使うWeb例です。Nativeの予約実行は対象外です。</p>
+      チップ別のAudio helperと対応クライアントを使うWeb例です。Nativeの予約実行は対象外です。</p>
     <p>予約はソフトウェアの機能です。Envelope・発振器・Operatorはチップの処理です。
-      <code>beat()</code>で待つメロディと、秒／sampleで指定する音色変化を独立させています。
+      メロディや音色変化を別周期で組み合わせます。<code>beat()</code>の通常待機と、予約内の秒／基準sample指定は区別します。
       コンパイル結果は実演奏中の書き込み履歴とは区別します。</p>
     <p><a href="./examples/atari-st/ym2149/01-sync-buzzer/web/index.html">R13 Sync-buzzer</a> ·
       <a href="./examples/atari-st/ym2149/02-volume-modulation/web/index.html">R8音量変調</a> ·
       <a href="./examples/genesis/fm/07-timed-operators/web/index.html">TL／MULTの別周期変調</a> ·
-      <a href="./examples/chip-raw/02-compile-compare/web/index.html">基準状態とsnapshotの比較</a></p>
+      <a href="./examples/chip-raw/02-compile-compare/web/index.html">基準状態とsnapshotの比較</a> ·
+      <a href="./examples/gameboy/registers/01-timed-operations/web/index.html">DMGの3系統予約</a> ·
+      <a href="./examples/c64/sid/04-timed-motion/web/index.html">SIDのメロディ／波形／Filter</a></p>
   </section>
   <section class="sample-panel"><h2>Mixer の音量プリセット</h2>
     <p><code>new SoundChipMixer(SOUNDCHIP_MIXER_PRESETS.calibrated)</code> を選ぶと、チップごとの測定と聴感バランス方針による音量倍率を使えます。

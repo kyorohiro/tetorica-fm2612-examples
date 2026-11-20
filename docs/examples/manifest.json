@@ -104,6 +104,15 @@
     ]
   },
   {
+    "id": "c64/sid/04-timed-motion",
+    "title": "SID：メロディ・波形・Filterを別周期で予約",
+    "description": "6581／8580で速いメロディとPulse width・共有Filterを独立した周期で動かし、同じsnapshotからの書き込みを比較。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
     "id": "chip-raw/01-register-note",
     "title": "レジスタを直接書く",
     "description": "YM2612 の OP4・algorithm・pan・周波数・key on/off をレジスタで設定。"
@@ -366,6 +375,15 @@
     "title": "Game Boy noise の幅",
     "description": "noise チャンネルで 15-bit と 7-bit の違いを聴き比べる。",
     "nodeAudioOutput": true
+  },
+  {
+    "id": "gameboy/registers/01-timed-operations",
+    "title": "DMG：Pulse・Wave・Noiseの予約とレジスタ比較",
+    "description": "3系統を別周期で予約し、Wave RAMのDAC停止・再トリガーと、同じ状態からのcompile比較を確認。",
+    "environments": [
+      "web",
+      "node"
+    ]
   },
   {
     "id": "nes/apu/01-tones",

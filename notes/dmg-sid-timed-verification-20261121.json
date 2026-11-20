@@ -1,0 +1,4272 @@
+{
+  "schemaVersion": 1,
+  "passed": true,
+  "packageVersion": "0.2.46",
+  "physicalOutputMuted": true,
+  "listeningPerformed": false,
+  "staticSiteOnly": true,
+  "node": {
+    "passed": true,
+    "count": 57,
+    "physicalAudioDeviceUsed": false,
+    "logSha256": "a17d33d352202a904c9379cdf7323f29cc98f8455aab570774db46e7122327d2",
+    "newComparisons": {
+      "dmg": {
+        "format": "tetorica-dmg-compile-comparison-v1",
+        "passed": true,
+        "writesA": [
+          {
+            "offsetSeconds": 0,
+            "register": 1,
+            "value": 95,
+            "operationIndex": 0,
+            "writeIndex": 0
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 21,
+            "value": 50,
+            "operationIndex": 1,
+            "writeIndex": 0
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 2,
+            "value": 144,
+            "operationIndex": 2,
+            "writeIndex": 0
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 3,
+            "value": 114,
+            "operationIndex": 3,
+            "writeIndex": 0
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 4,
+            "value": 6,
+            "operationIndex": 3,
+            "writeIndex": 1
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 0,
+            "value": 0,
+            "operationIndex": 4,
+            "writeIndex": 0
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 1,
+            "value": 95,
+            "operationIndex": 4,
+            "writeIndex": 1
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 2,
+            "value": 144,
+            "operationIndex": 4,
+            "writeIndex": 2
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 3,
+            "value": 114,
+            "operationIndex": 4,
+            "writeIndex": 3
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 4,
+            "value": 134,
+            "operationIndex": 4,
+            "writeIndex": 4
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 0,
+            "value": 0,
+            "operationIndex": 5,
+            "writeIndex": 0
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 1,
+            "value": 95,
+            "operationIndex": 5,
+            "writeIndex": 1
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 2,
+            "value": 144,
+            "operationIndex": 5,
+            "writeIndex": 2
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 3,
+            "value": 114,
+            "operationIndex": 5,
+            "writeIndex": 3
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 4,
+            "value": 134,
+            "operationIndex": 5,
+            "writeIndex": 4
+          },
+          {
+            "offsetSeconds": 0.1,
+            "register": 2,
+            "value": 0,
+            "operationIndex": 6,
+            "writeIndex": 0
+          },
+          {
+            "offsetSeconds": 0.2,
+            "register": 0,
+            "value": 0,
+            "operationIndex": 7,
+            "writeIndex": 0
+          },
+          {
+            "offsetSeconds": 0.2,
+            "register": 1,
+            "value": 95,
+            "operationIndex": 7,
+            "writeIndex": 1
+          },
+          {
+            "offsetSeconds": 0.2,
+            "register": 2,
+            "value": 144,
+            "operationIndex": 7,
+            "writeIndex": 2
+          },
+          {
+            "offsetSeconds": 0.2,
+            "register": 3,
+            "value": 114,
+            "operationIndex": 7,
+            "writeIndex": 3
+          },
+          {
+            "offsetSeconds": 0.2,
+            "register": 4,
+            "value": 134,
+            "operationIndex": 7,
+            "writeIndex": 4
+          }
+        ],
+        "writesB": [
+          {
+            "offsetSeconds": 0,
+            "register": 1,
+            "value": 223,
+            "operationIndex": 0,
+            "writeIndex": 0
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 21,
+            "value": 35,
+            "operationIndex": 1,
+            "writeIndex": 0
+          }
+        ],
+        "waveWrites": [
+          {
+            "offsetSeconds": 0,
+            "register": 10,
+            "value": 0,
+            "operationIndex": 0,
+            "writeIndex": 0
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 32,
+            "value": 1,
+            "operationIndex": 0,
+            "writeIndex": 1
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 33,
+            "value": 35,
+            "operationIndex": 0,
+            "writeIndex": 2
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 34,
+            "value": 69,
+            "operationIndex": 0,
+            "writeIndex": 3
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 35,
+            "value": 103,
+            "operationIndex": 0,
+            "writeIndex": 4
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 36,
+            "value": 137,
+            "operationIndex": 0,
+            "writeIndex": 5
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 37,
+            "value": 171,
+            "operationIndex": 0,
+            "writeIndex": 6
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 38,
+            "value": 205,
+            "operationIndex": 0,
+            "writeIndex": 7
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 39,
+            "value": 239,
+            "operationIndex": 0,
+            "writeIndex": 8
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 40,
+            "value": 254,
+            "operationIndex": 0,
+            "writeIndex": 9
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 41,
+            "value": 220,
+            "operationIndex": 0,
+            "writeIndex": 10
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 42,
+            "value": 186,
+            "operationIndex": 0,
+            "writeIndex": 11
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 43,
+            "value": 152,
+            "operationIndex": 0,
+            "writeIndex": 12
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 44,
+            "value": 118,
+            "operationIndex": 0,
+            "writeIndex": 13
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 45,
+            "value": 84,
+            "operationIndex": 0,
+            "writeIndex": 14
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 46,
+            "value": 50,
+            "operationIndex": 0,
+            "writeIndex": 15
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 47,
+            "value": 16,
+            "operationIndex": 0,
+            "writeIndex": 16
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 12,
+            "value": 96,
+            "operationIndex": 1,
+            "writeIndex": 0
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 13,
+            "value": 11,
+            "operationIndex": 2,
+            "writeIndex": 0
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 14,
+            "value": 6,
+            "operationIndex": 2,
+            "writeIndex": 1
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 10,
+            "value": 128,
+            "operationIndex": 2,
+            "writeIndex": 2
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 12,
+            "value": 96,
+            "operationIndex": 2,
+            "writeIndex": 3
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 13,
+            "value": 11,
+            "operationIndex": 2,
+            "writeIndex": 4
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 14,
+            "value": 134,
+            "operationIndex": 2,
+            "writeIndex": 5
+          },
+          {
+            "offsetSeconds": 0.6,
+            "register": 10,
+            "value": 0,
+            "operationIndex": 3,
+            "writeIndex": 0
+          }
+        ],
+        "noiseWrites": [
+          {
+            "offsetSeconds": 0,
+            "register": 17,
+            "value": 97,
+            "operationIndex": 0,
+            "writeIndex": 0
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 18,
+            "value": 67,
+            "operationIndex": 1,
+            "writeIndex": 0
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 16,
+            "value": 0,
+            "operationIndex": 2,
+            "writeIndex": 0
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 17,
+            "value": 97,
+            "operationIndex": 2,
+            "writeIndex": 1
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 18,
+            "value": 67,
+            "operationIndex": 2,
+            "writeIndex": 2
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 19,
+            "value": 128,
+            "operationIndex": 2,
+            "writeIndex": 3
+          },
+          {
+            "offsetSeconds": 0.0625,
+            "register": 18,
+            "value": 43,
+            "operationIndex": 3,
+            "writeIndex": 0
+          },
+          {
+            "offsetSeconds": 0.125,
+            "register": 17,
+            "value": 0,
+            "operationIndex": 4,
+            "writeIndex": 0
+          }
+        ],
+        "resetWrites": [
+          {
+            "offsetSeconds": 0,
+            "register": 22,
+            "value": 128,
+            "operationIndex": 0,
+            "writeIndex": 0
+          },
+          {
+            "offsetSeconds": 0,
+            "register": 20,
+            "value": 119,
+            "operationIndex": 1,
+            "writeIndex": 0
+          }
+        ],
+        "checks": {
+          "buildOnce": true,
+          "baselineUnchanged": true,
+          "liveTransportUnchanged": true,
+          "reusedSnapshot": true,
+          "packedFieldsPreserved": true,
+          "repeatedTriggerKept": true,
+          "keyOffRetainsVoice": true,
+          "waveUploadBeforeTrigger": true
+        }
+      },
+      "sid": {
+        "format": "tetorica-sid-timed-motion-v1",
+        "passed": true,
+        "reports": [
+          {
+            "model": "6581",
+            "writesA": [
+              {
+                "offsetSeconds": 0,
+                "register": 4,
+                "value": 39,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0,
+                "register": 4,
+                "value": 39,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "register": 2,
+                "value": 0,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "register": 3,
+                "value": 162,
+                "operationIndex": 2,
+                "writeIndex": 1
+              },
+              {
+                "offsetSeconds": 0.1,
+                "register": 4,
+                "value": 71,
+                "operationIndex": 2,
+                "writeIndex": 2
+              },
+              {
+                "offsetSeconds": 0.1,
+                "register": 21,
+                "value": 4,
+                "operationIndex": 3,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "register": 22,
+                "value": 87,
+                "operationIndex": 3,
+                "writeIndex": 1
+              },
+              {
+                "offsetSeconds": 0.2,
+                "register": 4,
+                "value": 70,
+                "operationIndex": 4,
+                "writeIndex": 0
+              }
+            ],
+            "writesB": [
+              {
+                "offsetSeconds": 0,
+                "register": 2,
+                "value": 0,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0,
+                "register": 3,
+                "value": 172,
+                "operationIndex": 0,
+                "writeIndex": 1
+              },
+              {
+                "offsetSeconds": 0,
+                "register": 4,
+                "value": 23,
+                "operationIndex": 0,
+                "writeIndex": 2
+              }
+            ],
+            "checks": {
+              "snapshotUnchanged": true,
+              "repeatable": true,
+              "packedBitsPreserved": true,
+              "repeatedGateKept": true,
+              "sameTimeOrder": true,
+              "absoluteOffsets": true
+            }
+          },
+          {
+            "model": "8580",
+            "writesA": [
+              {
+                "offsetSeconds": 0,
+                "register": 4,
+                "value": 39,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0,
+                "register": 4,
+                "value": 39,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "register": 2,
+                "value": 0,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "register": 3,
+                "value": 162,
+                "operationIndex": 2,
+                "writeIndex": 1
+              },
+              {
+                "offsetSeconds": 0.1,
+                "register": 4,
+                "value": 71,
+                "operationIndex": 2,
+                "writeIndex": 2
+              },
+              {
+                "offsetSeconds": 0.1,
+                "register": 21,
+                "value": 4,
+                "operationIndex": 3,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "register": 22,
+                "value": 87,
+                "operationIndex": 3,
+                "writeIndex": 1
+              },
+              {
+                "offsetSeconds": 0.2,
+                "register": 4,
+                "value": 70,
+                "operationIndex": 4,
+                "writeIndex": 0
+              }
+            ],
+            "writesB": [
+              {
+                "offsetSeconds": 0,
+                "register": 2,
+                "value": 0,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0,
+                "register": 3,
+                "value": 172,
+                "operationIndex": 0,
+                "writeIndex": 1
+              },
+              {
+                "offsetSeconds": 0,
+                "register": 4,
+                "value": 23,
+                "operationIndex": 0,
+                "writeIndex": 2
+              }
+            ],
+            "checks": {
+              "snapshotUnchanged": true,
+              "repeatable": true,
+              "packedBitsPreserved": true,
+              "repeatedGateKept": true,
+              "sameTimeOrder": true,
+              "absoluteOffsets": true
+            }
+          }
+        ]
+      }
+    }
+  },
+  "distribution": {
+    "passed": true,
+    "version": "0.2.46",
+    "siteFiles": 1713,
+    "siteBytes": 13396339,
+    "packageFiles": 1378,
+    "packageBytes": 12231444,
+    "catalogEntries": 86,
+    "distDocsIdentical": true,
+    "installedPackageBytesUnchanged": true
+  },
+  "newBrowserCases": [
+    {
+      "site": "dist",
+      "engine": "chromium",
+      "lesson": "gameboy/registers/01-timed-operations",
+      "sampleRate": 48000,
+      "runs": [
+        {
+          "model": "dmg",
+          "sampleFrames": [
+            3072,
+            10240,
+            17152,
+            24064,
+            30976,
+            37632,
+            44544,
+            51712,
+            58624,
+            65536,
+            72448,
+            79360,
+            87552
+          ],
+          "periods": [
+            {
+              "name": "dmg-pulse",
+              "repeatSeconds": 0.5
+            },
+            {
+              "name": "dmg-wave",
+              "repeatSeconds": 0.75
+            },
+            {
+              "name": "dmg-noise",
+              "repeatSeconds": 0.25
+            }
+          ],
+          "observedRegisterChanges": true
+        }
+      ],
+      "desktopScreenshot": "browser-dist-chromium-dmg-desktop.png",
+      "passed": true,
+      "editedSource": true,
+      "syntaxFailureBeforeAudio": true,
+      "runtimeFailureCleaned": true,
+      "pendingInitializationCancelled": true,
+      "restartAfterCancel": true,
+      "narrowLayout": true,
+      "screenshot": "browser-dist-chromium-dmg-390.png",
+      "audit": {
+        "contexts": [
+          {
+            "label": "dmg/dmg/initial",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          }
+        ],
+        "nodes": [
+          {
+            "name": "tetorica-gameboy",
+            "label": "dmg/dmg/initial"
+          },
+          {
+            "name": "tetorica-gameboy",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-gameboy",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-gameboy",
+            "label": "edited"
+          }
+        ],
+        "meters": [
+          {
+            "label": "dmg/dmg/initial",
+            "peak": 0.09375,
+            "acRms": 0.03520798870486071,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0.09375,
+            "acRms": 0.03572093064829139,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0.09375,
+            "acRms": 0.03411301152746802,
+            "finite": true,
+            "muted": true
+          }
+        ],
+        "rejections": []
+      }
+    },
+    {
+      "site": "dist",
+      "engine": "chromium",
+      "lesson": "c64/sid/04-timed-motion",
+      "sampleRate": 48000,
+      "runs": [
+        {
+          "model": "6581",
+          "sampleFrames": [
+            5376,
+            12288,
+            19200,
+            25856,
+            32768,
+            39680,
+            46592,
+            53248,
+            60160,
+            67072,
+            73984,
+            80896,
+            88064
+          ],
+          "periods": [
+            {
+              "name": "melody",
+              "repeatSeconds": 0.6
+            },
+            {
+              "name": "pulse-motion",
+              "repeatSeconds": 2
+            },
+            {
+              "name": "filter-motion",
+              "repeatSeconds": 3
+            }
+          ],
+          "observedRegisterChanges": true
+        },
+        {
+          "model": "8580",
+          "sampleFrames": [
+            6656,
+            13568,
+            20736,
+            27648,
+            34560,
+            41472,
+            48128,
+            55040,
+            61952,
+            68864,
+            75776,
+            82688,
+            89600
+          ],
+          "periods": [
+            {
+              "name": "melody",
+              "repeatSeconds": 0.6
+            },
+            {
+              "name": "pulse-motion",
+              "repeatSeconds": 2
+            },
+            {
+              "name": "filter-motion",
+              "repeatSeconds": 3
+            }
+          ],
+          "observedRegisterChanges": true
+        }
+      ],
+      "desktopScreenshot": "browser-dist-chromium-sid-desktop.png",
+      "passed": true,
+      "editedSource": true,
+      "syntaxFailureBeforeAudio": true,
+      "runtimeFailureCleaned": true,
+      "pendingInitializationCancelled": true,
+      "restartAfterCancel": true,
+      "narrowLayout": true,
+      "screenshot": "browser-dist-chromium-sid-390.png",
+      "audit": {
+        "contexts": [
+          {
+            "label": "sid/6581/initial",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "sid/8580/initial",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          }
+        ],
+        "nodes": [
+          {
+            "name": "tetorica-sid",
+            "model": "6581",
+            "label": "sid/6581/initial"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "sid/8580/initial"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "edited"
+          }
+        ],
+        "meters": [
+          {
+            "label": "sid/6581/initial",
+            "peak": 0.05229150876402855,
+            "acRms": 0.018720413522691732,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "sid/8580/initial",
+            "peak": 0.057572249323129654,
+            "acRms": 0.025278683016164788,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0.05735136568546295,
+            "acRms": 0.0253746513187812,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          }
+        ],
+        "rejections": []
+      }
+    },
+    {
+      "site": "dist",
+      "engine": "webkit",
+      "lesson": "gameboy/registers/01-timed-operations",
+      "sampleRate": 48000,
+      "runs": [
+        {
+          "model": "dmg",
+          "sampleFrames": [
+            4736,
+            11520,
+            18688,
+            25600,
+            32512,
+            39680,
+            46720,
+            53504,
+            60416,
+            67456,
+            74496,
+            81408,
+            88320
+          ],
+          "periods": [
+            {
+              "name": "dmg-pulse",
+              "repeatSeconds": 0.5
+            },
+            {
+              "name": "dmg-wave",
+              "repeatSeconds": 0.75
+            },
+            {
+              "name": "dmg-noise",
+              "repeatSeconds": 0.25
+            }
+          ],
+          "observedRegisterChanges": true
+        }
+      ],
+      "desktopScreenshot": "browser-dist-webkit-dmg-desktop.png",
+      "passed": true,
+      "editedSource": true,
+      "syntaxFailureBeforeAudio": true,
+      "runtimeFailureCleaned": true,
+      "pendingInitializationCancelled": true,
+      "restartAfterCancel": true,
+      "narrowLayout": true,
+      "screenshot": "browser-dist-webkit-dmg-390.png",
+      "audit": {
+        "contexts": [
+          {
+            "label": "dmg/dmg/initial",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          }
+        ],
+        "nodes": [
+          {
+            "name": "tetorica-gameboy",
+            "label": "dmg/dmg/initial"
+          },
+          {
+            "name": "tetorica-gameboy",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-gameboy",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-gameboy",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-gameboy",
+            "label": "edited"
+          }
+        ],
+        "meters": [
+          {
+            "label": "dmg/dmg/initial",
+            "peak": 0.09375,
+            "acRms": 0.03465822857377641,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0.09375,
+            "acRms": 0.03478698510748583,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0.09375,
+            "acRms": 0.027535420836807042,
+            "finite": true,
+            "muted": true
+          }
+        ],
+        "rejections": []
+      }
+    },
+    {
+      "site": "dist",
+      "engine": "webkit",
+      "lesson": "c64/sid/04-timed-motion",
+      "sampleRate": 48000,
+      "runs": [
+        {
+          "model": "6581",
+          "sampleFrames": [
+            4992,
+            11776,
+            18688,
+            25472,
+            32384,
+            39168,
+            46080,
+            52992,
+            60032,
+            66944,
+            73984,
+            81024,
+            87936
+          ],
+          "periods": [
+            {
+              "name": "melody",
+              "repeatSeconds": 0.6
+            },
+            {
+              "name": "pulse-motion",
+              "repeatSeconds": 2
+            },
+            {
+              "name": "filter-motion",
+              "repeatSeconds": 3
+            }
+          ],
+          "observedRegisterChanges": true
+        },
+        {
+          "model": "8580",
+          "sampleFrames": [
+            5760,
+            12544,
+            19456,
+            26240,
+            33152,
+            40320,
+            47232,
+            54144,
+            61184,
+            68224,
+            75136,
+            82048,
+            88960
+          ],
+          "periods": [
+            {
+              "name": "melody",
+              "repeatSeconds": 0.6
+            },
+            {
+              "name": "pulse-motion",
+              "repeatSeconds": 2
+            },
+            {
+              "name": "filter-motion",
+              "repeatSeconds": 3
+            }
+          ],
+          "observedRegisterChanges": true
+        }
+      ],
+      "desktopScreenshot": "browser-dist-webkit-sid-desktop.png",
+      "passed": true,
+      "editedSource": true,
+      "syntaxFailureBeforeAudio": true,
+      "runtimeFailureCleaned": true,
+      "pendingInitializationCancelled": true,
+      "restartAfterCancel": true,
+      "narrowLayout": true,
+      "screenshot": "browser-dist-webkit-sid-390.png",
+      "audit": {
+        "contexts": [
+          {
+            "label": "sid/6581/initial",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "sid/8580/initial",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          }
+        ],
+        "nodes": [
+          {
+            "name": "tetorica-sid",
+            "model": "6581",
+            "label": "sid/6581/initial"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "sid/8580/initial"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "edited"
+          }
+        ],
+        "meters": [
+          {
+            "label": "sid/6581/initial",
+            "peak": 0.0522749163210392,
+            "acRms": 0.018692708444569626,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "sid/8580/initial",
+            "peak": 0.057325560599565506,
+            "acRms": 0.0252957921984405,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0.057473015040159225,
+            "acRms": 0.025348392852991432,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          }
+        ],
+        "rejections": []
+      }
+    },
+    {
+      "site": "docs",
+      "engine": "chromium",
+      "lesson": "gameboy/registers/01-timed-operations",
+      "sampleRate": 48000,
+      "runs": [
+        {
+          "model": "dmg",
+          "sampleFrames": [
+            3072,
+            9984,
+            16640,
+            23552,
+            30464,
+            37632,
+            44544,
+            51456,
+            58368,
+            65536,
+            72448,
+            79616,
+            86528
+          ],
+          "periods": [
+            {
+              "name": "dmg-pulse",
+              "repeatSeconds": 0.5
+            },
+            {
+              "name": "dmg-wave",
+              "repeatSeconds": 0.75
+            },
+            {
+              "name": "dmg-noise",
+              "repeatSeconds": 0.25
+            }
+          ],
+          "observedRegisterChanges": true
+        }
+      ],
+      "desktopScreenshot": "browser-docs-chromium-dmg-desktop.png",
+      "passed": true,
+      "editedSource": true,
+      "syntaxFailureBeforeAudio": true,
+      "runtimeFailureCleaned": true,
+      "pendingInitializationCancelled": true,
+      "restartAfterCancel": true,
+      "narrowLayout": true,
+      "screenshot": "browser-docs-chromium-dmg-390.png",
+      "audit": {
+        "contexts": [
+          {
+            "label": "dmg/dmg/initial",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          }
+        ],
+        "nodes": [
+          {
+            "name": "tetorica-gameboy",
+            "label": "dmg/dmg/initial"
+          },
+          {
+            "name": "tetorica-gameboy",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-gameboy",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-gameboy",
+            "label": "edited"
+          }
+        ],
+        "meters": [
+          {
+            "label": "dmg/dmg/initial",
+            "peak": 0.09375,
+            "acRms": 0.03614106087100215,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0.09375,
+            "acRms": 0.03513821175204787,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0.09375,
+            "acRms": 0.03411301152746802,
+            "finite": true,
+            "muted": true
+          }
+        ],
+        "rejections": []
+      }
+    },
+    {
+      "site": "docs",
+      "engine": "chromium",
+      "lesson": "c64/sid/04-timed-motion",
+      "sampleRate": 48000,
+      "runs": [
+        {
+          "model": "6581",
+          "sampleFrames": [
+            5632,
+            12288,
+            19456,
+            26368,
+            33280,
+            40192,
+            47104,
+            53760,
+            60672,
+            67584,
+            74752,
+            81408,
+            88320
+          ],
+          "periods": [
+            {
+              "name": "melody",
+              "repeatSeconds": 0.6
+            },
+            {
+              "name": "pulse-motion",
+              "repeatSeconds": 2
+            },
+            {
+              "name": "filter-motion",
+              "repeatSeconds": 3
+            }
+          ],
+          "observedRegisterChanges": true
+        },
+        {
+          "model": "8580",
+          "sampleFrames": [
+            6656,
+            13312,
+            20224,
+            27136,
+            34048,
+            40960,
+            47872,
+            54528,
+            61440,
+            68352,
+            75264,
+            82176,
+            89088
+          ],
+          "periods": [
+            {
+              "name": "melody",
+              "repeatSeconds": 0.6
+            },
+            {
+              "name": "pulse-motion",
+              "repeatSeconds": 2
+            },
+            {
+              "name": "filter-motion",
+              "repeatSeconds": 3
+            }
+          ],
+          "observedRegisterChanges": true
+        }
+      ],
+      "desktopScreenshot": "browser-docs-chromium-sid-desktop.png",
+      "passed": true,
+      "editedSource": true,
+      "syntaxFailureBeforeAudio": true,
+      "runtimeFailureCleaned": true,
+      "pendingInitializationCancelled": true,
+      "restartAfterCancel": true,
+      "narrowLayout": true,
+      "screenshot": "browser-docs-chromium-sid-390.png",
+      "audit": {
+        "contexts": [
+          {
+            "label": "sid/6581/initial",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "sid/8580/initial",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          }
+        ],
+        "nodes": [
+          {
+            "name": "tetorica-sid",
+            "model": "6581",
+            "label": "sid/6581/initial"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "sid/8580/initial"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "edited"
+          }
+        ],
+        "meters": [
+          {
+            "label": "sid/6581/initial",
+            "peak": 0.05229150876402855,
+            "acRms": 0.018720413522691732,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "sid/8580/initial",
+            "peak": 0.057531241327524185,
+            "acRms": 0.025202720712086,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0.05735136568546295,
+            "acRms": 0.02519493011885663,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          }
+        ],
+        "rejections": []
+      }
+    },
+    {
+      "site": "docs",
+      "engine": "webkit",
+      "lesson": "gameboy/registers/01-timed-operations",
+      "sampleRate": 48000,
+      "runs": [
+        {
+          "model": "dmg",
+          "sampleFrames": [
+            4224,
+            11136,
+            17920,
+            24832,
+            31744,
+            38528,
+            45440,
+            52352,
+            59392,
+            66560,
+            73472,
+            80384,
+            87424
+          ],
+          "periods": [
+            {
+              "name": "dmg-pulse",
+              "repeatSeconds": 0.5
+            },
+            {
+              "name": "dmg-wave",
+              "repeatSeconds": 0.75
+            },
+            {
+              "name": "dmg-noise",
+              "repeatSeconds": 0.25
+            }
+          ],
+          "observedRegisterChanges": true
+        }
+      ],
+      "desktopScreenshot": "browser-docs-webkit-dmg-desktop.png",
+      "passed": true,
+      "editedSource": true,
+      "syntaxFailureBeforeAudio": true,
+      "runtimeFailureCleaned": true,
+      "pendingInitializationCancelled": true,
+      "restartAfterCancel": true,
+      "narrowLayout": true,
+      "screenshot": "browser-docs-webkit-dmg-390.png",
+      "audit": {
+        "contexts": [
+          {
+            "label": "dmg/dmg/initial",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          }
+        ],
+        "nodes": [
+          {
+            "name": "tetorica-gameboy",
+            "label": "dmg/dmg/initial"
+          },
+          {
+            "name": "tetorica-gameboy",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-gameboy",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-gameboy",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-gameboy",
+            "label": "edited"
+          }
+        ],
+        "meters": [
+          {
+            "label": "dmg/dmg/initial",
+            "peak": 0.09375,
+            "acRms": 0.03451030298433226,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0.09375,
+            "acRms": 0.03489816731016263,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0.09375,
+            "acRms": 0.027192831409093066,
+            "finite": true,
+            "muted": true
+          }
+        ],
+        "rejections": []
+      }
+    },
+    {
+      "site": "docs",
+      "engine": "webkit",
+      "lesson": "c64/sid/04-timed-motion",
+      "sampleRate": 48000,
+      "runs": [
+        {
+          "model": "6581",
+          "sampleFrames": [
+            4992,
+            11776,
+            18688,
+            25472,
+            32384,
+            39680,
+            46592,
+            53632,
+            60544,
+            67712,
+            74624,
+            81664,
+            88704
+          ],
+          "periods": [
+            {
+              "name": "melody",
+              "repeatSeconds": 0.6
+            },
+            {
+              "name": "pulse-motion",
+              "repeatSeconds": 2
+            },
+            {
+              "name": "filter-motion",
+              "repeatSeconds": 3
+            }
+          ],
+          "observedRegisterChanges": true
+        },
+        {
+          "model": "8580",
+          "sampleFrames": [
+            5632,
+            12544,
+            19328,
+            26112,
+            33152,
+            40448,
+            47232,
+            54144,
+            61056,
+            67968,
+            75008,
+            82048,
+            89088
+          ],
+          "periods": [
+            {
+              "name": "melody",
+              "repeatSeconds": 0.6
+            },
+            {
+              "name": "pulse-motion",
+              "repeatSeconds": 2
+            },
+            {
+              "name": "filter-motion",
+              "repeatSeconds": 3
+            }
+          ],
+          "observedRegisterChanges": true
+        }
+      ],
+      "desktopScreenshot": "browser-docs-webkit-sid-desktop.png",
+      "passed": true,
+      "editedSource": true,
+      "syntaxFailureBeforeAudio": true,
+      "runtimeFailureCleaned": true,
+      "pendingInitializationCancelled": true,
+      "restartAfterCancel": true,
+      "narrowLayout": true,
+      "screenshot": "browser-docs-webkit-sid-390.png",
+      "audit": {
+        "contexts": [
+          {
+            "label": "sid/6581/initial",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "sid/8580/initial",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 48000
+          }
+        ],
+        "nodes": [
+          {
+            "name": "tetorica-sid",
+            "model": "6581",
+            "label": "sid/6581/initial"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "sid/8580/initial"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "edited"
+          }
+        ],
+        "meters": [
+          {
+            "label": "sid/6581/initial",
+            "peak": 0.053963225334882736,
+            "acRms": 0.018994315842475507,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "sid/8580/initial",
+            "peak": 0.057531241327524185,
+            "acRms": 0.02515619309963055,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0.057274069637060165,
+            "acRms": 0.02523484769379222,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          }
+        ],
+        "rejections": []
+      }
+    },
+    {
+      "site": "dist",
+      "engine": "chromium",
+      "lesson": "gameboy/registers/01-timed-operations",
+      "sampleRate": 44100,
+      "runs": [
+        {
+          "model": "dmg",
+          "sampleFrames": [
+            3328,
+            9728,
+            15616,
+            22016,
+            28672,
+            34944,
+            41600,
+            48256,
+            54784,
+            61184,
+            67584,
+            73984,
+            80256
+          ],
+          "periods": [
+            {
+              "name": "dmg-pulse",
+              "repeatSeconds": 0.5
+            },
+            {
+              "name": "dmg-wave",
+              "repeatSeconds": 0.75
+            },
+            {
+              "name": "dmg-noise",
+              "repeatSeconds": 0.25
+            }
+          ],
+          "observedRegisterChanges": true
+        }
+      ],
+      "desktopScreenshot": "browser-44100-dist-chromium-dmg-desktop.png",
+      "passed": true,
+      "editedSource": true,
+      "syntaxFailureBeforeAudio": true,
+      "runtimeFailureCleaned": true,
+      "pendingInitializationCancelled": true,
+      "restartAfterCancel": true,
+      "narrowLayout": true,
+      "screenshot": "browser-44100-dist-chromium-dmg-390.png",
+      "audit": {
+        "contexts": [
+          {
+            "label": "dmg/dmg/initial",
+            "state": "closed",
+            "sampleRate": 44100
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 44100
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 44100
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 44100
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 44100
+          }
+        ],
+        "nodes": [
+          {
+            "name": "tetorica-gameboy",
+            "label": "dmg/dmg/initial"
+          },
+          {
+            "name": "tetorica-gameboy",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-gameboy",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-gameboy",
+            "label": "edited"
+          }
+        ],
+        "meters": [
+          {
+            "label": "dmg/dmg/initial",
+            "peak": 0.09375,
+            "acRms": 0.03465001358501359,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0.09375,
+            "acRms": 0.03615704081510037,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0.09375,
+            "acRms": 0.03608888710336957,
+            "finite": true,
+            "muted": true
+          }
+        ],
+        "rejections": []
+      }
+    },
+    {
+      "site": "dist",
+      "engine": "chromium",
+      "lesson": "c64/sid/04-timed-motion",
+      "sampleRate": 44100,
+      "runs": [
+        {
+          "model": "6581",
+          "sampleFrames": [
+            5760,
+            11904,
+            18176,
+            24320,
+            30720,
+            37120,
+            43520,
+            49920,
+            56448,
+            62848,
+            68992,
+            75392,
+            81536
+          ],
+          "periods": [
+            {
+              "name": "melody",
+              "repeatSeconds": 0.6
+            },
+            {
+              "name": "pulse-motion",
+              "repeatSeconds": 2
+            },
+            {
+              "name": "filter-motion",
+              "repeatSeconds": 3
+            }
+          ],
+          "observedRegisterChanges": true
+        },
+        {
+          "model": "8580",
+          "sampleFrames": [
+            6400,
+            12288,
+            18688,
+            25088,
+            31488,
+            37760,
+            43904,
+            50304,
+            56704,
+            63104,
+            69504,
+            75776,
+            82176
+          ],
+          "periods": [
+            {
+              "name": "melody",
+              "repeatSeconds": 0.6
+            },
+            {
+              "name": "pulse-motion",
+              "repeatSeconds": 2
+            },
+            {
+              "name": "filter-motion",
+              "repeatSeconds": 3
+            }
+          ],
+          "observedRegisterChanges": true
+        }
+      ],
+      "desktopScreenshot": "browser-44100-dist-chromium-sid-desktop.png",
+      "passed": true,
+      "editedSource": true,
+      "syntaxFailureBeforeAudio": true,
+      "runtimeFailureCleaned": true,
+      "pendingInitializationCancelled": true,
+      "restartAfterCancel": true,
+      "narrowLayout": true,
+      "screenshot": "browser-44100-dist-chromium-sid-390.png",
+      "audit": {
+        "contexts": [
+          {
+            "label": "sid/6581/initial",
+            "state": "closed",
+            "sampleRate": 44100
+          },
+          {
+            "label": "sid/8580/initial",
+            "state": "closed",
+            "sampleRate": 44100
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 44100
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 44100
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 44100
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 44100
+          }
+        ],
+        "nodes": [
+          {
+            "name": "tetorica-sid",
+            "model": "6581",
+            "label": "sid/6581/initial"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "sid/8580/initial"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "edited"
+          }
+        ],
+        "meters": [
+          {
+            "label": "sid/6581/initial",
+            "peak": 0.0490906648337841,
+            "acRms": 0.01864982795429321,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "sid/8580/initial",
+            "peak": 0.05751636624336243,
+            "acRms": 0.024956133476247075,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0.057373303920030594,
+            "acRms": 0.024873095338894747,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          }
+        ],
+        "rejections": []
+      }
+    },
+    {
+      "site": "dist",
+      "engine": "webkit",
+      "lesson": "gameboy/registers/01-timed-operations",
+      "sampleRate": 44100,
+      "runs": [
+        {
+          "model": "dmg",
+          "sampleFrames": [
+            4096,
+            10368,
+            16640,
+            22912,
+            29184,
+            35584,
+            41984,
+            48128,
+            54528,
+            60800,
+            67072,
+            73472,
+            79872
+          ],
+          "periods": [
+            {
+              "name": "dmg-pulse",
+              "repeatSeconds": 0.5
+            },
+            {
+              "name": "dmg-wave",
+              "repeatSeconds": 0.75
+            },
+            {
+              "name": "dmg-noise",
+              "repeatSeconds": 0.25
+            }
+          ],
+          "observedRegisterChanges": true
+        }
+      ],
+      "desktopScreenshot": "browser-44100-dist-webkit-dmg-desktop.png",
+      "passed": true,
+      "editedSource": true,
+      "syntaxFailureBeforeAudio": true,
+      "runtimeFailureCleaned": true,
+      "pendingInitializationCancelled": true,
+      "restartAfterCancel": true,
+      "narrowLayout": true,
+      "screenshot": "browser-44100-dist-webkit-dmg-390.png",
+      "audit": {
+        "contexts": [
+          {
+            "label": "dmg/dmg/initial",
+            "state": "closed",
+            "sampleRate": 44100
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 44100
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 44100
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 44100
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 44100
+          }
+        ],
+        "nodes": [
+          {
+            "name": "tetorica-gameboy",
+            "label": "dmg/dmg/initial"
+          },
+          {
+            "name": "tetorica-gameboy",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-gameboy",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-gameboy",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-gameboy",
+            "label": "edited"
+          }
+        ],
+        "meters": [
+          {
+            "label": "dmg/dmg/initial",
+            "peak": 0.09375,
+            "acRms": 0.035509605912078974,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0.09375,
+            "acRms": 0.034801418427994314,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0.09375,
+            "acRms": 0.02409133871757565,
+            "finite": true,
+            "muted": true
+          }
+        ],
+        "rejections": []
+      }
+    },
+    {
+      "site": "dist",
+      "engine": "webkit",
+      "lesson": "c64/sid/04-timed-motion",
+      "sampleRate": 44100,
+      "runs": [
+        {
+          "model": "6581",
+          "sampleFrames": [
+            4608,
+            11008,
+            17408,
+            23680,
+            29952,
+            36352,
+            42624,
+            48896,
+            55296,
+            61568,
+            67968,
+            74368,
+            80896
+          ],
+          "periods": [
+            {
+              "name": "melody",
+              "repeatSeconds": 0.6
+            },
+            {
+              "name": "pulse-motion",
+              "repeatSeconds": 2
+            },
+            {
+              "name": "filter-motion",
+              "repeatSeconds": 3
+            }
+          ],
+          "observedRegisterChanges": true
+        },
+        {
+          "model": "8580",
+          "sampleFrames": [
+            5248,
+            11392,
+            17664,
+            24064,
+            30208,
+            36736,
+            43008,
+            49280,
+            55680,
+            61824,
+            68224,
+            74624,
+            81024
+          ],
+          "periods": [
+            {
+              "name": "melody",
+              "repeatSeconds": 0.6
+            },
+            {
+              "name": "pulse-motion",
+              "repeatSeconds": 2
+            },
+            {
+              "name": "filter-motion",
+              "repeatSeconds": 3
+            }
+          ],
+          "observedRegisterChanges": true
+        }
+      ],
+      "desktopScreenshot": "browser-44100-dist-webkit-sid-desktop.png",
+      "passed": true,
+      "editedSource": true,
+      "syntaxFailureBeforeAudio": true,
+      "runtimeFailureCleaned": true,
+      "pendingInitializationCancelled": true,
+      "restartAfterCancel": true,
+      "narrowLayout": true,
+      "screenshot": "browser-44100-dist-webkit-sid-390.png",
+      "audit": {
+        "contexts": [
+          {
+            "label": "sid/6581/initial",
+            "state": "closed",
+            "sampleRate": 44100
+          },
+          {
+            "label": "sid/8580/initial",
+            "state": "closed",
+            "sampleRate": 44100
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 44100
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 44100
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 44100
+          },
+          {
+            "label": "edited",
+            "state": "closed",
+            "sampleRate": 44100
+          }
+        ],
+        "nodes": [
+          {
+            "name": "tetorica-sid",
+            "model": "6581",
+            "label": "sid/6581/initial"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "sid/8580/initial"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "edited"
+          },
+          {
+            "name": "tetorica-sid",
+            "model": "8580",
+            "label": "edited"
+          }
+        ],
+        "meters": [
+          {
+            "label": "sid/6581/initial",
+            "peak": 0.05114922672510147,
+            "acRms": 0.019096939705010498,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "sid/8580/initial",
+            "peak": 0.05748392269015312,
+            "acRms": 0.02487762642511302,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0.05751058831810951,
+            "acRms": 0.024871891220800784,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          },
+          {
+            "label": "edited",
+            "peak": 0,
+            "acRms": 0,
+            "finite": true,
+            "muted": true
+          }
+        ],
+        "rejections": []
+      }
+    }
+  ],
+  "existingTimedBrowser": {
+    "passed": true,
+    "packageVersion": "0.2.46",
+    "sampleRate": 48000,
+    "physicalOutputMuted": true,
+    "staticSiteOnly": true,
+    "site": "/Users/kyorohiro/development8/wfm/hello_ymfm/w/tetorica-fm2612-examples/dist",
+    "results": [
+      {
+        "browser": "chromium",
+        "example": "atari-st/ym2149/01-sync-buzzer",
+        "repeatSeconds": 0.00909090909090909,
+        "writesPerPattern": 1,
+        "editedSource": true,
+        "pendingInitializationCancelled": true,
+        "audit": {
+          "contexts": [
+            "closed",
+            "closed",
+            "closed"
+          ],
+          "sampleRates": [
+            48000,
+            48000,
+            48000
+          ],
+          "nodes": [
+            {
+              "name": "tetorica-ay8910",
+              "type": 16
+            },
+            {
+              "name": "tetorica-ay8910",
+              "type": 16
+            }
+          ],
+          "meters": [
+            {
+              "peak": 0.03333333507180214,
+              "acRms": 0.008015165258074514,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0.03333333507180214,
+              "acRms": 0.009800311563611061,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0,
+              "acRms": 0,
+              "finite": true,
+              "muted": true
+            }
+          ]
+        },
+        "passed": true
+      },
+      {
+        "browser": "chromium",
+        "example": "atari-st/ym2149/02-volume-modulation",
+        "repeatSeconds": 0.02,
+        "writesPerPattern": 16,
+        "editedSource": true,
+        "pendingInitializationCancelled": true,
+        "audit": {
+          "contexts": [
+            "closed",
+            "closed",
+            "closed"
+          ],
+          "sampleRates": [
+            48000,
+            48000,
+            48000
+          ],
+          "nodes": [
+            {
+              "name": "tetorica-ay8910",
+              "type": 16
+            },
+            {
+              "name": "tetorica-ay8910",
+              "type": 16
+            }
+          ],
+          "meters": [
+            {
+              "peak": 0.03333333507180214,
+              "acRms": 0.00963519145918729,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0.03333333507180214,
+              "acRms": 0.010820421164430008,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0,
+              "acRms": 0,
+              "finite": true,
+              "muted": true
+            }
+          ]
+        },
+        "passed": true
+      },
+      {
+        "browser": "chromium",
+        "example": "genesis/fm/07-timed-operators",
+        "engine": "ymfm",
+        "repeatSeconds": 1.5,
+        "writesPerPattern": 32,
+        "editedSource": true,
+        "pendingInitializationCancelled": true,
+        "audit": {
+          "contexts": [
+            "closed",
+            "closed",
+            "closed"
+          ],
+          "sampleRates": [
+            48000,
+            48000,
+            48000
+          ],
+          "nodes": [
+            {
+              "name": "tetorica-opn",
+              "engine": "ymfm"
+            },
+            {
+              "name": "tetorica-opn",
+              "engine": "ymfm"
+            }
+          ],
+          "meters": [
+            {
+              "peak": 0.01586151123046875,
+              "acRms": 0.007425256171893225,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0.01586151123046875,
+              "acRms": 0.007501981251116678,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0,
+              "acRms": 0,
+              "finite": true,
+              "muted": true
+            }
+          ]
+        },
+        "passed": true
+      },
+      {
+        "browser": "chromium",
+        "example": "genesis/fm/07-timed-operators",
+        "engine": "nuked",
+        "repeatSeconds": 1.5,
+        "writesPerPattern": 32,
+        "editedSource": true,
+        "pendingInitializationCancelled": true,
+        "audit": {
+          "contexts": [
+            "closed",
+            "closed",
+            "closed"
+          ],
+          "sampleRates": [
+            48000,
+            48000,
+            48000
+          ],
+          "nodes": [
+            {
+              "name": "tetorica-opn",
+              "engine": "nuked"
+            },
+            {
+              "name": "tetorica-opn",
+              "engine": "nuked"
+            }
+          ],
+          "meters": [
+            {
+              "peak": 0.02492523193359375,
+              "acRms": 0.011685356348143258,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0.02492523193359375,
+              "acRms": 0.011796042326317747,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0,
+              "acRms": 0,
+              "finite": true,
+              "muted": true
+            }
+          ]
+        },
+        "passed": true
+      },
+      {
+        "browser": "chromium",
+        "example": "wonderswan/registers/01-timed-operations",
+        "screenshot": "/Users/kyorohiro/development8/wfm/hello_ymfm/build/examples-dmg-sid-20261121-old-timed-chromium-aswan.png",
+        "repeatSeconds": 1,
+        "writesPerPattern": 6,
+        "editedSource": true,
+        "pendingInitializationCancelled": true,
+        "audit": {
+          "contexts": [
+            "closed",
+            "closed",
+            "closed"
+          ],
+          "sampleRates": [
+            48000,
+            48000,
+            48000
+          ],
+          "nodes": [
+            {
+              "name": "tetorica-wonderswan"
+            },
+            {
+              "name": "tetorica-wonderswan"
+            }
+          ],
+          "meters": [
+            {
+              "peak": 0.02978668175637722,
+              "acRms": 0.02117355913324307,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0.02978668175637722,
+              "acRms": 0.021173559133243067,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0,
+              "acRms": 0,
+              "finite": true,
+              "muted": true
+            }
+          ]
+        },
+        "passed": true
+      },
+      {
+        "browser": "chromium",
+        "example": "chip-raw/02-compile-compare",
+        "baselines": {
+          "current": [
+            {
+              "offsetSeconds": 0,
+              "port": 0,
+              "register": 48,
+              "value": 82,
+              "operationIndex": 0,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.1,
+              "port": 0,
+              "register": 40,
+              "value": 240,
+              "operationIndex": 1,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.1,
+              "port": 0,
+              "register": 40,
+              "value": 240,
+              "operationIndex": 2,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.2,
+              "port": 0,
+              "register": 40,
+              "value": 0,
+              "operationIndex": 3,
+              "writeIndex": 0
+            }
+          ],
+          "client": [
+            {
+              "offsetSeconds": 0,
+              "port": 0,
+              "register": 48,
+              "value": 50,
+              "operationIndex": 0,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.1,
+              "port": 0,
+              "register": 40,
+              "value": 240,
+              "operationIndex": 1,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.1,
+              "port": 0,
+              "register": 40,
+              "value": 240,
+              "operationIndex": 2,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.2,
+              "port": 0,
+              "register": 40,
+              "value": 0,
+              "operationIndex": 3,
+              "writeIndex": 0
+            }
+          ],
+          "reset": [
+            {
+              "offsetSeconds": 0,
+              "port": 0,
+              "register": 48,
+              "value": 2,
+              "operationIndex": 0,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.1,
+              "port": 0,
+              "register": 40,
+              "value": 240,
+              "operationIndex": 1,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.1,
+              "port": 0,
+              "register": 40,
+              "value": 240,
+              "operationIndex": 2,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.2,
+              "port": 0,
+              "register": 40,
+              "value": 0,
+              "operationIndex": 3,
+              "writeIndex": 0
+            }
+          ],
+          "snapshotA": [
+            {
+              "offsetSeconds": 0,
+              "port": 0,
+              "register": 48,
+              "value": 82,
+              "operationIndex": 0,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.1,
+              "port": 0,
+              "register": 40,
+              "value": 240,
+              "operationIndex": 1,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.1,
+              "port": 0,
+              "register": 40,
+              "value": 240,
+              "operationIndex": 2,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.2,
+              "port": 0,
+              "register": 40,
+              "value": 0,
+              "operationIndex": 3,
+              "writeIndex": 0
+            }
+          ],
+          "snapshotB": [
+            {
+              "offsetSeconds": 0,
+              "port": 0,
+              "register": 48,
+              "value": 17,
+              "operationIndex": 0,
+              "writeIndex": 0
+            }
+          ]
+        },
+        "snapshot": {
+          "frame": 2048,
+          "sampleRate": 48000,
+          "engine": "ymfm"
+        },
+        "checks": {
+          "currentMatchesSnapshot": true,
+          "snapshotReusable": true,
+          "snapshotUnchanged": true,
+          "liveStateUnchanged": true,
+          "repeatedKeysKept": true
+        },
+        "audit": {
+          "contexts": [
+            "closed",
+            "closed"
+          ],
+          "sampleRates": [
+            48000,
+            48000
+          ],
+          "nodes": [
+            {
+              "name": "tetorica-opn",
+              "engine": "ymfm"
+            },
+            {
+              "name": "tetorica-opn",
+              "engine": "ymfm"
+            }
+          ],
+          "meters": [
+            {
+              "peak": 0,
+              "acRms": 0,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0,
+              "acRms": 0,
+              "finite": true,
+              "muted": true
+            }
+          ]
+        },
+        "passed": true
+      },
+      {
+        "browser": "webkit",
+        "example": "atari-st/ym2149/01-sync-buzzer",
+        "repeatSeconds": 0.00909090909090909,
+        "writesPerPattern": 1,
+        "editedSource": true,
+        "pendingInitializationCancelled": true,
+        "audit": {
+          "contexts": [
+            "closed",
+            "closed",
+            "closed"
+          ],
+          "sampleRates": [
+            48000,
+            48000,
+            48000
+          ],
+          "nodes": [
+            {
+              "name": "tetorica-ay8910",
+              "type": 16
+            },
+            {
+              "name": "tetorica-ay8910",
+              "type": 16
+            }
+          ],
+          "meters": [
+            {
+              "peak": 0.03333333507180214,
+              "acRms": 0.008267159283721067,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0.03333333507180214,
+              "acRms": 0.00999869676357449,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0,
+              "acRms": 0,
+              "finite": true,
+              "muted": true
+            }
+          ]
+        },
+        "passed": true
+      },
+      {
+        "browser": "webkit",
+        "example": "atari-st/ym2149/02-volume-modulation",
+        "repeatSeconds": 0.02,
+        "writesPerPattern": 16,
+        "editedSource": true,
+        "pendingInitializationCancelled": true,
+        "audit": {
+          "contexts": [
+            "closed",
+            "closed",
+            "closed"
+          ],
+          "sampleRates": [
+            48000,
+            48000,
+            48000
+          ],
+          "nodes": [
+            {
+              "name": "tetorica-ay8910",
+              "type": 16
+            },
+            {
+              "name": "tetorica-ay8910",
+              "type": 16
+            }
+          ],
+          "meters": [
+            {
+              "peak": 0.03333333507180214,
+              "acRms": 0.010908312463221123,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0.03333333507180214,
+              "acRms": 0.010665759206988902,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0,
+              "acRms": 0,
+              "finite": true,
+              "muted": true
+            }
+          ]
+        },
+        "passed": true
+      },
+      {
+        "browser": "webkit",
+        "example": "genesis/fm/07-timed-operators",
+        "engine": "ymfm",
+        "repeatSeconds": 1.5,
+        "writesPerPattern": 32,
+        "editedSource": true,
+        "pendingInitializationCancelled": true,
+        "audit": {
+          "contexts": [
+            "closed",
+            "closed",
+            "closed"
+          ],
+          "sampleRates": [
+            48000,
+            48000,
+            48000
+          ],
+          "nodes": [
+            {
+              "name": "tetorica-opn",
+              "engine": "ymfm"
+            },
+            {
+              "name": "tetorica-opn",
+              "engine": "ymfm"
+            },
+            {
+              "name": "tetorica-opn",
+              "engine": "ymfm"
+            }
+          ],
+          "meters": [
+            {
+              "peak": 0.01586151123046875,
+              "acRms": 0.007432330495379027,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0.01586151123046875,
+              "acRms": 0.007497329702083599,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0,
+              "acRms": 0,
+              "finite": true,
+              "muted": true
+            }
+          ]
+        },
+        "passed": true
+      },
+      {
+        "browser": "webkit",
+        "example": "genesis/fm/07-timed-operators",
+        "engine": "nuked",
+        "repeatSeconds": 1.5,
+        "writesPerPattern": 32,
+        "editedSource": true,
+        "pendingInitializationCancelled": true,
+        "audit": {
+          "contexts": [
+            "closed",
+            "closed",
+            "closed"
+          ],
+          "sampleRates": [
+            48000,
+            48000,
+            48000
+          ],
+          "nodes": [
+            {
+              "name": "tetorica-opn",
+              "engine": "nuked"
+            },
+            {
+              "name": "tetorica-opn",
+              "engine": "nuked"
+            },
+            {
+              "name": "tetorica-opn",
+              "engine": "nuked"
+            }
+          ],
+          "meters": [
+            {
+              "peak": 0.02492523193359375,
+              "acRms": 0.011690606861858473,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0.02492523193359375,
+              "acRms": 0.011782316226051049,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0,
+              "acRms": 0,
+              "finite": true,
+              "muted": true
+            }
+          ]
+        },
+        "passed": true
+      },
+      {
+        "browser": "webkit",
+        "example": "wonderswan/registers/01-timed-operations",
+        "screenshot": "/Users/kyorohiro/development8/wfm/hello_ymfm/build/examples-dmg-sid-20261121-old-timed-webkit-aswan.png",
+        "repeatSeconds": 1,
+        "writesPerPattern": 6,
+        "editedSource": true,
+        "pendingInitializationCancelled": true,
+        "audit": {
+          "contexts": [
+            "closed",
+            "closed",
+            "closed"
+          ],
+          "sampleRates": [
+            48000,
+            48000,
+            48000
+          ],
+          "nodes": [
+            {
+              "name": "tetorica-wonderswan"
+            },
+            {
+              "name": "tetorica-wonderswan"
+            },
+            {
+              "name": "tetorica-wonderswan"
+            }
+          ],
+          "meters": [
+            {
+              "peak": 0.02978668175637722,
+              "acRms": 0.02117355913324307,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0.02978668175637722,
+              "acRms": 0.021173559133243067,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0,
+              "acRms": 0,
+              "finite": true,
+              "muted": true
+            }
+          ]
+        },
+        "passed": true
+      },
+      {
+        "browser": "webkit",
+        "example": "chip-raw/02-compile-compare",
+        "baselines": {
+          "current": [
+            {
+              "offsetSeconds": 0,
+              "port": 0,
+              "register": 48,
+              "value": 82,
+              "operationIndex": 0,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.1,
+              "port": 0,
+              "register": 40,
+              "value": 240,
+              "operationIndex": 1,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.1,
+              "port": 0,
+              "register": 40,
+              "value": 240,
+              "operationIndex": 2,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.2,
+              "port": 0,
+              "register": 40,
+              "value": 0,
+              "operationIndex": 3,
+              "writeIndex": 0
+            }
+          ],
+          "client": [
+            {
+              "offsetSeconds": 0,
+              "port": 0,
+              "register": 48,
+              "value": 50,
+              "operationIndex": 0,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.1,
+              "port": 0,
+              "register": 40,
+              "value": 240,
+              "operationIndex": 1,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.1,
+              "port": 0,
+              "register": 40,
+              "value": 240,
+              "operationIndex": 2,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.2,
+              "port": 0,
+              "register": 40,
+              "value": 0,
+              "operationIndex": 3,
+              "writeIndex": 0
+            }
+          ],
+          "reset": [
+            {
+              "offsetSeconds": 0,
+              "port": 0,
+              "register": 48,
+              "value": 2,
+              "operationIndex": 0,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.1,
+              "port": 0,
+              "register": 40,
+              "value": 240,
+              "operationIndex": 1,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.1,
+              "port": 0,
+              "register": 40,
+              "value": 240,
+              "operationIndex": 2,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.2,
+              "port": 0,
+              "register": 40,
+              "value": 0,
+              "operationIndex": 3,
+              "writeIndex": 0
+            }
+          ],
+          "snapshotA": [
+            {
+              "offsetSeconds": 0,
+              "port": 0,
+              "register": 48,
+              "value": 82,
+              "operationIndex": 0,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.1,
+              "port": 0,
+              "register": 40,
+              "value": 240,
+              "operationIndex": 1,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.1,
+              "port": 0,
+              "register": 40,
+              "value": 240,
+              "operationIndex": 2,
+              "writeIndex": 0
+            },
+            {
+              "offsetSeconds": 0.2,
+              "port": 0,
+              "register": 40,
+              "value": 0,
+              "operationIndex": 3,
+              "writeIndex": 0
+            }
+          ],
+          "snapshotB": [
+            {
+              "offsetSeconds": 0,
+              "port": 0,
+              "register": 48,
+              "value": 17,
+              "operationIndex": 0,
+              "writeIndex": 0
+            }
+          ]
+        },
+        "snapshot": {
+          "frame": 1920,
+          "sampleRate": 48000,
+          "engine": "ymfm"
+        },
+        "checks": {
+          "currentMatchesSnapshot": true,
+          "snapshotReusable": true,
+          "snapshotUnchanged": true,
+          "liveStateUnchanged": true,
+          "repeatedKeysKept": true
+        },
+        "audit": {
+          "contexts": [
+            "closed",
+            "closed"
+          ],
+          "sampleRates": [
+            48000,
+            48000
+          ],
+          "nodes": [
+            {
+              "name": "tetorica-opn",
+              "engine": "ymfm"
+            },
+            {
+              "name": "tetorica-opn",
+              "engine": "ymfm"
+            }
+          ],
+          "meters": [
+            {
+              "peak": 0,
+              "acRms": 0,
+              "finite": true,
+              "muted": true
+            },
+            {
+              "peak": 0,
+              "acRms": 0,
+              "finite": true,
+              "muted": true
+            }
+          ]
+        },
+        "passed": true
+      }
+    ]
+  },
+  "newBrowserAssets": [
+    {
+      "sampleRate": 48000,
+      "assets": {
+        "dist": {
+          "examples/c64/sid/04-timed-motion/node/main.mjs": {
+            "bytes": 3321,
+            "sha256": "1d45ead3a3511b04f496b1a41e6ccc46057311a213609117ae31652d12d4113d"
+          },
+          "examples/c64/sid/04-timed-motion/web/index.html": {
+            "bytes": 4670,
+            "sha256": "54f201716ee0d35d3d882c857c6461ceabde683ee7b141ca4f337454a52ca8fc"
+          },
+          "examples/c64/sid/04-timed-motion/web/main.js": {
+            "bytes": 12088,
+            "sha256": "f1bd9d1a461b82109fe618301e85b9db791e62c48554160a08328a11faeb879d"
+          },
+          "examples/gameboy/registers/01-timed-operations/web/index.html": {
+            "bytes": 3717,
+            "sha256": "f602890188268aabba0d3bca667b3d23a59b54a8c45f6411fac7d324038d659c"
+          },
+          "examples/gameboy/registers/01-timed-operations/web/main.js": {
+            "bytes": 12505,
+            "sha256": "488a6919dbd36fafecdbb5e7a075b9b033ce46fec1aea29bbd405de4cdac6dbd"
+          },
+          "style.css": {
+            "bytes": 2943,
+            "sha256": "ec3cde4b86adbfb8b8d55707245daea5b531249eb4d17e2a053b81091462d7fc"
+          },
+          "vendor/tetorica-fm2612/chip_worklet_transport.js": {
+            "bytes": 15460,
+            "sha256": "a7d1e5634cdf9baeb702cf069ef805a00c6a479951a90825f3a557c8dc31893a"
+          },
+          "vendor/tetorica-fm2612/fds_audio.js": {
+            "bytes": 5112,
+            "sha256": "a40594267909ec49f07897913877e3e27aee345ed783f8044d7f5f6e13c09ee9"
+          },
+          "vendor/tetorica-fm2612/gameboy_operations.js": {
+            "bytes": 14001,
+            "sha256": "312bc1469f93598667f14ef8b8f7df25bba464df6fc302ea79d2b861994ed6fa"
+          },
+          "vendor/tetorica-fm2612/gameboy_timed_client.js": {
+            "bytes": 10065,
+            "sha256": "6623676fca1a34c1dafb7bc31fbd3d5279f042df43d92f2bb56a58f231b037f8"
+          },
+          "vendor/tetorica-fm2612/gameboy_timed_processor.js": {
+            "bytes": 12254,
+            "sha256": "b06204a16d65b9dd2ba7a3fe892c2bcc2dffa6158ff0967e6386bdc4728eb69b"
+          },
+          "vendor/tetorica-fm2612/gameboy_timed_state.js": {
+            "bytes": 2226,
+            "sha256": "f3a91ea30d600857b90a2879c4b97560a338eebdd12ec57ce9f253594a2d36e5"
+          },
+          "vendor/tetorica-fm2612/gameboyapu.js": {
+            "bytes": 7082,
+            "sha256": "a652fa6e4b15457878d41ba4bfa47474bb902c943230ddc8ab89a2327f7b0cc4"
+          },
+          "vendor/tetorica-fm2612/gameboysynth.js": {
+            "bytes": 13903,
+            "sha256": "762e227143aa264208d239479ed6376ab39d3b5fb6cdb05d7ad1f8ac6f9dfcf4"
+          },
+          "vendor/tetorica-fm2612/generated/gameboy_apu_wasm.js": {
+            "bytes": 11497,
+            "sha256": "bd5d7500c4a3c99763ac7cd27263e73c060f04df3b85167a0fed19f9dad5c4e5"
+          },
+          "vendor/tetorica-fm2612/generated/gameboy_apu_wasm.wasm": {
+            "bytes": 13782,
+            "sha256": "ae2bccd3ed8f0c776fc8be198fa9fddebeb18db5654b9160eeef239c9a3faabd"
+          },
+          "vendor/tetorica-fm2612/generated/sid/sid.wasm": {
+            "bytes": 14488,
+            "sha256": "02634459953013378028171978d855e1841a55bb4493efe59f2ac07541949c7e"
+          },
+          "vendor/tetorica-fm2612/generated/sid8580-machine/sid8580-endpoint.wasm": {
+            "bytes": 1402110,
+            "sha256": "ea48a2460cc85103976ec84db3e14198796cedf77b1002974176931734aa3e37"
+          },
+          "vendor/tetorica-fm2612/nes_apu_vendor/channel-dm.js": {
+            "bytes": 6890,
+            "sha256": "94eed4be74f42c3a12f0559e736cefa73598be4b49bb83cd95ff619183b7cae7"
+          },
+          "vendor/tetorica-fm2612/nes_apu_vendor/channel-noise.js": {
+            "bytes": 3592,
+            "sha256": "9955835564f858bbb74927d0ffc202f815c24f67d63d17be09308a7cd5ccb812"
+          },
+          "vendor/tetorica-fm2612/nes_apu_vendor/channel-square.js": {
+            "bytes": 5728,
+            "sha256": "668da0573d064a3c6a7afe777f84d1635c7d541cfae315ee477b2209adbc6317"
+          },
+          "vendor/tetorica-fm2612/nes_apu_vendor/channel-triangle.js": {
+            "bytes": 3615,
+            "sha256": "4729ea94c099b7c08b6f74c3d96249212261c1f1bbf3ba53dd261e18347c6506"
+          },
+          "vendor/tetorica-fm2612/nes_apu_vendor/index.js": {
+            "bytes": 31024,
+            "sha256": "04b0d09d5a3a8dad0667d764decc6e261c81c83ab493e2423191f259f2a98122"
+          },
+          "vendor/tetorica-fm2612/nes_apu_vendor/utils.js": {
+            "bytes": 1154,
+            "sha256": "3e97884bae801319ac802378ace60591f489dec533aec2e26663685ab08f378c"
+          },
+          "vendor/tetorica-fm2612/nesapu.js": {
+            "bytes": 4072,
+            "sha256": "40310717d0f0a75b4bdb1a3d20e5350eb1274a67c406fad0eeff9e8a188aba55"
+          },
+          "vendor/tetorica-fm2612/nesapuaudioengine.js": {
+            "bytes": 5704,
+            "sha256": "5c0f6d91170b339cca384d5cdf99180af39c2b6a0b2afdb14b8582a04676c947"
+          },
+          "vendor/tetorica-fm2612/nesapusynth.js": {
+            "bytes": 15083,
+            "sha256": "29e45e817b0d419ef875a537333802516bcf508103161d08a6f07d1ece01bde6"
+          },
+          "vendor/tetorica-fm2612/playground_audio_endpoint.js": {
+            "bytes": 2002,
+            "sha256": "e8171d21fe682dd58d8d60c1cfb3f74b442586c254a8698d341fc4e1a7f1f9cd"
+          },
+          "vendor/tetorica-fm2612/playground_chip_clock.js": {
+            "bytes": 5244,
+            "sha256": "3802e15503424667324c4f6e067d5cae3ff4ad1b2adf81d780e8a47aa922ca2d"
+          },
+          "vendor/tetorica-fm2612/playground_chip_inspector_state.js": {
+            "bytes": 13049,
+            "sha256": "89a5f4c62defa490d5fd1603af0baeb763dcb00c319ea377714ada92cd350d9e"
+          },
+          "vendor/tetorica-fm2612/playground_gameboy_audio.js": {
+            "bytes": 1895,
+            "sha256": "c82bffe7e0b5b9cbcc083c40d40b95cf547a751fcff8624b3a46b5ac895362a7"
+          },
+          "vendor/tetorica-fm2612/playground_gameboy_worklet.js": {
+            "bytes": 10355,
+            "sha256": "b9af8e5f13b379907f4a472a32a3201a9ce154c7b034ec70d831bdc767088e7e"
+          },
+          "vendor/tetorica-fm2612/playground_gameboy.js": {
+            "bytes": 4669,
+            "sha256": "5430a68d9b79e77ef37b3432072f82ccaf42d1c0d9578334017b5b5828cce14e"
+          },
+          "vendor/tetorica-fm2612/playground_native_voice_inspector.js": {
+            "bytes": 19808,
+            "sha256": "173deb4fd1e7e35b8d9ec286298779a35424a87e35b69ea38e60acf54c25f045"
+          },
+          "vendor/tetorica-fm2612/playground_performance_processor.js": {
+            "bytes": 31505,
+            "sha256": "2b1ed0ab695f86247f908ff855b3130efa00db2e1dad7f57a29c7382a0786ba1"
+          },
+          "vendor/tetorica-fm2612/playground_performance_queue.js": {
+            "bytes": 24368,
+            "sha256": "5cb51d73ea0b9448a0991e81560101d1a0924248e08fa5bb572ff2b7713964f6"
+          },
+          "vendor/tetorica-fm2612/playground_sid_audio.js": {
+            "bytes": 4613,
+            "sha256": "17dbcb2d9c8274c75d6aa22100011f1e7bfefa3eedbf014af0a995d092d2be2d"
+          },
+          "vendor/tetorica-fm2612/playground_sid_inspector.js": {
+            "bytes": 1333,
+            "sha256": "f3b6d8798219e0951b4c43f9307bf2f316f201261879b7b7fd053e3a288c9a50"
+          },
+          "vendor/tetorica-fm2612/playground_sid_worklet.js": {
+            "bytes": 9462,
+            "sha256": "172b3635210e5cc5110c446e6e7a2b230f34d9884734196945e46233a721551c"
+          },
+          "vendor/tetorica-fm2612/playground_sid.js": {
+            "bytes": 6643,
+            "sha256": "032e3e659faa62cff93498aa5e75c5873cb4fb706b191c25f60cbf90e6d2de2a"
+          },
+          "vendor/tetorica-fm2612/rf5c164_notes.js": {
+            "bytes": 8631,
+            "sha256": "cd10b0abe19000e699edd181b3527edbea8d06ada2dbf34a88c51e12bf9d273f"
+          },
+          "vendor/tetorica-fm2612/rf5c164_pcm.js": {
+            "bytes": 1537,
+            "sha256": "da5835ccd54b0b8d07a82ea8cab10153044c7c20513b973c622957dc8d0b657a"
+          },
+          "vendor/tetorica-fm2612/rf5c164synth.js": {
+            "bytes": 6252,
+            "sha256": "9b5d8d0b6fb6811a2d126c6bf969ec5aae68acd680f636c2ef793e3603d61a73"
+          },
+          "vendor/tetorica-fm2612/segapsg_api.js": {
+            "bytes": 1032,
+            "sha256": "1a55c1d148536425eef54fe5ec4c3151b6ef5a734f9695a379b3a6344a7bd75d"
+          },
+          "vendor/tetorica-fm2612/segapsg.js": {
+            "bytes": 10113,
+            "sha256": "e63e1c25a9ac80721f8cd7ea1474710af125c83d4d2e682e6c4a97f40aa50bed"
+          },
+          "vendor/tetorica-fm2612/segapsgsynth.js": {
+            "bytes": 10390,
+            "sha256": "e19b274b8b2e11241e3bf3354d7a23a4d1fdf44b0a912dca3f291b4ab217ef8d"
+          },
+          "vendor/tetorica-fm2612/sid_operations.js": {
+            "bytes": 12745,
+            "sha256": "f161b3aa8f0cedcdd34bc4d22f6f7a750e92d4cb43aa489bbeb97885bfa1f288"
+          },
+          "vendor/tetorica-fm2612/sid_timed_client.js": {
+            "bytes": 10247,
+            "sha256": "9154fb943325a51006daa67155099362365631753dc94218327aa9d916301a1e"
+          },
+          "vendor/tetorica-fm2612/sid_timed_processor.js": {
+            "bytes": 12672,
+            "sha256": "e6b6fb3d5fdff9784662f8699f94dac1835004b3165a075a0f2f6c2ca990427b"
+          },
+          "vendor/tetorica-fm2612/sid_timed_state.js": {
+            "bytes": 2308,
+            "sha256": "e533c7ed4e75706fa80b36211bc4d751705bd261a270cd2c6776a6d91a04b14c"
+          },
+          "vendor/tetorica-fm2612/sid_waveforms.js": {
+            "bytes": 2012,
+            "sha256": "5ef93ebfff79ae1c7cddd8e2463ed4818752f4428ad3014e644c2cc90722b393"
+          },
+          "vendor/tetorica-fm2612/sid.js": {
+            "bytes": 4845,
+            "sha256": "6c61f6616e29faed214da59de613d1acb2c0c64ada691300c96d45e99cdc8dcb"
+          },
+          "vendor/tetorica-fm2612/sid8580.js": {
+            "bytes": 7628,
+            "sha256": "25a9e7ef9f938173acbae3d314351ba7bd1f33832289535c5015a1c5716b728c"
+          },
+          "vendor/tetorica-fm2612/sidsynth.js": {
+            "bytes": 14845,
+            "sha256": "c1172f4d7b8681a49cb7ca3a1d834e6b5b17d89817eb2cfae80b7513bfde771d"
+          },
+          "vendor/tetorica-fm2612/soundchip_pitch.js": {
+            "bytes": 2854,
+            "sha256": "c8bcce0f27c2500d6090b5e56660e697b8b03d7ec011cee4deba05664038bae9"
+          }
+        },
+        "docs": {
+          "examples/c64/sid/04-timed-motion/node/main.mjs": {
+            "bytes": 3321,
+            "sha256": "1d45ead3a3511b04f496b1a41e6ccc46057311a213609117ae31652d12d4113d"
+          },
+          "examples/c64/sid/04-timed-motion/web/index.html": {
+            "bytes": 4670,
+            "sha256": "54f201716ee0d35d3d882c857c6461ceabde683ee7b141ca4f337454a52ca8fc"
+          },
+          "examples/c64/sid/04-timed-motion/web/main.js": {
+            "bytes": 12088,
+            "sha256": "f1bd9d1a461b82109fe618301e85b9db791e62c48554160a08328a11faeb879d"
+          },
+          "examples/gameboy/registers/01-timed-operations/web/index.html": {
+            "bytes": 3717,
+            "sha256": "f602890188268aabba0d3bca667b3d23a59b54a8c45f6411fac7d324038d659c"
+          },
+          "examples/gameboy/registers/01-timed-operations/web/main.js": {
+            "bytes": 12505,
+            "sha256": "488a6919dbd36fafecdbb5e7a075b9b033ce46fec1aea29bbd405de4cdac6dbd"
+          },
+          "style.css": {
+            "bytes": 2943,
+            "sha256": "ec3cde4b86adbfb8b8d55707245daea5b531249eb4d17e2a053b81091462d7fc"
+          },
+          "vendor/tetorica-fm2612/chip_worklet_transport.js": {
+            "bytes": 15460,
+            "sha256": "a7d1e5634cdf9baeb702cf069ef805a00c6a479951a90825f3a557c8dc31893a"
+          },
+          "vendor/tetorica-fm2612/fds_audio.js": {
+            "bytes": 5112,
+            "sha256": "a40594267909ec49f07897913877e3e27aee345ed783f8044d7f5f6e13c09ee9"
+          },
+          "vendor/tetorica-fm2612/gameboy_operations.js": {
+            "bytes": 14001,
+            "sha256": "312bc1469f93598667f14ef8b8f7df25bba464df6fc302ea79d2b861994ed6fa"
+          },
+          "vendor/tetorica-fm2612/gameboy_timed_client.js": {
+            "bytes": 10065,
+            "sha256": "6623676fca1a34c1dafb7bc31fbd3d5279f042df43d92f2bb56a58f231b037f8"
+          },
+          "vendor/tetorica-fm2612/gameboy_timed_processor.js": {
+            "bytes": 12254,
+            "sha256": "b06204a16d65b9dd2ba7a3fe892c2bcc2dffa6158ff0967e6386bdc4728eb69b"
+          },
+          "vendor/tetorica-fm2612/gameboy_timed_state.js": {
+            "bytes": 2226,
+            "sha256": "f3a91ea30d600857b90a2879c4b97560a338eebdd12ec57ce9f253594a2d36e5"
+          },
+          "vendor/tetorica-fm2612/gameboyapu.js": {
+            "bytes": 7082,
+            "sha256": "a652fa6e4b15457878d41ba4bfa47474bb902c943230ddc8ab89a2327f7b0cc4"
+          },
+          "vendor/tetorica-fm2612/gameboysynth.js": {
+            "bytes": 13903,
+            "sha256": "762e227143aa264208d239479ed6376ab39d3b5fb6cdb05d7ad1f8ac6f9dfcf4"
+          },
+          "vendor/tetorica-fm2612/generated/gameboy_apu_wasm.js": {
+            "bytes": 11497,
+            "sha256": "bd5d7500c4a3c99763ac7cd27263e73c060f04df3b85167a0fed19f9dad5c4e5"
+          },
+          "vendor/tetorica-fm2612/generated/gameboy_apu_wasm.wasm": {
+            "bytes": 13782,
+            "sha256": "ae2bccd3ed8f0c776fc8be198fa9fddebeb18db5654b9160eeef239c9a3faabd"
+          },
+          "vendor/tetorica-fm2612/generated/sid/sid.wasm": {
+            "bytes": 14488,
+            "sha256": "02634459953013378028171978d855e1841a55bb4493efe59f2ac07541949c7e"
+          },
+          "vendor/tetorica-fm2612/generated/sid8580-machine/sid8580-endpoint.wasm": {
+            "bytes": 1402110,
+            "sha256": "ea48a2460cc85103976ec84db3e14198796cedf77b1002974176931734aa3e37"
+          },
+          "vendor/tetorica-fm2612/nes_apu_vendor/channel-dm.js": {
+            "bytes": 6890,
+            "sha256": "94eed4be74f42c3a12f0559e736cefa73598be4b49bb83cd95ff619183b7cae7"
+          },
+          "vendor/tetorica-fm2612/nes_apu_vendor/channel-noise.js": {
+            "bytes": 3592,
+            "sha256": "9955835564f858bbb74927d0ffc202f815c24f67d63d17be09308a7cd5ccb812"
+          },
+          "vendor/tetorica-fm2612/nes_apu_vendor/channel-square.js": {
+            "bytes": 5728,
+            "sha256": "668da0573d064a3c6a7afe777f84d1635c7d541cfae315ee477b2209adbc6317"
+          },
+          "vendor/tetorica-fm2612/nes_apu_vendor/channel-triangle.js": {
+            "bytes": 3615,
+            "sha256": "4729ea94c099b7c08b6f74c3d96249212261c1f1bbf3ba53dd261e18347c6506"
+          },
+          "vendor/tetorica-fm2612/nes_apu_vendor/index.js": {
+            "bytes": 31024,
+            "sha256": "04b0d09d5a3a8dad0667d764decc6e261c81c83ab493e2423191f259f2a98122"
+          },
+          "vendor/tetorica-fm2612/nes_apu_vendor/utils.js": {
+            "bytes": 1154,
+            "sha256": "3e97884bae801319ac802378ace60591f489dec533aec2e26663685ab08f378c"
+          },
+          "vendor/tetorica-fm2612/nesapu.js": {
+            "bytes": 4072,
+            "sha256": "40310717d0f0a75b4bdb1a3d20e5350eb1274a67c406fad0eeff9e8a188aba55"
+          },
+          "vendor/tetorica-fm2612/nesapuaudioengine.js": {
+            "bytes": 5704,
+            "sha256": "5c0f6d91170b339cca384d5cdf99180af39c2b6a0b2afdb14b8582a04676c947"
+          },
+          "vendor/tetorica-fm2612/nesapusynth.js": {
+            "bytes": 15083,
+            "sha256": "29e45e817b0d419ef875a537333802516bcf508103161d08a6f07d1ece01bde6"
+          },
+          "vendor/tetorica-fm2612/playground_audio_endpoint.js": {
+            "bytes": 2002,
+            "sha256": "e8171d21fe682dd58d8d60c1cfb3f74b442586c254a8698d341fc4e1a7f1f9cd"
+          },
+          "vendor/tetorica-fm2612/playground_chip_clock.js": {
+            "bytes": 5244,
+            "sha256": "3802e15503424667324c4f6e067d5cae3ff4ad1b2adf81d780e8a47aa922ca2d"
+          },
+          "vendor/tetorica-fm2612/playground_chip_inspector_state.js": {
+            "bytes": 13049,
+            "sha256": "89a5f4c62defa490d5fd1603af0baeb763dcb00c319ea377714ada92cd350d9e"
+          },
+          "vendor/tetorica-fm2612/playground_gameboy_audio.js": {
+            "bytes": 1895,
+            "sha256": "c82bffe7e0b5b9cbcc083c40d40b95cf547a751fcff8624b3a46b5ac895362a7"
+          },
+          "vendor/tetorica-fm2612/playground_gameboy_worklet.js": {
+            "bytes": 10355,
+            "sha256": "b9af8e5f13b379907f4a472a32a3201a9ce154c7b034ec70d831bdc767088e7e"
+          },
+          "vendor/tetorica-fm2612/playground_gameboy.js": {
+            "bytes": 4669,
+            "sha256": "5430a68d9b79e77ef37b3432072f82ccaf42d1c0d9578334017b5b5828cce14e"
+          },
+          "vendor/tetorica-fm2612/playground_native_voice_inspector.js": {
+            "bytes": 19808,
+            "sha256": "173deb4fd1e7e35b8d9ec286298779a35424a87e35b69ea38e60acf54c25f045"
+          },
+          "vendor/tetorica-fm2612/playground_performance_processor.js": {
+            "bytes": 31505,
+            "sha256": "2b1ed0ab695f86247f908ff855b3130efa00db2e1dad7f57a29c7382a0786ba1"
+          },
+          "vendor/tetorica-fm2612/playground_performance_queue.js": {
+            "bytes": 24368,
+            "sha256": "5cb51d73ea0b9448a0991e81560101d1a0924248e08fa5bb572ff2b7713964f6"
+          },
+          "vendor/tetorica-fm2612/playground_sid_audio.js": {
+            "bytes": 4613,
+            "sha256": "17dbcb2d9c8274c75d6aa22100011f1e7bfefa3eedbf014af0a995d092d2be2d"
+          },
+          "vendor/tetorica-fm2612/playground_sid_inspector.js": {
+            "bytes": 1333,
+            "sha256": "f3b6d8798219e0951b4c43f9307bf2f316f201261879b7b7fd053e3a288c9a50"
+          },
+          "vendor/tetorica-fm2612/playground_sid_worklet.js": {
+            "bytes": 9462,
+            "sha256": "172b3635210e5cc5110c446e6e7a2b230f34d9884734196945e46233a721551c"
+          },
+          "vendor/tetorica-fm2612/playground_sid.js": {
+            "bytes": 6643,
+            "sha256": "032e3e659faa62cff93498aa5e75c5873cb4fb706b191c25f60cbf90e6d2de2a"
+          },
+          "vendor/tetorica-fm2612/rf5c164_notes.js": {
+            "bytes": 8631,
+            "sha256": "cd10b0abe19000e699edd181b3527edbea8d06ada2dbf34a88c51e12bf9d273f"
+          },
+          "vendor/tetorica-fm2612/rf5c164_pcm.js": {
+            "bytes": 1537,
+            "sha256": "da5835ccd54b0b8d07a82ea8cab10153044c7c20513b973c622957dc8d0b657a"
+          },
+          "vendor/tetorica-fm2612/rf5c164synth.js": {
+            "bytes": 6252,
+            "sha256": "9b5d8d0b6fb6811a2d126c6bf969ec5aae68acd680f636c2ef793e3603d61a73"
+          },
+          "vendor/tetorica-fm2612/segapsg_api.js": {
+            "bytes": 1032,
+            "sha256": "1a55c1d148536425eef54fe5ec4c3151b6ef5a734f9695a379b3a6344a7bd75d"
+          },
+          "vendor/tetorica-fm2612/segapsg.js": {
+            "bytes": 10113,
+            "sha256": "e63e1c25a9ac80721f8cd7ea1474710af125c83d4d2e682e6c4a97f40aa50bed"
+          },
+          "vendor/tetorica-fm2612/segapsgsynth.js": {
+            "bytes": 10390,
+            "sha256": "e19b274b8b2e11241e3bf3354d7a23a4d1fdf44b0a912dca3f291b4ab217ef8d"
+          },
+          "vendor/tetorica-fm2612/sid_operations.js": {
+            "bytes": 12745,
+            "sha256": "f161b3aa8f0cedcdd34bc4d22f6f7a750e92d4cb43aa489bbeb97885bfa1f288"
+          },
+          "vendor/tetorica-fm2612/sid_timed_client.js": {
+            "bytes": 10247,
+            "sha256": "9154fb943325a51006daa67155099362365631753dc94218327aa9d916301a1e"
+          },
+          "vendor/tetorica-fm2612/sid_timed_processor.js": {
+            "bytes": 12672,
+            "sha256": "e6b6fb3d5fdff9784662f8699f94dac1835004b3165a075a0f2f6c2ca990427b"
+          },
+          "vendor/tetorica-fm2612/sid_timed_state.js": {
+            "bytes": 2308,
+            "sha256": "e533c7ed4e75706fa80b36211bc4d751705bd261a270cd2c6776a6d91a04b14c"
+          },
+          "vendor/tetorica-fm2612/sid_waveforms.js": {
+            "bytes": 2012,
+            "sha256": "5ef93ebfff79ae1c7cddd8e2463ed4818752f4428ad3014e644c2cc90722b393"
+          },
+          "vendor/tetorica-fm2612/sid.js": {
+            "bytes": 4845,
+            "sha256": "6c61f6616e29faed214da59de613d1acb2c0c64ada691300c96d45e99cdc8dcb"
+          },
+          "vendor/tetorica-fm2612/sid8580.js": {
+            "bytes": 7628,
+            "sha256": "25a9e7ef9f938173acbae3d314351ba7bd1f33832289535c5015a1c5716b728c"
+          },
+          "vendor/tetorica-fm2612/sidsynth.js": {
+            "bytes": 14845,
+            "sha256": "c1172f4d7b8681a49cb7ca3a1d834e6b5b17d89817eb2cfae80b7513bfde771d"
+          },
+          "vendor/tetorica-fm2612/soundchip_pitch.js": {
+            "bytes": 2854,
+            "sha256": "c8bcce0f27c2500d6090b5e56660e697b8b03d7ec011cee4deba05664038bae9"
+          }
+        }
+      }
+    },
+    {
+      "sampleRate": 44100,
+      "assets": {
+        "dist": {
+          "examples/c64/sid/04-timed-motion/node/main.mjs": {
+            "bytes": 3321,
+            "sha256": "1d45ead3a3511b04f496b1a41e6ccc46057311a213609117ae31652d12d4113d"
+          },
+          "examples/c64/sid/04-timed-motion/web/index.html": {
+            "bytes": 4670,
+            "sha256": "54f201716ee0d35d3d882c857c6461ceabde683ee7b141ca4f337454a52ca8fc"
+          },
+          "examples/c64/sid/04-timed-motion/web/main.js": {
+            "bytes": 12088,
+            "sha256": "f1bd9d1a461b82109fe618301e85b9db791e62c48554160a08328a11faeb879d"
+          },
+          "examples/gameboy/registers/01-timed-operations/web/index.html": {
+            "bytes": 3717,
+            "sha256": "f602890188268aabba0d3bca667b3d23a59b54a8c45f6411fac7d324038d659c"
+          },
+          "examples/gameboy/registers/01-timed-operations/web/main.js": {
+            "bytes": 12505,
+            "sha256": "488a6919dbd36fafecdbb5e7a075b9b033ce46fec1aea29bbd405de4cdac6dbd"
+          },
+          "style.css": {
+            "bytes": 2943,
+            "sha256": "ec3cde4b86adbfb8b8d55707245daea5b531249eb4d17e2a053b81091462d7fc"
+          },
+          "vendor/tetorica-fm2612/chip_worklet_transport.js": {
+            "bytes": 15460,
+            "sha256": "a7d1e5634cdf9baeb702cf069ef805a00c6a479951a90825f3a557c8dc31893a"
+          },
+          "vendor/tetorica-fm2612/fds_audio.js": {
+            "bytes": 5112,
+            "sha256": "a40594267909ec49f07897913877e3e27aee345ed783f8044d7f5f6e13c09ee9"
+          },
+          "vendor/tetorica-fm2612/gameboy_operations.js": {
+            "bytes": 14001,
+            "sha256": "312bc1469f93598667f14ef8b8f7df25bba464df6fc302ea79d2b861994ed6fa"
+          },
+          "vendor/tetorica-fm2612/gameboy_timed_client.js": {
+            "bytes": 10065,
+            "sha256": "6623676fca1a34c1dafb7bc31fbd3d5279f042df43d92f2bb56a58f231b037f8"
+          },
+          "vendor/tetorica-fm2612/gameboy_timed_processor.js": {
+            "bytes": 12254,
+            "sha256": "b06204a16d65b9dd2ba7a3fe892c2bcc2dffa6158ff0967e6386bdc4728eb69b"
+          },
+          "vendor/tetorica-fm2612/gameboy_timed_state.js": {
+            "bytes": 2226,
+            "sha256": "f3a91ea30d600857b90a2879c4b97560a338eebdd12ec57ce9f253594a2d36e5"
+          },
+          "vendor/tetorica-fm2612/gameboyapu.js": {
+            "bytes": 7082,
+            "sha256": "a652fa6e4b15457878d41ba4bfa47474bb902c943230ddc8ab89a2327f7b0cc4"
+          },
+          "vendor/tetorica-fm2612/gameboysynth.js": {
+            "bytes": 13903,
+            "sha256": "762e227143aa264208d239479ed6376ab39d3b5fb6cdb05d7ad1f8ac6f9dfcf4"
+          },
+          "vendor/tetorica-fm2612/generated/gameboy_apu_wasm.js": {
+            "bytes": 11497,
+            "sha256": "bd5d7500c4a3c99763ac7cd27263e73c060f04df3b85167a0fed19f9dad5c4e5"
+          },
+          "vendor/tetorica-fm2612/generated/gameboy_apu_wasm.wasm": {
+            "bytes": 13782,
+            "sha256": "ae2bccd3ed8f0c776fc8be198fa9fddebeb18db5654b9160eeef239c9a3faabd"
+          },
+          "vendor/tetorica-fm2612/generated/sid/sid.wasm": {
+            "bytes": 14488,
+            "sha256": "02634459953013378028171978d855e1841a55bb4493efe59f2ac07541949c7e"
+          },
+          "vendor/tetorica-fm2612/generated/sid8580-machine/sid8580-endpoint.wasm": {
+            "bytes": 1402110,
+            "sha256": "ea48a2460cc85103976ec84db3e14198796cedf77b1002974176931734aa3e37"
+          },
+          "vendor/tetorica-fm2612/nes_apu_vendor/channel-dm.js": {
+            "bytes": 6890,
+            "sha256": "94eed4be74f42c3a12f0559e736cefa73598be4b49bb83cd95ff619183b7cae7"
+          },
+          "vendor/tetorica-fm2612/nes_apu_vendor/channel-noise.js": {
+            "bytes": 3592,
+            "sha256": "9955835564f858bbb74927d0ffc202f815c24f67d63d17be09308a7cd5ccb812"
+          },
+          "vendor/tetorica-fm2612/nes_apu_vendor/channel-square.js": {
+            "bytes": 5728,
+            "sha256": "668da0573d064a3c6a7afe777f84d1635c7d541cfae315ee477b2209adbc6317"
+          },
+          "vendor/tetorica-fm2612/nes_apu_vendor/channel-triangle.js": {
+            "bytes": 3615,
+            "sha256": "4729ea94c099b7c08b6f74c3d96249212261c1f1bbf3ba53dd261e18347c6506"
+          },
+          "vendor/tetorica-fm2612/nes_apu_vendor/index.js": {
+            "bytes": 31024,
+            "sha256": "04b0d09d5a3a8dad0667d764decc6e261c81c83ab493e2423191f259f2a98122"
+          },
+          "vendor/tetorica-fm2612/nes_apu_vendor/utils.js": {
+            "bytes": 1154,
+            "sha256": "3e97884bae801319ac802378ace60591f489dec533aec2e26663685ab08f378c"
+          },
+          "vendor/tetorica-fm2612/nesapu.js": {
+            "bytes": 4072,
+            "sha256": "40310717d0f0a75b4bdb1a3d20e5350eb1274a67c406fad0eeff9e8a188aba55"
+          },
+          "vendor/tetorica-fm2612/nesapuaudioengine.js": {
+            "bytes": 5704,
+            "sha256": "5c0f6d91170b339cca384d5cdf99180af39c2b6a0b2afdb14b8582a04676c947"
+          },
+          "vendor/tetorica-fm2612/nesapusynth.js": {
+            "bytes": 15083,
+            "sha256": "29e45e817b0d419ef875a537333802516bcf508103161d08a6f07d1ece01bde6"
+          },
+          "vendor/tetorica-fm2612/playground_audio_endpoint.js": {
+            "bytes": 2002,
+            "sha256": "e8171d21fe682dd58d8d60c1cfb3f74b442586c254a8698d341fc4e1a7f1f9cd"
+          },
+          "vendor/tetorica-fm2612/playground_chip_clock.js": {
+            "bytes": 5244,
+            "sha256": "3802e15503424667324c4f6e067d5cae3ff4ad1b2adf81d780e8a47aa922ca2d"
+          },
+          "vendor/tetorica-fm2612/playground_chip_inspector_state.js": {
+            "bytes": 13049,
+            "sha256": "89a5f4c62defa490d5fd1603af0baeb763dcb00c319ea377714ada92cd350d9e"
+          },
+          "vendor/tetorica-fm2612/playground_gameboy_audio.js": {
+            "bytes": 1895,
+            "sha256": "c82bffe7e0b5b9cbcc083c40d40b95cf547a751fcff8624b3a46b5ac895362a7"
+          },
+          "vendor/tetorica-fm2612/playground_gameboy_worklet.js": {
+            "bytes": 10355,
+            "sha256": "b9af8e5f13b379907f4a472a32a3201a9ce154c7b034ec70d831bdc767088e7e"
+          },
+          "vendor/tetorica-fm2612/playground_gameboy.js": {
+            "bytes": 4669,
+            "sha256": "5430a68d9b79e77ef37b3432072f82ccaf42d1c0d9578334017b5b5828cce14e"
+          },
+          "vendor/tetorica-fm2612/playground_native_voice_inspector.js": {
+            "bytes": 19808,
+            "sha256": "173deb4fd1e7e35b8d9ec286298779a35424a87e35b69ea38e60acf54c25f045"
+          },
+          "vendor/tetorica-fm2612/playground_performance_processor.js": {
+            "bytes": 31505,
+            "sha256": "2b1ed0ab695f86247f908ff855b3130efa00db2e1dad7f57a29c7382a0786ba1"
+          },
+          "vendor/tetorica-fm2612/playground_performance_queue.js": {
+            "bytes": 24368,
+            "sha256": "5cb51d73ea0b9448a0991e81560101d1a0924248e08fa5bb572ff2b7713964f6"
+          },
+          "vendor/tetorica-fm2612/playground_sid_audio.js": {
+            "bytes": 4613,
+            "sha256": "17dbcb2d9c8274c75d6aa22100011f1e7bfefa3eedbf014af0a995d092d2be2d"
+          },
+          "vendor/tetorica-fm2612/playground_sid_inspector.js": {
+            "bytes": 1333,
+            "sha256": "f3b6d8798219e0951b4c43f9307bf2f316f201261879b7b7fd053e3a288c9a50"
+          },
+          "vendor/tetorica-fm2612/playground_sid_worklet.js": {
+            "bytes": 9462,
+            "sha256": "172b3635210e5cc5110c446e6e7a2b230f34d9884734196945e46233a721551c"
+          },
+          "vendor/tetorica-fm2612/playground_sid.js": {
+            "bytes": 6643,
+            "sha256": "032e3e659faa62cff93498aa5e75c5873cb4fb706b191c25f60cbf90e6d2de2a"
+          },
+          "vendor/tetorica-fm2612/rf5c164_notes.js": {
+            "bytes": 8631,
+            "sha256": "cd10b0abe19000e699edd181b3527edbea8d06ada2dbf34a88c51e12bf9d273f"
+          },
+          "vendor/tetorica-fm2612/rf5c164_pcm.js": {
+            "bytes": 1537,
+            "sha256": "da5835ccd54b0b8d07a82ea8cab10153044c7c20513b973c622957dc8d0b657a"
+          },
+          "vendor/tetorica-fm2612/rf5c164synth.js": {
+            "bytes": 6252,
+            "sha256": "9b5d8d0b6fb6811a2d126c6bf969ec5aae68acd680f636c2ef793e3603d61a73"
+          },
+          "vendor/tetorica-fm2612/segapsg_api.js": {
+            "bytes": 1032,
+            "sha256": "1a55c1d148536425eef54fe5ec4c3151b6ef5a734f9695a379b3a6344a7bd75d"
+          },
+          "vendor/tetorica-fm2612/segapsg.js": {
+            "bytes": 10113,
+            "sha256": "e63e1c25a9ac80721f8cd7ea1474710af125c83d4d2e682e6c4a97f40aa50bed"
+          },
+          "vendor/tetorica-fm2612/segapsgsynth.js": {
+            "bytes": 10390,
+            "sha256": "e19b274b8b2e11241e3bf3354d7a23a4d1fdf44b0a912dca3f291b4ab217ef8d"
+          },
+          "vendor/tetorica-fm2612/sid_operations.js": {
+            "bytes": 12745,
+            "sha256": "f161b3aa8f0cedcdd34bc4d22f6f7a750e92d4cb43aa489bbeb97885bfa1f288"
+          },
+          "vendor/tetorica-fm2612/sid_timed_client.js": {
+            "bytes": 10247,
+            "sha256": "9154fb943325a51006daa67155099362365631753dc94218327aa9d916301a1e"
+          },
+          "vendor/tetorica-fm2612/sid_timed_processor.js": {
+            "bytes": 12672,
+            "sha256": "e6b6fb3d5fdff9784662f8699f94dac1835004b3165a075a0f2f6c2ca990427b"
+          },
+          "vendor/tetorica-fm2612/sid_timed_state.js": {
+            "bytes": 2308,
+            "sha256": "e533c7ed4e75706fa80b36211bc4d751705bd261a270cd2c6776a6d91a04b14c"
+          },
+          "vendor/tetorica-fm2612/sid_waveforms.js": {
+            "bytes": 2012,
+            "sha256": "5ef93ebfff79ae1c7cddd8e2463ed4818752f4428ad3014e644c2cc90722b393"
+          },
+          "vendor/tetorica-fm2612/sid.js": {
+            "bytes": 4845,
+            "sha256": "6c61f6616e29faed214da59de613d1acb2c0c64ada691300c96d45e99cdc8dcb"
+          },
+          "vendor/tetorica-fm2612/sid8580.js": {
+            "bytes": 7628,
+            "sha256": "25a9e7ef9f938173acbae3d314351ba7bd1f33832289535c5015a1c5716b728c"
+          },
+          "vendor/tetorica-fm2612/sidsynth.js": {
+            "bytes": 14845,
+            "sha256": "c1172f4d7b8681a49cb7ca3a1d834e6b5b17d89817eb2cfae80b7513bfde771d"
+          },
+          "vendor/tetorica-fm2612/soundchip_pitch.js": {
+            "bytes": 2854,
+            "sha256": "c8bcce0f27c2500d6090b5e56660e697b8b03d7ec011cee4deba05664038bae9"
+          }
+        }
+      }
+    }
+  ],
+  "sources": {
+    "package.json": {
+      "bytes": 2221,
+      "sha256": "58901a2054f17ff771de79b3c14822f5e2e5faeaf39346b70bc7180c684562e4"
+    },
+    "package-lock.json": {
+      "bytes": 1895,
+      "sha256": "e1bf12e970ce690531080153d0cf97138145df704a1e70368a50b6e14f58e71d"
+    },
+    "scripts/check-node.mjs": {
+      "bytes": 21533,
+      "sha256": "c2cd0709f6c0bb85fda46b991f31ed7114a9541ea13b55a459777e3451fd6335"
+    },
+    "scripts/check-timed-browser.mjs": {
+      "bytes": 15376,
+      "sha256": "195a0d19054c148f8ac11ac085ac60b66193e75719126ff886dd14832f59afa6"
+    },
+    "scripts/check-dmg-sid-timed-browser.mjs": {
+      "bytes": 18370,
+      "sha256": "ca278e9e746bc531053ac30603b6c15103d3e7bd64e0c9a9294758aa295711b5"
+    },
+    "scripts/runtime.mjs": {
+      "bytes": 19564,
+      "sha256": "be3fe4bf4b2d8883752b1a208004c70d183caa3e16109b45fedddc8df9e3f630"
+    },
+    "examples/gameboy/registers/01-timed-operations/README.md": {
+      "bytes": 2767,
+      "sha256": "ea8d405cdc1e2f0863aa8a9d42ef6e5e06961b82bc15e752475ad5101332b1ca"
+    },
+    "examples/gameboy/registers/01-timed-operations/web/index.html": {
+      "bytes": 3717,
+      "sha256": "f602890188268aabba0d3bca667b3d23a59b54a8c45f6411fac7d324038d659c"
+    },
+    "examples/gameboy/registers/01-timed-operations/web/main.js": {
+      "bytes": 12505,
+      "sha256": "488a6919dbd36fafecdbb5e7a075b9b033ce46fec1aea29bbd405de4cdac6dbd"
+    },
+    "examples/gameboy/registers/01-timed-operations/node/main.mjs": {
+      "bytes": 4528,
+      "sha256": "c41fb8a0b2acc1cf1f1bc4fcf3d31a7d0e7f327f8ffb94dade2155cad93de6fd"
+    },
+    "examples/c64/sid/04-timed-motion/README.md": {
+      "bytes": 3201,
+      "sha256": "b591797c271b75fc8af35c0ea335f039de1a1d4731ce9f1bc0b04d643f448f9e"
+    },
+    "examples/c64/sid/04-timed-motion/web/index.html": {
+      "bytes": 4670,
+      "sha256": "54f201716ee0d35d3d882c857c6461ceabde683ee7b141ca4f337454a52ca8fc"
+    },
+    "examples/c64/sid/04-timed-motion/web/main.js": {
+      "bytes": 12088,
+      "sha256": "f1bd9d1a461b82109fe618301e85b9db791e62c48554160a08328a11faeb879d"
+    },
+    "examples/c64/sid/04-timed-motion/node/main.mjs": {
+      "bytes": 3321,
+      "sha256": "1d45ead3a3511b04f496b1a41e6ccc46057311a213609117ae31652d12d4113d"
+    }
+  }
+}

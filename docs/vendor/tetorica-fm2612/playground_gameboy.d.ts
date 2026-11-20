@@ -1,14 +1,22 @@
-import { GameboySynth } from './gameboysynth.js';
 /** Same immediate, ordered port writes for both raw and high-level APIs. */
 /** @param {MessagePort} port */
-export declare function createGameboyClient(port: MessagePort, options?: {}, lifecycle?: {}): GameboySynth & {
-    readonly clock: number;
-    setClock(hz: number): Promise<void>;
-    _requestControl(method: string, args?: any[], transfer?: Transferable[]): Promise<any>;
+/** @param {any} port
+ * @param {{clock?:number,instanceId?:string|number,native?:boolean,primary?:boolean}} [options]
+ * @param {any} [lifecycle]
+ * @returns {import('./gameboysynth.js').GameboySynth & import('./gameboy_timed_client.js').GameboyTimedApi & {setClock(hz:number):Promise<unknown>}}
+ */
+export declare function createGameboyClient(port: any, options?: {
+    clock?: number;
+    instanceId?: string | number;
+    native?: boolean;
+    primary?: boolean;
+}, lifecycle?: any): import('./gameboysynth.js').GameboySynth & import('./gameboy_timed_client.js').GameboyTimedApi & {
+    setClock(hz: number): Promise<unknown>;
 };
 /** Safe builtin controls borrow the primary device, whose lifetime belongs to the runtime. */
-export declare function createPrimaryGameboyApi(raw: any): {
-    pulse: any;
-    wave: any;
-    noise: any;
+/** @param {any} raw
+ * @returns {Omit<ReturnType<typeof createGameboyClient>,'dispose'> & {readonly id:string}}
+ */
+export declare function createPrimaryGameboyApi(raw: any): Omit<ReturnType<typeof createGameboyClient>, 'dispose'> & {
+    readonly id: string;
 };

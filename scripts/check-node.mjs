@@ -223,6 +223,29 @@ try {
      console.log('PASS '+item.id+': local/reset/reused snapshot traces, packed fields, immutable state and Native restrictions; no audio device');
      count++;continue;
    }
+   if(item.id==='gameboy/registers/01-timed-operations'||item.id==='c64/sid/04-timed-motion'){
+     const out=join(directory,item.id.startsWith('gameboy/')?'dmg-compile.json':'sid-motion-compile.json');
+     execFileSync(process.execPath,[`examples/${item.id}/node/main.mjs`,out],{cwd:root,timeout:30000,stdio:'pipe'});
+     const data=JSON.parse(await readFile(out,'utf8'));
+     assert.equal(data.passed,true);
+     if(item.id.startsWith('gameboy/')){
+       assert.equal(data.format,'tetorica-dmg-compile-comparison-v1');
+       assert(Object.keys(data.checks).length>=8&&Object.values(data.checks).every(value=>value===true));
+       assert.equal(data.writesA[0].value,0x5f);assert.equal(data.writesB[0].value,0xdf);
+       assert.equal(data.waveWrites.filter(row=>row.register>=32&&row.register<=47).length,16);
+       assert.equal(data.resetWrites.length,2);
+     }else{
+       assert.equal(data.format,'tetorica-sid-timed-motion-v1');
+       assert.deepEqual(data.reports.map(report=>report.model),['6581','8580']);
+       for(const report of data.reports){
+         assert(Object.keys(report.checks).length>=6&&Object.values(report.checks).every(value=>value===true));
+         assert.deepEqual(report.writesA.slice(0,2).map(row=>[row.register,row.value]),[[4,0x27],[4,0x27]]);
+         assert.equal(report.writesA.at(-1).offsetSeconds,.2);
+       }
+     }
+     console.log('PASS '+item.id+': structured register comparison, detached snapshot and event order; no audio device or WASM');
+     count++;continue;
+   }
    if(item.id.startsWith('c64/sid/')) {
      const segments=[];
      for(const model of ['6581','8580']) {
@@ -273,7 +296,7 @@ try {
    const data=JSON.parse(await readFile(root+'/output/'+file,'utf8'));assert.equal(data.format,'megasynth-recording-v1');assert.equal(data.commands.length,2);
   }
   if(onlyPcEngineCd)assert.equal(count,3,'Expected all three PC Engine CD Node examples');
-  if(onlySid)assert.equal(count,6,'Expected three SID examples with both models');
+  if(onlySid)assert.equal(count,7,'Expected three SID WAV examples with both models and one timed JSON comparison');
   console.log(`PASS ${count} installed-package Node examples: audible WAV${onlyPcEngineCd||onlySid?'':' + event / register JSON'}`);
 
 } finally {await rm(directory, {recursive: true, force: true});}
