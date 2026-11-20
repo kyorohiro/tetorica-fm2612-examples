@@ -43,6 +43,7 @@ export declare class Ps1InstrumentProcessor extends AudioWorkletProcessor {
             session?: number;
             owner?: string;
         }) => boolean;
+        clearPatterns: () => void;
         commitPatterns: (changes: any, { session, owner, dryRun }?: {
             session: number;
             owner: string;
@@ -82,6 +83,11 @@ export declare class Ps1InstrumentProcessor extends AudioWorkletProcessor {
         };
     };
     ready: Promise<void>;
+    timed: {
+        receive(data: any, port: any): boolean;
+        apply(operation: any, port: any, frame: any, metadata: any): any;
+        clear(): void;
+    };
     inspector: Ps1VoiceInspector;
     resampler: Ps1Resampler;
     constructor({ processorOptions }?: {

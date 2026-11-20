@@ -30,10 +30,11 @@
     "check:pcm-helpers": "node scripts/check-pcm-helpers-browser.mjs",
     "check:vab:node": "node scripts/check-vab-node.mjs",
     "check:vab": "node scripts/check-vab-node.mjs && node scripts/check-vab-browser.mjs",
-    "check:scsp-dsp": "node scripts/check-scsp-dsp-node.mjs && node scripts/check-scsp-dsp-browser.mjs"
+    "check:scsp-dsp": "node scripts/check-scsp-dsp-node.mjs && node scripts/check-scsp-dsp-browser.mjs",
+    "check:wonderswan-timed": "node examples/wonderswan/registers/01-timed-operations/node/main.mjs && node scripts/check-timed-browser.mjs --case=wonderswanTimed"
   },
   "dependencies": {
-    "tetorica-fm2612": "0.2.44"
+    "tetorica-fm2612": "0.2.45"
   },
   "devDependencies": {
     "playwright": "1.63.0"

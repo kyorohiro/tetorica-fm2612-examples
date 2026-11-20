@@ -14,8 +14,22 @@ export type Ym2608OutputGainPatch = {
     fm?: number;
     ssg?: number;
 };
+export type Ym2608SourceGains = {
+    fm: number;
+    ssg: number;
+    rhythm: number;
+    adpcm: number;
+};
+export type Ym2608SourceGainPatch = {
+    fm?: number;
+    ssg?: number;
+    rhythm?: number;
+    adpcm?: number;
+};
 /** @typedef {{fm:number,ssg:number}} Ym2608OutputGains */
 /** @typedef {{fm?:number,ssg?:number}} Ym2608OutputGainPatch */
+/** @typedef {{fm:number,ssg:number,rhythm:number,adpcm:number}} Ym2608SourceGains */
+/** @typedef {{fm?:number,ssg?:number,rhythm?:number,adpcm?:number}} Ym2608SourceGainPatch */
 /** Validate host-side output gains before changing either bus.
  * FM includes the chip's already combined Rhythm and ADPCM-B outputs.
  * @param {Ym2608OutputGainPatch} gains Partial linear gains, each 0..1024.
@@ -23,6 +37,12 @@ export type Ym2608OutputGainPatch = {
  * @returns {Ym2608OutputGains} Detached validated gains.
  */
 export declare function normalizeYm2608OutputGains(gains: Ym2608OutputGainPatch, current?: Ym2608OutputGains): Ym2608OutputGains;
+/** Validate independent source gains before changing any sound source.
+ * @param {Ym2608SourceGainPatch} gains Partial linear gains, each 0..1024.
+ * @param {Ym2608SourceGains} [current] Previously accepted gains.
+ * @returns {Ym2608SourceGains} Detached validated source gains.
+ */
+export declare function normalizeYm2608SourceGains(gains: Ym2608SourceGainPatch, current?: Ym2608SourceGains): Ym2608SourceGains;
 /**
  * Ym2608 chip instance backed by WASM. No AudioContext or playback device is created.
  * Use create() to initialize and dispose() to release native resources.
@@ -45,6 +65,12 @@ export declare class Ym2608 {
     outputGains: {
         fm: number;
         ssg: number;
+    };
+    sourceGains: {
+        fm: number;
+        ssg: number;
+        rhythm: number;
+        adpcm: number;
     };
     pcmView: {
         left: Float32Array<any>;
@@ -154,6 +180,14 @@ export declare class Ym2608 {
     setOutputGains(gains: Ym2608OutputGainPatch): Ym2608OutputGains;
     /** @returns {Ym2608OutputGains} Detached linear output gain multipliers. */
     getOutputGains(): Ym2608OutputGains;
+    /** Set independent host gains for FM, SSG, Rhythm and ADPCM-B before mixing.
+     * This does not change the legacy two-bus output gains or chip registers.
+     * @param {Ym2608SourceGainPatch} gains Partial linear gain multipliers, each 0..1024.
+     * @returns {Ym2608SourceGains} Accepted source gains.
+     */
+    setSourceGains(gains: Ym2608SourceGainPatch): Ym2608SourceGains;
+    /** @returns {Ym2608SourceGains} Detached independent source gain multipliers. */
+    getSourceGains(): Ym2608SourceGains;
     /**
      * Generate PCM synchronously, advancing the chip by the requested number of frames.
      * Returned arrays are copied from WASM memory and survive later generation/disposal.

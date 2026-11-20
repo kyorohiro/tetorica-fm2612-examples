@@ -6,11 +6,13 @@ export declare function createPs1Client(port: MessagePort, initial?: {
     sampleRate: number;
     nativeSampleRate: number;
     channelCount: number;
+    _requestControl: (method: any, args?: any[], transfer?: any[]) => Promise<any>;
     _getState(): {
         sampleRate: number;
         channelCount: number;
         nextAddress: number;
         nativeFrames: number;
+        noiseClock: number;
         samples: {
             id: number;
             startAddress: number;
@@ -37,6 +39,8 @@ export declare function createPs1Client(port: MessagePort, initial?: {
             adsr2: number;
             pitch: number;
             reverb: boolean;
+            noise: boolean;
+            pmon: boolean;
             waveform: {
                 sample: number;
                 pcm: number[];
@@ -66,6 +70,11 @@ export declare function createPs1Client(port: MessagePort, initial?: {
     /** @param {number} ch @param {number} pitch */ setPitch(ch: number, pitch: number): void;
     /** @param {number} ch @param {number} hz */ setFrequency(ch: number, hz: number): void;
     /** @param {number} ch @param {string|number} note */ setNote(ch: number, note: string | number): void;
+    /** Hardware Noise bit; does not allocate or trigger a sample. @param {number} ch @param {boolean} enabled */
+    setNoiseEnabled(ch: number, enabled: boolean): void;
+    /** Shared clock code 0..63. @param {number} code */ setNoiseClock(code: number): void;
+    /** Previous physical CH is the source; no auto pairing. @param {number} ch @param {boolean} enabled */
+    setPmonEnabled(ch: number, enabled: boolean): void;
     /** @param {number} ch */ keyOn(ch: number): void;
     /** @param {number} ch */ keyOff(ch: number): void;
     /** @param {number} ch @param {string|number} [note] */ noteOn(ch: number, note?: string | number): void;
@@ -80,4 +89,10 @@ export declare function createPs1Client(port: MessagePort, initial?: {
     /** @param {number} ch @returns {Promise<ReturnType<import('./ps1synth.js').Ps1Synth['getPreset']>>} */ getPreset(ch: number): Promise<ReturnType<import('./ps1synth.js').Ps1Synth['getPreset']>>;
     /** @returns {Promise<ReturnType<import('./ps1synth.js').Ps1Synth['snapshot']>>} */ snapshot(): Promise<ReturnType<import('./ps1synth.js').Ps1Synth['snapshot']>>;
     dispose(): void;
+} & {
+    build: typeof import('./ps1_operations.js').buildPs1Operations;
+    captureState: () => Promise<ReturnType<typeof import('./ps1_timed_state.js').createPs1TimedSnapshot>>;
+    compile: (operations: any, options?: any) => Promise<any[]>;
+    schedule: (operations: any, options: any) => Promise<any>;
+    clearSchedule: (name: string) => Promise<boolean>;
 };

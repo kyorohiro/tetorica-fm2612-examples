@@ -314,6 +314,15 @@
     ]
   },
   {
+    "id": "wonderswan/registers/01-timed-operations",
+    "title": "ASWAN：操作・レジスタ・予約演奏",
+    "description": "同じsnapshotからのcompile比較、左右音量とGateの予約、手動R90変更の保持。",
+    "environments": [
+      "web",
+      "node"
+    ]
+  },
+  {
     "id": "pokey/tone/01-four-channels",
     "title": "POKEY：4CHのメロディ",
     "description": "4つの物理CHを音名で鳴らし、音量とトーンを設定。WebはAudioWorklet、NodeはWAV出力。",

@@ -1,0 +1,3090 @@
+{
+  "passed": true,
+  "packageVersion": "0.2.45",
+  "physicalOutputMuted": true,
+  "matrices": {
+    "timed44100": {
+      "passed": true,
+      "packageVersion": "0.2.45",
+      "sampleRate": 44100,
+      "physicalOutputMuted": true,
+      "staticSiteOnly": true,
+      "site": "/Users/kyorohiro/development8/wfm/hello_ymfm/w/tetorica-fm2612-examples/dist",
+      "results": [
+        {
+          "browser": "chromium",
+          "example": "atari-st/ym2149/01-sync-buzzer",
+          "repeatSeconds": 0.00909090909090909,
+          "writesPerPattern": 1,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              },
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.007975849166382288,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.009527967798785402,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "chromium",
+          "example": "atari-st/ym2149/02-volume-modulation",
+          "repeatSeconds": 0.02,
+          "writesPerPattern": 16,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              },
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.009637002996892225,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.010571233101342174,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "chromium",
+          "example": "genesis/fm/07-timed-operators",
+          "engine": "ymfm",
+          "repeatSeconds": 1.5,
+          "writesPerPattern": 32,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.01586151123046875,
+                "acRms": 0.007543461532758833,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.01586151123046875,
+                "acRms": 0.007508180274881707,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "chromium",
+          "example": "genesis/fm/07-timed-operators",
+          "engine": "nuked",
+          "repeatSeconds": 1.5,
+          "writesPerPattern": 32,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "nuked"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "nuked"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.02492523193359375,
+                "acRms": 0.011756882365380684,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.02492523193359375,
+                "acRms": 0.011748631095636732,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "chromium",
+          "example": "wonderswan/registers/01-timed-operations",
+          "screenshot": "/tmp/aswan-examples-timed-44100-chromium-aswan.png",
+          "repeatSeconds": 1,
+          "writesPerPattern": 6,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-wonderswan"
+              },
+              {
+                "name": "tetorica-wonderswan"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.02978668175637722,
+                "acRms": 0.021298624133151107,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.02978668175637722,
+                "acRms": 0.0212875805417839,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "chromium",
+          "example": "chip-raw/02-compile-compare",
+          "baselines": {
+            "current": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 82,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "client": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 50,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "reset": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 2,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "snapshotA": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 82,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "snapshotB": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 17,
+                "operationIndex": 0,
+                "writeIndex": 0
+              }
+            ]
+          },
+          "snapshot": {
+            "frame": 2432,
+            "sampleRate": 44100,
+            "engine": "ymfm"
+          },
+          "checks": {
+            "currentMatchesSnapshot": true,
+            "snapshotReusable": true,
+            "snapshotUnchanged": true,
+            "liveStateUnchanged": true,
+            "repeatedKeysKept": true
+          },
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "atari-st/ym2149/01-sync-buzzer",
+          "repeatSeconds": 0.00909090909090909,
+          "writesPerPattern": 1,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              },
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.008195785219504507,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.009600849983529022,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "atari-st/ym2149/02-volume-modulation",
+          "repeatSeconds": 0.02,
+          "writesPerPattern": 16,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              },
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.010038651926280851,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.010556205026791545,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "genesis/fm/07-timed-operators",
+          "engine": "ymfm",
+          "repeatSeconds": 1.5,
+          "writesPerPattern": 32,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.01586151123046875,
+                "acRms": 0.007543611390556015,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.01586151123046875,
+                "acRms": 0.007502979042513083,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "genesis/fm/07-timed-operators",
+          "engine": "nuked",
+          "repeatSeconds": 1.5,
+          "writesPerPattern": 32,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "nuked"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "nuked"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "nuked"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.02492523193359375,
+                "acRms": 0.011843252682888546,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.02492523193359375,
+                "acRms": 0.011843252682888546,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "wonderswan/registers/01-timed-operations",
+          "screenshot": "/tmp/aswan-examples-timed-44100-webkit-aswan.png",
+          "repeatSeconds": 1,
+          "writesPerPattern": 6,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-wonderswan"
+              },
+              {
+                "name": "tetorica-wonderswan"
+              },
+              {
+                "name": "tetorica-wonderswan"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.02978668175637722,
+                "acRms": 0.021290600444729052,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.02978668175637722,
+                "acRms": 0.021290489998347185,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "chip-raw/02-compile-compare",
+          "baselines": {
+            "current": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 82,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "client": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 50,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "reset": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 2,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "snapshotA": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 82,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "snapshotB": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 17,
+                "operationIndex": 0,
+                "writeIndex": 0
+              }
+            ]
+          },
+          "snapshot": {
+            "frame": 2048,
+            "sampleRate": 44100,
+            "engine": "ymfm"
+          },
+          "checks": {
+            "currentMatchesSnapshot": true,
+            "snapshotReusable": true,
+            "snapshotUnchanged": true,
+            "liveStateUnchanged": true,
+            "repeatedKeysKept": true
+          },
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        }
+      ]
+    },
+    "timed48000": {
+      "passed": true,
+      "packageVersion": "0.2.45",
+      "sampleRate": 48000,
+      "physicalOutputMuted": true,
+      "staticSiteOnly": true,
+      "site": "/Users/kyorohiro/development8/wfm/hello_ymfm/w/tetorica-fm2612-examples/dist",
+      "results": [
+        {
+          "browser": "chromium",
+          "example": "atari-st/ym2149/01-sync-buzzer",
+          "repeatSeconds": 0.00909090909090909,
+          "writesPerPattern": 1,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              },
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.008351786830258633,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.009829701568533128,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "chromium",
+          "example": "atari-st/ym2149/02-volume-modulation",
+          "repeatSeconds": 0.02,
+          "writesPerPattern": 16,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              },
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.009635787869266456,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.010663641441473883,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "chromium",
+          "example": "genesis/fm/07-timed-operators",
+          "engine": "ymfm",
+          "repeatSeconds": 1.5,
+          "writesPerPattern": 32,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.01586151123046875,
+                "acRms": 0.007425256171893225,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.01586151123046875,
+                "acRms": 0.0074986715441596,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "chromium",
+          "example": "genesis/fm/07-timed-operators",
+          "engine": "nuked",
+          "repeatSeconds": 1.5,
+          "writesPerPattern": 32,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "nuked"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "nuked"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.02492523193359375,
+                "acRms": 0.011682488772476695,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.02492523193359375,
+                "acRms": 0.011791797818718992,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "chromium",
+          "example": "wonderswan/registers/01-timed-operations",
+          "screenshot": "/tmp/aswan-examples-timed-48000-chromium-aswan.png",
+          "repeatSeconds": 1,
+          "writesPerPattern": 6,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-wonderswan"
+              },
+              {
+                "name": "tetorica-wonderswan"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.02978668175637722,
+                "acRms": 0.02117355913324307,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.02978668175637722,
+                "acRms": 0.02117355913324307,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "chromium",
+          "example": "chip-raw/02-compile-compare",
+          "baselines": {
+            "current": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 82,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "client": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 50,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "reset": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 2,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "snapshotA": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 82,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "snapshotB": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 17,
+                "operationIndex": 0,
+                "writeIndex": 0
+              }
+            ]
+          },
+          "snapshot": {
+            "frame": 1536,
+            "sampleRate": 48000,
+            "engine": "ymfm"
+          },
+          "checks": {
+            "currentMatchesSnapshot": true,
+            "snapshotReusable": true,
+            "snapshotUnchanged": true,
+            "liveStateUnchanged": true,
+            "repeatedKeysKept": true
+          },
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "atari-st/ym2149/01-sync-buzzer",
+          "repeatSeconds": 0.00909090909090909,
+          "writesPerPattern": 1,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              },
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.008476492753939576,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.009666451100190362,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "atari-st/ym2149/02-volume-modulation",
+          "repeatSeconds": 0.02,
+          "writesPerPattern": 16,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              },
+              {
+                "name": "tetorica-ay8910",
+                "type": 16
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.01006421677229701,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.03333333507180214,
+                "acRms": 0.010255041194690416,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "genesis/fm/07-timed-operators",
+          "engine": "ymfm",
+          "repeatSeconds": 1.5,
+          "writesPerPattern": 32,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.01586151123046875,
+                "acRms": 0.007432330495379027,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.01586151123046875,
+                "acRms": 0.007452383598830573,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "genesis/fm/07-timed-operators",
+          "engine": "nuked",
+          "repeatSeconds": 1.5,
+          "writesPerPattern": 32,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "nuked"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "nuked"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "nuked"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.02492523193359375,
+                "acRms": 0.011567679345039182,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.02492523193359375,
+                "acRms": 0.011794709216814725,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "wonderswan/registers/01-timed-operations",
+          "screenshot": "/tmp/aswan-examples-timed-48000-webkit-aswan.png",
+          "repeatSeconds": 1,
+          "writesPerPattern": 6,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-wonderswan"
+              },
+              {
+                "name": "tetorica-wonderswan"
+              },
+              {
+                "name": "tetorica-wonderswan"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.02978668175637722,
+                "acRms": 0.021173559133243067,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.02978668175637722,
+                "acRms": 0.021173559133243067,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "chip-raw/02-compile-compare",
+          "baselines": {
+            "current": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 82,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "client": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 50,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "reset": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 2,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "snapshotA": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 82,
+                "operationIndex": 0,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 1,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.1,
+                "port": 0,
+                "register": 40,
+                "value": 240,
+                "operationIndex": 2,
+                "writeIndex": 0
+              },
+              {
+                "offsetSeconds": 0.2,
+                "port": 0,
+                "register": 40,
+                "value": 0,
+                "operationIndex": 3,
+                "writeIndex": 0
+              }
+            ],
+            "snapshotB": [
+              {
+                "offsetSeconds": 0,
+                "port": 0,
+                "register": 48,
+                "value": 17,
+                "operationIndex": 0,
+                "writeIndex": 0
+              }
+            ]
+          },
+          "snapshot": {
+            "frame": 1792,
+            "sampleRate": 48000,
+            "engine": "ymfm"
+          },
+          "checks": {
+            "currentMatchesSnapshot": true,
+            "snapshotReusable": true,
+            "snapshotUnchanged": true,
+            "liveStateUnchanged": true,
+            "repeatedKeysKept": true
+          },
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              },
+              {
+                "name": "tetorica-opn",
+                "engine": "ymfm"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        }
+      ]
+    },
+    "aswanShared44100": {
+      "passed": true,
+      "packageVersion": "0.2.45",
+      "sampleRate": 44100,
+      "physicalOutputMuted": true,
+      "staticSiteOnly": true,
+      "site": "/Users/kyorohiro/development8/wfm/hello_ymfm/w/tetorica-fm2612-examples/dist",
+      "results": [
+        {
+          "browser": "chromium",
+          "example": "wonderswan/registers/01-timed-operations",
+          "screenshot": "/tmp/aswan-examples-shared-44100-chromium-aswan.png",
+          "repeatSeconds": 1,
+          "writesPerPattern": 6,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-wonderswan"
+              },
+              {
+                "name": "tetorica-wonderswan"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.02978668175637722,
+                "acRms": 0.02129098441697224,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.02978668175637722,
+                "acRms": 0.021286504111732368,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "wonderswan/registers/01-timed-operations",
+          "screenshot": "/tmp/aswan-examples-shared-44100-webkit-aswan.png",
+          "repeatSeconds": 1,
+          "writesPerPattern": 6,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              44100,
+              44100,
+              44100
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-wonderswan"
+              },
+              {
+                "name": "tetorica-wonderswan"
+              },
+              {
+                "name": "tetorica-wonderswan"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.02978668175637722,
+                "acRms": 0.021290600444729052,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.02978668175637722,
+                "acRms": 0.021288396946025846,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        }
+      ]
+    },
+    "aswanShared48000": {
+      "passed": true,
+      "packageVersion": "0.2.45",
+      "sampleRate": 48000,
+      "physicalOutputMuted": true,
+      "staticSiteOnly": true,
+      "site": "/Users/kyorohiro/development8/wfm/hello_ymfm/w/tetorica-fm2612-examples/dist",
+      "results": [
+        {
+          "browser": "chromium",
+          "example": "wonderswan/registers/01-timed-operations",
+          "screenshot": "/tmp/aswan-examples-shared-48000-chromium-aswan.png",
+          "repeatSeconds": 1,
+          "writesPerPattern": 6,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-wonderswan"
+              },
+              {
+                "name": "tetorica-wonderswan"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.02978668175637722,
+                "acRms": 0.02117355913324307,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.02978668175637722,
+                "acRms": 0.02117355913324307,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "wonderswan/registers/01-timed-operations",
+          "screenshot": "/tmp/aswan-examples-shared-48000-webkit-aswan.png",
+          "repeatSeconds": 1,
+          "writesPerPattern": 6,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-wonderswan"
+              },
+              {
+                "name": "tetorica-wonderswan"
+              },
+              {
+                "name": "tetorica-wonderswan"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.02978668175637722,
+                "acRms": 0.021173559133243067,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.02978668175637722,
+                "acRms": 0.021173559133243067,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        }
+      ]
+    },
+    "docs48000": {
+      "passed": true,
+      "packageVersion": "0.2.45",
+      "sampleRate": 48000,
+      "physicalOutputMuted": true,
+      "staticSiteOnly": true,
+      "site": "/Users/kyorohiro/development8/wfm/hello_ymfm/w/tetorica-fm2612-examples/docs",
+      "results": [
+        {
+          "browser": "chromium",
+          "example": "wonderswan/registers/01-timed-operations",
+          "screenshot": "/tmp/aswan-examples-docs-48000-chromium-aswan.png",
+          "repeatSeconds": 1,
+          "writesPerPattern": 6,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-wonderswan"
+              },
+              {
+                "name": "tetorica-wonderswan"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.02978668175637722,
+                "acRms": 0.02117355913324307,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.02978668175637722,
+                "acRms": 0.02117355913324307,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        },
+        {
+          "browser": "webkit",
+          "example": "wonderswan/registers/01-timed-operations",
+          "screenshot": "/tmp/aswan-examples-docs-48000-webkit-aswan.png",
+          "repeatSeconds": 1,
+          "writesPerPattern": 6,
+          "editedSource": true,
+          "pendingInitializationCancelled": true,
+          "audit": {
+            "contexts": [
+              "closed",
+              "closed",
+              "closed"
+            ],
+            "sampleRates": [
+              48000,
+              48000,
+              48000
+            ],
+            "nodes": [
+              {
+                "name": "tetorica-wonderswan"
+              },
+              {
+                "name": "tetorica-wonderswan"
+              },
+              {
+                "name": "tetorica-wonderswan"
+              }
+            ],
+            "meters": [
+              {
+                "peak": 0.02978668175637722,
+                "acRms": 0.021172268335030196,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0.02978668175637722,
+                "acRms": 0.02117355913324307,
+                "finite": true,
+                "muted": true
+              },
+              {
+                "peak": 0,
+                "acRms": 0,
+                "finite": true,
+                "muted": true
+              }
+            ]
+          },
+          "passed": true
+        }
+      ]
+    }
+  },
+  "existingWonderSwan": [
+    {
+      "browser": "chromium",
+      "version": "153.0.8010.12",
+      "passed": true,
+      "subpath": true,
+      "path": "wonderswan/wave/01-four-channels",
+      "originalOutput": {
+        "peak": 0.013011294446496466,
+        "nodes": [
+          {
+            "processor": "tetorica-soundchip",
+            "chip": "wonderswan"
+          }
+        ],
+        "meters": [
+          {
+            "peak": [
+              0.013011294446496466,
+              0.012127780797107154
+            ],
+            "maxAbs": 0.03568267822265625,
+            "finite": true,
+            "frequency": [
+              803.1895316313983,
+              394.97197298034223
+            ],
+            "pitchHits": [
+              0,
+              3
+            ],
+            "leftOnly": 0,
+            "rightOnly": 0
+          }
+        ],
+        "physicalOutput": "muted",
+        "commandCounts": {
+          "reset": 1,
+          "writeRegister": 154,
+          "writeMemory": 128,
+          "start": 1,
+          "barrier": 1,
+          "clear-scheduled-writes": 1,
+          "dispose": 1
+        },
+        "scheduled": []
+      },
+      "editedOutput": {
+        "peak": 0.011728230254656136,
+        "nodes": [
+          {
+            "processor": "tetorica-soundchip",
+            "chip": "wonderswan"
+          },
+          {
+            "processor": "tetorica-soundchip",
+            "chip": "wonderswan"
+          }
+        ],
+        "meters": [
+          {
+            "peak": [
+              0,
+              0
+            ],
+            "maxAbs": 0,
+            "finite": true,
+            "frequency": [
+              0,
+              0
+            ],
+            "pitchHits": [
+              0,
+              0
+            ],
+            "leftOnly": 0,
+            "rightOnly": 0
+          },
+          {
+            "peak": [
+              0.011728061638565455,
+              0.011728230254656136
+            ],
+            "maxAbs": 0.01654815673828125,
+            "finite": true,
+            "frequency": [
+              465.2223026783898,
+              441.0177677494918
+            ],
+            "pitchHits": [
+              37,
+              39
+            ],
+            "leftOnly": 35,
+            "rightOnly": 36
+          }
+        ],
+        "physicalOutput": "muted",
+        "commandCounts": {
+          "reset": 1,
+          "writeRegister": 28,
+          "writeMemory": 80,
+          "start": 1,
+          "barrier": 1,
+          "clear-scheduled-writes": 1,
+          "dispose": 1
+        },
+        "scheduled": []
+      },
+      "cancelledInitialization": true,
+      "stoppedPlayback": true,
+      "rerun": true
+    },
+    {
+      "browser": "chromium",
+      "version": "153.0.8010.12",
+      "passed": true,
+      "subpath": true,
+      "path": "wonderswan/noise/01-noise-sweep",
+      "originalOutput": {
+        "peak": 0.00915526907192439,
+        "nodes": [
+          {
+            "processor": "tetorica-soundchip",
+            "chip": "wonderswan"
+          }
+        ],
+        "meters": [
+          {
+            "peak": [
+              0.00915526907192439,
+              0.00915526907192439
+            ],
+            "maxAbs": 0.010986328125,
+            "finite": true,
+            "frequency": [
+              322.1476510067114,
+              322.1476510067114
+            ],
+            "pitchHits": [
+              3,
+              3
+            ],
+            "leftOnly": 0,
+            "rightOnly": 0
+          }
+        ],
+        "physicalOutput": "muted",
+        "commandCounts": {
+          "reset": 1,
+          "writeRegister": 73,
+          "writeMemory": 64,
+          "start": 1,
+          "barrier": 1,
+          "clear-scheduled-writes": 1,
+          "dispose": 1
+        },
+        "scheduled": []
+      },
+      "editedOutput": {
+        "peak": 0.011728575883074289,
+        "nodes": [
+          {
+            "processor": "tetorica-soundchip",
+            "chip": "wonderswan"
+          },
+          {
+            "processor": "tetorica-soundchip",
+            "chip": "wonderswan"
+          }
+        ],
+        "meters": [
+          {
+            "peak": [
+              0,
+              0
+            ],
+            "maxAbs": 0,
+            "finite": true,
+            "frequency": [
+              0,
+              0
+            ],
+            "pitchHits": [
+              0,
+              0
+            ],
+            "leftOnly": 0,
+            "rightOnly": 0
+          },
+          {
+            "peak": [
+              0.011727267758392211,
+              0.011728575883074289
+            ],
+            "maxAbs": 0.01654815673828125,
+            "finite": true,
+            "frequency": [
+              442.16227151625225,
+              440.3669724770642
+            ],
+            "pitchHits": [
+              38,
+              38
+            ],
+            "leftOnly": 35,
+            "rightOnly": 35
+          }
+        ],
+        "physicalOutput": "muted",
+        "commandCounts": {
+          "reset": 1,
+          "writeRegister": 28,
+          "writeMemory": 80,
+          "start": 1,
+          "barrier": 1,
+          "clear-scheduled-writes": 1,
+          "dispose": 1
+        },
+        "scheduled": []
+      },
+      "cancelledInitialization": true,
+      "stoppedPlayback": true,
+      "rerun": true
+    },
+    {
+      "browser": "chromium",
+      "version": "153.0.8010.12",
+      "passed": true,
+      "subpath": true,
+      "path": "wonderswan/voice/01-timed-pcm",
+      "originalOutput": {
+        "peak": 0.013874241223015518,
+        "nodes": [
+          {
+            "processor": "tetorica-soundchip",
+            "chip": "wonderswan"
+          }
+        ],
+        "meters": [
+          {
+            "peak": [
+              0.013874241223015518,
+              0.013874241223015518
+            ],
+            "maxAbs": 0.0196533203125,
+            "finite": true,
+            "frequency": [
+              444.3307971169721,
+              444.3307971169721
+            ],
+            "pitchHits": [
+              15,
+              15
+            ],
+            "leftOnly": 0,
+            "rightOnly": 0
+          }
+        ],
+        "physicalOutput": "muted",
+        "commandCounts": {
+          "reset": 1,
+          "writeRegister": 25,
+          "writeMemory": 64,
+          "barrier": 2,
+          "schedule-writes": 1,
+          "start": 1,
+          "clear-scheduled-writes": 1,
+          "dispose": 1
+        },
+        "scheduled": [
+          {
+            "method": "schedule-writes",
+            "count": 12002,
+            "pcm": 12000
+          }
+        ]
+      },
+      "editedOutput": {
+        "peak": 0.011728575883074289,
+        "nodes": [
+          {
+            "processor": "tetorica-soundchip",
+            "chip": "wonderswan"
+          },
+          {
+            "processor": "tetorica-soundchip",
+            "chip": "wonderswan"
+          }
+        ],
+        "meters": [
+          {
+            "peak": [
+              0,
+              0
+            ],
+            "maxAbs": 0,
+            "finite": true,
+            "frequency": [
+              0,
+              0
+            ],
+            "pitchHits": [
+              0,
+              0
+            ],
+            "leftOnly": 0,
+            "rightOnly": 0
+          },
+          {
+            "peak": [
+              0.011728575883074289,
+              0.011728575883074289
+            ],
+            "maxAbs": 0.01654815673828125,
+            "finite": true,
+            "frequency": [
+              440.3669724770642,
+              440.3669724770642
+            ],
+            "pitchHits": [
+              38,
+              38
+            ],
+            "leftOnly": 35,
+            "rightOnly": 35
+          }
+        ],
+        "physicalOutput": "muted",
+        "commandCounts": {
+          "reset": 1,
+          "writeRegister": 28,
+          "writeMemory": 80,
+          "start": 1,
+          "barrier": 1,
+          "clear-scheduled-writes": 1,
+          "dispose": 1
+        },
+        "scheduled": []
+      },
+      "cancelledInitialization": true,
+      "stoppedPlayback": true,
+      "rerun": true
+    },
+    {
+      "browser": "webkit",
+      "version": "26.6",
+      "passed": true,
+      "subpath": true,
+      "path": "wonderswan/wave/01-four-channels",
+      "originalOutput": {
+        "peak": 0.013087579215854595,
+        "nodes": [
+          {
+            "processor": "tetorica-soundchip",
+            "chip": "wonderswan"
+          }
+        ],
+        "meters": [
+          {
+            "peak": [
+              0.013087579215854595,
+              0.012019759075990205
+            ],
+            "maxAbs": 0.03568267822265625,
+            "finite": true,
+            "frequency": [
+              814.7586999741901,
+              621.3222489765724
+            ],
+            "pitchHits": [
+              0,
+              3
+            ],
+            "leftOnly": 0,
+            "rightOnly": 0
+          }
+        ],
+        "physicalOutput": "muted",
+        "commandCounts": {
+          "reset": 1,
+          "writeRegister": 154,
+          "writeMemory": 128,
+          "start": 1,
+          "barrier": 1,
+          "clear-scheduled-writes": 1,
+          "dispose": 1
+        },
+        "scheduled": []
+      },
+      "editedOutput": {
+        "peak": 0.011728230254656136,
+        "nodes": [
+          {
+            "processor": "tetorica-soundchip",
+            "chip": "wonderswan"
+          },
+          {
+            "processor": "tetorica-soundchip",
+            "chip": "wonderswan"
+          }
+        ],
+        "meters": [
+          {
+            "peak": [
+              0,
+              0
+            ],
+            "maxAbs": 0,
+            "finite": true,
+            "frequency": [
+              0,
+              0
+            ],
+            "pitchHits": [
+              0,
+              0
+            ],
+            "leftOnly": 0,
+            "rightOnly": 0
+          },
+          {
+            "peak": [
+              0.011726605334574123,
+              0.011728230254656136
+            ],
+            "maxAbs": 0.01654815673828125,
+            "finite": true,
+            "frequency": [
+              449.88526875393285,
+              440
+            ],
+            "pitchHits": [
+              31,
+              32
+            ],
+            "leftOnly": 29,
+            "rightOnly": 30
+          }
+        ],
+        "physicalOutput": "muted",
+        "commandCounts": {
+          "reset": 1,
+          "writeRegister": 28,
+          "writeMemory": 80,
+          "start": 1,
+          "barrier": 1,
+          "clear-scheduled-writes": 1,
+          "dispose": 1
+        },
+        "scheduled": []
+      },
+      "cancelledInitialization": true,
+      "stoppedPlayback": true,
+      "rerun": true
+    },
+    {
+      "browser": "webkit",
+      "version": "26.6",
+      "passed": true,
+      "subpath": true,
+      "path": "wonderswan/noise/01-noise-sweep",
+      "originalOutput": {
+        "peak": 0.009155272346106292,
+        "nodes": [
+          {
+            "processor": "tetorica-soundchip",
+            "chip": "wonderswan"
+          }
+        ],
+        "meters": [
+          {
+            "peak": [
+              0.009155272346106292,
+              0.009155272346106292
+            ],
+            "maxAbs": 0.010986328125,
+            "finite": true,
+            "frequency": [
+              323.88663967611336,
+              323.88663967611336
+            ],
+            "pitchHits": [
+              1,
+              1
+            ],
+            "leftOnly": 0,
+            "rightOnly": 0
+          }
+        ],
+        "physicalOutput": "muted",
+        "commandCounts": {
+          "reset": 1,
+          "writeRegister": 73,
+          "writeMemory": 64,
+          "start": 1,
+          "barrier": 1,
+          "clear-scheduled-writes": 1,
+          "dispose": 1
+        },
+        "scheduled": []
+      },
+      "editedOutput": {
+        "peak": 0.011728061638565455,
+        "nodes": [
+          {
+            "processor": "tetorica-soundchip",
+            "chip": "wonderswan"
+          },
+          {
+            "processor": "tetorica-soundchip",
+            "chip": "wonderswan"
+          }
+        ],
+        "meters": [
+          {
+            "peak": [
+              0,
+              0
+            ],
+            "maxAbs": 0,
+            "finite": true,
+            "frequency": [
+              0,
+              0
+            ],
+            "pitchHits": [
+              0,
+              0
+            ],
+            "leftOnly": 0,
+            "rightOnly": 0
+          },
+          {
+            "peak": [
+              0.011728061638565455,
+              0.011728061638565455
+            ],
+            "maxAbs": 0.01654815673828125,
+            "finite": true,
+            "frequency": [
+              446.7371218840056,
+              440.3669724770642
+            ],
+            "pitchHits": [
+              31,
+              32
+            ],
+            "leftOnly": 29,
+            "rightOnly": 29
+          }
+        ],
+        "physicalOutput": "muted",
+        "commandCounts": {
+          "reset": 1,
+          "writeRegister": 28,
+          "writeMemory": 80,
+          "start": 1,
+          "barrier": 1,
+          "clear-scheduled-writes": 1,
+          "dispose": 1
+        },
+        "scheduled": []
+      },
+      "cancelledInitialization": true,
+      "stoppedPlayback": true,
+      "rerun": true
+    },
+    {
+      "browser": "webkit",
+      "version": "26.6",
+      "passed": true,
+      "subpath": true,
+      "path": "wonderswan/voice/01-timed-pcm",
+      "originalOutput": {
+        "peak": 0.0138717814975809,
+        "nodes": [
+          {
+            "processor": "tetorica-soundchip",
+            "chip": "wonderswan"
+          }
+        ],
+        "meters": [
+          {
+            "peak": [
+              0.0138717814975809,
+              0.0138717814975809
+            ],
+            "maxAbs": 0.0196533203125,
+            "finite": true,
+            "frequency": [
+              444.3549462112467,
+              444.3549462112467
+            ],
+            "pitchHits": [
+              12,
+              12
+            ],
+            "leftOnly": 0,
+            "rightOnly": 0
+          }
+        ],
+        "physicalOutput": "muted",
+        "commandCounts": {
+          "reset": 1,
+          "writeRegister": 25,
+          "writeMemory": 64,
+          "barrier": 2,
+          "schedule-writes": 1,
+          "start": 1,
+          "clear-scheduled-writes": 1,
+          "dispose": 1
+        },
+        "scheduled": [
+          {
+            "method": "schedule-writes",
+            "count": 12002,
+            "pcm": 12000
+          }
+        ]
+      },
+      "editedOutput": {
+        "peak": 0.011728230254656136,
+        "nodes": [
+          {
+            "processor": "tetorica-soundchip",
+            "chip": "wonderswan"
+          },
+          {
+            "processor": "tetorica-soundchip",
+            "chip": "wonderswan"
+          }
+        ],
+        "meters": [
+          {
+            "peak": [
+              0,
+              0
+            ],
+            "maxAbs": 0,
+            "finite": true,
+            "frequency": [
+              0,
+              0
+            ],
+            "pitchHits": [
+              0,
+              0
+            ],
+            "leftOnly": 0,
+            "rightOnly": 0
+          },
+          {
+            "peak": [
+              0.011728230254656136,
+              0.011728061638565455
+            ],
+            "maxAbs": 0.01654815673828125,
+            "finite": true,
+            "frequency": [
+              440.3669724770642,
+              440.3669724770642
+            ],
+            "pitchHits": [
+              31,
+              32
+            ],
+            "leftOnly": 29,
+            "rightOnly": 29
+          }
+        ],
+        "physicalOutput": "muted",
+        "commandCounts": {
+          "reset": 1,
+          "writeRegister": 28,
+          "writeMemory": 80,
+          "start": 1,
+          "barrier": 1,
+          "clear-scheduled-writes": 1,
+          "dispose": 1
+        },
+        "scheduled": []
+      },
+      "cancelledInitialization": true,
+      "stoppedPlayback": true,
+      "rerun": true
+    }
+  ],
+  "existingScspDsp": [
+    {
+      "browser": "chromium",
+      "lesson": "04-dsp-programs",
+      "execution": "main",
+      "rate": 44100,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "chromium",
+      "lesson": "04-dsp-programs",
+      "execution": "worker",
+      "rate": 44100,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "chromium",
+      "lesson": "05-dsp-delay",
+      "execution": "main",
+      "rate": 44100,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "chromium",
+      "lesson": "05-dsp-delay",
+      "execution": "worker",
+      "rate": 44100,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "chromium",
+      "lesson": "04-dsp-programs",
+      "execution": "main",
+      "rate": 48000,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "chromium",
+      "lesson": "04-dsp-programs",
+      "execution": "worker",
+      "rate": 48000,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "chromium",
+      "lesson": "05-dsp-delay",
+      "execution": "main",
+      "rate": 48000,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "chromium",
+      "lesson": "05-dsp-delay",
+      "execution": "worker",
+      "rate": 48000,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "webkit",
+      "lesson": "04-dsp-programs",
+      "execution": "main",
+      "rate": 44100,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "webkit",
+      "lesson": "04-dsp-programs",
+      "execution": "worker",
+      "rate": 44100,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "webkit",
+      "lesson": "05-dsp-delay",
+      "execution": "main",
+      "rate": 44100,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "webkit",
+      "lesson": "05-dsp-delay",
+      "execution": "worker",
+      "rate": 44100,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "webkit",
+      "lesson": "04-dsp-programs",
+      "execution": "main",
+      "rate": 48000,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "webkit",
+      "lesson": "04-dsp-programs",
+      "execution": "worker",
+      "rate": 48000,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "webkit",
+      "lesson": "05-dsp-delay",
+      "execution": "main",
+      "rate": 48000,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    },
+    {
+      "browser": "webkit",
+      "lesson": "05-dsp-delay",
+      "execution": "worker",
+      "rate": 48000,
+      "passed": true,
+      "heldPcmPreserved": true,
+      "actualWetSignal": true,
+      "stopClosed": true,
+      "editableCode": true,
+      "physicalOutputMuted": true
+    }
+  ]
+}

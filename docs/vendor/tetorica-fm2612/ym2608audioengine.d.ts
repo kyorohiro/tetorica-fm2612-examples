@@ -29,7 +29,7 @@ export declare class Ym2608AudioEngine {
     constructor(ym2608: Ym2608, chipSampleRate: number, outputSampleRate: number, masterVolume?: number);
     /**
      * Create the chip instances required by this engine.
-     * @param {{ym2608ModuleFactory: import('./soundchip.js').WasmModuleFactory, ym2608ModuleOptions?: import('./soundchip.js').WasmModuleOptions, ym2608Clock?: number, outputSampleRate?: number, masterVolume?: number, outputGains?:import('./ym2608.js').Ym2608OutputGainPatch}} [options={}] Chip factories, clocks in Hz and loader settings.
+     * @param {{ym2608ModuleFactory: import('./soundchip.js').WasmModuleFactory, ym2608ModuleOptions?: import('./soundchip.js').WasmModuleOptions, ym2608Clock?: number, outputSampleRate?: number, masterVolume?: number, outputGains?:import('./ym2608.js').Ym2608OutputGainPatch,sourceGains?:import('./ym2608.js').Ym2608SourceGainPatch}} [options={}] Chip factories, clocks in Hz and loader settings.
      * @param {number} [options.outputSampleRate=44100] Output stereo frames per second.
      * @param {number} [options.masterVolume=1] Linear output gain, not dB.
      * @returns {Promise<Ym2608AudioEngine>} Initialized engine owned by the caller.
@@ -41,6 +41,7 @@ export declare class Ym2608AudioEngine {
         outputSampleRate?: number;
         masterVolume?: number;
         outputGains?: import('./ym2608.js').Ym2608OutputGainPatch;
+        sourceGains?: import('./ym2608.js').Ym2608SourceGainPatch;
     }): Promise<Ym2608AudioEngine>;
     supportsState(): boolean;
     stateSettingsKey(): string;
@@ -89,6 +90,10 @@ export declare class Ym2608AudioEngine {
     setOutputGains(gains: import('./ym2608.js').Ym2608OutputGainPatch): import('./ym2608.js').Ym2608OutputGains;
     /** @returns {import('./ym2608.js').Ym2608OutputGains} Detached output gains. */
     getOutputGains(): import('./ym2608.js').Ym2608OutputGains;
+    /** @param {import('./ym2608.js').Ym2608SourceGainPatch} gains Independent source gains. */
+    setSourceGains(gains: import('./ym2608.js').Ym2608SourceGainPatch): import("./ym2608.js").Ym2608SourceGains;
+    /** @returns {import('./ym2608.js').Ym2608SourceGains} Detached independent source gains. */
+    getSourceGains(): import('./ym2608.js').Ym2608SourceGains;
     /**
      * Dispatch a VGM register/command write to the corresponding sound chip.
      * @param {number} port Chip register bank/port (not a MIDI channel).

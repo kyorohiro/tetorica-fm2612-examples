@@ -92,6 +92,7 @@ export declare class YM2612Processor extends AudioWorkletProcessor {
             session?: number;
             owner?: string;
         }) => boolean;
+        clearPatterns: () => void;
         commitPatterns: (changes: any, { session, owner, dryRun }?: {
             session: number;
             owner: string;

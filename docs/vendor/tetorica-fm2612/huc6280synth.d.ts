@@ -56,6 +56,9 @@ export declare class Huc6280Synth {
     keyOff(channel: number): void;
     /** @param {number} channel @param {string|number} note */
     noteOn(channel: number, note: string | number): void;
+    /** Alias for the raw hardware gate; HuC6280 has no hardware release envelope.
+     * @param {number} channel */
+    noteOff(channel: number): void;
     /** Silence every channel while retaining volume, waveform and DDA settings. */
     allNotesOff(): void;
     /** Noise is available on physical channels 4 and 5. Frequency is the hardware

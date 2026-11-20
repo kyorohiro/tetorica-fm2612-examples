@@ -1,7 +1,7 @@
 # tetorica-fm2612 examples
 
 `tetorica-fm2612` を import して使う、機能別の小さなサンプル集。
-公開済み npm `tetorica-fm2612@0.2.44` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES・PC Engine・MSX 合奏の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
+公開済み npm `tetorica-fm2612@0.2.45` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES・PC Engine・MSX 合奏の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
 SIDは専用APIのAudioWorklet接続と、共通factory／専用coreから直接PCMを生成するNode例を用意しています。
 PCM 生成・WAV 保存は専用例に置き、Web Audio を使う埋め込み例と、Node の nativeFX / 音声デバイス出力の例も掲載しています。本体リポジトリには依存しません。
 
@@ -575,3 +575,12 @@ npm run check:vab
 同梱のVABはBSD-3-Clauseの自作波形・設定だけです。自分のVABを使うNodeの
 `--input` と、元Program番号／Tone番号の指定方法は例のREADMEを参照してください。
 共有リバーブや曲のドライバー処理はこの例に含めず、PSF曲の再生とは分けています。
+
+
+## ASWANの操作とレジスタ予約（0.2.45）
+
+[ASWAN：操作・レジスタ・予約演奏](examples/wonderswan/registers/01-timed-operations/README.md)
+では同じsnapshotから2つの操作をcompileして比較し、音源を変えずに書き込みを
+観察してから予約演奏できます。後からの手動Gateを共有レジスタ更新が保持する
+ことも確認します。Node例は音声デバイスを開きません。
+予約はソフトウェア制御、raw Gateはハードウェア操作です。

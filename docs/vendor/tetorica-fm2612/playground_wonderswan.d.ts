@@ -1,16 +1,23 @@
-import { WonderSwanSynth } from './wonderswansynth.js';
 /** Immediate, ordered register/RAM commands shared by Main and Worker runtimes.
  * This client keeps authored state; it does not read advancing core registers.
- * @param {MessagePort} port @param {{clock?:number}} [options]
+ * @param {MessagePort} port @param {{clock?:number,instanceId?:string|number,native?:boolean}} [options]
  */
-export declare function createWonderSwanClient(port: MessagePort, options?: {
+/** @param {any} port
+ * @param {{clock?:number,instanceId?:string|number,native?:boolean}} [options]
+ * @param {any} [lifecycle]
+ * @returns {import('./wonderswansynth.js').WonderSwanSynth & import('./wonderswan_timed_client.js').WonderSwanTimedApi & {setClock(hz:number):Promise<unknown>}}
+ */
+export declare function createWonderSwanClient(port: any, options?: {
     clock?: number;
-}, lifecycle?: {}): WonderSwanSynth & {
-    readonly clock: number;
-    setClock(hz: number): Promise<void>;
-    _requestControl(method: string, args?: any[], transfer?: Transferable[]): Promise<any>;
+    instanceId?: string | number;
+    native?: boolean;
+}, lifecycle?: any): import('./wonderswansynth.js').WonderSwanSynth & import('./wonderswan_timed_client.js').WonderSwanTimedApi & {
+    setClock(hz: number): Promise<unknown>;
 };
 /** Builtin controls borrow the primary device; the runtime owns its lifetime. */
-export declare function createPrimaryWonderSwanApi(raw: any): {
-    setClock: (...args: any[]) => any;
+/** @param {any} raw
+ * @returns {Omit<ReturnType<typeof createWonderSwanClient>,'dispose'> & {readonly id:string}}
+ */
+export declare function createPrimaryWonderSwanApi(raw: any): Omit<ReturnType<typeof createWonderSwanClient>, 'dispose'> & {
+    readonly id: string;
 };

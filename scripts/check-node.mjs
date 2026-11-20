@@ -242,6 +242,14 @@ try {
      continue;
    }
    const out=join(directory, `${item.id.replaceAll('/', '-')}.wav`);
+   if(item.id==='wonderswan/registers/01-timed-operations'){
+    const report=join(directory,'wonderswan-compile.json');
+    execFileSync(process.execPath,[`examples/${item.id}/node/main.mjs`,report],{cwd:root,timeout:30000,stdio:'pipe'});
+    const data=JSON.parse(await readFile(report,'utf8'));
+    assert.equal(data.format,'tetorica-wonderswan-compile-comparison-v1');
+    assert.equal(data.passed,true);assert(Object.values(data.checks).every(v=>v===true));
+    count++;continue;
+   }
    execFileSync(process.execPath,[`examples/${item.id}/node/main.mjs`,...((item.id==='embedding/05-vgm-player'||item.id.startsWith('patches/')) ? ['',out] : [out])],{cwd:root,timeout:30000,stdio:'pipe'});
    const wav=await readFile(out); assert.equal(wav.toString('ascii',0,4),'RIFF');assert.equal(wav.toString('ascii',8,12),'WAVE');
    assert.ok(wav.length>44);assert.ok(wav.subarray(44).some(x=>x!==0));

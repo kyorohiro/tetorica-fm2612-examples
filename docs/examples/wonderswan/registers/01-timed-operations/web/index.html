@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ASWAN: 操作・レジスタ・予約演奏</title>
+<link rel="stylesheet" href="../../../../../style.css">
+<script type="importmap">{"imports":{"tetorica-fm2612/":"../../../../../vendor/tetorica-fm2612/"}}</script>
+<style>h1{font-size:clamp(2rem,4vw,3.2rem);text-wrap:balance}#code{width:100%;box-sizing:border-box;font-family:monospace}.trace{overflow:auto}table{border-collapse:collapse;width:100%;font-family:monospace}th,td{padding:6px;border-bottom:1px solid var(--line);text-align:left}</style>
+</head><body><main>
+<nav><a href="../../../../../index.html">← Examples</a><a href="./main.js">Source ↗</a></nav>
+<header><p class="eyebrow">wonderswan/registers/01-timed-operations · npm 0.2.45</p><h1>ASWAN：操作・レジスタ・予約演奏</h1><p>同じ状態から2つの操作をcompileし、左右音量とGateを音声サンプルの時計で動かします。</p></header>
+<section class="sample-panel">
+<label for="code">実行するコード — ws、setBpm、beat、console</label>
+<textarea id="code" rows="28" spellcheck="false"></textarea>
+<div class="actions"><button id="play" type="button">Play</button><button id="stop" type="button" disabled>Stop</button></div>
+<p id="status" role="status" aria-live="polite">Ready.</p><pre><code id="detail"></code></pre>
+<p>コードの編集は次のPlayに反映。setBpm()は待つ拍数を変えます。予約は秒／基準サンプル指定なのでBPMから独立しています。初期コードは約2秒で終了します。</p>
+<h2>compile()の予測書き込み</h2><p id="traceSummary">No compiled writes yet.</p>
+<div class="trace"><table><thead><tr><th>offsetSeconds</th><th>register</th><th>value</th><th>operationIndex</th></tr></thead><tbody id="traceBody"></tbody></table></div>
+<details><summary>仕組み・制限</summary><p>build()は操作だけを記録。compile()は取得済みsnapshotから予測し、音源もsnapshotも変更しません。比較結果は上のログに表示します。実演奏の書き込み履歴ではありません。</p><p>schedule()の完了は受付完了です。R90の部分更新は実行時に解決され、後からOnにした無音のCH2 Gateが残ることを例内で確認します。R8EのNoise resetは値が同じでも省略しません。</p><p>予約はソフトウェア機能で、音源の追加機能ではありません。Wave RAM／Voice PCM転送とSynthのソフトウェアEnvelope noteOn/offはレコーダーの対象外。raw keyOffは即時Gate offです。Native予約は未対応。Stopは出力を閉じて予約と音源を破棄します。</p></details>
+<h2>Web — 全コード</h2><pre class="source"><code data-source="./main.js">Loading…</code></pre><p><a href="../README.md">README</a></p>
+</section></main><script type="module" src="./main.js"></script><script type="module">
+for(const code of document.querySelectorAll('[data-source]')){try{const r=await fetch(code.dataset.source);if(!r.ok)throw Error('HTTP '+r.status);code.textContent=await r.text();}catch(e){code.textContent=e.message;}}
+</script></body></html>

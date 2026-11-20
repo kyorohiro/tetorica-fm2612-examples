@@ -168,9 +168,11 @@ export declare class YM2608Synth extends OPNFMSynth {
 /** Browser-hosted YM2608 FM synth with shared Tetorica audio services. */
 export declare class YM2608RuntimeSynth extends OPNRuntimeSynth {
     outputGains: import("./ym2608.js").Ym2608OutputGains;
-    /** @param {import('./opn_runtime_synth.js').OPNRuntimeSynthOptions & {outputGains?:import('./ym2608.js').Ym2608OutputGainPatch}} [options] */
+    sourceGains: import("./ym2608.js").Ym2608SourceGains;
+    /** @param {import('./opn_runtime_synth.js').OPNRuntimeSynthOptions & {outputGains?:import('./ym2608.js').Ym2608OutputGainPatch,sourceGains?:import('./ym2608.js').Ym2608SourceGainPatch}} [options] */
     constructor(options?: import('./opn_runtime_synth.js').OPNRuntimeSynthOptions & {
         outputGains?: import('./ym2608.js').Ym2608OutputGainPatch;
+        sourceGains?: import('./ym2608.js').Ym2608SourceGainPatch;
     });
     start(): Promise<this>;
     /** Configure host software gains before the native outputs are combined.
@@ -181,4 +183,11 @@ export declare class YM2608RuntimeSynth extends OPNRuntimeSynth {
     setOutputGains(gains: import('./ym2608.js').Ym2608OutputGainPatch): import('./ym2608.js').Ym2608OutputGains;
     /** @returns {import('./ym2608.js').Ym2608OutputGains} Detached linear gains. */
     getOutputGains(): import('./ym2608.js').Ym2608OutputGains;
+    /** Configure independent host gains without changing chip registers.
+     * @param {import('./ym2608.js').Ym2608SourceGainPatch} gains Partial linear gains, each 0..1024.
+     * @returns {import('./ym2608.js').Ym2608SourceGains} Accepted gains.
+     */
+    setSourceGains(gains: import('./ym2608.js').Ym2608SourceGainPatch): import('./ym2608.js').Ym2608SourceGains;
+    /** @returns {import('./ym2608.js').Ym2608SourceGains} Detached independent source gains. */
+    getSourceGains(): import('./ym2608.js').Ym2608SourceGains;
 }

@@ -43,6 +43,7 @@ export declare class SnesInstrumentProcessor extends AudioWorkletProcessor {
             session?: number;
             owner?: string;
         }) => boolean;
+        clearPatterns: () => void;
         commitPatterns: (changes: any, { session, owner, dryRun }?: {
             session: number;
             owner: string;

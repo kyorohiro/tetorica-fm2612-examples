@@ -196,6 +196,18 @@ export declare class Ps1Synth {
      * only on Stop/reset, not on preset selection. Changes affect active voices.
      * @param {Partial<Ps1ReverbState>} settings */
     setReverb(settings: Partial<Ps1ReverbState>): void;
+    /** Hardware NON bit only. Does not allocate PCM or trigger a voice.
+     * Noise uses the shared clock rather than the voice's PITCH register.
+     * @param {number} ch @param {boolean} enabled */
+    setNoiseEnabled(ch: number, enabled: boolean): void;
+    /** Shared SPUCNT Noise clock code (0..63), not Hz or a note number.
+     * @param {number} code */
+    setNoiseClock(code: number): void;
+    /** Hardware PMON bit only. Voice ch-1 modulates voice ch. No source allocation,
+     * retuning, muting or automatic key-on. Physical CH1 cannot be a carrier.
+     * @param {number} ch @param {boolean} enabled */
+    setPmonEnabled(ch: number, enabled: boolean): void;
+    _writeVoiceMask(base: any, ch: any, enabled: any): void;
     /** @param {number} ch @returns {Ps1VoiceState} */
     getPreset(ch: number): Ps1VoiceState;
     /** Raw hardware pitch 0..16383. Zero holds the current sample position.
@@ -234,6 +246,7 @@ export declare class Ps1Synth {
         channelCount: number;
         nextAddress: number;
         nativeFrames: number;
+        noiseClock: number;
         samples: {
             id: number;
             startAddress: number;
@@ -260,6 +273,8 @@ export declare class Ps1Synth {
             adsr2: number;
             pitch: number;
             reverb: boolean;
+            noise: boolean;
+            pmon: boolean;
             waveform: {
                 sample: number;
                 pcm: number[];
@@ -276,6 +291,7 @@ export declare class Ps1Synth {
         channelCount: number;
         nextAddress: number;
         nativeFrames: number;
+        noiseClock: number;
         samples: {
             id: number;
             startAddress: number;
@@ -302,6 +318,8 @@ export declare class Ps1Synth {
             adsr2: number;
             pitch: number;
             reverb: boolean;
+            noise: boolean;
+            pmon: boolean;
             waveform: {
                 sample: number;
                 pcm: number[];

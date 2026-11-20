@@ -18,6 +18,7 @@ export declare class Ps1VoiceInspector {
         channelCount: number;
         nextAddress: number;
         nativeFrames: number;
+        noiseClock: number;
         samples: {
             id: number;
             startAddress: number;
@@ -44,6 +45,8 @@ export declare class Ps1VoiceInspector {
             adsr2: number;
             pitch: number;
             reverb: boolean;
+            noise: boolean;
+            pmon: boolean;
             waveform: {
                 sample: number;
                 pcm: number[];

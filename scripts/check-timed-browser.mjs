@@ -9,7 +9,7 @@ import {chromium,webkit} from 'playwright';
 
 const repo=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const args=process.argv.slice(2);
-for(const arg of args)assert(/^--(?:site|out|sample-rate)=/.test(arg)||['--chromium','--webkit'].includes(arg),'Unknown argument '+arg);
+for(const arg of args)assert(/^--(?:site|out|sample-rate|case)=/.test(arg)||['--chromium','--webkit'].includes(arg),'Unknown argument '+arg);
 const option=(name,fallback)=>args.find(arg=>arg.startsWith('--'+name+'='))?.slice(name.length+3)??fallback;
 const requestedSampleRate=Number(option('sample-rate','48000'));
 assert([44100,48000].includes(requestedSampleRate),'Use --sample-rate=44100 or 48000');
@@ -39,7 +39,7 @@ function installAudit({sampleRate}){
     audit.meters.push({meter,mute,context:this.context,peak:0,acRms:0,finite:true});return destination;
   };
   MessagePort.prototype.postMessage=function(data,...rest){
-    if(['ayTimed','ym2612Timed'].includes(data?.method)){
+    if(['ayTimed','ym2612Timed','wonderswanTimed'].includes(data?.method)){
       audit.ports.set(data.method,this);const payload=structuredClone(data.args[0]);
       audit.traffic.push({method:data.method,...payload});
       if(data.id!==undefined){const port=this,listener=event=>{
@@ -72,8 +72,12 @@ const cases=[
   {id:'atari-st/ym2149/02-volume-modulation',kind:'ayTimed',rows:16},
   {id:'genesis/fm/07-timed-operators',kind:'ym2612Timed',engine:'ymfm',rows:32},
   {id:'genesis/fm/07-timed-operators',kind:'ym2612Timed',engine:'nuked',rows:32},
+  {id:'wonderswan/registers/01-timed-operations',kind:'wonderswanTimed',rows:7},
   {id:'chip-raw/02-compile-compare',compare:true},
 ];
+const selectedCase=option('case','all');
+const selectedCases=selectedCase==='all'?cases:cases.filter(item=>item.kind===selectedCase||item.id===selectedCase);
+assert(selectedCases.length,'Unknown timed example case');
 async function closed(page){await page.waitForFunction(()=>__timedExamples.contexts.every(c=>c.state==='closed'));}
 async function runCase(browser,browserName,base,item){
   const page=await browser.newPage({serviceWorkers:'block'}),errors=[],missing=[];
@@ -104,13 +108,23 @@ async function runCase(browser,browserName,base,item){
       await page.waitForFunction(()=>document.getElementById('status').textContent.startsWith('Playing'));
       await page.waitForFunction(()=>__timedExamples.receipts.some(r=>r.action==='schedule'&&r.ok));
       const samples=[];
-      for(let i=0;i<16;i++){samples.push(await page.evaluate(method=>__timedExamples.capture(method),item.kind));await page.waitForTimeout(20);}
+      for(let i=0;i<(item.kind==='wonderswanTimed'?32:16);i++){
+        const captured=await page.evaluate(method=>__timedExamples.capture(method),item.kind);samples.push(captured);
+        if(item.kind==='wonderswanTimed'&&(captured.state.registers[16]&0x80)&&new Set(samples.map(s=>s.state.registers[8])).size>1)break;
+        await page.waitForTimeout(20);
+      }
       const schedule=await page.evaluate(()=>__timedExamples.traffic.find(t=>t.action==='schedule'));
-      assert.equal(schedule.operations.operations.length,item.kind==='ayTimed'?(item.rows===1?1:16):32);
+      assert.equal(schedule.operations.operations.length,item.kind==='ayTimed'?(item.rows===1?1:16):item.kind==='wonderswanTimed'?6:32);
       assert(schedule.options.repeatSeconds>0);
       const rows=item.kind==='ayTimed'?'#writeRows tr':'#traceBody tr';assert.equal(await page.locator(rows).count(),item.rows);
       assert(samples.at(-1).frame>samples[0].frame,'Renderer keeps advancing');
-      if(item.kind==='ayTimed'){
+      if(item.kind==='wonderswanTimed'){
+        assert(new Set(samples.map(s=>s.state.registers[8])).size>1,'Scheduled pan changes on Worklet');
+        assert(samples.filter(s=>s.state.registers[16]&0x80).every(s=>s.state.registers[16]&2),'Shared Noise-mode write preserves manual CH2 Gate');
+        assert(samples.some(s=>s.state.registers[16]&0x80),'Capture includes the actual scheduled shared Noise-mode write');
+        const log=await page.locator('#detail').textContent();
+        assert(log.includes('"snapshotUnchanged":true')&&log.includes('"liveUnchanged":true'),'Compile preserves snapshot and live registers');
+      }else if(item.kind==='ayTimed'){
         assert(samples.every(s=>s.type===16&&s.clock===2000000));
         if(item.rows===1)assert(samples.every(s=>s.registers[13]===8));
         else assert(new Set(samples.map(s=>s.registers[8])).size>1,'R8 moves on Worklet');
@@ -121,6 +135,7 @@ async function runCase(browser,browserName,base,item){
         assert(samples.every(s=>(s.registers[0][0x30]&0x70)===0),'Partial MULT updates preserve DT');
       }
       await page.waitForFunction(()=>__timedExamples.sample().meters.some(m=>m.acRms>0.0001));
+      if(item.kind==='wonderswanTimed'){result.screenshot=out.replace(/\.json$/,`-${browserName}-aswan.png`);await page.screenshot({path:result.screenshot,fullPage:true});}
       result.repeatSeconds=schedule.options.repeatSeconds;result.writesPerPattern=schedule.operations.operations.length;
       await page.locator('#stop').click();await page.waitForFunction(()=>document.getElementById('status').textContent==='Stopped.');await closed(page);
       const count=await page.evaluate(()=>__timedExamples.traffic.filter(t=>t.action==='schedule').length);
@@ -141,6 +156,7 @@ async function runCase(browser,browserName,base,item){
       await page.waitForTimeout(100);await closed(page);
       result.editedSource=true;result.pendingInitializationCancelled=true;
     }
+    if(item.kind==='wonderswanTimed'){await page.setViewportSize({width:390,height:844});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Narrow viewport has no page overflow');await page.screenshot({path:out.replace(/\.json$/,`-${browserName}-aswan-mobile.png`),fullPage:true});}
     result.audit=await page.evaluate(()=>__timedExamples.sample());
     assert(result.audit.contexts.every(s=>s==='closed'));assert(result.audit.meters.length>0);
     assert(result.audit.sampleRates.every(rate=>rate===requestedSampleRate));
@@ -154,14 +170,14 @@ async function runCase(browser,browserName,base,item){
 let failure;const results=[];
 try{
   const version=JSON.parse(await readFile(join(site,'vendor/tetorica-fm2612/package.json'),'utf8')).version;
-  assert.equal(version,'0.2.41');
+  assert.equal(version,'0.2.45');
   await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});
   const base=`http://127.0.0.1:${server.address().port}${prefix}`;
   const engines=args.includes('--chromium')?[['chromium',chromium]]:args.includes('--webkit')?[['webkit',webkit]]:[['chromium',chromium],['webkit',webkit]];
-  for(const [name,engine]of engines){const browser=await engine.launch({headless:true,...(name==='chromium'?{args:['--mute-audio','--autoplay-policy=no-user-gesture-required']}:{})});try{for(const item of cases){results.push(await runCase(browser,name,base,item));console.log('PASS '+name+'/'+item.id+'/'+(item.engine??'default')+' (physical gain0)');}}finally{await browser.close();}}
+  for(const [name,engine]of engines){const browser=await engine.launch({headless:true,...(name==='chromium'?{args:['--mute-audio','--autoplay-policy=no-user-gesture-required']}:{})});try{for(const item of selectedCases){results.push(await runCase(browser,name,base,item));console.log('PASS '+name+'/'+item.id+'/'+(item.engine??'default')+' (physical gain0)');}}finally{await browser.close();}}
 }catch(error){failure=error;if(error.caseResult)results.push(error.caseResult);}
 finally{
   server.closeAllConnections?.();if(server.listening)await new Promise(resolve=>server.close(resolve));
-  await mkdir(dirname(out),{recursive:true});await writeFile(out,JSON.stringify({passed:!failure,packageVersion:'0.2.41',sampleRate:requestedSampleRate,physicalOutputMuted:true,staticSiteOnly:true,site,results},null,2)+'\n');
+  await mkdir(dirname(out),{recursive:true});await writeFile(out,JSON.stringify({passed:!failure,packageVersion:'0.2.45',sampleRate:requestedSampleRate,physicalOutputMuted:true,staticSiteOnly:true,site,results},null,2)+'\n');
 }
 if(failure)throw failure;console.log('PASS timed examples: '+out);

@@ -28,6 +28,7 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -54,6 +55,8 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -88,6 +91,7 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -114,6 +118,8 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -128,6 +134,7 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -154,6 +161,8 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -171,6 +180,7 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -197,6 +207,8 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -211,6 +223,7 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -237,6 +250,8 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -254,6 +269,7 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -280,6 +296,8 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -294,6 +312,7 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -320,6 +339,8 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -342,6 +363,7 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
                 channelCount: number;
                 nextAddress: number;
                 nativeFrames: number;
+                noiseClock: number;
                 samples: {
                     id: number;
                     startAddress: number;
@@ -368,6 +390,8 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
                     adsr2: number;
                     pitch: number;
                     reverb: boolean;
+                    noise: boolean;
+                    pmon: boolean;
                     waveform: {
                         sample: number;
                         pcm: number[];
@@ -394,6 +418,7 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
                 channelCount: number;
                 nextAddress: number;
                 nativeFrames: number;
+                noiseClock: number;
                 samples: {
                     id: number;
                     startAddress: number;
@@ -420,6 +445,8 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
                     adsr2: number;
                     pitch: number;
                     reverb: boolean;
+                    noise: boolean;
+                    pmon: boolean;
                     waveform: {
                         sample: number;
                         pcm: number[];
@@ -438,6 +465,7 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
         channelCount: number;
         nextAddress: number;
         nativeFrames: number;
+        noiseClock: number;
         samples: {
             id: number;
             startAddress: number;
@@ -464,6 +492,8 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
             adsr2: number;
             pitch: number;
             reverb: boolean;
+            noise: boolean;
+            pmon: boolean;
             waveform: {
                 sample: number;
                 pcm: number[];
@@ -488,6 +518,7 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
         channelCount: number;
         nextAddress: number;
         nativeFrames: number;
+        noiseClock: number;
         samples: {
             id: number;
             startAddress: number;
@@ -514,6 +545,8 @@ export declare function createNativeGenesisPs1(owner: any, { additional }?: {
             adsr2: number;
             pitch: number;
             reverb: boolean;
+            noise: boolean;
+            pmon: boolean;
             waveform: {
                 sample: number;
                 pcm: number[];

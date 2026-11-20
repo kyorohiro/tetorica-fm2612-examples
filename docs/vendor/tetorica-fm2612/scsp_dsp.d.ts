@@ -20,6 +20,7 @@ export declare class ScspDspProgram {
             level: number;
             pan: number;
         };
+        returns?: any[] | undefined;
         delay?: any;
         ram?: any;
     };
@@ -35,6 +36,7 @@ export declare class ScspDspProgram {
             level: number;
             pan: number;
         };
+        returns?: any[] | undefined;
         delay?: any;
         ram?: any;
     };
@@ -51,16 +53,14 @@ export declare class ScspDspProgram {
             level: number;
             pan: number;
         };
+        returns?: any[] | undefined;
         delay?: any;
         ram?: any;
     };
     setCoefficients(patch: any): {
         codes: number[];
     };
-    setReturn(patch: any): {
-        level: number;
-        pan: number;
-    };
+    setReturn(outputOrPatch: any, patch: any): any;
     ensureStarted(): {
         profile: string;
         configured: boolean;
@@ -73,6 +73,7 @@ export declare class ScspDspProgram {
             level: number;
             pan: number;
         };
+        returns?: any[] | undefined;
         delay?: any;
         ram?: any;
     };
@@ -89,6 +90,7 @@ export declare class ScspDspProgram {
             level: number;
             pan: number;
         };
+        returns?: any[] | undefined;
         delay?: any;
         ram?: any;
     };
@@ -105,6 +107,7 @@ export declare class ScspDspProgram {
             level: number;
             pan: number;
         };
+        returns?: any[] | undefined;
         delay?: any;
         ram?: any;
     };

@@ -2,7 +2,7 @@
 
 C/C++ sound-chip cores and WASM build recipes are maintained in [tetorica-soundchip-native](https://github.com/kyorohiro/tetorica-soundchip-native). This package uses the fixed source snapshot recorded below; upstream component credits and licenses remain with their respective sources.
 
-Fixed SDK 0.1.8-fm2608-mixer, source commit 95cf71a857b15d0ea932ebf97d5fde80b5e80a95. The SDK provides 29 chip WASM recipes and 2 separate application-audio recipes and 2 standalone instrument recipes. Source receipts retain the archive and manifest hashes and unpublished local-candidate provenance.
+Fixed SDK 0.1.8-fm2608-source-mixer, source commit 95cf71a857b15d0ea932ebf97d5fde80b5e80a95. The SDK provides 29 chip WASM recipes and 2 separate application-audio recipes and 2 standalone instrument recipes. Source receipts retain the archive and manifest hashes and unpublished local-candidate provenance.
 
 See [SegaPSG.md](SegaPSG.md) for the original Tetorica Sega PSG core, BSD notice, hardware-documentation credit and standalone rebuild recipe. Rebuild from this directory with `sh scripts/build_segapsg_wasm.sh ../generated`.
 

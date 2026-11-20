@@ -185,10 +185,10 @@ export declare class NativeGenesisSynth {
             value: number | undefined;
             error?: undefined;
         } | {
+            value?: undefined;
             op: string;
             id: any;
             error: string;
-            value?: undefined;
         }>;
         loadDacBank(name: any, bytes: any): Promise<any>;
         playDacBank(name: any, time: any, timing?: {}): Promise<void>;
@@ -1102,6 +1102,7 @@ export declare class NativeGenesisSynth {
                 channelCount: number;
                 nextAddress: number;
                 nativeFrames: number;
+                noiseClock: number;
                 samples: {
                     id: number;
                     startAddress: number;
@@ -1128,6 +1129,8 @@ export declare class NativeGenesisSynth {
                     adsr2: number;
                     pitch: number;
                     reverb: boolean;
+                    noise: boolean;
+                    pmon: boolean;
                     waveform: {
                         sample: number;
                         pcm: number[];
@@ -1162,6 +1165,7 @@ export declare class NativeGenesisSynth {
                 channelCount: number;
                 nextAddress: number;
                 nativeFrames: number;
+                noiseClock: number;
                 samples: {
                     id: number;
                     startAddress: number;
@@ -1188,6 +1192,8 @@ export declare class NativeGenesisSynth {
                     adsr2: number;
                     pitch: number;
                     reverb: boolean;
+                    noise: boolean;
+                    pmon: boolean;
                     waveform: {
                         sample: number;
                         pcm: number[];
@@ -1202,6 +1208,7 @@ export declare class NativeGenesisSynth {
                 channelCount: number;
                 nextAddress: number;
                 nativeFrames: number;
+                noiseClock: number;
                 samples: {
                     id: number;
                     startAddress: number;
@@ -1228,6 +1235,8 @@ export declare class NativeGenesisSynth {
                     adsr2: number;
                     pitch: number;
                     reverb: boolean;
+                    noise: boolean;
+                    pmon: boolean;
                     waveform: {
                         sample: number;
                         pcm: number[];
@@ -1245,6 +1254,7 @@ export declare class NativeGenesisSynth {
                 channelCount: number;
                 nextAddress: number;
                 nativeFrames: number;
+                noiseClock: number;
                 samples: {
                     id: number;
                     startAddress: number;
@@ -1271,6 +1281,8 @@ export declare class NativeGenesisSynth {
                     adsr2: number;
                     pitch: number;
                     reverb: boolean;
+                    noise: boolean;
+                    pmon: boolean;
                     waveform: {
                         sample: number;
                         pcm: number[];
@@ -1285,6 +1297,7 @@ export declare class NativeGenesisSynth {
                 channelCount: number;
                 nextAddress: number;
                 nativeFrames: number;
+                noiseClock: number;
                 samples: {
                     id: number;
                     startAddress: number;
@@ -1311,6 +1324,8 @@ export declare class NativeGenesisSynth {
                     adsr2: number;
                     pitch: number;
                     reverb: boolean;
+                    noise: boolean;
+                    pmon: boolean;
                     waveform: {
                         sample: number;
                         pcm: number[];
@@ -1328,6 +1343,7 @@ export declare class NativeGenesisSynth {
                 channelCount: number;
                 nextAddress: number;
                 nativeFrames: number;
+                noiseClock: number;
                 samples: {
                     id: number;
                     startAddress: number;
@@ -1354,6 +1370,8 @@ export declare class NativeGenesisSynth {
                     adsr2: number;
                     pitch: number;
                     reverb: boolean;
+                    noise: boolean;
+                    pmon: boolean;
                     waveform: {
                         sample: number;
                         pcm: number[];
@@ -1368,6 +1386,7 @@ export declare class NativeGenesisSynth {
                 channelCount: number;
                 nextAddress: number;
                 nativeFrames: number;
+                noiseClock: number;
                 samples: {
                     id: number;
                     startAddress: number;
@@ -1394,6 +1413,8 @@ export declare class NativeGenesisSynth {
                     adsr2: number;
                     pitch: number;
                     reverb: boolean;
+                    noise: boolean;
+                    pmon: boolean;
                     waveform: {
                         sample: number;
                         pcm: number[];
@@ -1416,6 +1437,7 @@ export declare class NativeGenesisSynth {
                     channelCount: number;
                     nextAddress: number;
                     nativeFrames: number;
+                    noiseClock: number;
                     samples: {
                         id: number;
                         startAddress: number;
@@ -1442,6 +1464,8 @@ export declare class NativeGenesisSynth {
                         adsr2: number;
                         pitch: number;
                         reverb: boolean;
+                        noise: boolean;
+                        pmon: boolean;
                         waveform: {
                             sample: number;
                             pcm: number[];
@@ -1468,6 +1492,7 @@ export declare class NativeGenesisSynth {
                     channelCount: number;
                     nextAddress: number;
                     nativeFrames: number;
+                    noiseClock: number;
                     samples: {
                         id: number;
                         startAddress: number;
@@ -1494,6 +1519,8 @@ export declare class NativeGenesisSynth {
                         adsr2: number;
                         pitch: number;
                         reverb: boolean;
+                        noise: boolean;
+                        pmon: boolean;
                         waveform: {
                             sample: number;
                             pcm: number[];
@@ -1512,6 +1539,7 @@ export declare class NativeGenesisSynth {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -1538,6 +1566,8 @@ export declare class NativeGenesisSynth {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -1562,6 +1592,7 @@ export declare class NativeGenesisSynth {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -1588,6 +1619,8 @@ export declare class NativeGenesisSynth {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -1626,6 +1659,7 @@ export declare class NativeGenesisSynth {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -1652,6 +1686,8 @@ export declare class NativeGenesisSynth {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -1686,6 +1722,7 @@ export declare class NativeGenesisSynth {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -1712,6 +1749,8 @@ export declare class NativeGenesisSynth {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -1726,6 +1765,7 @@ export declare class NativeGenesisSynth {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -1752,6 +1792,8 @@ export declare class NativeGenesisSynth {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -1769,6 +1811,7 @@ export declare class NativeGenesisSynth {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -1795,6 +1838,8 @@ export declare class NativeGenesisSynth {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -1809,6 +1854,7 @@ export declare class NativeGenesisSynth {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -1835,6 +1881,8 @@ export declare class NativeGenesisSynth {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -1852,6 +1900,7 @@ export declare class NativeGenesisSynth {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -1878,6 +1927,8 @@ export declare class NativeGenesisSynth {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -1892,6 +1943,7 @@ export declare class NativeGenesisSynth {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -1918,6 +1970,8 @@ export declare class NativeGenesisSynth {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -1942,6 +1996,7 @@ export declare class NativeGenesisSynth {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -1968,6 +2023,8 @@ export declare class NativeGenesisSynth {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -2002,6 +2059,7 @@ export declare class NativeGenesisSynth {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -2028,6 +2086,8 @@ export declare class NativeGenesisSynth {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -2042,6 +2102,7 @@ export declare class NativeGenesisSynth {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -2068,6 +2129,8 @@ export declare class NativeGenesisSynth {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -2085,6 +2148,7 @@ export declare class NativeGenesisSynth {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -2111,6 +2175,8 @@ export declare class NativeGenesisSynth {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -2125,6 +2191,7 @@ export declare class NativeGenesisSynth {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -2151,6 +2218,8 @@ export declare class NativeGenesisSynth {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -2168,6 +2237,7 @@ export declare class NativeGenesisSynth {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -2194,6 +2264,8 @@ export declare class NativeGenesisSynth {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -2208,6 +2280,7 @@ export declare class NativeGenesisSynth {
             channelCount: number;
             nextAddress: number;
             nativeFrames: number;
+            noiseClock: number;
             samples: {
                 id: number;
                 startAddress: number;
@@ -2234,6 +2307,8 @@ export declare class NativeGenesisSynth {
                 adsr2: number;
                 pitch: number;
                 reverb: boolean;
+                noise: boolean;
+                pmon: boolean;
                 waveform: {
                     sample: number;
                     pcm: number[];
@@ -3245,6 +3320,7 @@ export declare class NativeGenesisSynth {
                 channelCount: number;
                 nextAddress: number;
                 nativeFrames: number;
+                noiseClock: number;
                 samples: {
                     id: number;
                     startAddress: number;
@@ -3271,6 +3347,8 @@ export declare class NativeGenesisSynth {
                     adsr2: number;
                     pitch: number;
                     reverb: boolean;
+                    noise: boolean;
+                    pmon: boolean;
                     waveform: {
                         sample: number;
                         pcm: number[];
@@ -3297,6 +3375,7 @@ export declare class NativeGenesisSynth {
                 channelCount: number;
                 nextAddress: number;
                 nativeFrames: number;
+                noiseClock: number;
                 samples: {
                     id: number;
                     startAddress: number;
@@ -3323,6 +3402,8 @@ export declare class NativeGenesisSynth {
                     adsr2: number;
                     pitch: number;
                     reverb: boolean;
+                    noise: boolean;
+                    pmon: boolean;
                     waveform: {
                         sample: number;
                         pcm: number[];

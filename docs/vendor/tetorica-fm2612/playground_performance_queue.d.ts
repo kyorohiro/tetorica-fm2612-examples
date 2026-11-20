@@ -51,6 +51,7 @@ export declare function createPerformanceQueue({ apply, nowFrame, sampleRate, ma
         session?: number;
         owner?: string;
     }) => boolean;
+    clearPatterns: () => void;
     commitPatterns: (changes: any, { session, owner, dryRun }?: {
         session: number;
         owner: string;
