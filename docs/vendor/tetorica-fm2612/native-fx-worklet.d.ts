@@ -27,6 +27,7 @@ export declare class NativeFXProcessor extends AudioWorkletProcessor {
                 session: any;
                 owner: any;
                 time: any;
+                patternName: any;
             };
         };
         schedulePattern: (spec: any, reply: any) => {

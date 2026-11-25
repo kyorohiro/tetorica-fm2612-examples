@@ -7,7 +7,7 @@ export declare const PERFORMANCE_PATTERN_LIMITS: Readonly<{
  * Ordinary untagged messages remain the caller's immediate path. A batch is
  * validated on arrival and applied atomically, in submission order, at its frame.
  */
-export declare function createPerformanceQueue({ apply, nowFrame, sampleRate, maxCommands, maxPatterns, maxPatternEntries, maxPatternRate, patternCommandCost, validate, prepare, onDiscard, onCancelOwner, }: {
+export declare function createPerformanceQueue({ apply, nowFrame, sampleRate, maxCommands, maxPatterns, maxPatternEntries, maxPatternRate, patternCommandCost, validate, prepare, onDiscard, onCancelOwner, onReleasePattern, }: {
     apply: any;
     maxCommands?: number | undefined;
     maxPatternEntries?: 4096 | undefined;
@@ -16,6 +16,7 @@ export declare function createPerformanceQueue({ apply, nowFrame, sampleRate, ma
     nowFrame: any;
     onCancelOwner: any;
     onDiscard: any;
+    onReleasePattern: any;
     patternCommandCost: any;
     prepare: any;
     sampleRate: any;
@@ -38,6 +39,7 @@ export declare function createPerformanceQueue({ apply, nowFrame, sampleRate, ma
             session: any;
             owner: any;
             time: any;
+            patternName: any;
         };
     };
     schedulePattern: (spec: any, reply: any) => {
@@ -100,6 +102,11 @@ export declare function createPerformanceChipOwnership({ writeFm, writePsg, chan
 }): {
     observe(command: any, performance: any): void;
     canApplyTimed(command: any, performance: any): boolean;
-    cancel(owner: any): void;
+    cancel(owner: any): boolean;
+    /** @param {string|undefined} name @param {{owner?:string,session?:number}} [scope] */
+    releasePattern(name: string | undefined, { owner, session }?: {
+        owner?: string;
+        session?: number;
+    }): boolean;
     reset: () => void;
 };

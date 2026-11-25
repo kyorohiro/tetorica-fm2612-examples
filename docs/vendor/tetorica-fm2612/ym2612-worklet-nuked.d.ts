@@ -7,7 +7,7 @@ export declare class YM2612Processor extends AudioWorkletProcessor {
     instanceId: any;
     ym2612: import("./ym2612.js").Ym2612 | null;
     auditions: {
-        writeTimedRegister(register: any, value: any, port?: number): boolean;
+        writeTimedRegister(register: any, value: any, port?: number, releasingGate?: boolean): boolean;
         handle(command: any): boolean;
     } | null;
     psg: SegaPSG | null;
@@ -56,7 +56,11 @@ export declare class YM2612Processor extends AudioWorkletProcessor {
     performanceOwnership: {
         observe(command: any, performance: any): void;
         canApplyTimed(command: any, performance: any): boolean;
-        cancel(owner: any): void;
+        cancel(owner: any): boolean;
+        releasePattern(name: string | undefined, { owner, session }?: {
+            owner?: string;
+            session?: number;
+        }): boolean;
         reset: () => void;
     };
     performanceQueue: {
@@ -76,6 +80,7 @@ export declare class YM2612Processor extends AudioWorkletProcessor {
                 session: any;
                 owner: any;
                 time: any;
+                patternName: any;
             };
         };
         schedulePattern: (spec: any, reply: any) => {

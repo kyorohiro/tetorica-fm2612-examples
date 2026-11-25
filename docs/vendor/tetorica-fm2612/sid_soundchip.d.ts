@@ -19,8 +19,9 @@ export declare function createSidSoundChip(options?: import('./soundchip.js').So
 /** The audio quantum already matches the SID core's configured rate. Copy its
  * mono output into both channels without a second resampler, filter or gain.
  * @param {SidCore|Sid8580Core} core */
-export declare function createSidPCMRenderer(core: SidCore | Sid8580Core): {
-    rate: number;
+export { createMonoPCMRenderer as createSidPCMRenderer };
+export declare function createMonoPCMRenderer(core: any): {
+    rate: any;
     resetHistory(): void;
     renderInto(left: any, right: any, offset?: number, frames?: number): void;
 };

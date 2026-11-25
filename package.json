@@ -37,7 +37,7 @@
     "check:dmg-sid-timed": "npm run check:dmg-sid:node && npm run check:dmg-sid:browser"
   },
   "dependencies": {
-    "tetorica-fm2612": "0.2.46"
+    "tetorica-fm2612": "0.2.47"
   },
   "devDependencies": {
     "playwright": "1.63.0"

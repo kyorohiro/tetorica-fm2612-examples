@@ -61,4 +61,4 @@ export declare function createSnesClient(port: MessagePort, initial?: {
     /** @param {number} ch @returns {Promise<import('./snessynth.js').SnesVoiceState>} */ getPreset(ch: number): Promise<import('./snessynth.js').SnesVoiceState>;
     /** @returns {Promise<ReturnType<SnesSynth['snapshot']>>} */ snapshot(): Promise<ReturnType<SnesSynth['snapshot']>>;
     dispose(): void;
-};
+} & import("./snes_timed_client.js").SNESTimedApi;

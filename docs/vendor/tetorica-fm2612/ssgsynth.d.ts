@@ -35,12 +35,13 @@ export declare class SSGSynth {
     /** Silence/reset SSG audio registers only; FM and I/O registers are preserved. */
     reset(): void;
     /** @param {number} channel 0..2.
-     * @param {{period?: number, frequency?: number, volume?: number, envelope?: boolean}} options
+     * @param {{period?: number, frequency?: number, note?: string|number, volume?: number, envelope?: boolean}} options
      * volume is hardware level 0..15 (0=silent). period overrides frequency.
      */
-    tone(channel: number, { period, frequency, volume, envelope }?: {
+    tone(channel: number, { period, frequency, note, volume, envelope }?: {
         period?: number;
         frequency?: number;
+        note?: string | number;
         volume?: number;
         envelope?: boolean;
     }): number;
@@ -55,6 +56,8 @@ export declare class SSGSynth {
     keyOff(channel: number): void;
     /** @param {number} channel @param {string|number} note */
     noteOn(channel: number, note: string | number): void;
+    /** @param {number} channel */
+    noteOff(channel: number): void;
     /** Enable shared noise on one channel. Changing period affects all noise-enabled channels. @param {number} channel */
     noise(channel: number, { period, volume, envelope }?: {
         envelope?: boolean | undefined;
@@ -69,7 +72,7 @@ export declare class SSGSynth {
         tone: any;
     }): void;
     /** Envelope selection replaces fixed volume with the shared hardware envelope. @param {number} channel @param {number} volume */
-    setVolume(channel: number, volume: number, envelope?: boolean): void;
+    setVolume(channel: number, volume: number, envelope: any): void;
     /** @param {number} channel */
     off(channel: number): void;
     /** Set the shared envelope period/shape; writing shape retriggers the envelope. */

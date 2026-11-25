@@ -175,6 +175,7 @@ export declare class YM2608RuntimeSynth extends OPNRuntimeSynth {
         sourceGains?: import('./ym2608.js').Ym2608SourceGainPatch;
     });
     start(): Promise<this>;
+    close(): Promise<void>;
     /** Configure host software gains before the native outputs are combined.
      * FM includes Rhythm and ADPCM-B. Settings survive close/restart and reset.
      * @param {import('./ym2608.js').Ym2608OutputGainPatch} gains Partial linear gains, each 0..1024.

@@ -156,6 +156,7 @@ export declare class YM2612WorkletTransport {
     }>): void;
     scheduleWrites(entries: any): void;
     clearScheduledWrites(): void;
+    _releaseTimedNotes(): void;
     loadDacBank(name: any, bytes: any): void;
     playDacBank(name: any, time: any): void;
     clearDacPlayback(): void;

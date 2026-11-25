@@ -39,6 +39,7 @@ function installAudioMeter() {
   const observed = new WeakSet();
   const meters = [];
   const failures = [];
+  const samples = [];
   AudioNode.prototype.connect = function(destination, ...args) {
     const result = connect.call(this, destination, ...args);
     if (destination === this.context.destination && !observed.has(this)) {
@@ -65,11 +66,18 @@ function installAudioMeter() {
         if (!Number.isFinite(value)) { failures.push('Non-finite final output PCM'); break; }
         energy += value * value;
       }
-      meter.peak = Math.max(meter.peak, Math.sqrt(energy / meter.pcm.length));
+      const rms = Math.sqrt(energy / meter.pcm.length);
+      let crossings = 0;
+      for (let i = 1; i < meter.pcm.length; i++) {
+        if (meter.pcm[i-1] < 0 && meter.pcm[i] >= 0) crossings++;
+      }
+      samples.push({rms, hz:crossings * meter.context.sampleRate / meter.pcm.length});
+      meter.peak = Math.max(meter.peak, rms);
     }
   }
   setInterval(sample, 20);
   window.__dx7Output = {
+    samples,
     reset() { for (const meter of meters) meter.peak = 0; },
     read() {
       sample();
@@ -218,6 +226,41 @@ async function checkSysex(browser, base, execution) {
   } finally { gate.release(); await page.close(); }
 }
 
+async function checkLiveExamples(browser, base, execution) {
+  for (const example of ['03-held-envelope', '04-register-gates']) {
+    const audit = await openPage(browser, base, '/examples/dx7/' + example + '/web/index.html');
+    const {page} = audit;
+    try {
+      await audit.goto();
+      await page.selectOption('#execution', execution);
+      await page.click('#play');
+      await waitStatus(page, 'Finished.');
+      await assertOutput(page, true);
+      const samples = await page.evaluate(() => window.__dx7Output.samples);
+      let index = 0;
+      function expectPhase(predicate, label) {
+        for (; index < samples.length; index++) {
+          if (predicate(samples[index])) { index++; return; }
+        }
+        assert.fail(example + ' missing PCM phase: ' + label);
+      }
+      const peak = Math.max(...samples.map(sample => sample.rms));
+      if (example === '03-held-envelope') {
+        expectPhase(s => s.rms > peak * .7, 'initial sustain');
+        expectPhase(s => s.rms < peak * .1, 'lowered L3');
+        expectPhase(s => s.rms > peak * .7, 'restored L3');
+        expectPhase(s => s.rms < peak * .1, 'release');
+      } else {
+        expectPhase(s => s.rms > .001 && Math.abs(s.hz - 440) < 30, 'CH1 A4');
+        expectPhase(s => s.rms > .001 && Math.abs(s.hz - 659) < 30, 'CH2 E5');
+        expectPhase(s => s.rms < .0001, 'both gates off');
+      }
+      audit.assertClean();
+      console.log(example, execution, 'PCM verified');
+    } finally { await page.close(); }
+  }
+}
+
 const engines = process.argv.includes('--chromium') ? {chromium} : process.argv.includes('--webkit') ? {webkit} : {chromium, webkit};
 try {
   await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve); });
@@ -226,6 +269,7 @@ try {
     const browser = await engine.launch({headless:true, ...(name === 'chromium' ? {args:['--autoplay-policy=no-user-gesture-required']} : {})});
     try {
       for (const execution of ['main', 'worker']) {
+        await checkLiveExamples(browser, base, execution);
         const notes = await checkNotes(browser, base, execution);
         const sysex = await checkSysex(browser, base, execution);
         console.log(JSON.stringify({browser:name, passed:true, notes, sysex}));

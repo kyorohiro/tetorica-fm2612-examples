@@ -5,4 +5,4 @@ export declare function createYm2608Client(port: MessagePort, options?: {}, life
     readonly clock: number;
     setClock(hz: number): Promise<void>;
     _requestControl(method: string, args?: any[], transfer?: Transferable[]): Promise<any>;
-};
+} & import("./ym2608_timed_client.js").YM2608TimedApi;

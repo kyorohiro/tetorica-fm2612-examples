@@ -1,6 +1,5 @@
-/** Browser / Worker / Node: decode PCM WAV and encode Yamaha ADPCM-B.
- * No AudioContext is created. Other formats can use an injected decodeAudio.
- */
+/** Visit each normalized frame of the first decode pass after a reset. */
+export declare function visitAdpcmBFrames(bytes: any, visit: any): void;
 /** @param {unknown} source @param {{signal?: AbortSignal, decodeAudio?: (bytes: ArrayBuffer) => Promise<AudioBuffer | import("./wav.js").ChannelPCM>}} [options] */
 export declare function readSamplePCM(source: unknown, { signal, decodeAudio }?: {
     signal?: AbortSignal;

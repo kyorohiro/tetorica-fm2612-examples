@@ -39,6 +39,14 @@ export type PlaygroundCodeRuntimeOptions<ChipName extends string = DefaultCodeSo
         channel: number;
     } | null;
     /**
+     * Create a local MIDI performance bound to the caller’s abort signal.
+     */
+    createMidiPart?: Function;
+    /**
+     * Build a scope-owned MIDI output API with shared clock callbacks.
+     */
+    createMidi?: Function;
+    /**
      * Current FM compatibility client.
      */
     getFm?: () => object | null;
@@ -101,6 +109,8 @@ export type PlaygroundCodeRuntimeOptions<ChipName extends string = DefaultCodeSo
  * @property {(name:ChipName)=>object|Promise<object>} useSoundChip Borrow a supported chip client.
  * @property {readonly ChipName[]} [supportedSoundChips] Host-owned chip IDs; defaults to the four Genesis instruments.
  * @property {(target:object,method:string,args:unknown[])=>{target:object,channel:number}|null} [resolveNoteTarget] Map nested/aliased Gate methods to one physical channel owner.
+ * @property {Function} [createMidiPart] Create a local MIDI performance bound to the caller’s abort signal.
+ * @property {Function} [createMidi] Build a scope-owned MIDI output API with shared clock callbacks.
  * @property {()=>object|null} [getFm] Current FM compatibility client.
  * @property {object} [fx] Effect factories and live-effect controls owned by the host.
  * @property {(path:string,options:object,entry:{path:string})=>unknown} [readFile] Read a virtual file; may return a promise.
@@ -126,7 +136,7 @@ export type PlaygroundCodeRuntimeOptions<ChipName extends string = DefaultCodeSo
  * @template {string} [ChipName=DefaultCodeSoundChip]
  * @param {PlaygroundCodeRuntimeOptions<ChipName>} options
  */
-export declare function createPlaygroundCodeRuntime<ChipName extends string = DefaultCodeSoundChip>({ ensureReady, now, useSoundChip, supportedSoundChips, getFm, fx, resolveNoteTarget, readFile, prepareSource, onLog, onState, beforeStopSoundChips, stopSoundChips, guardExecution, realm, setTimer, clearTimer, createTaskChannel, }?: PlaygroundCodeRuntimeOptions<ChipName>): {
+export declare function createPlaygroundCodeRuntime<ChipName extends string = DefaultCodeSoundChip>({ ensureReady, now, useSoundChip, supportedSoundChips, getFm, createMidi, createMidiPart, fx, resolveNoteTarget, readFile, prepareSource, onLog, onState, beforeStopSoundChips, stopSoundChips, guardExecution, realm, setTimer, clearTimer, createTaskChannel, }?: PlaygroundCodeRuntimeOptions<ChipName>): {
     run: (source: any, options?: {}) => Promise<{
         state: string;
         playback: string;

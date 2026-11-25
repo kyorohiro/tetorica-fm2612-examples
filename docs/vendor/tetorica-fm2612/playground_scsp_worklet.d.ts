@@ -16,6 +16,7 @@ export declare class ScspInstrumentProcessor extends AudioWorkletProcessor {
         render(left: any, right: any, render: any): void;
         beginAudition(channel: any, owner: any): void;
         endAudition(channel: any, owner: any): void;
+        forgetNote(channel: any): void;
         applyImmediate(command: any, port: any, metadata: any): boolean | undefined;
         schedulePattern: (spec: any, reply: any) => {
             name: any;
@@ -37,6 +38,7 @@ export declare class ScspInstrumentProcessor extends AudioWorkletProcessor {
                 session: any;
                 owner: any;
                 time: any;
+                patternName: any;
             };
         };
         clearPattern: (name: string, { session, owner }?: {

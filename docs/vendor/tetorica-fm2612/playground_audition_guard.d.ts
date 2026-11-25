@@ -8,7 +8,7 @@ export declare function createOpnAuditionGuard(chip: any, channelCount?: number)
      * and pitch writes retain that token; an old scheduled Off cannot release
      * a currently held manual replacement. Ordinary script writes keep their
      * existing keyboard-priority path above. */
-    writeTimedRegister(register: any, value: any, port?: number): boolean;
+    writeTimedRegister(register: any, value: any, port?: number, releasingGate?: boolean): boolean;
     /** Return false for unrelated commands. Invalid audition data throws before
      * changing claims or chip state; the processor reports that error to host. */
     handle(command: any): boolean;

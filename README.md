@@ -1,7 +1,7 @@
 # tetorica-fm2612 examples
 
 `tetorica-fm2612` を import して使う、機能別の小さなサンプル集。
-公開済み npm `tetorica-fm2612@0.2.46` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES・PC Engine・MSX 合奏の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
+公開済み npm `tetorica-fm2612@0.2.47` を使用します。チップ別の基本例は WorkletTransport / AudifyTransport、DX7・SNES・PC Engine・MSX 合奏の Web 演奏は Playground Runtime を使います。導入手順は末尾の「Transport の例」を参照してください。
 SIDは専用APIのAudioWorklet接続と、共通factory／専用coreから直接PCMを生成するNode例を用意しています。
 PCM 生成・WAV 保存は専用例に置き、Web Audio を使う埋め込み例と、Node の nativeFX / 音声デバイス出力の例も掲載しています。本体リポジトリには依存しません。
 
@@ -66,6 +66,8 @@ Nativeの予約実行をJavaScriptタイマーで代替する処理はありま�
 | Atari ST / YM2149（Web） | [01-sync-buzzer](examples/atari-st/ym2149/01-sync-buzzer/README.md) | 共有EnvelopeのR13再トリガー、音名と変調周期の分離 |
 | Atari ST / YM2149（Web） | [02-volume-modulation](examples/atari-st/ym2149/02-volume-modulation/README.md) | 16段階Volumeの予約変調、非線形音量 |
 | レジスタ比較（Web / Node JSON） | [02-compile-compare](examples/chip-raw/02-compile-compare/README.md) | 現在状態・ローカル状態・reset・snapshotの比較 |
+| DX7（Web） | [DX7：押鍵中のエンベロープ編集](examples/dx7/03-held-envelope/README.md) | A4 を押したまま OP1 の L3 を下げて戻し、離鍵後は R4 を上げて余韻を切ります。 |
+| DX7（Web） | [FM21290：レジスタで2声を演奏](examples/dx7/04-register-gates/README.md) | 物理 CH1 と CH2 に音程を書き込み、ゲートレジスタ 0x30F1 で A4 と E5 を重ねてから順に離鍵します。 |
 | DX7（Web） | [01-notes](examples/dx7/01-notes/README.md) | MIDI ノート番号でメロディと和音、Main / Worker の切替 |
 | DX7（Web） | [02-sysex](examples/dx7/02-sysex/README.md) | 1音色 / 32音色の SysEx 読込み、音色選択、試聴 |
 | SNES（実験用・Web / Node） | [01-brr-notes](examples/snes/01-brr-notes/README.md) | 自作 BRR、基準音程、8ボイス、Main / Worker、Node WAV |

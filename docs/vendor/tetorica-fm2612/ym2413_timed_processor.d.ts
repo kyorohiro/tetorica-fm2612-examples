@@ -17,5 +17,6 @@ export declare function createOpllTimedProcessor({ performance: timeline, getSta
     observeWrite(register: any, value: any, previous: any, intentMask: any, metadata: any, port: any): void;
     forget(key: any): void;
     discard(command: any, metadata: any): void;
+    releaseNotes: () => boolean;
     clear(): void;
 };

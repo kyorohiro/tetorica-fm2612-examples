@@ -5,6 +5,8 @@
  * チップ操作・PCM 生成に DOM・AudioContext は不要。ローダーは実行環境に合わせて渡す。
  */
 export declare const YM2610B_CLOCK = 8000000;
+/** Validate FM, SSG, ADPCM-A and ADPCM-B faders in that order. */
+export declare function normalizeYm2610BSourceGains(gains: any): any[];
 /**
  * Ym2610B chip instance backed by WASM. No AudioContext or playback device is created.
  * Use create() to initialize and dispose() to release native resources.
@@ -64,6 +66,9 @@ export declare class Ym2610B {
     clearAdpcmRoms(): void;
     /** @param {number} mask */
     setSourceMuteMask(mask: number): void;
+    /** @param {number[]} gains Independent output multipliers, ordered FM, SSG, ADPCM-A, ADPCM-B. */
+    setSourceGains(gains: number[]): void;
+    getSourceGains(): number[];
     /** @param {Uint8Array} bytes
      * @param {0|1} type
      * @param {number} size

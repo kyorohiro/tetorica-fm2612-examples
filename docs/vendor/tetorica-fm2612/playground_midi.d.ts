@@ -41,14 +41,16 @@ export declare function createMidiRack({ write, writePsg, preset, fmChannels, ge
  * @param {Function} options.bpm Read the current beats-per-minute value.
  * @param {Function} [options.check] Throw when the current run is cancelled.
  * @param {Function} [options.owner] Return the current live-loop ownership token.
+ * @param {readonly string[]} [options.outputs] Destinations provided by the host.
  * @param {Function} [options.now] Read the scheduling clock in seconds.
  * @returns {Object} MIDI API with output handles, sound-chip mode selection and cleanup helpers.
  */
-export declare function createMidiApi(invoke: Function, { sleep, bpm, waitBeats, check, owner, now }: {
+export declare function createMidiApi(invoke: Function, { sleep, bpm, waitBeats, outputs, check, owner, now }: {
     sleep: Function;
     waitBeats?: Function;
     bpm: Function;
     check?: Function;
     owner?: Function;
+    outputs?: readonly string[];
     now?: Function;
 }): Object;

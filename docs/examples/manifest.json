@@ -60,6 +60,22 @@
     ]
   },
   {
+    "id": "dx7/03-held-envelope",
+    "title": "DX7：押鍵中のエンベロープ編集",
+    "description": "A4 を押したまま OP1 の L3 を下げて戻し、離鍵後は R4 を上げて余韻を切ります。",
+    "environments": [
+      "web"
+    ]
+  },
+  {
+    "id": "dx7/04-register-gates",
+    "title": "FM21290：レジスタで2声を演奏",
+    "description": "物理 CH1 と CH2 に音程を書き込み、ゲートレジスタ 0x30F1 で A4 と E5 を重ねてから順に離鍵します。",
+    "environments": [
+      "web"
+    ]
+  },
+  {
     "id": "snes/01-brr-notes",
     "title": "SNES：BRR でメロディと和音（実験的）",
     "description": "自作 BRR の調律・ADSR・8ボイス。Web は Main / Worker、Node は32kHz stereo WAV。",

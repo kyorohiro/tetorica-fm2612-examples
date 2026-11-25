@@ -44,11 +44,11 @@ export declare class SegaPSGSynth {
     };
     _adoptState(state?: {}): void;
     /** @param {number} channel Physical tone channel, 0..2.
-     * @param {{note?: string, frequency?: number, period?: number, attenuation?: number, volume?: number}} [options]
+     * @param {{note?: string|number, frequency?: number, period?: number, attenuation?: number, volume?: number}} [options]
      * @returns {number} Written 10-bit period, calculated using SEGAPSG_CLOCK.
      */
     tone(channel: number, options?: {
-        note?: string;
+        note?: string | number;
         frequency?: number;
         period?: number;
         attenuation?: number;
@@ -60,12 +60,14 @@ export declare class SegaPSGSynth {
     setFrequency(channel: number, hz: number): number;
     /** @param {number} channel @param {string|number} note */
     setNote(channel: number, note: string | number): number;
-    /** Restore the configured attenuation without changing pitch. @param {number} channel */
+    /** Restore the configured tone or noise attenuation. @param {number} channel */
     keyOn(channel: number): void;
     /** Silence while remembering the configured attenuation. @param {number} channel */
     keyOff(channel: number): void;
     /** @param {number} channel @param {string|number} note */
-    noteOn(channel: number, note: string | number): void;
+    noteOn(channel: number, note: string | number): number;
+    /** @param {number} channel */
+    noteOff(channel: number): void;
     /** Set attenuation only: 0 is loudest, 15 is silent; channel 3 is noise. @param {number} channel @param {number} attenuation */
     setAttenuation(channel: number, attenuation: number): void;
     /** Write noise control only. Resets the noise shift register, without changing attenuation. */

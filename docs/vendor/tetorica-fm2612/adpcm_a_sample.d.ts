@@ -2,6 +2,9 @@
  * This is ADPCM-A sample data for YM2610/YM2610B, not ADPCM-B or PCM WAV.
  * No resampling, gain normalization, pitch inference or looping is performed.
  */
+/** Visit normalized predictor samples in the encoded ADPCM-A stream.
+ * Like an OPNB key-on, the predictor and step index start at zero. */
+export declare function visitAdpcmAFrames(bytes: any, visit: any): void;
 /** Encode normalized mono Float32 PCM as complete 256-byte ADPCM-A units.
  *
  * Input values must be finite and in [-1, 1]. The caller must supply PCM at

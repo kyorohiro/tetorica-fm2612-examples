@@ -16,6 +16,7 @@ export declare class SnesInstrumentProcessor extends AudioWorkletProcessor {
         render(left: any, right: any, render: any): void;
         beginAudition(channel: any, owner: any): void;
         endAudition(channel: any, owner: any): void;
+        forgetNote(channel: any): void;
         applyImmediate(command: any, port: any, metadata: any): boolean | undefined;
         schedulePattern: (spec: any, reply: any) => {
             name: any;
@@ -37,6 +38,7 @@ export declare class SnesInstrumentProcessor extends AudioWorkletProcessor {
                 session: any;
                 owner: any;
                 time: any;
+                patternName: any;
             };
         };
         clearPattern: (name: string, { session, owner }?: {
@@ -82,6 +84,12 @@ export declare class SnesInstrumentProcessor extends AudioWorkletProcessor {
             discardedCommands: number;
         };
     };
+    instanceId: string;
+    timed: {
+        receive(data: any, port: any): boolean;
+        apply(operation: any, port: any, frame: any, metadata: any): void;
+        clear(): void;
+    };
     workerRemote: any;
     ready: Promise<void>;
     inspector: SnesVoiceInspector;
@@ -97,7 +105,7 @@ export declare class SnesInstrumentProcessor extends AudioWorkletProcessor {
         args?: never[] | undefined;
         id: any;
         method: any;
-    }, port: any, queued?: boolean): void;
+    }, port: any, queued: boolean | undefined, metadata: any): void;
     finishTimeline(message: any): void;
     fail(error: any): void;
     dispose(): void;

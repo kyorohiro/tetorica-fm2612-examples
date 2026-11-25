@@ -3,11 +3,12 @@
  * while their sound changes wait for the reserved audio frame.
  */
 /** @param {string} chip @param {any} command
- * @param {{psgLatch?:number,hucChannel?:number,opllRhythm?:number,wonderswanRegisters?:ArrayLike<number>}} [state] */
-export declare function identifyPerformanceNote(chip: string, { method, type, args, register, value, channel, controlMask, psgRegister, port: registerPort }: any, { psgLatch, hucChannel, opllRhythm, wonderswanRegisters }?: {
+ * @param {{psgLatch?:number,hucChannel?:number,opllRhythm?:number,nesEnabled?:number,wonderswanRegisters?:ArrayLike<number>}} [state] */
+export declare function identifyPerformanceNote(chip: string, { method, type, args, register, value, channel, controlMask, psgRegister, nesTimed, port: registerPort }: any, { psgLatch, hucChannel, opllRhythm, nesEnabled, wonderswanRegisters }?: {
     psgLatch?: number;
     hucChannel?: number;
     opllRhythm?: number;
+    nesEnabled?: number;
     wonderswanRegisters?: ArrayLike<number>;
 }): number | "adpcm" | {
     allOff: boolean;
@@ -50,11 +51,12 @@ export declare function nativeVoiceChannel(chip: string, { method, type, args, c
     wonderswanRegisters?: ArrayLike<number>;
     pokeyRegisters?: ArrayLike<number>;
 }): any;
-export declare function createProcessorPerformance({ apply, prepare, validate, patternCommandCost, onDiscard, onBlocked, chip, releaseNote, getPsgLatch, getPsgMode, getHucChannel, getRfChannel, getRfMask, getOpllRhythm, getAyRegisters, getOplRegisters, getWonderSwanRegisters, getPokeyRegisters, trackImmediateNotes, immediate, nowFrame, rate }: {
+export declare function createProcessorPerformance({ apply, prepare, validate, patternCommandCost, onDiscard, onBlocked, chip, releaseNote, releasePatternNotes, getPsgLatch, getPsgMode, getHucChannel, getRfChannel, getRfMask, getOpllRhythm, getAyRegisters, getOplRegisters, getWonderSwanRegisters, getPokeyRegisters, getNesEnableMask, trackImmediateNotes, immediate, nowFrame, rate }: {
     apply: any;
     chip: any;
     getAyRegisters: any;
     getHucChannel: any;
+    getNesEnableMask: any;
     getOplRegisters: any;
     getOpllRhythm: any;
     getPokeyRegisters: any;
@@ -71,6 +73,7 @@ export declare function createProcessorPerformance({ apply, prepare, validate, p
     prepare: any;
     rate?: any;
     releaseNote: any;
+    releasePatternNotes?: boolean | undefined;
     trackImmediateNotes?: boolean | undefined;
     validate: any;
 }): {
@@ -78,6 +81,7 @@ export declare function createProcessorPerformance({ apply, prepare, validate, p
     render(left: any, right: any, render: any): void;
     beginAudition(channel: any, owner: any): void;
     endAudition(channel: any, owner: any): void;
+    forgetNote(channel: any): void;
     applyImmediate(command: any, port: any, metadata: any): boolean | undefined;
     schedulePattern: (spec: any, reply: any) => {
         name: any;
@@ -99,6 +103,7 @@ export declare function createProcessorPerformance({ apply, prepare, validate, p
             session: any;
             owner: any;
             time: any;
+            patternName: any;
         };
     };
     clearPattern: (name: string, { session, owner }?: {

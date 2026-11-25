@@ -17,5 +17,6 @@ export declare function createPsgTimedProcessor({ performance: timeline, getStat
     apply(command: any, port: any, frame: any, metadata: any): boolean;
     observeWrite(register: any, value: any, metadata: any, port: any): void;
     discard(command: any, metadata: any): void;
+    releaseNotes: () => boolean;
     clear(): void;
 };

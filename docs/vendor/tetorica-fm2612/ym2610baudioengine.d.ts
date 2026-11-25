@@ -75,6 +75,10 @@ export declare class Ym2610BAudioEngine {
      * @returns {number} Gain multiplier, not a dB value.
      */
     getMasterVolume(): number;
+    /** @param {number[]} gains Linear host gains in FM, SSG, ADPCM-A, ADPCM-B order. */
+    setSourceGains(gains: number[]): void;
+    /** Return independent source gains without exposing the chip's settings. */
+    getSourceGains(): number[];
     /**
      * Dispatch a VGM register/command write to the corresponding sound chip.
      * @param {number} port Chip register bank/port (not a MIDI channel).
