@@ -1,4 +1,4 @@
-// Real npm runtime, DX7 WASM, Worker/Main execution, and final Web Audio output.
+// Real npm runtime, FM21290 Worklet, Worker/Main execution, and final Web Audio output.
 // Run `npm run build` first. No development server or external assets are needed.
 import assert from 'node:assert/strict';
 import http from 'node:http';
@@ -86,13 +86,6 @@ function installAudioMeter() {
   };
 }
 
-async function withTimeout(promise, message, milliseconds = 20000) {
-  let timer;
-  try {
-    return await Promise.race([promise, new Promise((_, reject) => { timer = setTimeout(() => reject(Error(message)), milliseconds); })]);
-  } finally { clearTimeout(timer); }
-}
-
 async function openPage(browser, base, path) {
   const page = await browser.newPage({serviceWorkers:'block'});
   const errors = [], missing = [];
@@ -131,21 +124,25 @@ async function assertOutput(page, audible) {
   return output.peak;
 }
 
-async function delayDx7Wasm(page) {
-  let release, requested;
-  const held = new Promise(resolve => { release = resolve; });
-  const started = new Promise(resolve => { requested = resolve; });
-  await page.route('**/msfa_dx7/wasm/msfa.wasm', async route => {
-    requested();
-    await held;
-    await route.continue();
+async function delayDx7Module(page) {
+  await page.addInitScript(() => {
+    const original = AudioWorklet.prototype.addModule;
+    AudioWorklet.prototype.addModule = async function(url, ...args) {
+      if (String(url).includes('playground_dx7_worklet') && !window.releaseDx7Module) {
+        await new Promise(resolve => { window.releaseDx7Module = resolve; });
+      }
+      return original.call(this, url, ...args);
+    };
   });
-  return {release, wait:() => withTimeout(started, 'DX7 WASM initialization was not requested')};
+  return {
+    wait: () => page.waitForFunction(() => !!window.releaseDx7Module),
+    release: () => page.evaluate(() => window.releaseDx7Module?.()),
+  };
 }
 
 async function checkNotes(browser, base, execution) {
   const audit = await openPage(browser, base, notesPath), {page} = audit;
-  const gate = await delayDx7Wasm(page);
+  const gate = await delayDx7Module(page);
   try {
     await audit.goto();
     await page.selectOption('#execution', execution);
@@ -156,7 +153,7 @@ async function checkNotes(browser, base, execution) {
     await gate.wait();
     assert.equal(await page.locator('#play').isDisabled(), true);
     await page.click('#stop');
-    gate.release();
+    await gate.release();
     await waitStatus(page, 'Stopped.');
     assert.equal((await page.locator('#detail').textContent()).includes('EDITED_DX7_SOURCE'), false, 'Cancelled initialization ran the score');
     await assertOutput(page, false);
@@ -178,12 +175,12 @@ async function checkNotes(browser, base, execution) {
     const editedRms = await assertOutput(page, true);
     audit.assertClean();
     return {execution, stoppedInitialization:true, defaultRms, editedRms};
-  } finally { gate.release(); await page.close(); }
+  } finally { await gate.release(); await page.close(); }
 }
 
 async function checkSysex(browser, base, execution) {
   const audit = await openPage(browser, base, sysexPath), {page} = audit;
-  const gate = await delayDx7Wasm(page);
+  const gate = await delayDx7Module(page);
   try {
     await audit.goto();
     await page.selectOption('#execution', execution);
@@ -191,7 +188,7 @@ async function checkSysex(browser, base, execution) {
     await page.click('#load');
     await gate.wait();
     await page.click('#stop');
-    gate.release();
+    await gate.release();
     await waitStatus(page, 'Stopped.');
     assert.equal(await page.locator('#play').isDisabled(), true, 'Cancelled loading published a bank');
     await assertOutput(page, false);
@@ -223,11 +220,11 @@ async function checkSysex(browser, base, execution) {
     const recoveredRms = await assertOutput(page, true);
     audit.assertClean();
     return {execution, voices:voices.length, stoppedInitialization:true, invalidBankPreserved:true, rms, recoveredRms};
-  } finally { gate.release(); await page.close(); }
+  } finally { await gate.release(); await page.close(); }
 }
 
 async function checkLiveExamples(browser, base, execution) {
-  for (const example of ['03-held-envelope', '04-register-gates']) {
+  for (const example of ['03-held-envelope', '04-register-gates', '05-shared-registers']) {
     const audit = await openPage(browser, base, '/examples/dx7/' + example + '/web/index.html');
     const {page} = audit;
     try {
@@ -245,7 +242,7 @@ async function checkLiveExamples(browser, base, execution) {
         assert.fail(example + ' missing PCM phase: ' + label);
       }
       const peak = Math.max(...samples.map(sample => sample.rms));
-      if (example === '03-held-envelope') {
+      if (example !== '04-register-gates') {
         expectPhase(s => s.rms > peak * .7, 'initial sustain');
         expectPhase(s => s.rms < peak * .1, 'lowered L3');
         expectPhase(s => s.rms > peak * .7, 'restored L3');

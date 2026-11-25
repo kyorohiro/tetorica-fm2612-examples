@@ -56,6 +56,7 @@ export declare function createDx7Client(port: MessagePort, initial?: {
     getPreset(): Promise<import('./msfa_dx7/src/preset.js').DX7PresetState>;
     /** @param {number} index */
     selectVoice(index: number): void;
+    writeRegister(address: any, value: any): void;
     /** @param {number} note @param {number} [velocity] */
     noteOn(note: number, velocity?: number): void;
     /** @param {number} note */

@@ -76,6 +76,14 @@
     ]
   },
   {
+    "id": "dx7/05-shared-registers",
+    "title": "DX7：押鍵したままレジスタで音量を変える",
+    "description": "dx7 で鳴らした A4 を、fm21290 の OP1 出力レジスタで小さくし、鍵盤を押したまま元の音量に戻します。",
+    "environments": [
+      "web"
+    ]
+  },
+  {
     "id": "snes/01-brr-notes",
     "title": "SNES：BRR でメロディと和音（実験的）",
     "description": "自作 BRR の調律・ADSR・8ボイス。Web は Main / Worker、Node は32kHz stereo WAV。",

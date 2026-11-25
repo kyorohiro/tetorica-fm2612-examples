@@ -25,9 +25,7 @@ dx7.noteOff(60);
 音色名は script の `console.log()` → 公開 `onLog` コールバックで受け取ります。
 ガードされた script 内での fetch や外部通信は不要です。
 
-音声生成は Main / Worker のどちらも AudioWorklet 内です。最大16ボイス、mono、内部44,100 Hz。
-AudioContext の44,100 / 48,000 Hz に対応し、48,000 Hz 出力時は内部で変換します。
-msfa の AM・transpose などの制約は同梱 `vendor/tetorica-fm2612/msfa_dx7/README.md` を参照してください。
+音声生成は Main / Worker のどちらも AudioWorklet 内です。最大16ボイスのモノラル音源で、AudioContext の 44,100 Hz／48,000 Hz でレンダリングします。
 
 ## 同梱音色
 
@@ -43,5 +41,5 @@ node examples/dx7/02-sysex/assets/create-bank.mjs
 ## 実行環境
 
 ブラウザ専用です。HTTPS または localhost を使用します。`Playground` の `useSoundChip('dx7')` は
-package root の `createSoundChip()` と別の入口です。Node で直接 PCM を作る場合は別 package
+package root の `createSoundChip()` と別の入口です。MSFA を使って Node で直接 PCM を作る場合は別 package
 `tetorica-msfa-dx7-wasm` の `createDX7()` を使用してください。この例に追加依存や Node 版はありません。

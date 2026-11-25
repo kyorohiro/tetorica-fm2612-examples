@@ -8,6 +8,7 @@ export declare class Fm21290 {
     voices: {
         active: boolean;
         held: boolean;
+        releaseLevel: Float64Array<ArrayBuffer>;
         idleSince: number;
         phase: Float64Array<ArrayBuffer>;
         gain: Float64Array<ArrayBuffer>;

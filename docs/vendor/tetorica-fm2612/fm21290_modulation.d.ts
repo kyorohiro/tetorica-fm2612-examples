@@ -1,0 +1,40 @@
+import { PitchEnvelope } from './fm21290_pitch_envelope.js';
+export declare class ModulatedChip {
+    chip: any;
+    pitchEnvelope: PitchEnvelope;
+    period: number;
+    elapsed: number;
+    phase: number;
+    random: number;
+    wave: number;
+    bend: number;
+    wheelAM: number;
+    wheelPM: number;
+    bias: number;
+    fade: number;
+    delayPhase: number;
+    increment: number | undefined;
+    delayIncrement: number | undefined;
+    delay: any;
+    sync: any;
+    shape: any;
+    amDepth: number | undefined;
+    pmDepth: number | undefined;
+    sensitivity: number | undefined;
+    constructor(chip: any);
+    configure(lfo: any): void;
+    get usesAM(): number;
+    get usesPM(): number | undefined;
+    setWheel({ value, range, assign }: {
+        assign: any;
+        range: any;
+        value: any;
+    }): void;
+    clearInactive(oldAM: any, oldPM: any): void;
+    writePitch(pitch: any): void;
+    setBend(value: any): void;
+    keyOn(ch: any, basePitch: any): void;
+    pitchOffset(): number;
+    tick(): void;
+    renderInto(buffer: any): void;
+}
